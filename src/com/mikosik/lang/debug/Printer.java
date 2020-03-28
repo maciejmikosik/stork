@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import com.mikosik.lang.model.Alias;
 import com.mikosik.lang.model.Application;
 import com.mikosik.lang.model.Expression;
+import com.mikosik.lang.model.Lambda;
 
 public class Printer {
   private Printer() {}
@@ -20,6 +21,11 @@ public class Printer {
     } else if (expression instanceof Application) {
       Application application = (Application) expression;
       return format("%s(%s)", print(application.function), print(application.argument));
+    } else if (expression instanceof Lambda) {
+      Lambda lambda = (Lambda) expression;
+      return lambda.body instanceof Lambda
+          ? format("(%s)%s", lambda.parameter, print(lambda.body))
+          : format("(%s){ %s }", lambda.parameter, print(lambda.body));
     } else {
       throw new RuntimeException();
     }
