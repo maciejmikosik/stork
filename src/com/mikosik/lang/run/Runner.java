@@ -7,17 +7,24 @@ import com.mikosik.lang.model.Alias;
 import com.mikosik.lang.model.Application;
 import com.mikosik.lang.model.Expression;
 import com.mikosik.lang.model.Lambda;
+import com.mikosik.lang.model.Library;
 import com.mikosik.lang.model.Primitive;
 
 public class Runner {
-  private Runner() {}
+  private final Library library;
 
-  public static Runner runner() {
-    return new Runner();
+  private Runner(Library library) {
+    this.library = library;
+  }
+
+  public static Runner runner(Library library) {
+    return new Runner(library);
   }
 
   public Expression run(Expression expression) {
-    if (expression instanceof Primitive) {
+    if (expression instanceof Alias) {
+      return run((Alias) expression);
+    } else if (expression instanceof Primitive) {
       return expression;
     } else if (expression instanceof Application) {
       return run((Application) expression);
@@ -25,6 +32,10 @@ public class Runner {
       // TODO fail if unknown expression
       return expression;
     }
+  }
+
+  private Expression run(Alias alias) {
+    return run(library.get(alias.name));
   }
 
   private Expression run(Application application) {
