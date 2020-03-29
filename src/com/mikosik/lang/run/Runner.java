@@ -7,6 +7,7 @@ import com.mikosik.lang.model.Alias;
 import com.mikosik.lang.model.Application;
 import com.mikosik.lang.model.Expression;
 import com.mikosik.lang.model.Lambda;
+import com.mikosik.lang.model.Primitive;
 
 public class Runner {
   private Runner() {}
@@ -16,7 +17,9 @@ public class Runner {
   }
 
   public Expression run(Expression expression) {
-    if (expression instanceof Application) {
+    if (expression instanceof Primitive) {
+      return expression;
+    } else if (expression instanceof Application) {
       return run((Application) expression);
     } else {
       // TODO fail if unknown expression
