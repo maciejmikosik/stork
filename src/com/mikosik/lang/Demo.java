@@ -7,13 +7,15 @@ import static com.mikosik.lang.model.Lambda.lambda;
 import static com.mikosik.lang.model.Library.library;
 import static com.mikosik.lang.model.Primitive.primitive;
 import static com.mikosik.lang.run.Runner.runner;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 
+import com.mikosik.lang.compile.Expresser;
+import com.mikosik.lang.compile.Scope;
+import com.mikosik.lang.compile.Scoper;
+import com.mikosik.lang.compile.Syntax;
+import com.mikosik.lang.compile.Syntaxer;
 import com.mikosik.lang.debug.Printer;
-import com.mikosik.lang.model.Alias;
 import com.mikosik.lang.model.Expression;
 import com.mikosik.lang.model.Library;
 import com.mikosik.lang.run.Runner;
@@ -34,8 +36,8 @@ public class Demo {
     String some = "some";
     String none = "none";
 
-    library.define("flip", l(f, l(x, l(y, ap(f, y, x)))));
-    library.define("some", l(head, l(tail, l(vSome, l(vNone, ap(vSome, head, tail))))));
+    library.define("flip", l(f, l(x, l(y, compile("f(y)(x)")))));
+    library.define("some", l(head, l(tail, l(vSome, l(vNone, compile("vSome(head)(tail)"))))));
     library.define("none", l(vSome, l(vNone, vNone)));
 
     show(ap("flip", n(1), n(2), n(3)));
@@ -56,14 +58,6 @@ public class Demo {
     return ap(alias(alias), arguments);
   }
 
-  private static Expression ap(String alias, String... arguments) {
-    Expression[] args = stream(arguments)
-        .map(Alias::alias)
-        .collect(toList())
-        .toArray(new Expression[0]);
-    return ap(alias(alias), args);
-  }
-
   private static Expression l(String parameter, Expression body) {
     return lambda(parameter, body);
   }
@@ -74,6 +68,12 @@ public class Demo {
 
   private static Expression n(int value) {
     return primitive(BigInteger.valueOf(value));
+  }
+
+  private static Expression compile(String source) {
+    Scope scope = Scoper.scope(source);
+    Syntax syntax = Syntaxer.syntax(source, scope);
+    return Expresser.expression(syntax);
   }
 
   private static void show(Expression expression) {
