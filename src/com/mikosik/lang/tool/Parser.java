@@ -33,7 +33,7 @@ public class Parser {
       } else if (isClosingBracket(stream.peek())) {
         break;
       } else {
-        throw new RuntimeException();
+        throw new RuntimeException("unknown character " + stream.peek());
       }
     }
     return sentence(parts);
@@ -41,7 +41,7 @@ public class Parser {
 
   private static Word parseWord(Stream stream) {
     StringBuilder builder = new StringBuilder();
-    while (isLetter(stream.peek())) {
+    while (stream.available() && isLetter(stream.peek())) {
       builder.append(stream.read());
     }
     return word(builder.toString());
