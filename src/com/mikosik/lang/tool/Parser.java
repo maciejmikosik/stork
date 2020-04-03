@@ -1,6 +1,8 @@
 package com.mikosik.lang.tool;
 
 import static com.mikosik.lang.model.syntax.Bracket.bracket;
+import static com.mikosik.lang.model.syntax.BracketType.isClosingBracket;
+import static com.mikosik.lang.model.syntax.BracketType.isOpeningBracket;
 import static com.mikosik.lang.model.syntax.Sentence.sentence;
 import static com.mikosik.lang.model.syntax.Word.word;
 
@@ -52,13 +54,5 @@ public class Parser {
   private static boolean isLetter(char character) {
     return 'a' <= character && character <= 'z'
         || 'A' <= character && character <= 'Z';
-  }
-
-  private static boolean isOpeningBracket(char character) {
-    return character == '(';
-  }
-
-  private static boolean isClosingBracket(char character) {
-    return character == ')';
   }
 }
