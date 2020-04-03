@@ -1,20 +1,19 @@
 package com.mikosik.lang.compile;
 
+import static com.mikosik.lang.compile.Sentence.sentence;
 import static com.mikosik.lang.model.Alias.alias;
 import static com.mikosik.lang.model.Application.application;
-
-import java.util.List;
 
 import com.mikosik.lang.model.Expression;
 
 public class Compiler {
-  public static Expression compileApplication(List<Syntax> syntax) {
-    Expression expression = alias(((Word) syntax.get(0)).string);
-    for (int index = 1; index < syntax.size(); index++) {
-      Bracket bracket = (Bracket) syntax.get(index);
+  public static Expression compileApplication(Sentence sentence) {
+    Expression expression = alias(((Word) sentence.parts.get(0)).string);
+    for (int index = 1; index < sentence.parts.size(); index++) {
+      Bracket bracket = (Bracket) sentence.parts.get(index);
       expression = application(
           expression,
-          compileApplication(bracket.children));
+          compileApplication(sentence(bracket.children)));
     }
     return expression;
   }

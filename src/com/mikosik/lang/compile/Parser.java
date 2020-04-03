@@ -1,7 +1,7 @@
 package com.mikosik.lang.compile;
 
 import static com.mikosik.lang.compile.Bracket.bracket;
-import static com.mikosik.lang.compile.Unit.unit;
+import static com.mikosik.lang.compile.Sentence.sentence;
 import static com.mikosik.lang.compile.Word.word;
 
 import java.util.LinkedList;
@@ -10,8 +10,8 @@ import java.util.List;
 import com.mikosik.lang.common.Stream;
 
 public class Parser {
-  public static Unit parse(Stream stream) {
-    return unit(parseChildren(stream));
+  public static Sentence parse(Stream stream) {
+    return sentence(parseChildren(stream));
   }
 
   private static List<Syntax> parseChildren(Stream stream) {

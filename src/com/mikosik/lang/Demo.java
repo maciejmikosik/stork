@@ -13,7 +13,7 @@ import static com.mikosik.lang.run.Runner.runner;
 
 import java.math.BigInteger;
 
-import com.mikosik.lang.compile.Unit;
+import com.mikosik.lang.compile.Sentence;
 import com.mikosik.lang.debug.Printer;
 import com.mikosik.lang.model.Expression;
 import com.mikosik.lang.model.Library;
@@ -70,8 +70,8 @@ public class Demo {
   }
 
   private static Expression compile(String source) {
-    Unit syntax = parse(stream(source));
-    return compileApplication(syntax.children);
+    Sentence sentence = parse(stream(source));
+    return compileApplication(sentence);
   }
 
   private static void show(Expression expression) {
