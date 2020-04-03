@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.mikosik.lang.model.def.Definition;
+
 public class Library {
   private final Map<String, Expression> definitions = new HashMap<>();
 
@@ -15,6 +17,11 @@ public class Library {
 
   public Library define(String name, Expression expression) {
     definitions.put(name, expression);
+    return this;
+  }
+
+  public Library add(Definition definition) {
+    definitions.put(definition.name, definition.expression);
     return this;
   }
 
