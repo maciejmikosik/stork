@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Visitor<T> {
-  protected T visit(Word head, Sentence tail) {
+  protected T visitLabel(Word head, Sentence tail) {
     return visitDefault(join(head, tail));
   }
 
@@ -30,7 +30,7 @@ public class Visitor<T> {
     Syntax head = first(sentence.parts);
     Sentence tail = sentence(skipFirst(sentence.parts));
     if (head instanceof Word) {
-      return visitor.visit((Word) head, tail);
+      return visitor.visitLabel((Word) head, tail);
     } else if (head instanceof Bracket) {
       Bracket bracket = (Bracket) head;
       if (bracket.type == ROUND) {

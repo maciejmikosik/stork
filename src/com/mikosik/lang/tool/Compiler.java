@@ -20,7 +20,7 @@ import com.mikosik.lang.model.syntax.Word;
 public class Compiler {
   public static Definition compileDefinition(Sentence sentence) {
     return visit(sentence, new Visitor<Definition>() {
-      protected Definition visit(Word head, Sentence tail) {
+      protected Definition visitLabel(Word head, Sentence tail) {
         return definition(head.string, compileLambda(tail));
       }
     });
@@ -28,7 +28,7 @@ public class Compiler {
 
   public static Expression compileExpression(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
-      protected Expression visit(Word head, Sentence tail) {
+      protected Expression visitLabel(Word head, Sentence tail) {
         return compileApplication(sentence);
       }
 
@@ -40,7 +40,7 @@ public class Compiler {
 
   public static Expression compileApplication(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
-      protected Expression visit(Word head, Sentence tail) {
+      protected Expression visitLabel(Word head, Sentence tail) {
         Expression expression = variable(head.string);
         for (Syntax part : tail.parts) {
           Bracket bracket = (Bracket) part;
