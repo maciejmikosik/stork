@@ -1,10 +1,10 @@
-package com.mikosik.lang.model.runtime;
+package com.mikosik.lang.model.def;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.mikosik.lang.model.def.Definition;
+import com.mikosik.lang.model.runtime.Expression;
 
 public class Library {
   private final Map<String, Expression> definitions = new HashMap<>();

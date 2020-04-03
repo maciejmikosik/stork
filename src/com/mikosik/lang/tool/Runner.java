@@ -3,10 +3,10 @@ package com.mikosik.lang.tool;
 import static com.mikosik.lang.model.runtime.Application.application;
 import static com.mikosik.lang.model.runtime.Lambda.lambda;
 
+import com.mikosik.lang.model.def.Library;
 import com.mikosik.lang.model.runtime.Application;
 import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.runtime.Lambda;
-import com.mikosik.lang.model.runtime.Library;
 import com.mikosik.lang.model.runtime.Primitive;
 import com.mikosik.lang.model.runtime.Variable;
 

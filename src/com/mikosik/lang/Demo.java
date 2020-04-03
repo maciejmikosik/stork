@@ -1,7 +1,7 @@
 package com.mikosik.lang;
 
 import static com.mikosik.lang.common.Stream.stream;
-import static com.mikosik.lang.model.runtime.Library.library;
+import static com.mikosik.lang.model.def.Library.library;
 import static com.mikosik.lang.tool.Compiler.compileDefinition;
 import static com.mikosik.lang.tool.Compiler.compileExpression;
 import static com.mikosik.lang.tool.Parser.parse;
@@ -9,8 +9,8 @@ import static com.mikosik.lang.tool.Printer.printer;
 import static com.mikosik.lang.tool.Runner.runner;
 
 import com.mikosik.lang.model.def.Definition;
+import com.mikosik.lang.model.def.Library;
 import com.mikosik.lang.model.runtime.Expression;
-import com.mikosik.lang.model.runtime.Library;
 import com.mikosik.lang.model.syntax.Sentence;
 import com.mikosik.lang.tool.Printer;
 import com.mikosik.lang.tool.Runner;
