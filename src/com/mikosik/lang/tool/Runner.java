@@ -2,6 +2,7 @@ package com.mikosik.lang.tool;
 
 import static com.mikosik.lang.model.runtime.Application.application;
 import static com.mikosik.lang.model.runtime.Lambda.lambda;
+import static com.mikosik.lang.model.runtime.Visitor.visit;
 
 import com.mikosik.lang.model.def.Library;
 import com.mikosik.lang.model.runtime.Application;
@@ -9,6 +10,7 @@ import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.runtime.Lambda;
 import com.mikosik.lang.model.runtime.Primitive;
 import com.mikosik.lang.model.runtime.Variable;
+import com.mikosik.lang.model.runtime.Visitor;
 
 public class Runner {
   private final Library library;
@@ -22,16 +24,25 @@ public class Runner {
   }
 
   public Expression run(Expression expression) {
-    if (expression instanceof Variable) {
-      return run((Variable) expression);
-    } else if (expression instanceof Primitive) {
-      return expression;
-    } else if (expression instanceof Application) {
-      return run((Application) expression);
-    } else {
-      // TODO fail if unknown expression
-      return expression;
-    }
+    return visit(expression, new Visitor<Expression>() {
+      protected Expression visit(Variable variable) {
+        return run(variable);
+      }
+
+      protected Expression visit(Primitive primitive) {
+        return primitive;
+      }
+
+      protected Expression visit(Application application) {
+        return run(application);
+      }
+
+      @SuppressWarnings("hiding")
+      protected Expression visitDefault(Expression expression) {
+        // TODO fail if unknown expression
+        return expression;
+      }
+    });
   }
 
   private Expression run(Variable variable) {
@@ -40,40 +51,47 @@ public class Runner {
 
   private Expression run(Application application) {
     Expression function = run(application.function);
-    if (function instanceof Lambda) {
-      Lambda lambda = (Lambda) function;
-      return bind(
-          lambda.body,
-          lambda.parameter,
-          application.argument);
-    } else {
-      // TODO fail if unknown function
-      return application;
-    }
+    return visit(function, new Visitor<Expression>() {
+      protected Expression visit(Lambda lambda) {
+        return bind(
+            lambda.body,
+            lambda.parameter,
+            application.argument);
+      }
+
+      protected Expression visitDefault(Expression expression) {
+        // TODO fail if unknown function
+        return application;
+      }
+    });
   }
 
   private Expression bind(Expression body, String parameter, Expression argument) {
-    if (body instanceof Application) {
-      Application application = (Application) body;
-      return application(
-          bind(application.function, parameter, argument),
-          bind(application.argument, parameter, argument));
-    } else if (body instanceof Variable) {
-      Variable variable = (Variable) body;
-      return variable.name.equals(parameter)
-          ? argument
-          : variable;
-    } else if (body instanceof Lambda) {
-      Lambda lambda = (Lambda) body;
-      // TODO test shadowing
-      boolean isShadowing = lambda.parameter.equals(parameter);
-      return isShadowing
-          ? body
-          : lambda(lambda.parameter, bind(lambda.body, parameter, argument));
+    return visit(body, new Visitor<Expression>() {
+      protected Expression visit(Application application) {
+        return application(
+            bind(application.function, parameter, argument),
+            bind(application.argument, parameter, argument));
+      }
 
-    } else {
-      // TODO fail if unknown expression
-      return body;
-    }
+      protected Expression visit(Variable variable) {
+        return variable.name.equals(parameter)
+            ? argument
+            : variable;
+      }
+
+      protected Expression visit(Lambda lambda) {
+        // TODO test shadowing
+        boolean isShadowing = lambda.parameter.equals(parameter);
+        return isShadowing
+            ? body
+            : lambda(lambda.parameter, bind(lambda.body, parameter, argument));
+      }
+
+      protected Expression visitDefault(Expression expression) {
+        // TODO fail if unknown expression
+        return expression;
+      }
+    });
   }
 }

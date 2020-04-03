@@ -1,5 +1,6 @@
 package com.mikosik.lang.tool;
 
+import static com.mikosik.lang.model.runtime.Visitor.visit;
 import static java.lang.String.format;
 
 import com.mikosik.lang.model.runtime.Application;
@@ -7,6 +8,7 @@ import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.runtime.Lambda;
 import com.mikosik.lang.model.runtime.Primitive;
 import com.mikosik.lang.model.runtime.Variable;
+import com.mikosik.lang.model.runtime.Visitor;
 
 public class Printer {
   private Printer() {}
@@ -16,22 +18,24 @@ public class Printer {
   }
 
   public String print(Expression expression) {
-    if (expression instanceof Primitive) {
-      Primitive primitive = (Primitive) expression;
-      return primitive.object.toString();
-    } else if (expression instanceof Variable) {
-      Variable variable = (Variable) expression;
-      return variable.name;
-    } else if (expression instanceof Application) {
-      Application application = (Application) expression;
-      return format("%s(%s)", print(application.function), print(application.argument));
-    } else if (expression instanceof Lambda) {
-      Lambda lambda = (Lambda) expression;
-      return lambda.body instanceof Lambda
-          ? format("(%s)%s", lambda.parameter, print(lambda.body))
-          : format("(%s){ %s }", lambda.parameter, print(lambda.body));
-    } else {
-      throw new RuntimeException();
-    }
+    return visit(expression, new Visitor<String>() {
+      protected String visit(Primitive primitive) {
+        return primitive.object.toString();
+      }
+
+      protected String visit(Variable variable) {
+        return variable.name;
+      }
+
+      protected String visit(Application application) {
+        return format("%s(%s)", print(application.function), print(application.argument));
+      }
+
+      protected String visit(Lambda lambda) {
+        return lambda.body instanceof Lambda
+            ? format("(%s)%s", lambda.parameter, print(lambda.body))
+            : format("(%s){ %s }", lambda.parameter, print(lambda.body));
+      }
+    });
   }
 }
