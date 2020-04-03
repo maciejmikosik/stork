@@ -14,8 +14,8 @@ public class Parser {
     return unit(parseChildren(stream));
   }
 
-  private static List<Object> parseChildren(Stream stream) {
-    List<Object> children = new LinkedList<>();
+  private static List<Syntax> parseChildren(Stream stream) {
+    List<Syntax> children = new LinkedList<>();
     while (stream.available()) {
       if (isLetter(stream.peek())) {
         children.add(parseWord(stream));
@@ -40,7 +40,7 @@ public class Parser {
 
   private static Bracket parseBracket(Stream stream) {
     stream.read(); // TODO check type of bracket
-    List<Object> children = parseChildren(stream);
+    List<Syntax> children = parseChildren(stream);
     stream.read(); // TODO check type of bracket
     return bracket(children);
   }

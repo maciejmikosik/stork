@@ -8,7 +8,7 @@ import java.util.List;
 import com.mikosik.lang.model.Expression;
 
 public class Compiler {
-  public static Expression compileApplication(List<Object> syntax) {
+  public static Expression compileApplication(List<Syntax> syntax) {
     Expression expression = alias(((Word) syntax.get(0)).string);
     for (int index = 1; index < syntax.size(); index++) {
       Bracket bracket = (Bracket) syntax.get(index);

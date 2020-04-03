@@ -1,6 +1,6 @@
 package com.mikosik.lang.compile;
 
-public class Word {
+public class Word implements Syntax {
   public final String string;
 
   private Word(String string) {
