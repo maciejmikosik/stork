@@ -8,6 +8,7 @@ import com.mikosik.lang.model.def.Library;
 import com.mikosik.lang.model.runtime.Application;
 import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.runtime.Lambda;
+import com.mikosik.lang.model.runtime.Core;
 import com.mikosik.lang.model.runtime.Primitive;
 import com.mikosik.lang.model.runtime.Variable;
 import com.mikosik.lang.model.runtime.Visitor;
@@ -40,6 +41,10 @@ public class Runner {
       protected Expression visit(Lambda lambda) {
         return lambda;
       }
+
+      protected Expression visit(Core core) {
+        return core;
+      }
     });
   }
 
@@ -51,6 +56,10 @@ public class Runner {
             lambda.body,
             lambda.parameter,
             application.argument);
+      }
+
+      protected Expression visit(Core core) {
+        return core.run(run(application.argument));
       }
 
       protected Expression visitDefault(Expression expression) {

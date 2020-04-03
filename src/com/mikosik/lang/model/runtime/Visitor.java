@@ -9,6 +9,10 @@ public class Visitor<T> {
     return visitDefault(primitive);
   }
 
+  protected T visit(Core core) {
+    return visitDefault(core);
+  }
+
   protected T visit(Application application) {
     return visitDefault(application);
   }
@@ -26,6 +30,8 @@ public class Visitor<T> {
       return visitor.visit((Variable) expression);
     } else if (expression instanceof Primitive) {
       return visitor.visit((Primitive) expression);
+    } else if (expression instanceof Core) {
+      return visitor.visit((Core) expression);
     } else if (expression instanceof Application) {
       return visitor.visit((Application) expression);
     } else if (expression instanceof Lambda) {
