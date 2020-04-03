@@ -1,23 +1,23 @@
 package com.mikosik.lang;
 
 import static com.mikosik.lang.common.Stream.stream;
-import static com.mikosik.lang.compile.Compiler.compileApplication;
-import static com.mikosik.lang.compile.Parser.parse;
-import static com.mikosik.lang.debug.Printer.printer;
-import static com.mikosik.lang.model.Application.application;
-import static com.mikosik.lang.model.Lambda.lambda;
-import static com.mikosik.lang.model.Library.library;
-import static com.mikosik.lang.model.Primitive.primitive;
-import static com.mikosik.lang.model.Variable.variable;
-import static com.mikosik.lang.run.Runner.runner;
+import static com.mikosik.lang.model.runtime.Application.application;
+import static com.mikosik.lang.model.runtime.Lambda.lambda;
+import static com.mikosik.lang.model.runtime.Library.library;
+import static com.mikosik.lang.model.runtime.Primitive.primitive;
+import static com.mikosik.lang.model.runtime.Variable.variable;
+import static com.mikosik.lang.tool.Compiler.compileApplication;
+import static com.mikosik.lang.tool.Parser.parse;
+import static com.mikosik.lang.tool.Printer.printer;
+import static com.mikosik.lang.tool.Runner.runner;
 
 import java.math.BigInteger;
 
-import com.mikosik.lang.compile.Sentence;
-import com.mikosik.lang.debug.Printer;
-import com.mikosik.lang.model.Expression;
-import com.mikosik.lang.model.Library;
-import com.mikosik.lang.run.Runner;
+import com.mikosik.lang.model.runtime.Expression;
+import com.mikosik.lang.model.runtime.Library;
+import com.mikosik.lang.model.syntax.Sentence;
+import com.mikosik.lang.tool.Printer;
+import com.mikosik.lang.tool.Runner;
 
 public class Demo {
   private static Library library = library();

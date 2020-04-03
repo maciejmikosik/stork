@@ -1,9 +1,12 @@
-package com.mikosik.lang.compile;
+package com.mikosik.lang.tool;
 
-import static com.mikosik.lang.model.Application.application;
-import static com.mikosik.lang.model.Variable.variable;
+import static com.mikosik.lang.model.runtime.Application.application;
+import static com.mikosik.lang.model.runtime.Variable.variable;
 
-import com.mikosik.lang.model.Expression;
+import com.mikosik.lang.model.runtime.Expression;
+import com.mikosik.lang.model.syntax.Bracket;
+import com.mikosik.lang.model.syntax.Sentence;
+import com.mikosik.lang.model.syntax.Word;
 
 public class Compiler {
   public static Expression compileApplication(Sentence sentence) {

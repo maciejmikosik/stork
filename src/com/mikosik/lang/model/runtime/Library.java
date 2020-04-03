@@ -1,4 +1,4 @@
-package com.mikosik.lang.model;
+package com.mikosik.lang.model.runtime;
 
 import java.util.HashMap;
 import java.util.Map;

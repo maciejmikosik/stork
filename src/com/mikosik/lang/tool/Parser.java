@@ -1,13 +1,17 @@
-package com.mikosik.lang.compile;
+package com.mikosik.lang.tool;
 
-import static com.mikosik.lang.compile.Bracket.bracket;
-import static com.mikosik.lang.compile.Sentence.sentence;
-import static com.mikosik.lang.compile.Word.word;
+import static com.mikosik.lang.model.syntax.Bracket.bracket;
+import static com.mikosik.lang.model.syntax.Sentence.sentence;
+import static com.mikosik.lang.model.syntax.Word.word;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import com.mikosik.lang.common.Stream;
+import com.mikosik.lang.model.syntax.Bracket;
+import com.mikosik.lang.model.syntax.Sentence;
+import com.mikosik.lang.model.syntax.Syntax;
+import com.mikosik.lang.model.syntax.Word;
 
 public class Parser {
   public static Sentence parse(Stream stream) {

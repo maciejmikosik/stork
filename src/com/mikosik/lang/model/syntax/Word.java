@@ -1,4 +1,4 @@
-package com.mikosik.lang.compile;
+package com.mikosik.lang.model.syntax;
 
 public class Word implements Syntax {
   public final String string;
