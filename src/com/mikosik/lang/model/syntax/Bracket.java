@@ -2,12 +2,14 @@ package com.mikosik.lang.model.syntax;
 
 public class Bracket implements Syntax {
   public final Sentence sentence;
+  public final BracketType type;
 
-  private Bracket(Sentence sentence) {
+  private Bracket(BracketType type, Sentence sentence) {
+    this.type = type;
     this.sentence = sentence;
   }
 
-  public static Bracket bracket(Sentence sentence) {
-    return new Bracket(sentence);
+  public static Bracket bracket(BracketType type, Sentence sentence) {
+    return new Bracket(type, sentence);
   }
 }

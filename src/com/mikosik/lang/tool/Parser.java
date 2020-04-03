@@ -1,6 +1,8 @@
 package com.mikosik.lang.tool;
 
+import static com.mikosik.lang.common.Check.check;
 import static com.mikosik.lang.model.syntax.Bracket.bracket;
+import static com.mikosik.lang.model.syntax.BracketType.bracketByCharacter;
 import static com.mikosik.lang.model.syntax.BracketType.isClosingBracket;
 import static com.mikosik.lang.model.syntax.BracketType.isOpeningBracket;
 import static com.mikosik.lang.model.syntax.Sentence.sentence;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import com.mikosik.lang.common.Stream;
 import com.mikosik.lang.model.syntax.Bracket;
+import com.mikosik.lang.model.syntax.BracketType;
 import com.mikosik.lang.model.syntax.Sentence;
 import com.mikosik.lang.model.syntax.Syntax;
 import com.mikosik.lang.model.syntax.Word;
@@ -45,10 +48,11 @@ public class Parser {
   }
 
   private static Bracket parseBracket(Stream stream) {
-    stream.read(); // TODO check type of bracket
+    BracketType openingBracket = bracketByCharacter(stream.read());
     Sentence sentence = parseSentence(stream);
-    stream.read(); // TODO check type of bracket
-    return bracket(sentence);
+    BracketType closingBracket = bracketByCharacter(stream.read());
+    check(openingBracket == closingBracket);
+    return bracket(openingBracket, sentence);
   }
 
   private static boolean isLetter(char character) {

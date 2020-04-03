@@ -21,4 +21,11 @@ public enum BracketType {
     return stream(BracketType.values())
         .anyMatch(value -> value.closing == character);
   }
+
+  public static BracketType bracketByCharacter(char character) {
+    return stream(BracketType.values())
+        .filter(type -> type.opening == character || type.closing == character)
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("" + character));
+  }
 }
