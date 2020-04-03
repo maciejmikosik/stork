@@ -2,7 +2,7 @@ package com.mikosik.lang.model.syntax;
 
 import java.util.List;
 
-public class Sentence implements Syntax {
+public class Sentence {
   public final List<Syntax> parts;
 
   private Sentence(List<Syntax> parts) {
