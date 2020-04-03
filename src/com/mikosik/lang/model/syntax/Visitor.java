@@ -14,6 +14,10 @@ public class Visitor<T> {
     return visitDefault(join(head, tail));
   }
 
+  protected T visitInteger(Word head, Sentence tail) {
+    return visitDefault(join(head, tail));
+  }
+
   protected T visitRound(Bracket head, Sentence tail) {
     return visitDefault(join(head, tail));
   }
@@ -30,7 +34,12 @@ public class Visitor<T> {
     Syntax head = first(sentence.parts);
     Sentence tail = sentence(skipFirst(sentence.parts));
     if (head instanceof Word) {
-      return visitor.visitLabel((Word) head, tail);
+      Word word = (Word) head;
+      if (word.string.chars().allMatch(Character::isDigit)) {
+        return visitor.visitInteger(word, tail);
+      } else {
+        return visitor.visitLabel(word, tail);
+      }
     } else if (head instanceof Bracket) {
       Bracket bracket = (Bracket) head;
       if (bracket.type == ROUND) {

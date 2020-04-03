@@ -5,9 +5,12 @@ import static com.mikosik.lang.common.Collections.first;
 import static com.mikosik.lang.model.def.Definition.definition;
 import static com.mikosik.lang.model.runtime.Application.application;
 import static com.mikosik.lang.model.runtime.Lambda.lambda;
+import static com.mikosik.lang.model.runtime.Primitive.primitive;
 import static com.mikosik.lang.model.runtime.Variable.variable;
 import static com.mikosik.lang.model.syntax.BracketType.ROUND;
 import static com.mikosik.lang.model.syntax.Visitor.visit;
+
+import java.math.BigInteger;
 
 import com.mikosik.lang.model.def.Definition;
 import com.mikosik.lang.model.runtime.Expression;
@@ -50,6 +53,14 @@ public class Compiler {
               compileApplication(bracket.sentence));
         }
         return expression;
+      }
+
+      protected Expression visitInteger(Word head, Sentence tail) {
+        if (tail.parts.isEmpty()) {
+          return primitive(new BigInteger(head.string));
+        } else {
+          throw new RuntimeException("integer cannot be followed by sentence");
+        }
       }
     });
   }
