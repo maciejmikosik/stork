@@ -26,7 +26,7 @@ public class Runner {
   public Expression run(Expression expression) {
     return visit(expression, new Visitor<Expression>() {
       protected Expression visit(Variable variable) {
-        return run(variable);
+        return run(library.get(variable.name));
       }
 
       protected Expression visit(Primitive primitive) {
@@ -37,16 +37,10 @@ public class Runner {
         return run(application);
       }
 
-      @SuppressWarnings("hiding")
-      protected Expression visitDefault(Expression expression) {
-        // TODO fail if unknown expression
-        return expression;
+      protected Expression visit(Lambda lambda) {
+        return lambda;
       }
     });
-  }
-
-  private Expression run(Variable variable) {
-    return run(library.get(variable.name));
   }
 
   private Expression run(Application application) {
@@ -88,9 +82,8 @@ public class Runner {
             : lambda(lambda.parameter, bind(lambda.body, parameter, argument));
       }
 
-      protected Expression visitDefault(Expression expression) {
-        // TODO fail if unknown expression
-        return expression;
+      protected Expression visit(Primitive primitive) {
+        return primitive;
       }
     });
   }
