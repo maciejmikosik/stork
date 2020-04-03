@@ -1,5 +1,8 @@
 package com.mikosik.lang;
 
+import static com.mikosik.lang.common.Stream.stream;
+import static com.mikosik.lang.compile.Compiler.compileApplication;
+import static com.mikosik.lang.compile.Parser.parse;
 import static com.mikosik.lang.debug.Printer.printer;
 import static com.mikosik.lang.model.Alias.alias;
 import static com.mikosik.lang.model.Application.application;
@@ -10,11 +13,7 @@ import static com.mikosik.lang.run.Runner.runner;
 
 import java.math.BigInteger;
 
-import com.mikosik.lang.compile.Expresser;
-import com.mikosik.lang.compile.Scope;
-import com.mikosik.lang.compile.Scoper;
-import com.mikosik.lang.compile.Syntax;
-import com.mikosik.lang.compile.Syntaxer;
+import com.mikosik.lang.compile.Unit;
 import com.mikosik.lang.debug.Printer;
 import com.mikosik.lang.model.Expression;
 import com.mikosik.lang.model.Library;
@@ -71,9 +70,8 @@ public class Demo {
   }
 
   private static Expression compile(String source) {
-    Scope scope = Scoper.scope(source);
-    Syntax syntax = Syntaxer.syntax(source, scope);
-    return Expresser.expression(syntax);
+    Unit syntax = parse(stream(source));
+    return compileApplication(syntax.children);
   }
 
   private static void show(Expression expression) {
