@@ -15,6 +15,7 @@ import com.mikosik.lang.model.def.Definition;
 import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.syntax.Bracket;
 import com.mikosik.lang.model.syntax.Sentence;
+import com.mikosik.lang.model.syntax.Syntax;
 import com.mikosik.lang.model.syntax.Word;
 
 public class Compiler {
@@ -25,15 +26,25 @@ public class Compiler {
   }
 
   public static Expression compileExpression(Sentence sentence) {
-    return first(sentence.parts) instanceof Word
-        ? compileApplication(sentence)
-        : compileLambda(sentence);
+    if (first(sentence.parts) instanceof Word) {
+      return compileApplication(sentence);
+    } else if (first(sentence.parts) instanceof Bracket) {
+      return compileLambda(sentence);
+    } else {
+      throw new RuntimeException();
+    }
   }
 
   public static Expression compileApplication(Sentence sentence) {
-    Expression expression = variable(((Word) first(sentence.parts)).string);
-    for (int index = 1; index < sentence.parts.size(); index++) {
-      Bracket bracket = (Bracket) sentence.parts.get(index);
+    return compileApplication(
+        (Word) first(sentence.parts),
+        sentence(skipFirst(sentence.parts)));
+  }
+
+  private static Expression compileApplication(Word head, Sentence tail) {
+    Expression expression = variable(head.string);
+    for (Syntax part : tail.parts) {
+      Bracket bracket = (Bracket) part;
       check(bracket.type == ROUND);
       expression = application(
           expression,
@@ -43,11 +54,17 @@ public class Compiler {
   }
 
   public static Expression compileLambda(Sentence sentence) {
-    Bracket bracket = (Bracket) first(sentence.parts);
+    return compileLambda(
+        (Bracket) first(sentence.parts),
+        sentence(skipFirst(sentence.parts)));
+  }
+
+  public static Expression compileLambda(Bracket head, Sentence tail) {
+    Bracket bracket = head;
     if (bracket.type == ROUND) {
       return lambda(
           parameterIn(bracket),
-          compileLambda(sentence(skipFirst(sentence.parts))));
+          compileLambda(tail));
     } else if (bracket.type == CURLY) {
       // TODO rest of sentence after bracket is ignored right now
       return compileExpression(bracket.sentence);
