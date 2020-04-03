@@ -4,11 +4,11 @@ import static com.mikosik.lang.common.Stream.stream;
 import static com.mikosik.lang.compile.Compiler.compileApplication;
 import static com.mikosik.lang.compile.Parser.parse;
 import static com.mikosik.lang.debug.Printer.printer;
-import static com.mikosik.lang.model.Alias.alias;
 import static com.mikosik.lang.model.Application.application;
 import static com.mikosik.lang.model.Lambda.lambda;
 import static com.mikosik.lang.model.Library.library;
 import static com.mikosik.lang.model.Primitive.primitive;
+import static com.mikosik.lang.model.Variable.variable;
 import static com.mikosik.lang.run.Runner.runner;
 
 import java.math.BigInteger;
@@ -40,9 +40,9 @@ public class Demo {
     library.define("none", l(vSome, l(vNone, vNone)));
 
     show(ap("flip", n(1), n(2), n(3)));
-    show(ap(some, n(1), ap(some, n(2), alias(none))));
-    show(alias(some));
-    show(alias(none));
+    show(ap(some, n(1), ap(some, n(2), variable(none))));
+    show(variable(some));
+    show(variable(none));
   }
 
   private static Expression ap(Expression function, Expression... arguments) {
@@ -53,8 +53,8 @@ public class Demo {
     return result;
   }
 
-  private static Expression ap(String alias, Expression... arguments) {
-    return ap(alias(alias), arguments);
+  private static Expression ap(String variable, Expression... arguments) {
+    return ap(variable(variable), arguments);
   }
 
   private static Expression l(String parameter, Expression body) {
@@ -62,7 +62,7 @@ public class Demo {
   }
 
   private static Expression l(String parameter, String body) {
-    return lambda(parameter, alias(body));
+    return lambda(parameter, variable(body));
   }
 
   private static Expression n(int value) {
