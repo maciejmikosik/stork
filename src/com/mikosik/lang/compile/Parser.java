@@ -11,23 +11,23 @@ import com.mikosik.lang.common.Stream;
 
 public class Parser {
   public static Sentence parse(Stream stream) {
-    return sentence(parseChildren(stream));
+    return parseSentence(stream);
   }
 
-  private static List<Syntax> parseChildren(Stream stream) {
-    List<Syntax> children = new LinkedList<>();
+  private static Sentence parseSentence(Stream stream) {
+    List<Syntax> parts = new LinkedList<>();
     while (stream.available()) {
       if (isLetter(stream.peek())) {
-        children.add(parseWord(stream));
+        parts.add(parseWord(stream));
       } else if (isOpeningBracket(stream.peek())) {
-        children.add(parseBracket(stream));
+        parts.add(parseBracket(stream));
       } else if (isClosingBracket(stream.peek())) {
-        return children;
+        break;
       } else {
         throw new RuntimeException();
       }
     }
-    return children;
+    return sentence(parts);
   }
 
   private static Word parseWord(Stream stream) {
@@ -40,9 +40,9 @@ public class Parser {
 
   private static Bracket parseBracket(Stream stream) {
     stream.read(); // TODO check type of bracket
-    List<Syntax> children = parseChildren(stream);
+    Sentence sentence = parseSentence(stream);
     stream.read(); // TODO check type of bracket
-    return bracket(children);
+    return bracket(sentence);
   }
 
   private static boolean isLetter(char character) {

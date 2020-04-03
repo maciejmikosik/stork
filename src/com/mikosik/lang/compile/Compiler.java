@@ -1,6 +1,5 @@
 package com.mikosik.lang.compile;
 
-import static com.mikosik.lang.compile.Sentence.sentence;
 import static com.mikosik.lang.model.Alias.alias;
 import static com.mikosik.lang.model.Application.application;
 
@@ -13,7 +12,7 @@ public class Compiler {
       Bracket bracket = (Bracket) sentence.parts.get(index);
       expression = application(
           expression,
-          compileApplication(sentence(bracket.children)));
+          compileApplication(bracket.sentence));
     }
     return expression;
   }

@@ -1,15 +1,13 @@
 package com.mikosik.lang.compile;
 
-import java.util.List;
-
 public class Bracket implements Syntax {
-  public final List<Syntax> children;
+  public final Sentence sentence;
 
-  private Bracket(List<Syntax> children) {
-    this.children = children;
+  private Bracket(Sentence sentence) {
+    this.sentence = sentence;
   }
 
-  public static Bracket bracket(List<Syntax> children) {
-    return new Bracket(children);
+  public static Bracket bracket(Sentence sentence) {
+    return new Bracket(sentence);
   }
 }
