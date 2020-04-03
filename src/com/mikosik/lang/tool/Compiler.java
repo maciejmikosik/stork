@@ -3,6 +3,7 @@ package com.mikosik.lang.tool;
 import static com.mikosik.lang.common.Check.check;
 import static com.mikosik.lang.common.Collections.first;
 import static com.mikosik.lang.common.Collections.skipFirst;
+import static com.mikosik.lang.model.def.Definition.definition;
 import static com.mikosik.lang.model.runtime.Application.application;
 import static com.mikosik.lang.model.runtime.Lambda.lambda;
 import static com.mikosik.lang.model.runtime.Variable.variable;
@@ -10,12 +11,19 @@ import static com.mikosik.lang.model.syntax.BracketType.CURLY;
 import static com.mikosik.lang.model.syntax.BracketType.ROUND;
 import static com.mikosik.lang.model.syntax.Sentence.sentence;
 
+import com.mikosik.lang.model.def.Definition;
 import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.syntax.Bracket;
 import com.mikosik.lang.model.syntax.Sentence;
 import com.mikosik.lang.model.syntax.Word;
 
 public class Compiler {
+  public static Definition compileDefinition(Sentence sentence) {
+    return definition(
+        ((Word) first(sentence.parts)).string,
+        compileLambda(sentence(skipFirst(sentence.parts))));
+  }
+
   public static Expression compileExpression(Sentence sentence) {
     return first(sentence.parts) instanceof Word
         ? compileApplication(sentence)
