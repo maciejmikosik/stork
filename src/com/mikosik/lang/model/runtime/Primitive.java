@@ -1,4 +1,4 @@
-package com.mikosik.lang.model;
+package com.mikosik.lang.model.runtime;
 
 public class Primitive implements Expression {
   public final Object object;

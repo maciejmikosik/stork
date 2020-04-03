@@ -1,6 +1,6 @@
-package com.mikosik.lang.compile;
+package com.mikosik.lang.model.syntax;
 
-public class Word {
+public class Word implements Syntax {
   public final String string;
 
   private Word(String string) {

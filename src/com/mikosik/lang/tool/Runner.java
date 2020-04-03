@@ -1,14 +1,14 @@
-package com.mikosik.lang.run;
+package com.mikosik.lang.tool;
 
-import static com.mikosik.lang.model.Application.application;
-import static com.mikosik.lang.model.Lambda.lambda;
+import static com.mikosik.lang.model.runtime.Application.application;
+import static com.mikosik.lang.model.runtime.Lambda.lambda;
 
-import com.mikosik.lang.model.Alias;
-import com.mikosik.lang.model.Application;
-import com.mikosik.lang.model.Expression;
-import com.mikosik.lang.model.Lambda;
-import com.mikosik.lang.model.Library;
-import com.mikosik.lang.model.Primitive;
+import com.mikosik.lang.model.runtime.Application;
+import com.mikosik.lang.model.runtime.Expression;
+import com.mikosik.lang.model.runtime.Lambda;
+import com.mikosik.lang.model.runtime.Library;
+import com.mikosik.lang.model.runtime.Primitive;
+import com.mikosik.lang.model.runtime.Variable;
 
 public class Runner {
   private final Library library;
@@ -22,8 +22,8 @@ public class Runner {
   }
 
   public Expression run(Expression expression) {
-    if (expression instanceof Alias) {
-      return run((Alias) expression);
+    if (expression instanceof Variable) {
+      return run((Variable) expression);
     } else if (expression instanceof Primitive) {
       return expression;
     } else if (expression instanceof Application) {
@@ -34,8 +34,8 @@ public class Runner {
     }
   }
 
-  private Expression run(Alias alias) {
-    return run(library.get(alias.name));
+  private Expression run(Variable variable) {
+    return run(library.get(variable.name));
   }
 
   private Expression run(Application application) {
@@ -58,11 +58,11 @@ public class Runner {
       return application(
           bind(application.function, parameter, argument),
           bind(application.argument, parameter, argument));
-    } else if (body instanceof Alias) {
-      Alias alias = (Alias) body;
-      return alias.name.equals(parameter)
+    } else if (body instanceof Variable) {
+      Variable variable = (Variable) body;
+      return variable.name.equals(parameter)
           ? argument
-          : alias;
+          : variable;
     } else if (body instanceof Lambda) {
       Lambda lambda = (Lambda) body;
       // TODO test shadowing

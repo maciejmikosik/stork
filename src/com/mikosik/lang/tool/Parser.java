@@ -1,33 +1,37 @@
-package com.mikosik.lang.compile;
+package com.mikosik.lang.tool;
 
-import static com.mikosik.lang.compile.Bracket.bracket;
-import static com.mikosik.lang.compile.Unit.unit;
-import static com.mikosik.lang.compile.Word.word;
+import static com.mikosik.lang.model.syntax.Bracket.bracket;
+import static com.mikosik.lang.model.syntax.Sentence.sentence;
+import static com.mikosik.lang.model.syntax.Word.word;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import com.mikosik.lang.common.Stream;
+import com.mikosik.lang.model.syntax.Bracket;
+import com.mikosik.lang.model.syntax.Sentence;
+import com.mikosik.lang.model.syntax.Syntax;
+import com.mikosik.lang.model.syntax.Word;
 
 public class Parser {
-  public static Unit parse(Stream stream) {
-    return unit(parseChildren(stream));
+  public static Sentence parse(Stream stream) {
+    return parseSentence(stream);
   }
 
-  private static List<Object> parseChildren(Stream stream) {
-    List<Object> children = new LinkedList<>();
+  private static Sentence parseSentence(Stream stream) {
+    List<Syntax> parts = new LinkedList<>();
     while (stream.available()) {
       if (isLetter(stream.peek())) {
-        children.add(parseWord(stream));
+        parts.add(parseWord(stream));
       } else if (isOpeningBracket(stream.peek())) {
-        children.add(parseBracket(stream));
+        parts.add(parseBracket(stream));
       } else if (isClosingBracket(stream.peek())) {
-        return children;
+        break;
       } else {
         throw new RuntimeException();
       }
     }
-    return children;
+    return sentence(parts);
   }
 
   private static Word parseWord(Stream stream) {
@@ -40,9 +44,9 @@ public class Parser {
 
   private static Bracket parseBracket(Stream stream) {
     stream.read(); // TODO check type of bracket
-    List<Object> children = parseChildren(stream);
+    Sentence sentence = parseSentence(stream);
     stream.read(); // TODO check type of bracket
-    return bracket(children);
+    return bracket(sentence);
   }
 
   private static boolean isLetter(char character) {
