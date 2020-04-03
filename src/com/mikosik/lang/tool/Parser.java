@@ -26,7 +26,7 @@ public class Parser {
   private static Sentence parseSentence(Stream stream) {
     List<Syntax> parts = new LinkedList<>();
     while (stream.available()) {
-      if (isLetter(stream.peek())) {
+      if (isWordCharacter(stream.peek())) {
         parts.add(parseWord(stream));
       } else if (isOpeningBracket(stream.peek())) {
         parts.add(parseBracket(stream));
@@ -41,7 +41,7 @@ public class Parser {
 
   private static Word parseWord(Stream stream) {
     StringBuilder builder = new StringBuilder();
-    while (stream.available() && isLetter(stream.peek())) {
+    while (stream.available() && isWordCharacter(stream.peek())) {
       builder.append(stream.read());
     }
     return word(builder.toString());
@@ -55,8 +55,9 @@ public class Parser {
     return bracket(openingBracket, sentence);
   }
 
-  private static boolean isLetter(char character) {
+  private static boolean isWordCharacter(char character) {
     return 'a' <= character && character <= 'z'
-        || 'A' <= character && character <= 'Z';
+        || 'A' <= character && character <= 'Z'
+        || '0' <= character && character <= '9';
   }
 }

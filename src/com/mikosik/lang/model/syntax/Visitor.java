@@ -10,7 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Visitor<T> {
-  protected T visit(Word head, Sentence tail) {
+  protected T visitLabel(Word head, Sentence tail) {
+    return visitDefault(join(head, tail));
+  }
+
+  protected T visitInteger(Word head, Sentence tail) {
     return visitDefault(join(head, tail));
   }
 
@@ -30,7 +34,12 @@ public class Visitor<T> {
     Syntax head = first(sentence.parts);
     Sentence tail = sentence(skipFirst(sentence.parts));
     if (head instanceof Word) {
-      return visitor.visit((Word) head, tail);
+      Word word = (Word) head;
+      if (word.string.chars().allMatch(Character::isDigit)) {
+        return visitor.visitInteger(word, tail);
+      } else {
+        return visitor.visitLabel(word, tail);
+      }
     } else if (head instanceof Bracket) {
       Bracket bracket = (Bracket) head;
       if (bracket.type == ROUND) {

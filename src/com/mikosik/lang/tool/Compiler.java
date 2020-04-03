@@ -5,9 +5,12 @@ import static com.mikosik.lang.common.Collections.first;
 import static com.mikosik.lang.model.def.Definition.definition;
 import static com.mikosik.lang.model.runtime.Application.application;
 import static com.mikosik.lang.model.runtime.Lambda.lambda;
+import static com.mikosik.lang.model.runtime.Primitive.primitive;
 import static com.mikosik.lang.model.runtime.Variable.variable;
 import static com.mikosik.lang.model.syntax.BracketType.ROUND;
 import static com.mikosik.lang.model.syntax.Visitor.visit;
+
+import java.math.BigInteger;
 
 import com.mikosik.lang.model.def.Definition;
 import com.mikosik.lang.model.runtime.Expression;
@@ -20,7 +23,7 @@ import com.mikosik.lang.model.syntax.Word;
 public class Compiler {
   public static Definition compileDefinition(Sentence sentence) {
     return visit(sentence, new Visitor<Definition>() {
-      protected Definition visit(Word head, Sentence tail) {
+      protected Definition visitLabel(Word head, Sentence tail) {
         return definition(head.string, compileLambda(tail));
       }
     });
@@ -28,7 +31,7 @@ public class Compiler {
 
   public static Expression compileExpression(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
-      protected Expression visit(Word head, Sentence tail) {
+      protected Expression visitLabel(Word head, Sentence tail) {
         return compileApplication(sentence);
       }
 
@@ -40,7 +43,7 @@ public class Compiler {
 
   public static Expression compileApplication(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
-      protected Expression visit(Word head, Sentence tail) {
+      protected Expression visitLabel(Word head, Sentence tail) {
         Expression expression = variable(head.string);
         for (Syntax part : tail.parts) {
           Bracket bracket = (Bracket) part;
@@ -50,6 +53,14 @@ public class Compiler {
               compileApplication(bracket.sentence));
         }
         return expression;
+      }
+
+      protected Expression visitInteger(Word head, Sentence tail) {
+        if (tail.parts.isEmpty()) {
+          return primitive(new BigInteger(head.string));
+        } else {
+          throw new RuntimeException("integer cannot be followed by sentence");
+        }
       }
     });
   }
