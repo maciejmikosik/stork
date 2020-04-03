@@ -3,7 +3,7 @@ package com.mikosik.lang.model.syntax;
 import static java.util.Arrays.stream;
 
 public enum BracketType {
-  ROUND('(', ')');
+  ROUND('(', ')'), CURLY('{', '}');
 
   private final char opening, closing;
 
