@@ -25,8 +25,6 @@ public class Demo {
     library.add(definition("some(head)(tail)(vSome)(vNone){vSome(head)(tail)}"));
     library.add(definition("none(vSome)(vNone){vNone}"));
 
-    show(compile("flip(a)(b)(c)"));
-    show(compile("some(a)(some(b)(none))"));
     show(compile("some"));
     show(compile("none"));
   }
