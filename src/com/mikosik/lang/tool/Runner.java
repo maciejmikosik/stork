@@ -6,9 +6,9 @@ import static com.mikosik.lang.model.runtime.Visitor.visit;
 
 import com.mikosik.lang.model.def.Library;
 import com.mikosik.lang.model.runtime.Application;
+import com.mikosik.lang.model.runtime.Core;
 import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.model.runtime.Lambda;
-import com.mikosik.lang.model.runtime.Core;
 import com.mikosik.lang.model.runtime.Primitive;
 import com.mikosik.lang.model.runtime.Variable;
 import com.mikosik.lang.model.runtime.Visitor;
@@ -52,10 +52,10 @@ public class Runner {
     Expression function = run(application.function);
     return visit(function, new Visitor<Expression>() {
       protected Expression visit(Lambda lambda) {
-        return bind(
+        return run(bind(
             lambda.body,
             lambda.parameter,
-            application.argument);
+            application.argument));
       }
 
       protected Expression visit(Core core) {
