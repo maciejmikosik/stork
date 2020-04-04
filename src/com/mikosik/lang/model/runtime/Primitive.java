@@ -10,4 +10,8 @@ public class Primitive implements Expression {
   public static Expression primitive(Object object) {
     return new Primitive(object);
   }
+
+  public String toString() {
+    return object.toString();
+  }
 }

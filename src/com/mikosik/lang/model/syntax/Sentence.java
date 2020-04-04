@@ -1,5 +1,7 @@
 package com.mikosik.lang.model.syntax;
 
+import static java.util.stream.Collectors.joining;
+
 import java.util.List;
 
 public class Sentence {
@@ -11,5 +13,11 @@ public class Sentence {
 
   public static Sentence sentence(List<Syntax> parts) {
     return new Sentence(parts);
+  }
+
+  public String toString() {
+    return parts.stream()
+        .map(Syntax::toString)
+        .collect(joining());
   }
 }

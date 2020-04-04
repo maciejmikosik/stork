@@ -12,6 +12,14 @@ public enum BracketType {
     this.closing = closing;
   }
 
+  public char openingCharacter() {
+    return opening;
+  }
+
+  public char closingCharacter() {
+    return closing;
+  }
+
   public static boolean isOpeningBracket(char character) {
     return stream(BracketType.values())
         .anyMatch(value -> value.opening == character);

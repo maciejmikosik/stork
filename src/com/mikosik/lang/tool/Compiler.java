@@ -35,13 +35,21 @@ public class Compiler {
         return compileApplication(sentence);
       }
 
+      protected Expression visitInteger(Word head, Sentence tail) {
+        if (tail.parts.isEmpty()) {
+          return primitive(new BigInteger(head.string));
+        } else {
+          throw new RuntimeException("integer cannot be followed by sentence");
+        }
+      }
+
       protected Expression visitRound(Bracket head, Sentence tail) {
         return compileLambda(sentence);
       }
     });
   }
 
-  public static Expression compileApplication(Sentence sentence) {
+  private static Expression compileApplication(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitLabel(Word head, Sentence tail) {
         Expression expression = variable(head.string);
@@ -50,22 +58,14 @@ public class Compiler {
           check(bracket.type == ROUND);
           expression = application(
               expression,
-              compileApplication(bracket.sentence));
+              compileExpression(bracket.sentence));
         }
         return expression;
-      }
-
-      protected Expression visitInteger(Word head, Sentence tail) {
-        if (tail.parts.isEmpty()) {
-          return primitive(new BigInteger(head.string));
-        } else {
-          throw new RuntimeException("integer cannot be followed by sentence");
-        }
       }
     });
   }
 
-  public static Expression compileLambda(Sentence sentence) {
+  private static Expression compileLambda(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitRound(Bracket head, Sentence tail) {
         return lambda(

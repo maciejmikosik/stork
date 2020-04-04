@@ -10,4 +10,8 @@ public class Variable implements Expression {
   public static Expression variable(String name) {
     return new Variable(name);
   }
+
+  public String toString() {
+    return name;
+  }
 }
