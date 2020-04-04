@@ -26,7 +26,9 @@ public class Parser {
   private static Sentence parseSentence(Stream stream) {
     List<Syntax> parts = new LinkedList<>();
     while (stream.available()) {
-      if (isWordCharacter(stream.peek())) {
+      if (isWhitespace(stream.peek())) {
+        stream.read();
+      } else if (isWordCharacter(stream.peek())) {
         parts.add(parseWord(stream));
       } else if (isOpeningBracket(stream.peek())) {
         parts.add(parseBracket(stream));
@@ -53,6 +55,10 @@ public class Parser {
     BracketType closingBracket = bracketByCharacter(stream.read());
     check(openingBracket == closingBracket);
     return bracket(openingBracket, sentence);
+  }
+
+  private static boolean isWhitespace(char peek) {
+    return Character.isWhitespace(peek);
   }
 
   private static boolean isWordCharacter(char character) {

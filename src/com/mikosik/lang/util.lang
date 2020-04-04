@@ -1,0 +1,91 @@
+
+  self(x) {
+    x
+  }
+
+  flip(f)(x)(y) {
+    f(y)(x)
+  }
+
+
+  true(then)(else) {
+    then
+  }
+
+  false(then)(else) {
+    else
+  }
+
+  not(bool) {
+    bool(false)(true)
+  }
+
+  and(a)(b) {
+    a(b)(false)
+  }
+
+  or(a)(b) {
+    a(true)(b)
+  }
+
+
+  present(element)(vPresent)(vAbsent) {
+    vPresent(element)
+  }
+
+  absent(vPresent)(vAbsent) {
+    vAbsent
+  }
+
+  else(default)(optional) {
+    optional
+      (self)
+      (default)
+  }
+
+
+  some(head)(tail)(vSome)(vNone) {
+    vSome(head)(tail)
+  }
+
+  none(vSome)(vNone) {
+    vNone
+  }
+
+  reduce(sum)(add)(stream) {
+    stream
+      ((head)(tail) {
+        reduce
+          (add(head)(sum))
+          (add)
+          (tail)
+      })
+      (sum)
+  }
+
+  length(stream) {
+    stream
+      ((head)(tail){ add(1)(length(tail)) })
+      (0)
+  }
+
+  single(element) {
+    some(element)(none)
+  }
+
+  repeat(element) {
+    some
+      (element)
+      (repeat(element))
+  }
+
+  first(stream) {
+    stream
+      ((head)(tail){ present(head) })
+      (absent)
+  }
+
+
+  subtract(x) {
+    add(negate(x))
+  }
