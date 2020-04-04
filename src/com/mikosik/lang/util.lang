@@ -3,6 +3,10 @@
     x
   }
 
+  flip(f)(x)(y) {
+    f(y)(x)
+  }
+
 
   true(then)(else) {
     then
@@ -39,10 +43,6 @@
       (default)
   }
 
-
-  flip(f)(x)(y) {
-    f(y)(x)
-  }
 
   some(head)(tail)(vSome)(vNone) {
     vSome(head)(tail)
