@@ -8,6 +8,7 @@ import static com.mikosik.lang.tool.Compiler.compileExpression;
 import static com.mikosik.lang.tool.Parser.parse;
 import static com.mikosik.lang.tool.Printer.printer;
 import static com.mikosik.lang.tool.Runner.runner;
+import static java.lang.String.format;
 
 import java.math.BigInteger;
 
@@ -28,16 +29,34 @@ public class Demo {
     library.add(definition("some(head)(tail)(vSome)(vNone){vSome(head)(tail)}"));
     library.add(definition("none(vSome)(vNone){vNone}"));
 
-    library.define("add", (Core) argumentA -> {
-      BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
-      return (Core) argumentB -> {
-        BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
-        return primitive(numberA.add(numberB));
-      };
+    library.define("add", new Core() {
+      public Expression run(Expression argumentA) {
+        BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
+        return new Core() {
+          public Expression run(Expression argumentB) {
+            BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
+            return primitive(numberA.add(numberB));
+          }
+
+          public String toString() {
+            return format("add(%s)", numberA);
+          }
+        };
+      }
+
+      public String toString() {
+        return "add";
+      }
     });
-    library.define("negate", (Core) argument -> {
-      BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
-      return primitive(bigInteger.negate());
+    library.define("negate", new Core() {
+      public Expression run(Expression argument) {
+        BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
+        return primitive(bigInteger.negate());
+      }
+
+      public String toString() {
+        return "negate";
+      }
     });
 
     library.add(definition("subtract(x){add(negate(x))}"));

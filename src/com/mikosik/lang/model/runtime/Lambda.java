@@ -1,5 +1,7 @@
 package com.mikosik.lang.model.runtime;
 
+import static java.lang.String.format;
+
 public class Lambda implements Expression {
   public final String parameter;
   public final Expression body;
@@ -11,5 +13,11 @@ public class Lambda implements Expression {
 
   public static Expression lambda(String parameter, Expression body) {
     return new Lambda(parameter, body);
+  }
+
+  public String toString() {
+    return body instanceof Lambda
+        ? format("(%s)%s", parameter, body)
+        : format("(%s){%s}", parameter, body);
   }
 }
