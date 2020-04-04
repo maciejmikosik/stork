@@ -1,6 +1,7 @@
 package com.mikosik.lang;
 
 import static com.mikosik.lang.model.runtime.Primitive.primitive;
+import static com.mikosik.lang.model.runtime.Variable.variable;
 import static java.lang.String.format;
 
 import java.math.BigInteger;
@@ -39,6 +40,44 @@ public class CoreLibrary {
 
       public String toString() {
         return "negate";
+      }
+    });
+    library.define("equal", new Core() {
+      public Expression run(Expression argumentA) {
+        BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
+        return new Core() {
+          public Expression run(Expression argumentB) {
+            BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
+            return variable("" + numberA.equals(numberB));
+          }
+
+          public String toString() {
+            return format("equal(%s)", numberA);
+          }
+        };
+      }
+
+      public String toString() {
+        return "equal";
+      }
+    });
+    library.define("moreThan", new Core() {
+      public Expression run(Expression argumentA) {
+        BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
+        return new Core() {
+          public Expression run(Expression argumentB) {
+            BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
+            return variable("" + (numberB.compareTo(numberA) > 0));
+          }
+
+          public String toString() {
+            return format("moreThan(%s)", numberA);
+          }
+        };
+      }
+
+      public String toString() {
+        return "moreThan";
       }
     });
   }
