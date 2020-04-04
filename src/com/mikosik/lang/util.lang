@@ -1,0 +1,16 @@
+
+  flip(f)(x)(y) {
+    f(y)(x)
+  }
+
+  some(head)(tail)(vSome)(vNone) {
+    vSome(head)(tail)
+  }
+
+  none(vSome)(vNone) {
+    vNone
+  }
+
+  subtract(x) {
+    add(negate(x))
+  }
