@@ -85,6 +85,110 @@
       (absent)
   }
 
+  limit(n)(stream) {
+    moreThan(0)(n)
+      (stream
+        ((head)(tail) {
+          some(head)(limit(decrement(n))(tail))
+        })
+        (none)
+      )
+      (none)
+  }
+
+  skip(n)(stream) {
+    moreThan(0)(n)
+      (stream
+        ((head)(tail) {
+          skip(decrement(n))(tail)
+        })
+        (none)
+      )
+      (stream)
+  }
+
+  filter(condition)(stream) {
+    stream
+      ((head)(tail) {
+        condition(head)
+          (some(head)(filter(condition)(tail)))
+          (filter(condition)(tail))
+      })
+      (none)
+  }
+
+  while(condition)(stream) {
+    stream
+      ((head)(tail) {
+        condition(head)
+          (some(head)(while(condition)(tail)))
+          (none)
+      })
+      (none)
+  }
+
+  contains(condition)(stream){
+    stream
+      ((head)(tail) {
+        or
+          (condition(head))
+          (contains(condition)(tail))
+      })
+      (false)
+  }
+
+  find(condition)(stream) {
+    first(filter(condition)(stream))
+  }
+
+  each(transform)(stream) {
+    stream
+      ((head)(tail) {
+        some
+          (transform(head))
+          (each(transform)(tail))
+      })
+      (none)
+  }
+
+  reverse {
+    reduce(none)(some)
+  }
+
+  append(end)(stream) {
+    stream
+      ((head)(tail) {
+        some(head)(append(end)(tail))
+      })
+      (end)
+  }
+
+  prepend {
+    flip(append)
+  }
+
+  flatten {
+    reduce(none)(append)
+  }
+
+  generate(next)(current) {
+    some
+      (current)
+      (generate(next)(next(current)))
+  }
+
+  for(initial)(condition)(next) {
+    while(condition)(generate(next)(initial))
+  }
+
+  count {
+    countFrom(0)
+  }
+
+  countFrom {
+    generate(increment)
+  }
+
 
   lessThan {
     flip(moreThan)
