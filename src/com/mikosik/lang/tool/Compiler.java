@@ -49,7 +49,7 @@ public class Compiler {
     });
   }
 
-  public static Expression compileApplication(Sentence sentence) {
+  private static Expression compileApplication(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitLabel(Word head, Sentence tail) {
         Expression expression = variable(head.string);
@@ -65,7 +65,7 @@ public class Compiler {
     });
   }
 
-  public static Expression compileLambda(Sentence sentence) {
+  private static Expression compileLambda(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitRound(Bracket head, Sentence tail) {
         return lambda(
