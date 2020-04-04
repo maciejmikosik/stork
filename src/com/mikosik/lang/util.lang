@@ -52,6 +52,40 @@
     vNone
   }
 
+  reduce(sum)(add)(stream) {
+    stream
+      ((head)(tail) {
+        reduce
+          (add(head)(sum))
+          (add)
+          (tail)
+      })
+      (sum)
+  }
+
+  length(stream) {
+    stream
+      ((head)(tail){ add(1)(length(tail)) })
+      (0)
+  }
+
+  single(element) {
+    some(element)(none)
+  }
+
+  repeat(element) {
+    some
+      (element)
+      (repeat(element))
+  }
+
+  first(stream) {
+    stream
+      ((head)(tail){ present(head) })
+      (absent)
+  }
+
+
   subtract(x) {
     add(negate(x))
   }
