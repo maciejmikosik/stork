@@ -50,7 +50,7 @@ public class Compiler {
           check(bracket.type == ROUND);
           expression = application(
               expression,
-              compileApplication(bracket.sentence));
+              compileExpression(bracket.sentence));
         }
         return expression;
       }
