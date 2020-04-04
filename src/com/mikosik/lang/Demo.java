@@ -34,9 +34,7 @@ public class Demo {
 
     installCore(library);
 
-    show("add(add(negate(1))(2))(add(3)(4))");
-    show("flip(add)(5)(1)");
-    show("subtract(5)(1)");
+    show("main");
   }
 
   private static Definition definition(String source) {
