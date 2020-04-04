@@ -12,4 +12,11 @@ public class Bracket implements Syntax {
   public static Bracket bracket(BracketType type, Sentence sentence) {
     return new Bracket(type, sentence);
   }
+
+  public String toString() {
+    return ""
+        + type.openingCharacter()
+        + sentence
+        + type.closingCharacter();
+  }
 }

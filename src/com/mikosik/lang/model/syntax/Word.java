@@ -10,4 +10,8 @@ public class Word implements Syntax {
   public static Word word(String string) {
     return new Word(string);
   }
+
+  public String toString() {
+    return string;
+  }
 }
