@@ -35,6 +35,14 @@ public class Compiler {
         return compileApplication(sentence);
       }
 
+      protected Expression visitInteger(Word head, Sentence tail) {
+        if (tail.parts.isEmpty()) {
+          return primitive(new BigInteger(head.string));
+        } else {
+          throw new RuntimeException("integer cannot be followed by sentence");
+        }
+      }
+
       protected Expression visitRound(Bracket head, Sentence tail) {
         return compileLambda(sentence);
       }
@@ -53,14 +61,6 @@ public class Compiler {
               compileExpression(bracket.sentence));
         }
         return expression;
-      }
-
-      protected Expression visitInteger(Word head, Sentence tail) {
-        if (tail.parts.isEmpty()) {
-          return primitive(new BigInteger(head.string));
-        } else {
-          throw new RuntimeException("integer cannot be followed by sentence");
-        }
       }
     });
   }
