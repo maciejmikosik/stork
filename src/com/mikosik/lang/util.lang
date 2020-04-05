@@ -63,6 +63,10 @@
       (sum)
   }
 
+  at(index)(stream) {
+    first(skip(index)(stream))
+  }
+
   length(stream) {
     stream
       ((head)(tail){ add(1)(length(tail)) })
@@ -169,6 +173,22 @@
 
   flatten {
     reduce(none)(append)
+  }
+
+  array(size) {
+    array2(size)(none)
+  }
+
+  array2(size)(collected) {
+    moreThan(0)(size)
+      (array3(size)(collected))
+      (reverse(collected))
+  }
+
+  array3(size)(collected)(element) {
+    array2
+      (decrement(size))
+      (some(element)(collected))
   }
 
   generate(next)(current) {
