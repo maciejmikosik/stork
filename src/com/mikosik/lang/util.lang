@@ -63,8 +63,8 @@
       (sum)
   }
 
-  at(index)(stream) {
-    first(skip(index)(stream))
+  tryAt(index)(stream) {
+    tryFirst(skip(index)(stream))
   }
 
   length(stream) {
@@ -83,7 +83,7 @@
       (repeat(element))
   }
 
-  first(stream) {
+  tryFirst(stream) {
     stream
       ((head)(tail){ present(head) })
       (absent)
@@ -141,8 +141,8 @@
       (false)
   }
 
-  find(condition)(stream) {
-    first(filter(condition)(stream))
+  tryFind(condition)(stream) {
+    tryFirst(filter(condition)(stream))
   }
 
   each(transform)(stream) {
