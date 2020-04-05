@@ -57,13 +57,16 @@ public class Parser {
     return bracket(openingBracket, sentence);
   }
 
+  // TODO gather functions checking word characters
   private static boolean isWhitespace(char peek) {
     return Character.isWhitespace(peek);
   }
 
+  // TODO gather functions checking word characters
   private static boolean isWordCharacter(char character) {
     return 'a' <= character && character <= 'z'
         || 'A' <= character && character <= 'Z'
-        || '0' <= character && character <= '9';
+        || '0' <= character && character <= '9'
+        || character == '-';
   }
 }

@@ -35,7 +35,7 @@ public class Visitor<T> {
     Sentence tail = sentence(skipFirst(sentence.parts));
     if (head instanceof Word) {
       Word word = (Word) head;
-      if (word.string.chars().allMatch(Character::isDigit)) {
+      if (word.string.chars().allMatch(Visitor::isNumberCharacter)) {
         return visitor.visitInteger(word, tail);
       } else {
         return visitor.visitLabel(word, tail);
@@ -59,5 +59,11 @@ public class Visitor<T> {
     joined.add(syntax);
     joined.addAll(sentence.parts);
     return sentence(joined);
+  }
+
+  // TODO gather functions checking word characters
+  private static boolean isNumberCharacter(int character) {
+    return '0' <= character && character <= '9'
+        || character == '-';
   }
 }

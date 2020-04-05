@@ -63,6 +63,10 @@
       (sum)
   }
 
+  tryAt(index)(stream) {
+    tryFirst(skip(index)(stream))
+  }
+
   length(stream) {
     stream
       ((head)(tail){ add(1)(length(tail)) })
@@ -79,13 +83,180 @@
       (repeat(element))
   }
 
-  first(stream) {
+  tryFirst(stream) {
     stream
       ((head)(tail){ present(head) })
       (absent)
   }
 
+  limit(n)(stream) {
+    moreThan(0)(n)
+      (stream
+        ((head)(tail) {
+          some(head)(limit(decrement(n))(tail))
+        })
+        (none)
+      )
+      (none)
+  }
+
+  skip(n)(stream) {
+    moreThan(0)(n)
+      (stream
+        ((head)(tail) {
+          skip(decrement(n))(tail)
+        })
+        (none)
+      )
+      (stream)
+  }
+
+  filter(condition)(stream) {
+    stream
+      ((head)(tail) {
+        condition(head)
+          (some(head)(filter(condition)(tail)))
+          (filter(condition)(tail))
+      })
+      (none)
+  }
+
+  while(condition)(stream) {
+    stream
+      ((head)(tail) {
+        condition(head)
+          (some(head)(while(condition)(tail)))
+          (none)
+      })
+      (none)
+  }
+
+  contains(condition)(stream){
+    stream
+      ((head)(tail) {
+        or
+          (condition(head))
+          (contains(condition)(tail))
+      })
+      (false)
+  }
+
+  tryFind(condition)(stream) {
+    tryFirst(filter(condition)(stream))
+  }
+
+  each(transform)(stream) {
+    stream
+      ((head)(tail) {
+        some
+          (transform(head))
+          (each(transform)(tail))
+      })
+      (none)
+  }
+
+  reverse {
+    reduce(none)(some)
+  }
+
+  append(end)(stream) {
+    stream
+      ((head)(tail) {
+        some(head)(append(end)(tail))
+      })
+      (end)
+  }
+
+  prepend {
+    flip(append)
+  }
+
+  flatten {
+    reduce(none)(append)
+  }
+
+  array(size) {
+    array2(size)(none)
+  }
+
+  array2(size)(collected) {
+    moreThan(0)(size)
+      (array3(size)(collected))
+      (reverse(collected))
+  }
+
+  array3(size)(collected)(element) {
+    array2
+      (decrement(size))
+      (some(element)(collected))
+  }
+
+  generate(next)(current) {
+    some
+      (current)
+      (generate(next)(next(current)))
+  }
+
+  for(initial)(condition)(next) {
+    while(condition)(generate(next)(initial))
+  }
+
+  count {
+    countFrom(0)
+  }
+
+  countFrom {
+    generate(increment)
+  }
+
+
+  lessThan {
+    flip(moreThan)
+  }
+
+  atLeast(min)(number) {
+    not(lessThan(min)(number))
+  }
+
+  atMost(max)(number) {
+    not(moreThan(max)(number))
+  }
+
+  within(min)(max)(number) {
+    and
+      (atLeast(min)(number))
+      (atMost(max)(number))
+  }
 
   subtract(x) {
     add(negate(x))
+  }
+
+  increment {
+    add(1)
+  }
+
+  decrement {
+    subtract(1)
+  }
+
+  ceiling(max)(number) {
+    moreThan(max)(number)
+      (max)
+      (number)
+  }
+
+  floor(min)(number) {
+    lessThan(min)(number)
+      (min)
+      (number)
+  }
+
+  clamp(min)(max)(number) {
+    ceiling(max)(floor(min)(number))
+  }
+
+
+  main {
+    0
   }
