@@ -26,7 +26,7 @@ public class Demo {
   private static Library library = library();
 
   public static void main(String[] args) {
-    stream(readFile("util.lang").split("\n\n"))
+    stream(readFile("core.stork").split("\n\n"))
         .map(String::trim)
         .filter(source -> source.length() > 0)
         .map(Demo::definition)
