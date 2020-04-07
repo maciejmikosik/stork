@@ -18,7 +18,6 @@ import com.mikosik.lang.model.def.Library;
 import com.mikosik.lang.model.runtime.Expression;
 import com.mikosik.lang.tool.Runner;
 
-@SuppressWarnings("hiding")
 public class Snippet extends Case {
   private final List<String> definitions = new LinkedList<>();
   private String launch;
