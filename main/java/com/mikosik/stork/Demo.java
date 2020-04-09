@@ -21,7 +21,7 @@ public class Demo {
     Library mainLibrary = library(asList(
         compileDefinition(parse(stream("main { add(2)(3) }")))));
     Runner runner = runner(runtime(
-        library("lang.stork"),
+        library("integer.stork"),
         library("core.stork"),
         mainLibrary));
 

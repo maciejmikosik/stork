@@ -1,0 +1,16 @@
+
+  present(element)(vPresent)(vAbsent) {
+    vPresent(element)
+  }
+
+  absent(vPresent)(vAbsent) {
+    vAbsent
+  }
+
+
+
+  else(default)(optional) {
+    optional
+      (self)
+      (default)
+  }

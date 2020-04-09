@@ -1,0 +1,8 @@
+
+  self(x) {
+    x
+  }
+
+  flip(f)(x)(y) {
+    f(y)(x)
+  }
