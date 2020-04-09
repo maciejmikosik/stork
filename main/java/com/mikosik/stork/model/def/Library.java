@@ -1,16 +1,15 @@
 package com.mikosik.stork.model.def;
 
-import java.util.List;
+import com.mikosik.stork.common.Chain;
 
 public class Library {
-  // TODO make immutable
-  public final List<Definition> definitions;
+  public final Chain<Definition> definitions;
 
-  private Library(List<Definition> definitions) {
+  private Library(Chain<Definition> definitions) {
     this.definitions = definitions;
   }
 
-  public static Library library(List<Definition> definitions) {
+  public static Library library(Chain<Definition> definitions) {
     return new Library(definitions);
   }
 }

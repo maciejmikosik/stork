@@ -1,11 +1,11 @@
 package com.mikosik.stork.lib;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.def.Definition.definition;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.model.runtime.Primitive.primitive;
 import static com.mikosik.stork.model.runtime.Variable.variable;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 import java.math.BigInteger;
 
@@ -17,7 +17,7 @@ import com.mikosik.stork.model.runtime.Primitive;
 
 class CoreLibrary {
   public static Library coreLibrary() {
-    return library(asList(
+    return library(chainOf(
         addIntegerInteger(),
         negateInteger(),
         equalIntegerInteger(),

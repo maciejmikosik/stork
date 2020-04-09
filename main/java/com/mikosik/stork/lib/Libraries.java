@@ -1,5 +1,6 @@
 package com.mikosik.stork.lib;
 
+import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.lib.CoreLibrary.coreLibrary;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -29,8 +30,7 @@ public class Libraries {
         .map(Parser::parse)
         .map(Compiler::compileDefinition)
         .collect(toList());
-
-    return Library.library(definitions);
+    return Library.library(chainFrom(definitions));
   }
 
   private static String readFile(String name) {
