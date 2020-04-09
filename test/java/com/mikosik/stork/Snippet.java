@@ -1,5 +1,6 @@
 package com.mikosik.stork;
 
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.tool.Compiler.compileExpression;
@@ -15,6 +16,7 @@ import java.util.List;
 import org.quackery.Case;
 import org.quackery.report.AssertException;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.runtime.Expression;
 import com.mikosik.stork.tool.Compiler;
@@ -22,31 +24,47 @@ import com.mikosik.stork.tool.Parser;
 import com.mikosik.stork.tool.Runner;
 
 public class Snippet extends Case {
-  private final List<String> sources = new LinkedList<>();
-  private String launch;
-  private String expect;
+  private final Chain<String> sources;
+  private final String launch;
+  private final String expect;
 
-  private Snippet(String name) {
+  private Snippet(
+      String name,
+      Chain<String> sources,
+      String launch,
+      String expect) {
     super(name);
+    this.sources = sources;
+    this.launch = launch;
+    this.expect = expect;
   }
 
   public static Snippet snippet(String name) {
-    return new Snippet(name);
+    return new Snippet(name, chain(), null, null);
   }
 
   public Snippet define(String definition) {
-    sources.add(definition);
-    return this;
+    return new Snippet(
+        name,
+        sources.add(definition),
+        launch,
+        expect);
   }
 
   public Snippet launch(String launch) {
-    this.launch = launch;
-    return this;
+    return new Snippet(
+        name,
+        sources,
+        launch,
+        expect);
   }
 
   public Snippet expect(String expect) {
-    this.expect = expect;
-    return this;
+    return new Snippet(
+        name,
+        sources,
+        launch,
+        expect);
   }
 
   public void run() throws Throwable {
