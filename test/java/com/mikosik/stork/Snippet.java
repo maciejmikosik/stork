@@ -67,7 +67,7 @@ public class Snippet extends Case {
         expect);
   }
 
-  public void run() throws Throwable {
+  public void run() {
     List<Definition> definitions = sources.stream()
         .map(Parser::parse)
         .map(Compiler::compileDefinition)
