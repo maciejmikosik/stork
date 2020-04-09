@@ -1,6 +1,7 @@
 package com.mikosik.stork.tool;
 
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Reading.reading;
 import static com.mikosik.stork.model.syntax.Bracket.bracket;
 import static com.mikosik.stork.model.syntax.BracketType.bracketByCharacter;
 import static com.mikosik.stork.model.syntax.BracketType.isClosingBracket;
@@ -11,7 +12,7 @@ import static com.mikosik.stork.model.syntax.Word.word;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mikosik.stork.common.Stream;
+import com.mikosik.stork.common.Reading;
 import com.mikosik.stork.model.syntax.Bracket;
 import com.mikosik.stork.model.syntax.BracketType;
 import com.mikosik.stork.model.syntax.Sentence;
@@ -19,40 +20,41 @@ import com.mikosik.stork.model.syntax.Syntax;
 import com.mikosik.stork.model.syntax.Word;
 
 public class Parser {
-  public static Sentence parse(Stream stream) {
-    return parseSentence(stream);
+  public static Sentence parse(String source) {
+    return parseSentence(reading(source));
   }
 
-  private static Sentence parseSentence(Stream stream) {
+  private static Sentence parseSentence(Reading reading) {
     List<Syntax> parts = new LinkedList<>();
-    while (stream.available()) {
-      if (isWhitespace(stream.peek())) {
-        stream.read();
-      } else if (isWordCharacter(stream.peek())) {
-        parts.add(parseWord(stream));
-      } else if (isOpeningBracket(stream.peek())) {
-        parts.add(parseBracket(stream));
-      } else if (isClosingBracket(stream.peek())) {
+    while (reading.available()) {
+      char character = reading.peek();
+      if (isWhitespace(character)) {
+        reading.read();
+      } else if (isWordy(character)) {
+        parts.add(parseWord(reading));
+      } else if (isOpeningBracket(character)) {
+        parts.add(parseBracket(reading));
+      } else if (isClosingBracket(character)) {
         break;
       } else {
-        throw new RuntimeException("unknown character " + stream.peek());
+        throw new RuntimeException("unknown character " + character);
       }
     }
     return sentence(parts);
   }
 
-  private static Word parseWord(Stream stream) {
+  private static Word parseWord(Reading reading) {
     StringBuilder builder = new StringBuilder();
-    while (stream.available() && isWordCharacter(stream.peek())) {
-      builder.append(stream.read());
+    while (reading.available() && isWordy(reading.peek())) {
+      builder.append(reading.read());
     }
     return word(builder.toString());
   }
 
-  private static Bracket parseBracket(Stream stream) {
-    BracketType openingBracket = bracketByCharacter(stream.read());
-    Sentence sentence = parseSentence(stream);
-    BracketType closingBracket = bracketByCharacter(stream.read());
+  private static Bracket parseBracket(Reading reading) {
+    BracketType openingBracket = bracketByCharacter(reading.read());
+    Sentence sentence = parseSentence(reading);
+    BracketType closingBracket = bracketByCharacter(reading.read());
     check(openingBracket == closingBracket);
     return bracket(openingBracket, sentence);
   }
@@ -63,7 +65,7 @@ public class Parser {
   }
 
   // TODO gather functions checking word characters
-  private static boolean isWordCharacter(char character) {
+  private static boolean isWordy(char character) {
     return 'a' <= character && character <= 'z'
         || 'A' <= character && character <= 'Z'
         || '0' <= character && character <= '9'

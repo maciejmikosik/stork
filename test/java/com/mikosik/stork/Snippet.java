@@ -1,6 +1,5 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.common.Stream.stream;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.tool.Compiler.compileExpression;
 import static com.mikosik.stork.tool.Parser.parse;
@@ -15,7 +14,6 @@ import java.util.List;
 import org.quackery.Case;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.Stream;
 import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.runtime.Expression;
 import com.mikosik.stork.tool.Compiler;
@@ -52,14 +50,13 @@ public class Snippet extends Case {
 
   public void run() throws Throwable {
     List<Definition> definitions = sources.stream()
-        .map(Stream::stream)
         .map(Parser::parse)
         .map(Compiler::compileDefinition)
         .collect(toCollection(LinkedList::new));
     Runner runner = runner(runtime(library(definitions)));
 
-    Expression launched = runner.run(compileExpression(parse(stream(launch))));
-    Expression expected = runner.run(compileExpression(parse(stream(expect))));
+    Expression launched = runner.run(compileExpression(parse(launch)));
+    Expression expected = runner.run(compileExpression(parse(expect)));
 
     if (!expected.toString().equals(launched.toString())) {
       throw new AssertException(format(""

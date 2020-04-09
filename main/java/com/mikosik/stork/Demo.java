@@ -1,6 +1,5 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.common.Stream.stream;
 import static com.mikosik.stork.lib.Libraries.library;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.tool.Compiler.compileDefinition;
@@ -19,14 +18,14 @@ import com.mikosik.stork.tool.Runner;
 public class Demo {
   public static void main(String[] args) {
     Library mainLibrary = library(asList(
-        compileDefinition(parse(stream("main { add(2)(3) }")))));
+        compileDefinition(parse("main { add(2)(3) }"))));
     Runner runner = runner(runtime(
         library("integer.stork"),
         library("core.stork"),
         mainLibrary));
 
     Printer printer = printer();
-    Expression main = compileExpression(parse(stream("main")));
+    Expression main = compileExpression(parse("main"));
     System.out.println(printer.print(runner.run(main)));
   }
 }

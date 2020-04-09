@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.List;
 
-import com.mikosik.stork.common.Stream;
 import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.tool.Compiler;
@@ -27,7 +26,6 @@ public class Libraries {
     List<Definition> definitions = stream(readFile(name).split("\n\n"))
         .map(String::trim)
         .filter(source -> source.length() > 0)
-        .map(Stream::stream)
         .map(Parser::parse)
         .map(Compiler::compileDefinition)
         .collect(toList());
