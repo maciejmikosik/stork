@@ -1,19 +1,31 @@
-package com.mikosik.stork;
+package com.mikosik.stork.lib;
 
+import static com.mikosik.stork.model.def.Definition.definition;
+import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.model.runtime.Primitive.primitive;
 import static com.mikosik.stork.model.runtime.Variable.variable;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 
 import java.math.BigInteger;
 
+import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Core;
 import com.mikosik.stork.model.runtime.Expression;
 import com.mikosik.stork.model.runtime.Primitive;
 
-public class CoreLibrary {
-  public static void installCore(Library library) {
-    library.define("add", new Core() {
+class CoreLibrary {
+  public static Library coreLibrary() {
+    return library(asList(
+        addIntegerInteger(),
+        negateInteger(),
+        equalIntegerInteger(),
+        moreThanIntegerInteger()));
+  }
+
+  private static Definition addIntegerInteger() {
+    return definition("add", new Core() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new Core() {
@@ -32,7 +44,10 @@ public class CoreLibrary {
         return "add";
       }
     });
-    library.define("negate", new Core() {
+  }
+
+  private static Definition negateInteger() {
+    return definition("negate", new Core() {
       public Expression run(Expression argument) {
         BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
         return primitive(bigInteger.negate());
@@ -42,7 +57,10 @@ public class CoreLibrary {
         return "negate";
       }
     });
-    library.define("equal", new Core() {
+  }
+
+  private static Definition equalIntegerInteger() {
+    return definition("equal", new Core() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new Core() {
@@ -61,7 +79,10 @@ public class CoreLibrary {
         return "equal";
       }
     });
-    library.define("moreThan", new Core() {
+  }
+
+  private static Definition moreThanIntegerInteger() {
+    return definition("moreThan", new Core() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new Core() {

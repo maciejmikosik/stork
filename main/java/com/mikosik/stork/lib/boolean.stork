@@ -1,0 +1,22 @@
+
+  true(then)(else) {
+    then
+  }
+
+  false(then)(else) {
+    else
+  }
+
+
+
+  not(bool) {
+    bool(false)(true)
+  }
+
+  and(a)(b) {
+    a(b)(false)
+  }
+
+  or(a)(b) {
+    a(true)(b)
+  }

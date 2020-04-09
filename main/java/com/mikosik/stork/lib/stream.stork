@@ -1,49 +1,4 @@
 
-  self(x) {
-    x
-  }
-
-  flip(f)(x)(y) {
-    f(y)(x)
-  }
-
-
-  true(then)(else) {
-    then
-  }
-
-  false(then)(else) {
-    else
-  }
-
-  not(bool) {
-    bool(false)(true)
-  }
-
-  and(a)(b) {
-    a(b)(false)
-  }
-
-  or(a)(b) {
-    a(true)(b)
-  }
-
-
-  present(element)(vPresent)(vAbsent) {
-    vPresent(element)
-  }
-
-  absent(vPresent)(vAbsent) {
-    vAbsent
-  }
-
-  else(default)(optional) {
-    optional
-      (self)
-      (default)
-  }
-
-
   some(head)(tail)(vSome)(vNone) {
     vSome(head)(tail)
   }
@@ -51,6 +6,8 @@
   none(vSome)(vNone) {
     vNone
   }
+
+
 
   reduce(sum)(add)(stream) {
     stream
@@ -207,56 +164,4 @@
 
   countFrom {
     generate(increment)
-  }
-
-
-  lessThan {
-    flip(moreThan)
-  }
-
-  atLeast(min)(number) {
-    not(lessThan(min)(number))
-  }
-
-  atMost(max)(number) {
-    not(moreThan(max)(number))
-  }
-
-  within(min)(max)(number) {
-    and
-      (atLeast(min)(number))
-      (atMost(max)(number))
-  }
-
-  subtract(x) {
-    add(negate(x))
-  }
-
-  increment {
-    add(1)
-  }
-
-  decrement {
-    subtract(1)
-  }
-
-  ceiling(max)(number) {
-    moreThan(max)(number)
-      (max)
-      (number)
-  }
-
-  floor(min)(number) {
-    lessThan(min)(number)
-      (min)
-      (number)
-  }
-
-  clamp(min)(max)(number) {
-    ceiling(max)(floor(min)(number))
-  }
-
-
-  main {
-    0
   }
