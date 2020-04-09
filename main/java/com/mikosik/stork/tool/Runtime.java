@@ -1,20 +1,31 @@
 package com.mikosik.stork.tool;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Expression;
 
 public class Runtime {
-  private final Library library;
+  private final Map<String, Expression> definitions;
 
-  private Runtime(Library library) {
-    this.library = library;
+  private Runtime(Map<String, Expression> definitions) {
+    this.definitions = definitions;
   }
 
   public static Runtime runtime(Library library) {
-    return new Runtime(library);
+    Map<String, Expression> definitions = new HashMap<>();
+    for (Definition definition : library.definitions) {
+      // TODO check collisions
+      definitions.put(definition.name, definition.expression);
+    }
+    return new Runtime(definitions);
   }
 
   public Expression find(String name) {
-    return library.get(name);
+    return Optional.ofNullable(definitions.get(name))
+        .orElseThrow(() -> new RuntimeException(name));
   }
 }
