@@ -10,6 +10,7 @@ import static com.mikosik.stork.tool.Printer.printer;
 import static com.mikosik.stork.tool.Runner.runner;
 import static com.mikosik.stork.tool.Runtime.runtime;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Expression;
 import com.mikosik.stork.tool.Printer;
@@ -19,10 +20,11 @@ public class Demo {
   public static void main(String[] args) {
     Library mainLibrary = library(chainOf(
         compileDefinition(parse("main { add(2)(3) }"))));
-    Runner runner = runner(runtime(
+    Chain<Library> libraries = chainOf(
         library("integer.stork"),
         library("core.stork"),
-        mainLibrary));
+        mainLibrary);
+    Runner runner = runner(runtime(libraries));
 
     Printer printer = printer();
     Expression main = compileExpression(parse("main"));

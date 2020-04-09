@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Expression;
@@ -15,7 +16,7 @@ public class Runtime {
     this.definitions = definitions;
   }
 
-  public static Runtime runtime(Library... libraries) {
+  public static Runtime runtime(Chain<Library> libraries) {
     Map<String, Expression> definitions = new HashMap<>();
     for (Library library : libraries) {
       for (Definition definition : library.definitions) {

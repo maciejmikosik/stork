@@ -2,6 +2,7 @@ package com.mikosik.stork.common;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -62,6 +63,14 @@ public class Chain<E> implements Iterable<E> {
 
   public Stream<E> stream() {
     return StreamSupport.stream(this.spliterator(), false);
+  }
+
+  public <X> Chain<X> map(Function<E, X> mapper) {
+    Chain<X> chain = chain();
+    for (E element : this) {
+      chain = chain.add(mapper.apply(element));
+    }
+    return chain.reverse();
   }
 
   public static <E> Chain<E> chainOf(E element) {
