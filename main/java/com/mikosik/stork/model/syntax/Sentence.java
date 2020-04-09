@@ -2,16 +2,16 @@ package com.mikosik.stork.model.syntax;
 
 import static java.util.stream.Collectors.joining;
 
-import java.util.List;
+import com.mikosik.stork.common.Chain;
 
 public class Sentence {
-  public final List<Syntax> parts;
+  public final Chain<Syntax> parts;
 
-  private Sentence(List<Syntax> parts) {
+  private Sentence(Chain<Syntax> parts) {
     this.parts = parts;
   }
 
-  public static Sentence sentence(List<Syntax> parts) {
+  public static Sentence sentence(Chain<Syntax> parts) {
     return new Sentence(parts);
   }
 

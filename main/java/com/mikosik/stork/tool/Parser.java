@@ -1,5 +1,6 @@
 package com.mikosik.stork.tool;
 
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Reading.reading;
 import static com.mikosik.stork.model.syntax.Bracket.bracket;
@@ -9,9 +10,7 @@ import static com.mikosik.stork.model.syntax.BracketType.isOpeningBracket;
 import static com.mikosik.stork.model.syntax.Sentence.sentence;
 import static com.mikosik.stork.model.syntax.Word.word;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Reading;
 import com.mikosik.stork.model.syntax.Bracket;
 import com.mikosik.stork.model.syntax.BracketType;
@@ -25,22 +24,22 @@ public class Parser {
   }
 
   private static Sentence parseSentence(Reading reading) {
-    List<Syntax> parts = new LinkedList<>();
+    Chain<Syntax> parts = chain();
     while (reading.available()) {
       char character = reading.peek();
       if (isWhitespace(character)) {
         reading.read();
       } else if (isWordy(character)) {
-        parts.add(parseWord(reading));
+        parts = parts.add(parseWord(reading));
       } else if (isOpeningBracket(character)) {
-        parts.add(parseBracket(reading));
+        parts = parts.add(parseBracket(reading));
       } else if (isClosingBracket(character)) {
         break;
       } else {
         throw new RuntimeException("unknown character " + character);
       }
     }
-    return sentence(parts);
+    return sentence(parts.reverse());
   }
 
   private static Word parseWord(Reading reading) {

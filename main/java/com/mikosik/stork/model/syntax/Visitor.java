@@ -1,13 +1,8 @@
 package com.mikosik.stork.model.syntax;
 
-import static com.mikosik.stork.common.Collections.first;
-import static com.mikosik.stork.common.Collections.skipFirst;
 import static com.mikosik.stork.model.syntax.BracketType.CURLY;
 import static com.mikosik.stork.model.syntax.BracketType.ROUND;
 import static com.mikosik.stork.model.syntax.Sentence.sentence;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Visitor<T> {
   protected T visitLabel(Word head, Sentence tail) {
@@ -31,8 +26,8 @@ public class Visitor<T> {
   }
 
   public static <T> T visit(Sentence sentence, Visitor<T> visitor) {
-    Syntax head = first(sentence.parts);
-    Sentence tail = sentence(skipFirst(sentence.parts));
+    Syntax head = sentence.parts.head();
+    Sentence tail = sentence(sentence.parts.tail());
     if (head instanceof Word) {
       Word word = (Word) head;
       if (word.string.chars().allMatch(Visitor::isNumberCharacter)) {
@@ -55,10 +50,7 @@ public class Visitor<T> {
   }
 
   private static Sentence join(Syntax syntax, Sentence sentence) {
-    List<Syntax> joined = new LinkedList<>();
-    joined.add(syntax);
-    joined.addAll(sentence.parts);
-    return sentence(joined);
+    return sentence(sentence.parts.add(syntax));
   }
 
   // TODO gather functions checking word characters

@@ -1,5 +1,6 @@
 package com.mikosik.stork;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.lib.Libraries.library;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.tool.Compiler.compileDefinition;
@@ -8,7 +9,6 @@ import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.Printer.printer;
 import static com.mikosik.stork.tool.Runner.runner;
 import static com.mikosik.stork.tool.Runtime.runtime;
-import static java.util.Arrays.asList;
 
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Expression;
@@ -17,7 +17,7 @@ import com.mikosik.stork.tool.Runner;
 
 public class Demo {
   public static void main(String[] args) {
-    Library mainLibrary = library(asList(
+    Library mainLibrary = library(chainOf(
         compileDefinition(parse("main { add(2)(3) }"))));
     Runner runner = runner(runtime(
         library("integer.stork"),

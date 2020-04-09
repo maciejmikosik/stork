@@ -1,7 +1,6 @@
 package com.mikosik.stork.tool;
 
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Collections.first;
 import static com.mikosik.stork.model.def.Definition.definition;
 import static com.mikosik.stork.model.runtime.Application.application;
 import static com.mikosik.stork.model.runtime.Lambda.lambda;
@@ -36,10 +35,10 @@ public class Compiler {
       }
 
       protected Expression visitInteger(Word head, Sentence tail) {
-        if (tail.parts.isEmpty()) {
-          return primitive(new BigInteger(head.string));
-        } else {
+        if (tail.parts.available()) {
           throw new RuntimeException("integer cannot be followed by sentence");
+        } else {
+          return primitive(new BigInteger(head.string));
         }
       }
 
@@ -82,8 +81,8 @@ public class Compiler {
 
   private static String parameterIn(Bracket bracket) {
     check(bracket.type == ROUND);
-    check(bracket.sentence.parts.size() == 1);
-    Word word = (Word) first(bracket.sentence.parts);
+    check(!bracket.sentence.parts.tail().available());
+    Word word = (Word) bracket.sentence.parts.head();
     return word.string;
   }
 }
