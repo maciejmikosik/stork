@@ -255,8 +255,3 @@
   clamp(min)(max)(number) {
     ceiling(max)(floor(min)(number))
   }
-
-
-  main {
-    0
-  }
