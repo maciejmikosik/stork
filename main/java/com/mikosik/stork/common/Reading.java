@@ -1,15 +1,15 @@
 package com.mikosik.stork.common;
 
-public class Stream {
+public class Reading {
   private final String string;
   private int index = 0;
 
-  private Stream(String string) {
+  private Reading(String string) {
     this.string = string;
   }
 
-  public static Stream stream(String string) {
-    return new Stream(string);
+  public static Reading reading(String string) {
+    return new Reading(string);
   }
 
   public char peek() {
