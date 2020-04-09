@@ -27,16 +27,17 @@ public class Parser {
   private static Sentence parseSentence(Reading reading) {
     List<Syntax> parts = new LinkedList<>();
     while (reading.available()) {
-      if (isWhitespace(reading.peek())) {
+      char character = reading.peek();
+      if (isWhitespace(character)) {
         reading.read();
-      } else if (isWordCharacter(reading.peek())) {
+      } else if (isWordy(character)) {
         parts.add(parseWord(reading));
-      } else if (isOpeningBracket(reading.peek())) {
+      } else if (isOpeningBracket(character)) {
         parts.add(parseBracket(reading));
-      } else if (isClosingBracket(reading.peek())) {
+      } else if (isClosingBracket(character)) {
         break;
       } else {
-        throw new RuntimeException("unknown character " + reading.peek());
+        throw new RuntimeException("unknown character " + character);
       }
     }
     return sentence(parts);
@@ -44,7 +45,7 @@ public class Parser {
 
   private static Word parseWord(Reading reading) {
     StringBuilder builder = new StringBuilder();
-    while (reading.available() && isWordCharacter(reading.peek())) {
+    while (reading.available() && isWordy(reading.peek())) {
       builder.append(reading.read());
     }
     return word(builder.toString());
@@ -64,7 +65,7 @@ public class Parser {
   }
 
   // TODO gather functions checking word characters
-  private static boolean isWordCharacter(char character) {
+  private static boolean isWordy(char character) {
     return 'a' <= character && character <= 'z'
         || 'A' <= character && character <= 'Z'
         || '0' <= character && character <= '9'
