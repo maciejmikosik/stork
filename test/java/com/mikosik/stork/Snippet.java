@@ -22,18 +22,18 @@ import com.mikosik.stork.tool.Runner;
 
 public class Snippet extends Case {
   private final Chain<String> libraries;
-  private final Chain<String> sources;
+  private final Chain<String> definitions;
   private final String launch;
   private final String expect;
 
   private Snippet(
       String name,
       Chain<String> libraries,
-      Chain<String> sources,
+      Chain<String> definitions,
       String launch,
       String expect) {
     super(name);
-    this.sources = sources;
+    this.definitions = definitions;
     this.libraries = libraries;
     this.launch = launch;
     this.expect = expect;
@@ -52,7 +52,7 @@ public class Snippet extends Case {
     return new Snippet(
         name,
         libraries.add(library),
-        sources,
+        definitions,
         launch,
         expect);
   }
@@ -61,7 +61,7 @@ public class Snippet extends Case {
     return new Snippet(
         name,
         libraries,
-        sources.add(definition),
+        definitions.add(definition),
         launch,
         expect);
   }
@@ -70,7 +70,7 @@ public class Snippet extends Case {
     return new Snippet(
         name,
         libraries,
-        sources,
+        definitions,
         launch,
         expect);
   }
@@ -79,13 +79,13 @@ public class Snippet extends Case {
     return new Snippet(
         name,
         libraries,
-        sources,
+        definitions,
         launch,
         expect);
   }
 
   public void run() {
-    Chain<Definition> compiledDefinitions = sources
+    Chain<Definition> compiledDefinitions = definitions
         .map(Parser::parse)
         .map(Compiler::compileDefinition);
     Chain<Library> compiledLibraries = libraries
