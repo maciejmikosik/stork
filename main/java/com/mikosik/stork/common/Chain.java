@@ -1,6 +1,9 @@
 package com.mikosik.stork.common;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Chain<E> implements Iterable<E> {
   private final E head;
@@ -17,6 +20,14 @@ public class Chain<E> implements Iterable<E> {
 
   public boolean available() {
     return true;
+  }
+
+  public E head() {
+    return head;
+  }
+
+  public Chain<E> tail() {
+    return tail;
   }
 
   public Chain<E> add(E element) {
@@ -49,6 +60,10 @@ public class Chain<E> implements Iterable<E> {
     };
   }
 
+  public Stream<E> stream() {
+    return StreamSupport.stream(this.spliterator(), false);
+  }
+
   public static <E> Chain<E> chainOf(E element) {
     Chain<E> chain = chain();
     return chain.add(element);
@@ -74,6 +89,14 @@ public class Chain<E> implements Iterable<E> {
   private static Chain<Object> EMPTY = new Chain<Object>(null, null) {
     public boolean available() {
       return false;
+    }
+
+    public Object head() {
+      throw new NoSuchElementException();
+    }
+
+    public Chain<Object> tail() {
+      throw new NoSuchElementException();
     }
   };
 }
