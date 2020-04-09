@@ -1,4 +1,4 @@
-package com.mikosik.stork;
+package com.mikosik.stork.lib;
 
 import static com.mikosik.stork.model.def.Definition.definition;
 import static com.mikosik.stork.model.def.Library.library;
@@ -15,7 +15,7 @@ import com.mikosik.stork.model.runtime.Core;
 import com.mikosik.stork.model.runtime.Expression;
 import com.mikosik.stork.model.runtime.Primitive;
 
-public class CoreLibrary {
+class CoreLibrary {
   public static Library coreLibrary() {
     return library(asList(
         addIntegerInteger(),
