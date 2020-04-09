@@ -1,6 +1,7 @@
 package com.mikosik.stork.tool;
 
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Stream.stream;
 import static com.mikosik.stork.model.syntax.Bracket.bracket;
 import static com.mikosik.stork.model.syntax.BracketType.bracketByCharacter;
 import static com.mikosik.stork.model.syntax.BracketType.isClosingBracket;
@@ -19,8 +20,8 @@ import com.mikosik.stork.model.syntax.Syntax;
 import com.mikosik.stork.model.syntax.Word;
 
 public class Parser {
-  public static Sentence parse(Stream stream) {
-    return parseSentence(stream);
+  public static Sentence parse(String source) {
+    return parseSentence(stream(source));
   }
 
   private static Sentence parseSentence(Stream stream) {
