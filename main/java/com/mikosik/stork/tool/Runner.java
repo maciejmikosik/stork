@@ -4,7 +4,6 @@ import static com.mikosik.stork.model.runtime.Application.application;
 import static com.mikosik.stork.model.runtime.Lambda.lambda;
 import static com.mikosik.stork.model.runtime.Visitor.visit;
 
-import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Application;
 import com.mikosik.stork.model.runtime.Core;
 import com.mikosik.stork.model.runtime.Expression;
@@ -14,20 +13,20 @@ import com.mikosik.stork.model.runtime.Variable;
 import com.mikosik.stork.model.runtime.Visitor;
 
 public class Runner {
-  private final Library library;
+  private final Runtime runtime;
 
-  private Runner(Library library) {
-    this.library = library;
+  private Runner(Runtime runtime) {
+    this.runtime = runtime;
   }
 
-  public static Runner runner(Library library) {
-    return new Runner(library);
+  public static Runner runner(Runtime runtime) {
+    return new Runner(runtime);
   }
 
   public Expression run(Expression expression) {
     return visit(expression, new Visitor<Expression>() {
       protected Expression visit(Variable variable) {
-        return run(library.get(variable.name));
+        return run(runtime.find(variable.name));
       }
 
       protected Expression visit(Primitive primitive) {

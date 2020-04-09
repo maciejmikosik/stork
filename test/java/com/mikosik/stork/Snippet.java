@@ -6,6 +6,7 @@ import static com.mikosik.stork.tool.Compiler.compileDefinition;
 import static com.mikosik.stork.tool.Compiler.compileExpression;
 import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.Runner.runner;
+import static com.mikosik.stork.tool.Runtime.runtime;
 import static java.lang.String.format;
 
 import java.util.LinkedList;
@@ -51,7 +52,7 @@ public class Snippet extends Case {
     for (String definition : definitions) {
       library.add(compileDefinition(parse(stream(definition))));
     }
-    Runner runner = runner(library);
+    Runner runner = runner(runtime(library));
 
     Expression launched = runner.run(compileExpression(parse(stream(launch))));
     Expression expected = runner.run(compileExpression(parse(stream(expect))));
