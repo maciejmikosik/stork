@@ -15,11 +15,13 @@ public class Runtime {
     this.definitions = definitions;
   }
 
-  public static Runtime runtime(Library library) {
+  public static Runtime runtime(Library... libraries) {
     Map<String, Expression> definitions = new HashMap<>();
-    for (Definition definition : library.definitions) {
-      // TODO check collisions
-      definitions.put(definition.name, definition.expression);
+    for (Library library : libraries) {
+      for (Definition definition : library.definitions) {
+        // TODO check collisions
+        definitions.put(definition.name, definition.expression);
+      }
     }
     return new Runtime(definitions);
   }
