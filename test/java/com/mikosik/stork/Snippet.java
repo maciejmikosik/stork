@@ -2,6 +2,7 @@ package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Chain.chainFrom;
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.tool.Compiler.compileExpression;
 import static com.mikosik.stork.tool.Parser.parse;
@@ -72,7 +73,7 @@ public class Snippet extends Case {
         .map(Parser::parse)
         .map(Compiler::compileDefinition)
         .collect(toCollection(LinkedList::new));
-    Runner runner = runner(runtime(library(chainFrom(definitions))));
+    Runner runner = runner(runtime(chainOf(library(chainFrom(definitions)))));
 
     Expression launched = runner.run(compileExpression(parse(launch)));
     Expression expected = runner.run(compileExpression(parse(expect)));
