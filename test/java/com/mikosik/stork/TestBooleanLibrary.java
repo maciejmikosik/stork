@@ -7,57 +7,50 @@ import org.quackery.Suite;
 
 public class TestBooleanLibrary {
   public static Suite testBooleanLibrary() {
+    StorkTest test = storkTest()
+        .givenImported("boolean.stork")
+        .given("then{5}")
+        .given("else{7}");
+
     return suite("test boolean library")
         .add(suite("true/false")
-            .add(storkTest("true(then)(else) = then")
-                .givenImported("boolean.stork")
-                .when("true(1)(2)")
-                .thenReturned("1"))
-            .add(storkTest("false(then)(else) = else")
-                .givenImported("boolean.stork")
-                .when("false(1)(2)")
-                .thenReturned("2")))
+            .add(test
+                .when("true(then)(else)")
+                .thenReturned("then"))
+            .add(test
+                .when("false(then)(else)")
+                .thenReturned("else")))
         .add(suite("not")
-            .add(storkTest("not(true) = false")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("not(true)")
                 .thenReturned("false"))
-            .add(storkTest("not(false) = true")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("not(false)")
                 .thenReturned("true")))
         .add(suite("and")
-            .add(storkTest("and(true)(true) = true")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("and(true)(true)")
                 .thenReturned("true"))
-            .add(storkTest("and(false)(true) = false")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("and(false)(true)")
                 .thenReturned("false"))
-            .add(storkTest("and(true)(false) = false")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("and(true)(false)")
                 .thenReturned("false"))
-            .add(storkTest("and(false)(false) = false")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("and(false)(false)")
                 .thenReturned("false")))
         .add(suite("or")
-            .add(storkTest("or(true)(true) = true")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("or(true)(true)")
                 .thenReturned("true"))
-            .add(storkTest("or(false)(true) = true")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("or(false)(true)")
                 .thenReturned("true"))
-            .add(storkTest("or(true)(false) = true")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("or(true)(false)")
                 .thenReturned("true"))
-            .add(storkTest("or(false)(false) = false")
-                .givenImported("boolean.stork")
+            .add(test
                 .when("or(false)(false)")
                 .thenReturned("false")));
   }

@@ -21,6 +21,8 @@ import com.mikosik.stork.tool.Parser;
 import com.mikosik.stork.tool.Runner;
 
 public class StorkTest extends Case {
+  @SuppressWarnings("hiding")
+  private final String name;
   private final Chain<String> givenImportedLibraries;
   private final Chain<String> givenDefinitions;
   private final String whenExpression;
@@ -32,20 +34,40 @@ public class StorkTest extends Case {
       Chain<String> givenDefinitions,
       String whenExpression,
       String thenReturnedExpression) {
-    super(name);
+    super(replaceEmptyName(name, whenExpression, thenReturnedExpression));
+    this.name = name;
     this.givenDefinitions = givenDefinitions;
     this.givenImportedLibraries = givenImportedLibraries;
     this.whenExpression = whenExpression;
     this.thenReturnedExpression = thenReturnedExpression;
   }
 
-  public static StorkTest storkTest(String name) {
+  private static String replaceEmptyName(String name, String when, String then) {
+    return name.isEmpty()
+        ? format("%s = %s", when, then)
+        : name;
+  }
+
+  public static StorkTest storkTest() {
     return new StorkTest(
-        name,
+        "",
         chain(),
         chain(),
         null,
         null);
+  }
+
+  public static StorkTest storkTest(String name) {
+    return storkTest().name(name);
+  }
+
+  public StorkTest name(String name) {
+    return new StorkTest(
+        name,
+        givenImportedLibraries,
+        givenDefinitions,
+        whenExpression,
+        thenReturnedExpression);
   }
 
   public StorkTest givenImported(String library) {
