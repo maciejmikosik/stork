@@ -1,76 +1,38 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.Snippet.snippet;
+import static com.mikosik.stork.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Suite;
+import org.quackery.Test;
 
 public class TestBooleanLibrary {
   public static Suite testBooleanLibrary() {
     return suite("test boolean library")
         .add(suite("true/false")
-            .add(snippet("true(then)(else) = then")
-                .include("boolean.stork")
-                .define("main{true(1)(2)}")
-                .launch("main")
-                .expect("1"))
-            .add(snippet("false(then)(else) = else")
-                .include("boolean.stork")
-                .define("main{false(1)(2)}")
-                .launch("main")
-                .expect("2")))
+            .add(testEqual("true(then)(else)", "then"))
+            .add(testEqual("false(then)(else)", "else")))
         .add(suite("not")
-            .add(snippet("not(true) = false")
-                .include("boolean.stork")
-                .define("main{not(true)}")
-                .launch("main")
-                .expect("false"))
-            .add(snippet("not(false) = true")
-                .include("boolean.stork")
-                .define("main{not(false)}")
-                .launch("main")
-                .expect("true")))
+            .add(testEqual("not(true)", "false"))
+            .add(testEqual("not(false)", "true")))
         .add(suite("and")
-            .add(snippet("and(true)(true) = true")
-                .include("boolean.stork")
-                .define("main{and(true)(true)}")
-                .launch("main")
-                .expect("true"))
-            .add(snippet("and(false)(true) = false")
-                .include("boolean.stork")
-                .define("main{and(false)(true)}")
-                .launch("main")
-                .expect("false"))
-            .add(snippet("and(true)(false) = false")
-                .include("boolean.stork")
-                .define("main{and(true)(false)}")
-                .launch("main")
-                .expect("false"))
-            .add(snippet("and(false)(false) = false")
-                .include("boolean.stork")
-                .define("main{and(false)(false)}")
-                .launch("main")
-                .expect("false")))
+            .add(testEqual("and(true)(true)", "true"))
+            .add(testEqual("and(false)(true)", "false"))
+            .add(testEqual("and(true)(false)", "false"))
+            .add(testEqual("and(false)(false)", "false")))
         .add(suite("or")
-            .add(snippet("or(true)(true) = true")
-                .include("boolean.stork")
-                .define("main{or(true)(true)}")
-                .launch("main")
-                .expect("true"))
-            .add(snippet("or(false)(true) = true")
-                .include("boolean.stork")
-                .define("main{or(false)(true)}")
-                .launch("main")
-                .expect("true"))
-            .add(snippet("or(true)(false) = true")
-                .include("boolean.stork")
-                .define("main{or(true)(false)}")
-                .launch("main")
-                .expect("true"))
-            .add(snippet("or(false)(false) = false")
-                .include("boolean.stork")
-                .define("main{or(false)(false)}")
-                .launch("main")
-                .expect("false")));
+            .add(testEqual("or(true)(true)", "true"))
+            .add(testEqual("or(false)(true)", "true"))
+            .add(testEqual("or(true)(false)", "true"))
+            .add(testEqual("or(false)(false)", "false")));
+  }
+
+  private static Test testEqual(String expression, String expected) {
+    return storkTest()
+        .givenImported("boolean.stork")
+        .given("then{5}")
+        .given("else{7}")
+        .when(expression)
+        .thenReturned(expected);
   }
 }
