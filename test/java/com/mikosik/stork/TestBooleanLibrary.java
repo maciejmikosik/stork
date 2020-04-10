@@ -4,54 +4,35 @@ import static com.mikosik.stork.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Suite;
+import org.quackery.Test;
 
 public class TestBooleanLibrary {
   public static Suite testBooleanLibrary() {
-    StorkTest test = storkTest()
-        .givenImported("boolean.stork")
-        .given("then{5}")
-        .given("else{7}");
-
     return suite("test boolean library")
         .add(suite("true/false")
-            .add(test
-                .when("true(then)(else)")
-                .thenReturned("then"))
-            .add(test
-                .when("false(then)(else)")
-                .thenReturned("else")))
+            .add(testEqual("true(then)(else)", "then"))
+            .add(testEqual("false(then)(else)", "else")))
         .add(suite("not")
-            .add(test
-                .when("not(true)")
-                .thenReturned("false"))
-            .add(test
-                .when("not(false)")
-                .thenReturned("true")))
+            .add(testEqual("not(true)", "false"))
+            .add(testEqual("not(false)", "true")))
         .add(suite("and")
-            .add(test
-                .when("and(true)(true)")
-                .thenReturned("true"))
-            .add(test
-                .when("and(false)(true)")
-                .thenReturned("false"))
-            .add(test
-                .when("and(true)(false)")
-                .thenReturned("false"))
-            .add(test
-                .when("and(false)(false)")
-                .thenReturned("false")))
+            .add(testEqual("and(true)(true)", "true"))
+            .add(testEqual("and(false)(true)", "false"))
+            .add(testEqual("and(true)(false)", "false"))
+            .add(testEqual("and(false)(false)", "false")))
         .add(suite("or")
-            .add(test
-                .when("or(true)(true)")
-                .thenReturned("true"))
-            .add(test
-                .when("or(false)(true)")
-                .thenReturned("true"))
-            .add(test
-                .when("or(true)(false)")
-                .thenReturned("true"))
-            .add(test
-                .when("or(false)(false)")
-                .thenReturned("false")));
+            .add(testEqual("or(true)(true)", "true"))
+            .add(testEqual("or(false)(true)", "true"))
+            .add(testEqual("or(true)(false)", "true"))
+            .add(testEqual("or(false)(false)", "false")));
+  }
+
+  private static Test testEqual(String expression, String expected) {
+    return storkTest()
+        .givenImported("boolean.stork")
+        .given("then{5}")
+        .given("else{7}")
+        .when(expression)
+        .thenReturned(expected);
   }
 }
