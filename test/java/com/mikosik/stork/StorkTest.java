@@ -1,6 +1,9 @@
 package com.mikosik.stork;
 
+import static com.mikosik.stork.Mock.mock;
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.model.def.Definition.definition;
 import static com.mikosik.stork.model.def.Library.library;
 import static com.mikosik.stork.tool.Compiler.compileExpression;
 import static com.mikosik.stork.tool.Parser.parse;
@@ -24,6 +27,7 @@ public class StorkTest extends Case {
   @SuppressWarnings("hiding")
   private final String name;
   private final Chain<String> givenImportedLibraries;
+  private final Chain<String> givenMocks;
   private final Chain<String> givenDefinitions;
   private final String whenExpression;
   private final String thenReturnedExpression;
@@ -31,11 +35,13 @@ public class StorkTest extends Case {
   private StorkTest(
       String name,
       Chain<String> givenImportedLibraries,
+      Chain<String> givenMocks,
       Chain<String> givenDefinitions,
       String whenExpression,
       String thenReturnedExpression) {
     super(replaceEmptyName(name, whenExpression, thenReturnedExpression));
     this.name = name;
+    this.givenMocks = givenMocks;
     this.givenDefinitions = givenDefinitions;
     this.givenImportedLibraries = givenImportedLibraries;
     this.whenExpression = whenExpression;
@@ -53,6 +59,7 @@ public class StorkTest extends Case {
         "",
         chain(),
         chain(),
+        chain(),
         null,
         null);
   }
@@ -65,6 +72,7 @@ public class StorkTest extends Case {
     return new StorkTest(
         name,
         givenImportedLibraries,
+        givenMocks,
         givenDefinitions,
         whenExpression,
         thenReturnedExpression);
@@ -74,6 +82,17 @@ public class StorkTest extends Case {
     return new StorkTest(
         name,
         givenImportedLibraries.add(library),
+        givenMocks,
+        givenDefinitions,
+        whenExpression,
+        thenReturnedExpression);
+  }
+
+  public StorkTest givenMocks(String... mocks) {
+    return new StorkTest(
+        name,
+        givenImportedLibraries,
+        chainOf(mocks),
         givenDefinitions,
         whenExpression,
         thenReturnedExpression);
@@ -83,6 +102,7 @@ public class StorkTest extends Case {
     return new StorkTest(
         name,
         givenImportedLibraries,
+        givenMocks,
         givenDefinitions.add(definition),
         whenExpression,
         thenReturnedExpression);
@@ -92,6 +112,7 @@ public class StorkTest extends Case {
     return new StorkTest(
         name,
         givenImportedLibraries,
+        givenMocks,
         givenDefinitions,
         expression,
         thenReturnedExpression);
@@ -101,6 +122,7 @@ public class StorkTest extends Case {
     return new StorkTest(
         name,
         givenImportedLibraries,
+        givenMocks,
         givenDefinitions,
         whenExpression,
         expression);
@@ -112,7 +134,11 @@ public class StorkTest extends Case {
         .map(Compiler::compileDefinition);
     Chain<Library> libraries = givenImportedLibraries
         .map(Libraries::library);
-    Chain<Library> allLibraries = libraries.add(library(definitions));
+    Chain<Definition> mocks = givenMocks
+        .map(name -> definition(name, mock(name)));
+    Chain<Library> allLibraries = libraries
+        .add(library(definitions))
+        .add(library(mocks));
     Runner runner = runner(runtime(allLibraries));
 
     Expression actual = runner.run(compileExpression(parse(whenExpression)));
