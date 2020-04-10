@@ -9,7 +9,6 @@ import static java.lang.String.format;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.model.def.Definition;
 import com.mikosik.stork.model.def.Library;
 import com.mikosik.stork.model.runtime.Core;
 import com.mikosik.stork.model.runtime.Expression;
@@ -19,14 +18,14 @@ import com.mikosik.stork.tool.Runner;
 class CoreLibrary {
   public static Library coreLibrary() {
     return library(chainOf(
-        addIntegerInteger(),
-        negateInteger(),
-        equalIntegerInteger(),
-        moreThanIntegerInteger()));
+        definition("add", addIntegerInteger()),
+        definition("negate", negateInteger()),
+        definition("equal", equalIntegerInteger()),
+        definition("moreThan", moreThanIntegerInteger())));
   }
 
-  private static Definition addIntegerInteger() {
-    return definition("add", new RecursiveCore() {
+  private static RecursiveCore addIntegerInteger() {
+    return new RecursiveCore() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new RecursiveCore() {
@@ -44,11 +43,11 @@ class CoreLibrary {
       public String toString() {
         return "add";
       }
-    });
+    };
   }
 
-  private static Definition negateInteger() {
-    return definition("negate", new RecursiveCore() {
+  private static RecursiveCore negateInteger() {
+    return new RecursiveCore() {
       public Expression run(Expression argument) {
         BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
         return primitive(bigInteger.negate());
@@ -57,11 +56,11 @@ class CoreLibrary {
       public String toString() {
         return "negate";
       }
-    });
+    };
   }
 
-  private static Definition equalIntegerInteger() {
-    return definition("equal", new RecursiveCore() {
+  private static RecursiveCore equalIntegerInteger() {
+    return new RecursiveCore() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new RecursiveCore() {
@@ -79,11 +78,11 @@ class CoreLibrary {
       public String toString() {
         return "equal";
       }
-    });
+    };
   }
 
-  private static Definition moreThanIntegerInteger() {
-    return definition("moreThan", new RecursiveCore() {
+  private static RecursiveCore moreThanIntegerInteger() {
+    return new RecursiveCore() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new RecursiveCore() {
@@ -101,7 +100,7 @@ class CoreLibrary {
       public String toString() {
         return "moreThan";
       }
-    });
+    };
   }
 
   private static abstract class RecursiveCore implements Core {
