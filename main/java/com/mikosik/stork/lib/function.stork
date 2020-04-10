@@ -1,8 +1,12 @@
 
-  self(x) {
-    x
+  self(xx) {
+    xx
   }
 
-  flip(f)(x)(y) {
-    f(y)(x)
+  compose(ff)(gg)(xx) {
+    ff(gg(xx))
+  }
+
+  flip(ff)(xx)(yy) {
+    ff(yy)(xx)
   }
