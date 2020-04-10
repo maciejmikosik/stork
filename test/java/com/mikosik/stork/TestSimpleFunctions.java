@@ -9,17 +9,20 @@ public class TestSimpleFunctions {
   public static Suite testSimpleFunctions() {
     return suite("test simple functions")
         .add(storkTest("returning constant")
-            .given("main{5}")
+            .givenMocks("x")
+            .given("main{x}")
             .when("main")
-            .thenReturned("5"))
+            .thenReturned("x"))
         .add(storkTest("returning argument")
+            .givenMocks("x")
             .given("main(argument){argument}")
-            .when("main(10)")
-            .thenReturned("10"))
+            .when("main(x)")
+            .thenReturned("x"))
         .add(storkTest("forwarding argument and result")
-            .given("identity(x){x}")
-            .given("main(argument){identity(argument)}")
-            .when("main(3)")
-            .thenReturned("3"));
+            .givenMocks("x")
+            .given("identity(arg){arg}")
+            .given("main(arg){identity(arg)}")
+            .when("main(x)")
+            .thenReturned("x"));
   }
 }
