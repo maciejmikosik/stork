@@ -58,7 +58,7 @@ public class Runner {
       }
 
       protected Expression visit(Core core) {
-        return run(core.run(run(application.argument)));
+        return core.run(application.argument, Runner.this);
       }
 
       protected Expression visitDefault(Expression expression) {
