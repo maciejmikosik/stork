@@ -30,8 +30,7 @@ public class TestBooleanLibrary {
   private static Test testEqual(String expression, String expected) {
     return storkTest()
         .givenImported("boolean.stork")
-        .given("then{5}")
-        .given("else{7}")
+        .givenMocks("then", "else")
         .when(expression)
         .thenReturned(expected);
   }
