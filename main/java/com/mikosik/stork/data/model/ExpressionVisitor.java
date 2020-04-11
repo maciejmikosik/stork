@@ -1,6 +1,6 @@
 package com.mikosik.stork.data.model;
 
-public class Visitor<T> {
+public class ExpressionVisitor<T> {
   protected T visit(Variable variable) {
     return visitDefault(variable);
   }
@@ -25,19 +25,19 @@ public class Visitor<T> {
     throw new RuntimeException();
   }
 
-  public static <T> T visit(Expression expression, Visitor<T> visitor) {
+  public T visit(Expression expression) {
     if (expression instanceof Variable) {
-      return visitor.visit((Variable) expression);
+      return visit((Variable) expression);
     } else if (expression instanceof Primitive) {
-      return visitor.visit((Primitive) expression);
+      return visit((Primitive) expression);
     } else if (expression instanceof Core) {
-      return visitor.visit((Core) expression);
+      return visit((Core) expression);
     } else if (expression instanceof Application) {
-      return visitor.visit((Application) expression);
+      return visit((Application) expression);
     } else if (expression instanceof Lambda) {
-      return visitor.visit((Lambda) expression);
+      return visit((Lambda) expression);
     } else {
-      return visitor.visitDefault(expression);
+      return visitDefault(expression);
     }
   }
 }

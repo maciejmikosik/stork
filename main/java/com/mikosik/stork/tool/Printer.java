@@ -1,14 +1,13 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.data.model.Visitor.visit;
 import static java.lang.String.format;
 
 import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.ExpressionVisitor;
 import com.mikosik.stork.data.model.Lambda;
 import com.mikosik.stork.data.model.Primitive;
 import com.mikosik.stork.data.model.Variable;
-import com.mikosik.stork.data.model.Visitor;
 
 public class Printer {
   private Printer() {}
@@ -18,7 +17,7 @@ public class Printer {
   }
 
   public String print(Expression expression) {
-    return visit(expression, new Visitor<String>() {
+    ExpressionVisitor<String> visitor = new ExpressionVisitor<String>() {
       protected String visit(Primitive primitive) {
         return primitive.object.toString();
       }
@@ -36,6 +35,7 @@ public class Printer {
             ? format("(%s)%s", lambda.parameter, print(lambda.body))
             : format("(%s){ %s }", lambda.parameter, print(lambda.body));
       }
-    });
+    };
+    return visitor.visit(expression);
   }
 }
