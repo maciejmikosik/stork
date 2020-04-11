@@ -19,8 +19,7 @@ import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Library;
 import com.mikosik.stork.lib.Libraries;
-import com.mikosik.stork.tool.Modeler;
-import com.mikosik.stork.tool.Parser;
+import com.mikosik.stork.tool.Default;
 import com.mikosik.stork.tool.Runner;
 
 public class StorkTest extends Case {
@@ -130,8 +129,7 @@ public class StorkTest extends Case {
 
   public void run() {
     Chain<Definition> definitions = givenDefinitions
-        .map(Parser::parse)
-        .map(Modeler::modelDefinition);
+        .map(Default::compileDefinition);
     Chain<Library> libraries = givenImportedLibraries
         .map(Libraries::library);
     Chain<Definition> mocks = givenMocks

@@ -13,8 +13,7 @@ import java.util.List;
 
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Library;
-import com.mikosik.stork.tool.Modeler;
-import com.mikosik.stork.tool.Parser;
+import com.mikosik.stork.tool.Default;
 
 public class Libraries {
   public static Library library(String name) {
@@ -27,8 +26,7 @@ public class Libraries {
     List<Definition> definitions = stream(readFile(name).split("\n\n"))
         .map(String::trim)
         .filter(source -> source.length() > 0)
-        .map(Parser::parse)
-        .map(Modeler::modelDefinition)
+        .map(Default::compileDefinition)
         .collect(toList());
     return Library.library(chainFrom(definitions));
   }
