@@ -1,16 +1,16 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.model.runtime.Application.application;
-import static com.mikosik.stork.model.runtime.Lambda.lambda;
-import static com.mikosik.stork.model.runtime.Visitor.visit;
+import static com.mikosik.stork.data.model.Application.application;
+import static com.mikosik.stork.data.model.Lambda.lambda;
+import static com.mikosik.stork.data.model.Visitor.visit;
 
-import com.mikosik.stork.model.runtime.Application;
-import com.mikosik.stork.model.runtime.Core;
-import com.mikosik.stork.model.runtime.Expression;
-import com.mikosik.stork.model.runtime.Lambda;
-import com.mikosik.stork.model.runtime.Primitive;
-import com.mikosik.stork.model.runtime.Variable;
-import com.mikosik.stork.model.runtime.Visitor;
+import com.mikosik.stork.data.model.Application;
+import com.mikosik.stork.data.model.Core;
+import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Lambda;
+import com.mikosik.stork.data.model.Primitive;
+import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.data.model.Visitor;
 
 public class Runner {
   private final Runtime runtime;

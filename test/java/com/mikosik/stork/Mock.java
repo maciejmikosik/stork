@@ -1,8 +1,8 @@
 package com.mikosik.stork;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.model.runtime.Core;
-import com.mikosik.stork.model.runtime.Expression;
+import com.mikosik.stork.data.model.Core;
+import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.tool.Runner;
 
 public class Mock implements Core {

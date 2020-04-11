@@ -1,18 +1,18 @@
 package com.mikosik.stork.lib;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.model.def.Definition.definition;
-import static com.mikosik.stork.model.def.Library.library;
-import static com.mikosik.stork.model.runtime.Primitive.primitive;
-import static com.mikosik.stork.model.runtime.Variable.variable;
+import static com.mikosik.stork.data.model.Definition.definition;
+import static com.mikosik.stork.data.model.Library.library;
+import static com.mikosik.stork.data.model.Primitive.primitive;
+import static com.mikosik.stork.data.model.Variable.variable;
 import static java.lang.String.format;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.model.def.Library;
-import com.mikosik.stork.model.runtime.Core;
-import com.mikosik.stork.model.runtime.Expression;
-import com.mikosik.stork.model.runtime.Primitive;
+import com.mikosik.stork.data.model.Core;
+import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Library;
+import com.mikosik.stork.data.model.Primitive;
 import com.mikosik.stork.tool.Runner;
 
 class CoreLibrary {

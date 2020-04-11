@@ -1,6 +1,4 @@
-package com.mikosik.stork.model.def;
-
-import com.mikosik.stork.model.runtime.Expression;
+package com.mikosik.stork.data.model;
 
 public class Definition {
   public final String name;

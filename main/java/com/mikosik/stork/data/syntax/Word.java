@@ -1,4 +1,4 @@
-package com.mikosik.stork.model.syntax;
+package com.mikosik.stork.data.syntax;
 
 public class Word implements Syntax {
   public final String string;
