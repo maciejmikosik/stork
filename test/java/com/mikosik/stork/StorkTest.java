@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Library.library;
-import static com.mikosik.stork.tool.Compiler.compileExpression;
+import static com.mikosik.stork.tool.Modeler.modelExpression;
 import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.Runner.runner;
 import static com.mikosik.stork.tool.Runtime.runtime;
@@ -19,7 +19,7 @@ import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Library;
 import com.mikosik.stork.lib.Libraries;
-import com.mikosik.stork.tool.Compiler;
+import com.mikosik.stork.tool.Modeler;
 import com.mikosik.stork.tool.Parser;
 import com.mikosik.stork.tool.Runner;
 
@@ -131,7 +131,7 @@ public class StorkTest extends Case {
   public void run() {
     Chain<Definition> definitions = givenDefinitions
         .map(Parser::parse)
-        .map(Compiler::compileDefinition);
+        .map(Modeler::modelDefinition);
     Chain<Library> libraries = givenImportedLibraries
         .map(Libraries::library);
     Chain<Definition> mocks = givenMocks
@@ -141,8 +141,8 @@ public class StorkTest extends Case {
         .add(library(mocks));
     Runner runner = runner(runtime(allLibraries));
 
-    Expression actual = runner.run(compileExpression(parse(whenExpression)));
-    Expression expected = runner.run(compileExpression(parse(thenReturnedExpression)));
+    Expression actual = runner.run(modelExpression(parse(whenExpression)));
+    Expression expected = runner.run(modelExpression(parse(thenReturnedExpression)));
 
     if (!expected.toString().equals(actual.toString())) {
       throw new AssertException(format(""

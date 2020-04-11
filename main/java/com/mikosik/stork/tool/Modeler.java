@@ -19,19 +19,19 @@ import com.mikosik.stork.data.syntax.Syntax;
 import com.mikosik.stork.data.syntax.Visitor;
 import com.mikosik.stork.data.syntax.Word;
 
-public class Compiler {
-  public static Definition compileDefinition(Sentence sentence) {
+public class Modeler {
+  public static Definition modelDefinition(Sentence sentence) {
     return visit(sentence, new Visitor<Definition>() {
       protected Definition visitLabel(Word head, Sentence tail) {
-        return definition(head.string, compileLambda(tail));
+        return definition(head.string, modelLambda(tail));
       }
     });
   }
 
-  public static Expression compileExpression(Sentence sentence) {
+  public static Expression modelExpression(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitLabel(Word head, Sentence tail) {
-        return compileApplication(sentence);
+        return modelApplication(sentence);
       }
 
       protected Expression visitInteger(Word head, Sentence tail) {
@@ -43,12 +43,12 @@ public class Compiler {
       }
 
       protected Expression visitRound(Bracket head, Sentence tail) {
-        return compileLambda(sentence);
+        return modelLambda(sentence);
       }
     });
   }
 
-  private static Expression compileApplication(Sentence sentence) {
+  private static Expression modelApplication(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitLabel(Word head, Sentence tail) {
         Expression expression = variable(head.string);
@@ -57,24 +57,24 @@ public class Compiler {
           check(bracket.type == ROUND);
           expression = application(
               expression,
-              compileExpression(bracket.sentence));
+              modelExpression(bracket.sentence));
         }
         return expression;
       }
     });
   }
 
-  private static Expression compileLambda(Sentence sentence) {
+  private static Expression modelLambda(Sentence sentence) {
     return visit(sentence, new Visitor<Expression>() {
       protected Expression visitRound(Bracket head, Sentence tail) {
         return lambda(
             parameterIn(head),
-            compileLambda(tail));
+            modelLambda(tail));
       }
 
       protected Expression visitCurly(Bracket head, Sentence tail) {
         // TODO rest of sentence after bracket is ignored right now
-        return compileExpression(head.sentence);
+        return modelExpression(head.sentence);
       }
     });
   }
