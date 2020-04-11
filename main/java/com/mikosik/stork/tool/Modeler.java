@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Lambda.lambda;
+import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
@@ -12,6 +13,7 @@ import java.math.BigInteger;
 
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.Sentence;
 import com.mikosik.stork.data.syntax.SentenceVisitor;
@@ -82,10 +84,10 @@ public class Modeler {
     return visitor.visit(sentence);
   }
 
-  private static String parameterIn(Bracket bracket) {
+  private static Parameter parameterIn(Bracket bracket) {
     check(bracket.type == ROUND);
     check(!bracket.sentence.parts.tail().available());
     Word word = (Word) bracket.sentence.parts.head();
-    return word.string;
+    return parameter(word.string);
   }
 }
