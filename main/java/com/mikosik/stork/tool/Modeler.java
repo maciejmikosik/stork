@@ -7,7 +7,6 @@ import static com.mikosik.stork.data.model.Lambda.lambda;
 import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
-import static com.mikosik.stork.data.syntax.Visitor.visit;
 
 import java.math.BigInteger;
 
@@ -15,21 +14,22 @@ import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.Sentence;
+import com.mikosik.stork.data.syntax.SentenceVisitor;
 import com.mikosik.stork.data.syntax.Syntax;
-import com.mikosik.stork.data.syntax.Visitor;
 import com.mikosik.stork.data.syntax.Word;
 
 public class Modeler {
   public static Definition modelDefinition(Sentence sentence) {
-    return visit(sentence, new Visitor<Definition>() {
+    SentenceVisitor<Definition> visitor = new SentenceVisitor<Definition>() {
       protected Definition visitLabel(Word head, Sentence tail) {
         return definition(head.string, modelLambda(tail));
       }
-    });
+    };
+    return visitor.visit(sentence);
   }
 
   public static Expression modelExpression(Sentence sentence) {
-    return visit(sentence, new Visitor<Expression>() {
+    SentenceVisitor<Expression> visitor = new SentenceVisitor<Expression>() {
       protected Expression visitLabel(Word head, Sentence tail) {
         return modelApplication(sentence);
       }
@@ -45,11 +45,12 @@ public class Modeler {
       protected Expression visitRound(Bracket head, Sentence tail) {
         return modelLambda(sentence);
       }
-    });
+    };
+    return visitor.visit(sentence);
   }
 
   private static Expression modelApplication(Sentence sentence) {
-    return visit(sentence, new Visitor<Expression>() {
+    SentenceVisitor<Expression> visitor = new SentenceVisitor<Expression>() {
       protected Expression visitLabel(Word head, Sentence tail) {
         Expression expression = variable(head.string);
         for (Syntax part : tail.parts) {
@@ -61,11 +62,12 @@ public class Modeler {
         }
         return expression;
       }
-    });
+    };
+    return visitor.visit(sentence);
   }
 
   private static Expression modelLambda(Sentence sentence) {
-    return visit(sentence, new Visitor<Expression>() {
+    SentenceVisitor<Expression> visitor = new SentenceVisitor<Expression>() {
       protected Expression visitRound(Bracket head, Sentence tail) {
         return lambda(
             parameterIn(head),
@@ -76,7 +78,8 @@ public class Modeler {
         // TODO rest of sentence after bracket is ignored right now
         return modelExpression(head.sentence);
       }
-    });
+    };
+    return visitor.visit(sentence);
   }
 
   private static String parameterIn(Bracket bracket) {
