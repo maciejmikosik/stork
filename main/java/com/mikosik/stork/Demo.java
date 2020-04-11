@@ -1,10 +1,9 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.lib.Libraries.library;
-import static com.mikosik.stork.tool.Default.compileDefinition;
 import static com.mikosik.stork.tool.Default.compileExpression;
+import static com.mikosik.stork.tool.Default.compileLibrary;
 import static com.mikosik.stork.tool.Printer.printer;
 import static com.mikosik.stork.tool.Runner.runner;
 import static com.mikosik.stork.tool.Runtime.runtime;
@@ -20,7 +19,7 @@ public class Demo {
     Chain<Library> libraries = chainOf(
         library("integer.stork"),
         library("core.stork"),
-        library(chainOf(compileDefinition("main { add(2)(3) }"))));
+        compileLibrary("main { add(2)(3) }"));
     Runner runner = runner(runtime(libraries));
 
     Printer printer = printer();
