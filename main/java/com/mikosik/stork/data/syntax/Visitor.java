@@ -1,8 +1,8 @@
-package com.mikosik.stork.model.syntax;
+package com.mikosik.stork.data.syntax;
 
-import static com.mikosik.stork.model.syntax.BracketType.CURLY;
-import static com.mikosik.stork.model.syntax.BracketType.ROUND;
-import static com.mikosik.stork.model.syntax.Sentence.sentence;
+import static com.mikosik.stork.data.syntax.BracketType.CURLY;
+import static com.mikosik.stork.data.syntax.BracketType.ROUND;
+import static com.mikosik.stork.data.syntax.Sentence.sentence;
 
 public class Visitor<T> {
   protected T visitLabel(Word head, Sentence tail) {

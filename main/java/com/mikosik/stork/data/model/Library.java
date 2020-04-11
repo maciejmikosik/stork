@@ -1,4 +1,4 @@
-package com.mikosik.stork.model.def;
+package com.mikosik.stork.data.model;
 
 import com.mikosik.stork.common.Chain;
 

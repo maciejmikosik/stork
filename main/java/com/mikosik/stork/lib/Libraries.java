@@ -11,8 +11,8 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.List;
 
-import com.mikosik.stork.model.def.Definition;
-import com.mikosik.stork.model.def.Library;
+import com.mikosik.stork.data.model.Definition;
+import com.mikosik.stork.data.model.Library;
 import com.mikosik.stork.tool.Compiler;
 import com.mikosik.stork.tool.Parser;
 

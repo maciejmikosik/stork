@@ -3,20 +3,20 @@ package com.mikosik.stork.tool;
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Reading.reading;
-import static com.mikosik.stork.model.syntax.Bracket.bracket;
-import static com.mikosik.stork.model.syntax.BracketType.bracketByCharacter;
-import static com.mikosik.stork.model.syntax.BracketType.isClosingBracket;
-import static com.mikosik.stork.model.syntax.BracketType.isOpeningBracket;
-import static com.mikosik.stork.model.syntax.Sentence.sentence;
-import static com.mikosik.stork.model.syntax.Word.word;
+import static com.mikosik.stork.data.syntax.Bracket.bracket;
+import static com.mikosik.stork.data.syntax.BracketType.bracketByCharacter;
+import static com.mikosik.stork.data.syntax.BracketType.isClosingBracket;
+import static com.mikosik.stork.data.syntax.BracketType.isOpeningBracket;
+import static com.mikosik.stork.data.syntax.Sentence.sentence;
+import static com.mikosik.stork.data.syntax.Word.word;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Reading;
-import com.mikosik.stork.model.syntax.Bracket;
-import com.mikosik.stork.model.syntax.BracketType;
-import com.mikosik.stork.model.syntax.Sentence;
-import com.mikosik.stork.model.syntax.Syntax;
-import com.mikosik.stork.model.syntax.Word;
+import com.mikosik.stork.data.syntax.Bracket;
+import com.mikosik.stork.data.syntax.BracketType;
+import com.mikosik.stork.data.syntax.Sentence;
+import com.mikosik.stork.data.syntax.Syntax;
+import com.mikosik.stork.data.syntax.Word;
 
 public class Parser {
   public static Sentence parse(String source) {

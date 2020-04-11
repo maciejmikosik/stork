@@ -1,4 +1,4 @@
-package com.mikosik.stork.model.runtime;
+package com.mikosik.stork.data.model;
 
 import com.mikosik.stork.tool.Runner;
 

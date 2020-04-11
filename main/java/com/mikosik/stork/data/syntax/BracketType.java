@@ -1,4 +1,4 @@
-package com.mikosik.stork.model.syntax;
+package com.mikosik.stork.data.syntax;
 
 import static java.util.Arrays.stream;
 

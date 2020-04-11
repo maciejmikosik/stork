@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.model.def.Definition;
-import com.mikosik.stork.model.def.Library;
-import com.mikosik.stork.model.runtime.Expression;
+import com.mikosik.stork.data.model.Definition;
+import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Library;
 
 public class Runtime {
   private final Map<String, Expression> definitions;
