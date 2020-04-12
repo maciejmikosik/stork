@@ -4,6 +4,7 @@ import static com.mikosik.stork.MoreReports.formatExceptions;
 import static com.mikosik.stork.TestBooleanLibrary.testBooleanLibrary;
 import static com.mikosik.stork.TestFunctionLibrary.testFunctionLibrary;
 import static com.mikosik.stork.TestOptionalLibrary.testOptionalLibrary;
+import static com.mikosik.stork.TestRunnerEngine.testRunnerEngine;
 import static com.mikosik.stork.TestSimpleFunctions.testSimpleFunctions;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
@@ -16,6 +17,7 @@ public class RunAllTests {
   public static void main(String[] args) {
     Suite test = suite("test basics")
         .add(testSimpleFunctions())
+        .add(testRunnerEngine())
         .add(testFunctionLibrary())
         .add(testBooleanLibrary())
         .add(testOptionalLibrary());
