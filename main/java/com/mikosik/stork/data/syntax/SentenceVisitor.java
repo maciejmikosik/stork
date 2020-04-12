@@ -2,6 +2,8 @@ package com.mikosik.stork.data.syntax;
 
 import static com.mikosik.stork.data.syntax.BracketType.CURLY;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
+import static com.mikosik.stork.data.syntax.Legal.isInteger;
+import static com.mikosik.stork.data.syntax.Legal.isLabel;
 import static com.mikosik.stork.data.syntax.Sentence.sentence;
 
 public class SentenceVisitor<T> {
@@ -30,10 +32,12 @@ public class SentenceVisitor<T> {
     Sentence tail = sentence(sentence.parts.tail());
     if (head instanceof Word) {
       Word word = (Word) head;
-      if (word.string.chars().allMatch(SentenceVisitor::isNumberCharacter)) {
+      if (isLabel(word.string)) {
+        return visitLabel(word, tail);
+      } else if (isInteger(word.string)) {
         return visitInteger(word, tail);
       } else {
-        return visitLabel(word, tail);
+        return visitDefault(sentence);
       }
     } else if (head instanceof Bracket) {
       Bracket bracket = (Bracket) head;
@@ -51,11 +55,5 @@ public class SentenceVisitor<T> {
 
   private static Sentence join(Syntax syntax, Sentence sentence) {
     return sentence(sentence.parts.add(syntax));
-  }
-
-  // TODO gather functions checking word characters
-  private static boolean isNumberCharacter(int character) {
-    return '0' <= character && character <= '9'
-        || character == '-';
   }
 }
