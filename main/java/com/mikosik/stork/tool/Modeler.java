@@ -3,89 +3,69 @@ package com.mikosik.stork.tool;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
+import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
 import static com.mikosik.stork.data.model.Lambda.lambda;
 import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
+import static com.mikosik.stork.data.syntax.SentenceSwitcher.sentenceSwitcherReturning;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.ExpressionVisitor;
-import com.mikosik.stork.data.model.Lambda;
 import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.Sentence;
-import com.mikosik.stork.data.syntax.SentenceVisitor;
-import com.mikosik.stork.data.syntax.Syntax;
 import com.mikosik.stork.data.syntax.Word;
 
 public class Modeler {
   public static Definition modelDefinition(Sentence sentence) {
-    SentenceVisitor<Definition> visitor = new SentenceVisitor<Definition>() {
-      protected Definition visitLabel(Word head, Sentence tail) {
-        return definition(head.string, modelLambda(tail));
-      }
-    };
-    return visitor.visit(sentence);
+    return sentenceSwitcherReturning(Definition.class)
+        .ifLabel((word, tail) -> definition(word.string, modelLambda(tail)))
+        .apply(sentence);
   }
 
   public static Expression modelExpression(Sentence sentence) {
-    SentenceVisitor<Expression> visitor = new SentenceVisitor<Expression>() {
-      protected Expression visitLabel(Word head, Sentence tail) {
-        return modelApplication(sentence);
-      }
-
-      protected Expression visitInteger(Word head, Sentence tail) {
-        if (tail.parts.available()) {
-          throw new RuntimeException("integer cannot be followed by sentence");
-        } else {
-          return primitive(new BigInteger(head.string));
-        }
-      }
-
-      protected Expression visitRound(Bracket head, Sentence tail) {
-        return modelLambda(sentence);
-      }
-    };
-    return visitor.visit(sentence);
+    return sentenceSwitcherReturning(Expression.class)
+        .ifLabel((word, tail) -> modelApplication(sentence))
+        .ifInteger((word, tail) -> {
+          if (tail.parts.available()) {
+            throw new RuntimeException("integer cannot be followed by sentence");
+          } else {
+            return primitive(new BigInteger(word.string));
+          }
+        })
+        .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
+        .apply(sentence);
   }
 
   private static Expression modelApplication(Sentence sentence) {
-    SentenceVisitor<Expression> visitor = new SentenceVisitor<Expression>() {
-      protected Expression visitLabel(Word head, Sentence tail) {
-        Expression expression = variable(head.string);
-        for (Syntax part : tail.parts) {
-          Bracket bracket = (Bracket) part;
-          check(bracket.type == ROUND);
-          expression = application(
-              expression,
-              modelExpression(bracket.sentence));
-        }
-        return expression;
-      }
-    };
-    return visitor.visit(sentence);
+    return sentenceSwitcherReturning(Expression.class)
+        .ifLabel((word, tail) -> modelApplication(variable(word.string), tail))
+        .apply(sentence);
+  }
+
+  private static Expression modelApplication(Expression function, Sentence sentence) {
+    return sentenceSwitcherReturning(Expression.class)
+        .ifEmpty(() -> function)
+        .ifRoundBracket((bracket, tail) -> modelApplication(
+            application(function, modelExpression(bracket.sentence)),
+            tail))
+        .apply(sentence);
   }
 
   private static Expression modelLambda(Sentence sentence) {
-    SentenceVisitor<Expression> visitor = new SentenceVisitor<Expression>() {
-      protected Expression visitRound(Bracket head, Sentence tail) {
-        Parameter parameter = parameterIn(head);
-        Expression body = bind(parameter, modelLambda(tail));
-        return lambda(parameter, body);
-      }
-
-      protected Expression visitCurly(Bracket head, Sentence tail) {
+    return sentenceSwitcherReturning(Expression.class)
+        .ifRoundBracket((bracket, tail) -> {
+          Parameter parameter = parameterIn(bracket);
+          Expression body = bind(parameter, modelLambda(tail));
+          return lambda(parameter, body);
+        })
         // TODO rest of sentence after bracket is ignored right now
-        return modelExpression(head.sentence);
-      }
-    };
-    return visitor.visit(sentence);
+        .ifCurlyBracket((bracket, tail) -> modelExpression(bracket.sentence))
+        .apply(sentence);
   }
 
   private static Parameter parameterIn(Bracket bracket) {
@@ -96,32 +76,19 @@ public class Modeler {
   }
 
   private static Expression bind(Parameter parameter, Expression expression) {
-    ExpressionVisitor<Expression> visitor = new ExpressionVisitor<Expression>() {
-      protected Expression visit(Variable variable) {
-        return variable.name.equals(parameter.name)
+    return expressionSwitcherReturning(Expression.class)
+        .ifVariable(variable -> variable.name.equals(parameter.name)
             ? parameter
-            : variable;
-      }
-
-      protected Expression visit(Application application) {
-        return application(
+            : variable)
+        .ifApplication(application -> application(
             bind(parameter, application.function),
-            bind(parameter, application.argument));
-      }
-
-      protected Expression visit(Lambda lambda) {
-        // TODO test shadowing
-        return lambda.parameter.name.equals(parameter.name)
-            ? lambda
+            bind(parameter, application.argument)))
+        .ifLambda(lambda -> lambda.parameter.name.equals(parameter.name)
+            ? lambda // TODO test shadowing
             : lambda(
                 lambda.parameter,
-                bind(parameter, lambda.body));
-      }
-
-      protected Expression visit(Parameter parameter) {
-        return parameter;
-      }
-    };
-    return visitor.visit(expression);
+                bind(parameter, lambda.body)))
+        .ifParameter(param -> param)
+        .apply(expression);
   }
 }
