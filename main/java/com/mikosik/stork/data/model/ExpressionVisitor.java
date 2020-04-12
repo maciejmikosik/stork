@@ -21,6 +21,10 @@ public class ExpressionVisitor<T> {
     return visitDefault(lambda);
   }
 
+  protected T visit(Parameter parameter) {
+    return visitDefault(parameter);
+  }
+
   protected T visitDefault(Expression expression) {
     throw new RuntimeException();
   }
@@ -36,6 +40,8 @@ public class ExpressionVisitor<T> {
       return visit((Application) expression);
     } else if (expression instanceof Lambda) {
       return visit((Lambda) expression);
+    } else if (expression instanceof Parameter) {
+      return visit((Parameter) expression);
     } else {
       return visitDefault(expression);
     }

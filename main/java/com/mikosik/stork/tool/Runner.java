@@ -79,9 +79,7 @@ public class Runner {
       }
 
       protected Expression visit(Variable variable) {
-        return variable.name.equals(parameter.name)
-            ? argument
-            : variable;
+        return variable;
       }
 
       protected Expression visit(Lambda lambda) {
@@ -90,6 +88,12 @@ public class Runner {
         return isShadowing
             ? body
             : lambda(lambda.parameter, bind(lambda.body, parameter, argument));
+      }
+
+      protected Expression visit(Parameter visitedParameter) {
+        return parameter == visitedParameter
+            ? argument
+            : visitedParameter;
       }
 
       protected Expression visit(Primitive primitive) {

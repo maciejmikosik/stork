@@ -1,6 +1,6 @@
 package com.mikosik.stork.data.model;
 
-public class Parameter {
+public class Parameter implements Expression {
   public final String name;
 
   private Parameter(String name) {
