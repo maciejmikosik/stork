@@ -18,7 +18,6 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.Sentence;
-import com.mikosik.stork.data.syntax.Syntax;
 import com.mikosik.stork.data.syntax.Word;
 
 public class Modeler {
@@ -44,17 +43,17 @@ public class Modeler {
 
   private static Expression modelApplication(Sentence sentence) {
     return sentenceSwitcherReturning(Expression.class)
-        .ifLabel((word, tail) -> {
-          Expression expression = variable(word.string);
-          for (Syntax part : tail.parts) {
-            Bracket bracket = (Bracket) part;
-            check(bracket.type == ROUND);
-            expression = application(
-                expression,
-                modelExpression(bracket.sentence));
-          }
-          return expression;
-        }).apply(sentence);
+        .ifLabel((word, tail) -> modelApplication(variable(word.string), tail))
+        .apply(sentence);
+  }
+
+  private static Expression modelApplication(Expression function, Sentence sentence) {
+    return sentenceSwitcherReturning(Expression.class)
+        .ifEmpty(() -> function)
+        .ifRoundBracket((bracket, tail) -> modelApplication(
+            application(function, modelExpression(bracket.sentence)),
+            tail))
+        .apply(sentence);
   }
 
   private static Expression modelLambda(Sentence sentence) {
