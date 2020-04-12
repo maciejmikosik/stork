@@ -2,9 +2,11 @@ package com.mikosik.stork.data.syntax;
 
 import static com.mikosik.stork.data.syntax.BracketType.CURLY;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
+import static com.mikosik.stork.data.syntax.Legal.isInteger;
+import static com.mikosik.stork.data.syntax.Legal.isLabel;
 import static com.mikosik.stork.data.syntax.Sentence.sentence;
 
-public class Visitor<T> {
+public class SentenceVisitor<T> {
   protected T visitLabel(Word head, Sentence tail) {
     return visitDefault(join(head, tail));
   }
@@ -25,37 +27,33 @@ public class Visitor<T> {
     throw new RuntimeException();
   }
 
-  public static <T> T visit(Sentence sentence, Visitor<T> visitor) {
+  public T visit(Sentence sentence) {
     Syntax head = sentence.parts.head();
     Sentence tail = sentence(sentence.parts.tail());
     if (head instanceof Word) {
       Word word = (Word) head;
-      if (word.string.chars().allMatch(Visitor::isNumberCharacter)) {
-        return visitor.visitInteger(word, tail);
+      if (isLabel(word.string)) {
+        return visitLabel(word, tail);
+      } else if (isInteger(word.string)) {
+        return visitInteger(word, tail);
       } else {
-        return visitor.visitLabel(word, tail);
+        return visitDefault(sentence);
       }
     } else if (head instanceof Bracket) {
       Bracket bracket = (Bracket) head;
       if (bracket.type == ROUND) {
-        return visitor.visitRound(bracket, tail);
+        return visitRound(bracket, tail);
       } else if (bracket.type == CURLY) {
-        return visitor.visitCurly(bracket, tail);
+        return visitCurly(bracket, tail);
       } else {
-        return visitor.visitDefault(sentence);
+        return visitDefault(sentence);
       }
     } else {
-      return visitor.visitDefault(sentence);
+      return visitDefault(sentence);
     }
   }
 
   private static Sentence join(Syntax syntax, Sentence sentence) {
     return sentence(sentence.parts.add(syntax));
-  }
-
-  // TODO gather functions checking word characters
-  private static boolean isNumberCharacter(int character) {
-    return '0' <= character && character <= '9'
-        || character == '-';
   }
 }

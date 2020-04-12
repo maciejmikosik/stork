@@ -7,6 +7,8 @@ import static com.mikosik.stork.data.syntax.Bracket.bracket;
 import static com.mikosik.stork.data.syntax.BracketType.bracketByCharacter;
 import static com.mikosik.stork.data.syntax.BracketType.isClosingBracket;
 import static com.mikosik.stork.data.syntax.BracketType.isOpeningBracket;
+import static com.mikosik.stork.data.syntax.Legal.isWordSeparator;
+import static com.mikosik.stork.data.syntax.Legal.isWordy;
 import static com.mikosik.stork.data.syntax.Sentence.sentence;
 import static com.mikosik.stork.data.syntax.Word.word;
 
@@ -27,7 +29,7 @@ public class Parser {
     Chain<Syntax> parts = chain();
     while (reading.available()) {
       char character = reading.peek();
-      if (isWhitespace(character)) {
+      if (isWordSeparator(character)) {
         reading.read();
       } else if (isWordy(character)) {
         parts = parts.add(parseWord(reading));
@@ -56,18 +58,5 @@ public class Parser {
     BracketType closingBracket = bracketByCharacter(reading.read());
     check(openingBracket == closingBracket);
     return bracket(openingBracket, sentence);
-  }
-
-  // TODO gather functions checking word characters
-  private static boolean isWhitespace(char peek) {
-    return Character.isWhitespace(peek);
-  }
-
-  // TODO gather functions checking word characters
-  private static boolean isWordy(char character) {
-    return 'a' <= character && character <= 'z'
-        || 'A' <= character && character <= 'Z'
-        || '0' <= character && character <= '9'
-        || character == '-';
   }
 }
