@@ -8,6 +8,7 @@ import com.mikosik.stork.data.model.Core;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.ExpressionVisitor;
 import com.mikosik.stork.data.model.Lambda;
+import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.Primitive;
 import com.mikosik.stork.data.model.Variable;
 
@@ -69,7 +70,7 @@ public class Runner {
     return visitor.visit(function);
   }
 
-  private Expression bind(Expression body, String parameter, Expression argument) {
+  private Expression bind(Expression body, Parameter parameter, Expression argument) {
     ExpressionVisitor<Expression> visitor = new ExpressionVisitor<Expression>() {
       protected Expression visit(Application application) {
         return application(
@@ -78,17 +79,21 @@ public class Runner {
       }
 
       protected Expression visit(Variable variable) {
-        return variable.name.equals(parameter)
-            ? argument
-            : variable;
+        return variable;
       }
 
       protected Expression visit(Lambda lambda) {
         // TODO test shadowing
-        boolean isShadowing = lambda.parameter.equals(parameter);
+        boolean isShadowing = lambda.parameter.name.equals(parameter.name);
         return isShadowing
             ? body
             : lambda(lambda.parameter, bind(lambda.body, parameter, argument));
+      }
+
+      protected Expression visit(Parameter visitedParameter) {
+        return parameter == visitedParameter
+            ? argument
+            : visitedParameter;
       }
 
       protected Expression visit(Primitive primitive) {
