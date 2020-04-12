@@ -1,13 +1,10 @@
 package com.mikosik.stork.tool;
 
+import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
 import static java.lang.String.format;
 
-import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.ExpressionVisitor;
 import com.mikosik.stork.data.model.Lambda;
-import com.mikosik.stork.data.model.Primitive;
-import com.mikosik.stork.data.model.Variable;
 
 public class Printer {
   private Printer() {}
@@ -17,25 +14,15 @@ public class Printer {
   }
 
   public String print(Expression expression) {
-    ExpressionVisitor<String> visitor = new ExpressionVisitor<String>() {
-      protected String visit(Primitive primitive) {
-        return primitive.object.toString();
-      }
-
-      protected String visit(Variable variable) {
-        return variable.name;
-      }
-
-      protected String visit(Application application) {
-        return format("%s(%s)", print(application.function), print(application.argument));
-      }
-
-      protected String visit(Lambda lambda) {
-        return lambda.body instanceof Lambda
+    return expressionSwitcherReturning(String.class)
+        .ifPrimitive(primitive -> primitive.object.toString())
+        .ifVariable(variable -> variable.name)
+        .ifApplication(application -> format("%s(%s)",
+            print(application.function),
+            print(application.argument)))
+        .ifLambda(lambda -> lambda.body instanceof Lambda
             ? format("(%s)%s", lambda.parameter, print(lambda.body))
-            : format("(%s){ %s }", lambda.parameter, print(lambda.body));
-      }
-    };
-    return visitor.visit(expression);
+            : format("(%s){ %s }", lambda.parameter, print(lambda.body)))
+        .apply(expression);
   }
 }
