@@ -12,4 +12,12 @@ public class Library {
   public static Library library(Chain<Definition> definitions) {
     return new Library(definitions);
   }
+
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    for (Definition definition : definitions) {
+      builder.append(definition).append("\n\n");
+    }
+    return builder.toString();
+  }
 }
