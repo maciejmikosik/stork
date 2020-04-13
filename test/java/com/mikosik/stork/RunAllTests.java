@@ -1,11 +1,8 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.MoreReports.formatExceptions;
-import static com.mikosik.stork.TestBooleanLibrary.testBooleanLibrary;
-import static com.mikosik.stork.TestFunctionLibrary.testFunctionLibrary;
-import static com.mikosik.stork.TestOptionalLibrary.testOptionalLibrary;
-import static com.mikosik.stork.TestRunnerEngine.testRunnerEngine;
-import static com.mikosik.stork.TestSimpleFunctions.testSimpleFunctions;
+import static com.mikosik.stork.TestRunner.testRunner;
+import static com.mikosik.stork.TestStorkLibraries.testStorkLibraries;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
@@ -14,12 +11,9 @@ import org.quackery.Test;
 
 public class RunAllTests {
   public static void main(String[] args) {
-    Test test = suite("test basics")
-        .add(testSimpleFunctions())
-        .add(testRunnerEngine())
-        .add(testFunctionLibrary())
-        .add(testBooleanLibrary())
-        .add(testOptionalLibrary());
+    Test test = suite("all tests")
+        .add(testRunner())
+        .add(testStorkLibraries());
     Test report = run(test);
 
     System.out.println(formatExceptions(report));

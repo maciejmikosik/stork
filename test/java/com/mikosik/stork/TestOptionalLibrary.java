@@ -7,7 +7,7 @@ import org.quackery.Test;
 
 public class TestOptionalLibrary {
   public static Test testOptionalLibrary() {
-    return suite("test optional library")
+    return suite("optional.stork")
         .add(suite("present/absent")
             .add(testEqual("present(x)(f)(g)", "f(x)"))
             .add(testEqual("absent(f)(g)", "g")))

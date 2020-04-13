@@ -5,9 +5,25 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestRunnerEngine {
-  public static Test testRunnerEngine() {
-    return suite("test runner engine")
+public class TestRunner {
+  public static Test testRunner() {
+    return suite("compiling and running")
+        .add(storkTest("returning constant")
+            .givenMocks("x")
+            .given("main{x}")
+            .when("main")
+            .thenReturned("x"))
+        .add(storkTest("returning argument")
+            .givenMocks("x")
+            .given("main(argument){argument}")
+            .when("main(x)")
+            .thenReturned("x"))
+        .add(storkTest("forwarding argument and result")
+            .givenMocks("x")
+            .given("identity(arg){arg}")
+            .given("main(arg){identity(arg)}")
+            .when("main(x)")
+            .thenReturned("x"))
         .add(storkTest("application argument can be integer")
             .givenMocks("f")
             .when("f(2)")

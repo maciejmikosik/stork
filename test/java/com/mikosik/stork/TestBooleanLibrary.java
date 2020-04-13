@@ -7,7 +7,7 @@ import org.quackery.Test;
 
 public class TestBooleanLibrary {
   public static Test testBooleanLibrary() {
-    return suite("test boolean library")
+    return suite("boolean.stork")
         .add(suite("true/false")
             .add(testEqual("true(then)(else)", "then"))
             .add(testEqual("false(then)(else)", "else")))

@@ -7,7 +7,7 @@ import org.quackery.Test;
 
 public class TestFunctionLibrary {
   public static Test testFunctionLibrary() {
-    return suite("test function library")
+    return suite("function.stork")
         .add(suite("self")
             .add(testEqual("self(x)", "x")))
         .add(suite("compose")
