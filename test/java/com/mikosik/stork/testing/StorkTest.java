@@ -1,10 +1,10 @@
-package com.mikosik.stork;
+package com.mikosik.stork.testing;
 
-import static com.mikosik.stork.Mock.mock;
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Library.library;
+import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Modeler.modelExpression;
 import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.Runner.runner;

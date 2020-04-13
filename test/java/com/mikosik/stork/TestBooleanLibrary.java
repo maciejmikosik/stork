@@ -1,14 +1,13 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 public class TestBooleanLibrary {
-  public static Suite testBooleanLibrary() {
-    return suite("test boolean library")
+  public static Test testBooleanLibrary() {
+    return suite("boolean.stork")
         .add(suite("true/false")
             .add(testEqual("true(then)(else)", "then"))
             .add(testEqual("false(then)(else)", "else")))

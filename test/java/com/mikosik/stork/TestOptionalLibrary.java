@@ -1,14 +1,13 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 public class TestOptionalLibrary {
-  public static Suite testOptionalLibrary() {
-    return suite("test optional library")
+  public static Test testOptionalLibrary() {
+    return suite("optional.stork")
         .add(suite("present/absent")
             .add(testEqual("present(x)(f)(g)", "f(x)"))
             .add(testEqual("absent(f)(g)", "g")))
