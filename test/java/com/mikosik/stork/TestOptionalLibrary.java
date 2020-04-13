@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;

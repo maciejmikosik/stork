@@ -1,8 +1,8 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.MoreReports.formatExceptions;
 import static com.mikosik.stork.TestRunner.testRunner;
 import static com.mikosik.stork.TestStorkLibraries.testStorkLibraries;
+import static com.mikosik.stork.testing.MoreReports.formatExceptions;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;

@@ -1,4 +1,4 @@
-package com.mikosik.stork;
+package com.mikosik.stork.testing;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
