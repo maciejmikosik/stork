@@ -7,6 +7,7 @@ import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Modeler.modelExpression;
 import static com.mikosik.stork.tool.Parser.parse;
+import static com.mikosik.stork.tool.Printer.print;
 import static com.mikosik.stork.tool.Runner.runner;
 import static com.mikosik.stork.tool.Runtime.runtime;
 import static java.lang.String.format;
@@ -152,7 +153,10 @@ public class StorkTest extends Case {
           + "  %s\n"
           + "but returned\n"
           + "  %s\n",
-          whenExpression, thenReturnedExpression, expected, actual));
+          whenExpression,
+          thenReturnedExpression,
+          print(expected),
+          print(actual)));
     }
   }
 }

@@ -12,4 +12,10 @@ public class Definition {
   public static Definition definition(String name, Expression expression) {
     return new Definition(name, expression);
   }
+
+  public String toString() {
+    return expression instanceof Lambda
+        ? name + expression
+        : name + "{" + expression + "}";
+  }
 }
