@@ -5,10 +5,9 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.testing.Mock.mock;
+import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.defaultRunner;
 import static com.mikosik.stork.tool.Linker.link;
-import static com.mikosik.stork.tool.Modeler.modelExpression;
-import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.Printer.print;
 import static java.lang.String.format;
 
@@ -140,8 +139,8 @@ public class StorkTest extends Case {
         .add(library(mocks));
     Runner runner = defaultRunner(link(allLibraries));
 
-    Expression actual = runner.run(modelExpression(parse(whenExpression)));
-    Expression expected = runner.run(modelExpression(parse(thenReturnedExpression)));
+    Expression actual = runner.run(compileExpression(whenExpression));
+    Expression expected = runner.run(compileExpression(thenReturnedExpression));
 
     if (!expected.toString().equals(actual.toString())) {
       throw new AssertException(format(""
