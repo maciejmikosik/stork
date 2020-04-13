@@ -10,12 +10,11 @@ import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 public class RunAllTests {
   public static void main(String[] args) {
-    Suite test = suite("test basics")
+    Test test = suite("test basics")
         .add(testSimpleFunctions())
         .add(testRunnerEngine())
         .add(testFunctionLibrary())

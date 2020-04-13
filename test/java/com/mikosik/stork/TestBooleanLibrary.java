@@ -3,11 +3,10 @@ package com.mikosik.stork;
 import static com.mikosik.stork.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 public class TestBooleanLibrary {
-  public static Suite testBooleanLibrary() {
+  public static Test testBooleanLibrary() {
     return suite("test boolean library")
         .add(suite("true/false")
             .add(testEqual("true(then)(else)", "then"))

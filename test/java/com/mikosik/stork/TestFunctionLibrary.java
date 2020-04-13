@@ -3,11 +3,10 @@ package com.mikosik.stork;
 import static com.mikosik.stork.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 public class TestFunctionLibrary {
-  public static Suite testFunctionLibrary() {
+  public static Test testFunctionLibrary() {
     return suite("test function library")
         .add(suite("self")
             .add(testEqual("self(x)", "x")))

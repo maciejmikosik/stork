@@ -3,10 +3,10 @@ package com.mikosik.stork;
 import static com.mikosik.stork.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
+import org.quackery.Test;
 
 public class TestSimpleFunctions {
-  public static Suite testSimpleFunctions() {
+  public static Test testSimpleFunctions() {
     return suite("test simple functions")
         .add(storkTest("returning constant")
             .givenMocks("x")

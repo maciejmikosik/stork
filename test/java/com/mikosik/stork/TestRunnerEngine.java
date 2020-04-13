@@ -3,10 +3,10 @@ package com.mikosik.stork;
 import static com.mikosik.stork.StorkTest.storkTest;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
+import org.quackery.Test;
 
 public class TestRunnerEngine {
-  public static Suite testRunnerEngine() {
+  public static Test testRunnerEngine() {
     return suite("test runner engine")
         .add(storkTest("application argument can be integer")
             .givenMocks("f")
