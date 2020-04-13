@@ -46,7 +46,7 @@ public class Runner {
             bind(application.function, parameter, argument),
             bind(application.argument, parameter, argument)))
         .ifVariable(variable -> variable)
-        .ifLambda(lambda -> lambda.parameter.name.equals(parameter.name)
+        .ifLambda(lambda -> lambda.parameter == parameter
             ? expression // TODO test shadowing
             : lambda(
                 lambda.parameter,
