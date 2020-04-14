@@ -30,6 +30,13 @@ public class Modeler {
   public static Expression modelExpression(Sentence sentence) {
     return sentenceSwitcherReturning(Expression.class)
         .ifLabel((word, tail) -> modelApplication(sentence))
+        .ifInteger((word, tail) -> modelInteger(sentence))
+        .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
+        .apply(sentence);
+  }
+
+  private static Expression modelInteger(Sentence sentence) {
+    return sentenceSwitcherReturning(Expression.class)
         .ifInteger((word, tail) -> {
           if (tail.parts.available()) {
             throw new RuntimeException("integer cannot be followed by sentence");
@@ -37,7 +44,6 @@ public class Modeler {
             return primitive(new BigInteger(word.string));
           }
         })
-        .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
         .apply(sentence);
   }
 
