@@ -11,11 +11,11 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Primitive;
 
 class LinkedFunctions {
-  public static RecursiveCore addIntegerInteger() {
-    return new RecursiveCore() {
+  public static Expression addIntegerInteger() {
+    return new Core() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
-        return new RecursiveCore() {
+        return new Core() {
           public Expression run(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
             return primitive(numberA.add(numberB));
@@ -33,8 +33,8 @@ class LinkedFunctions {
     };
   }
 
-  public static RecursiveCore negateInteger() {
-    return new RecursiveCore() {
+  public static Expression negateInteger() {
+    return new Core() {
       public Expression run(Expression argument) {
         BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
         return primitive(bigInteger.negate());
@@ -46,11 +46,11 @@ class LinkedFunctions {
     };
   }
 
-  public static RecursiveCore equalIntegerInteger() {
-    return new RecursiveCore() {
+  public static Expression equalIntegerInteger() {
+    return new Core() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
-        return new RecursiveCore() {
+        return new Core() {
           public Expression run(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
             return variable("" + numberA.equals(numberB));
@@ -68,11 +68,11 @@ class LinkedFunctions {
     };
   }
 
-  public static RecursiveCore moreThanIntegerInteger() {
-    return new RecursiveCore() {
+  public static Expression moreThanIntegerInteger() {
+    return new Core() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
-        return new RecursiveCore() {
+        return new Core() {
           public Expression run(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
             return variable("" + (numberB.compareTo(numberA) > 0));
@@ -88,16 +88,5 @@ class LinkedFunctions {
         return "moreThan";
       }
     };
-  }
-
-  private static abstract class RecursiveCore implements Core {
-    public final Expression run(Expression argument, Runner runner) {
-      Expression runArgument = runner.run(argument);
-      Expression result = run(runArgument);
-      Expression runResult = runner.run(result);
-      return runResult;
-    }
-
-    protected abstract Expression run(Expression argument);
   }
 }

@@ -3,7 +3,6 @@ package com.mikosik.stork.testing;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Core;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.tool.Runner;
 
 public class Mock implements Core {
   private final String name;
@@ -18,8 +17,8 @@ public class Mock implements Core {
     return new Mock(name, Chain.chain());
   }
 
-  public Expression run(Expression argument, Runner runner) {
-    return new Mock(name, arguments.add(runner.run(argument)));
+  public Expression run(Expression argument) {
+    return new Mock(name, arguments.add(argument));
   }
 
   public String toString() {

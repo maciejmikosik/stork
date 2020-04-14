@@ -36,7 +36,7 @@ public class Runner {
             lambda.body,
             lambda.parameter,
             application.argument)))
-        .ifCore(core -> core.run(application.argument, Runner.this))
+        .ifCore(core -> run(core.run(run(application.argument))))
         .apply(function);
   }
 
