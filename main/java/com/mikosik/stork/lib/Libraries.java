@@ -1,6 +1,5 @@
 package com.mikosik.stork.lib;
 
-import static com.mikosik.stork.lib.CoreLibrary.coreLibrary;
 import static com.mikosik.stork.tool.Default.compileLibrary;
 
 import java.io.BufferedInputStream;
@@ -12,9 +11,7 @@ import com.mikosik.stork.data.model.Library;
 
 public class Libraries {
   public static Library library(String name) {
-    return name.equals("core.stork")
-        ? coreLibrary()
-        : compileLibrary(readFile(name));
+    return compileLibrary(readFile(name));
   }
 
   private static String readFile(String name) {

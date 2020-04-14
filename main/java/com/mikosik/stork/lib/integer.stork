@@ -1,4 +1,8 @@
 
+  equal(x)(y) { coreFunction }
+
+  moreThan(x)(y) { coreFunction }
+
   lessThan {
     flip(moreThan)
   }
@@ -16,6 +20,10 @@
       (atLeast(min)(number))
       (atMost(max)(number))
   }
+
+  add(x)(y) { coreFunction }
+
+  negate(x) { coreFunction }
 
   subtract(x) {
     add(negate(x))
