@@ -17,7 +17,6 @@ public class Demo {
   public static void main(String[] args) {
     Chain<Library> libraries = chainOf(
         library("integer.stork"),
-        library("core.stork"),
         compileLibrary("main { add(2)(3) }"));
     Runner runner = runner(link(libraries));
 

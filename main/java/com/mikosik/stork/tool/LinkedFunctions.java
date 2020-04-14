@@ -1,8 +1,5 @@
-package com.mikosik.stork.lib;
+package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static java.lang.String.format;
@@ -11,20 +8,10 @@ import java.math.BigInteger;
 
 import com.mikosik.stork.data.model.Core;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Library;
 import com.mikosik.stork.data.model.Primitive;
-import com.mikosik.stork.tool.Runner;
 
-class CoreLibrary {
-  public static Library coreLibrary() {
-    return library(chainOf(
-        definition("add", addIntegerInteger()),
-        definition("negate", negateInteger()),
-        definition("equal", equalIntegerInteger()),
-        definition("moreThan", moreThanIntegerInteger())));
-  }
-
-  private static RecursiveCore addIntegerInteger() {
+class LinkedFunctions {
+  public static RecursiveCore addIntegerInteger() {
     return new RecursiveCore() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
@@ -46,7 +33,7 @@ class CoreLibrary {
     };
   }
 
-  private static RecursiveCore negateInteger() {
+  public static RecursiveCore negateInteger() {
     return new RecursiveCore() {
       public Expression run(Expression argument) {
         BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
@@ -59,7 +46,7 @@ class CoreLibrary {
     };
   }
 
-  private static RecursiveCore equalIntegerInteger() {
+  public static RecursiveCore equalIntegerInteger() {
     return new RecursiveCore() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
@@ -81,7 +68,7 @@ class CoreLibrary {
     };
   }
 
-  private static RecursiveCore moreThanIntegerInteger() {
+  public static RecursiveCore moreThanIntegerInteger() {
     return new RecursiveCore() {
       public Expression run(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;

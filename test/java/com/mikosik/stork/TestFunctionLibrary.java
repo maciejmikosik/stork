@@ -22,7 +22,6 @@ public class TestFunctionLibrary {
 
   private static Test testEqual(String expression, String expected) {
     return storkTest()
-        .givenImported("core.stork")
         .givenImported("function.stork")
         .givenMocks("x", "y", "z", "f", "g", "h", "i")
         .when(expression)
