@@ -9,19 +9,19 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Parameter;
 
 public class Runner {
-  private final Runtime runtime;
+  private final Binary binary;
 
-  private Runner(Runtime runtime) {
-    this.runtime = runtime;
+  private Runner(Binary binary) {
+    this.binary = binary;
   }
 
-  public static Runner runner(Runtime runtime) {
-    return new Runner(runtime);
+  public static Runner runner(Binary binary) {
+    return new Runner(binary);
   }
 
   public Expression run(Expression expression) {
     return expressionSwitcherReturning(Expression.class)
-        .ifVariable(variable -> run(runtime.find(variable.name)))
+        .ifVariable(variable -> run(binary.table.get(variable.name)))
         .ifPrimitive(primitive -> primitive)
         .ifApplication(application -> run(application))
         .ifLambda(lambda -> lambda)
