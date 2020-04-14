@@ -2,9 +2,9 @@ package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.lib.Libraries.library;
-import static com.mikosik.stork.tool.Binary.binary;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.compileLibrary;
+import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.Printer.print;
 import static com.mikosik.stork.tool.Runner.runner;
 
@@ -19,7 +19,7 @@ public class Demo {
         library("integer.stork"),
         library("core.stork"),
         compileLibrary("main { add(2)(3) }"));
-    Runner runner = runner(binary(libraries));
+    Runner runner = runner(link(libraries));
 
     Expression main = compileExpression("main");
     System.out.println(print(runner.run(main)));

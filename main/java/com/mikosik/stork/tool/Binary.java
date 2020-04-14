@@ -1,15 +1,7 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.common.Chain.chain;
-import static com.mikosik.stork.common.table.Put.put;
-import static com.mikosik.stork.common.table.Table.table;
-
-import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.common.table.Mod;
 import com.mikosik.stork.common.table.Table;
-import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Library;
 
 public class Binary {
   public final Table<String, Expression> table;
@@ -18,14 +10,7 @@ public class Binary {
     this.table = table;
   }
 
-  public static Binary binary(Chain<Library> libraries) {
-    Chain<Mod<String, Expression>> mods = chain();
-    for (Library library : libraries) {
-      for (Definition definition : library.definitions) {
-        // TODO check collisions
-        mods = mods.add(put(definition.name, definition.expression));
-      }
-    }
-    return new Binary(table(mods));
+  public static Binary binary(Table<String, Expression> table) {
+    return new Binary(table);
   }
 }
