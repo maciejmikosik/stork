@@ -17,7 +17,7 @@ public class Mock implements Core {
     return new Mock(name, Chain.chain());
   }
 
-  public Expression run(Expression argument) {
+  public Expression apply(Expression argument) {
     return new Mock(name, arguments.add(argument));
   }
 

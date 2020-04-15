@@ -13,10 +13,10 @@ import com.mikosik.stork.data.model.Primitive;
 class LinkedFunctions {
   public static Expression addIntegerInteger() {
     return new Core() {
-      public Expression run(Expression argumentA) {
+      public Expression apply(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new Core() {
-          public Expression run(Expression argumentB) {
+          public Expression apply(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
             return primitive(numberA.add(numberB));
           }
@@ -35,7 +35,7 @@ class LinkedFunctions {
 
   public static Expression negateInteger() {
     return new Core() {
-      public Expression run(Expression argument) {
+      public Expression apply(Expression argument) {
         BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
         return primitive(bigInteger.negate());
       }
@@ -48,10 +48,10 @@ class LinkedFunctions {
 
   public static Expression equalIntegerInteger() {
     return new Core() {
-      public Expression run(Expression argumentA) {
+      public Expression apply(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new Core() {
-          public Expression run(Expression argumentB) {
+          public Expression apply(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
             return variable("" + numberA.equals(numberB));
           }
@@ -70,10 +70,10 @@ class LinkedFunctions {
 
   public static Expression moreThanIntegerInteger() {
     return new Core() {
-      public Expression run(Expression argumentA) {
+      public Expression apply(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
         return new Core() {
-          public Expression run(Expression argumentB) {
+          public Expression apply(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
             return variable("" + (numberB.compareTo(numberA) > 0));
           }
