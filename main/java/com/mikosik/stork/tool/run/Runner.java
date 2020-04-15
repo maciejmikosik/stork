@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.run;
 
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
@@ -7,6 +7,7 @@ import static com.mikosik.stork.data.model.Lambda.lambda;
 import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Parameter;
+import com.mikosik.stork.tool.Binary;
 
 public class Runner {
   private final Binary binary;

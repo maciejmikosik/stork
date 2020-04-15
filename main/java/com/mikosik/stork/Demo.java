@@ -6,12 +6,12 @@ import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.compileLibrary;
 import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.Printer.print;
-import static com.mikosik.stork.tool.Runner.runner;
+import static com.mikosik.stork.tool.run.Runner.runner;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Library;
-import com.mikosik.stork.tool.Runner;
+import com.mikosik.stork.tool.run.Runner;
 
 public class Demo {
   public static void main(String[] args) {
