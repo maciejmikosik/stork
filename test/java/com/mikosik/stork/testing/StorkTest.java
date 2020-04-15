@@ -5,11 +5,11 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.testing.Mock.mock;
+import static com.mikosik.stork.tool.Default.defaultRunner;
 import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.Modeler.modelExpression;
 import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.Printer.print;
-import static com.mikosik.stork.tool.run.Runner.runner;
 import static java.lang.String.format;
 
 import org.quackery.Case;
@@ -138,7 +138,7 @@ public class StorkTest extends Case {
     Chain<Library> allLibraries = libraries
         .add(library(definitions))
         .add(library(mocks));
-    Runner runner = runner(link(allLibraries));
+    Runner runner = defaultRunner(link(allLibraries));
 
     Expression actual = runner.run(modelExpression(parse(whenExpression)));
     Expression expected = runner.run(modelExpression(parse(thenReturnedExpression)));

@@ -4,9 +4,9 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.lib.Libraries.library;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.compileLibrary;
+import static com.mikosik.stork.tool.Default.defaultRunner;
 import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.Printer.print;
-import static com.mikosik.stork.tool.run.Runner.runner;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
@@ -18,7 +18,7 @@ public class Demo {
     Chain<Library> libraries = chainOf(
         library("integer.stork"),
         compileLibrary("main { add(2)(3) }"));
-    Runner runner = runner(link(libraries));
+    Runner runner = defaultRunner(link(libraries));
 
     Expression main = compileExpression("main");
     System.out.println(print(runner.run(main)));
