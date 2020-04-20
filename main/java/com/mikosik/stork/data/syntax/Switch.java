@@ -9,6 +9,7 @@ import static java.lang.String.format;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Switch {
   private final Sentence sentence;
@@ -31,6 +32,14 @@ public class Switch {
     return !result.isPresent()
         && !sentence.parts.available()
             ? withResult(handler)
+            : this;
+  }
+
+  public Switch ifMulti(Function<Sentence, Object> handler) {
+    return !result.isPresent()
+        && sentence.parts.available()
+        && sentence.parts.tail().available()
+            ? new Switch(sentence, Optional.of(handler))
             : this;
   }
 

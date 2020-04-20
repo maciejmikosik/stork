@@ -1,6 +1,5 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Lambda.lambda;
@@ -8,17 +7,15 @@ import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.data.syntax.BracketType.ROUND;
 import static com.mikosik.stork.data.syntax.Switch.switchOn;
+import static java.lang.String.format;
 
 import java.math.BigInteger;
 
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.Sentence;
-import com.mikosik.stork.data.syntax.Word;
 
 public class Modeler {
   public static Definition modelDefinition(Sentence sentence) {
@@ -65,7 +62,7 @@ public class Modeler {
   private static Expression modelLambda(Sentence sentence) {
     return switchOn(sentence)
         .ifRoundBracket((bracket, tail) -> {
-          Parameter parameter = parameterIn(bracket);
+          Parameter parameter = modelParameter(bracket.sentence);
           Expression body = bind(parameter, modelLambda(tail));
           return lambda(parameter, body);
         })
@@ -74,11 +71,13 @@ public class Modeler {
         .elseFail();
   }
 
-  private static Parameter parameterIn(Bracket bracket) {
-    check(bracket.type == ROUND);
-    check(!bracket.sentence.parts.tail().available());
-    Word word = (Word) bracket.sentence.parts.head();
-    return parameter(word.string);
+  private static Parameter modelParameter(Sentence sentence) {
+    return switchOn(sentence)
+        .ifMulti(s -> {
+          throw new RuntimeException(format("parameter must be single word, not '%s'", sentence));
+        })
+        .ifLabel((word, tail) -> parameter(word.string))
+        .elseFail();
   }
 
   private static Expression bind(Parameter parameter, Expression expression) {
