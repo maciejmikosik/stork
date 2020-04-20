@@ -3,10 +3,10 @@ package com.mikosik.stork.tool;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
 import static com.mikosik.stork.data.model.Lambda.lambda;
 import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Primitive.primitive;
+import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
 import static com.mikosik.stork.data.syntax.SentenceSwitcher.sentenceSwitcherReturning;
@@ -82,7 +82,7 @@ public class Modeler {
   }
 
   private static Expression bind(Parameter parameter, Expression expression) {
-    return expressionSwitcherReturning(Expression.class)
+    return switchOn(expression)
         .ifVariable(variable -> variable.name.equals(parameter.name)
             ? parameter
             : variable)
@@ -95,6 +95,6 @@ public class Modeler {
                 lambda.parameter,
                 bind(parameter, lambda.body)))
         .ifParameter(param -> param)
-        .apply(expression);
+        .elseFail();
   }
 }
