@@ -85,6 +85,7 @@ public class Modeler {
         .ifVariable(variable -> variable.name.equals(parameter.name)
             ? parameter
             : variable)
+        .ifPrimitive(primitive -> primitive)
         .ifApplication(application -> application(
             bind(parameter, application.function),
             bind(parameter, application.argument)))
