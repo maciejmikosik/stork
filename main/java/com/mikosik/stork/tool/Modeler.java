@@ -9,7 +9,7 @@ import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
-import static com.mikosik.stork.data.syntax.SentenceSwitcher.sentenceSwitcherReturning;
+import static com.mikosik.stork.data.syntax.Switch.switchOn;
 
 import java.math.BigInteger;
 
@@ -22,21 +22,21 @@ import com.mikosik.stork.data.syntax.Word;
 
 public class Modeler {
   public static Definition modelDefinition(Sentence sentence) {
-    return sentenceSwitcherReturning(Definition.class)
+    return switchOn(sentence)
         .ifLabel((word, tail) -> definition(word.string, modelLambda(tail)))
-        .apply(sentence);
+        .elseFail();
   }
 
   public static Expression modelExpression(Sentence sentence) {
-    return sentenceSwitcherReturning(Expression.class)
+    return switchOn(sentence)
         .ifLabel((word, tail) -> modelApplication(sentence))
         .ifInteger((word, tail) -> modelInteger(sentence))
         .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
-        .apply(sentence);
+        .elseFail();
   }
 
   private static Expression modelInteger(Sentence sentence) {
-    return sentenceSwitcherReturning(Expression.class)
+    return switchOn(sentence)
         .ifInteger((word, tail) -> {
           if (tail.parts.available()) {
             throw new RuntimeException("integer cannot be followed by sentence");
@@ -44,26 +44,26 @@ public class Modeler {
             return primitive(new BigInteger(word.string));
           }
         })
-        .apply(sentence);
+        .elseFail();
   }
 
   private static Expression modelApplication(Sentence sentence) {
-    return sentenceSwitcherReturning(Expression.class)
+    return switchOn(sentence)
         .ifLabel((word, tail) -> modelApplication(variable(word.string), tail))
-        .apply(sentence);
+        .elseFail();
   }
 
   private static Expression modelApplication(Expression function, Sentence sentence) {
-    return sentenceSwitcherReturning(Expression.class)
-        .ifEmpty(() -> function)
+    return switchOn(sentence)
+        .ifEmpty(function)
         .ifRoundBracket((bracket, tail) -> modelApplication(
             application(function, modelExpression(bracket.sentence)),
             tail))
-        .apply(sentence);
+        .elseFail();
   }
 
   private static Expression modelLambda(Sentence sentence) {
-    return sentenceSwitcherReturning(Expression.class)
+    return switchOn(sentence)
         .ifRoundBracket((bracket, tail) -> {
           Parameter parameter = parameterIn(bracket);
           Expression body = bind(parameter, modelLambda(tail));
@@ -71,7 +71,7 @@ public class Modeler {
         })
         // TODO rest of sentence after bracket is ignored right now
         .ifCurlyBracket((bracket, tail) -> modelExpression(bracket.sentence))
-        .apply(sentence);
+        .elseFail();
   }
 
   private static Parameter parameterIn(Bracket bracket) {
