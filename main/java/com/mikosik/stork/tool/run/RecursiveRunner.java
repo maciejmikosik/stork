@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.run;
 
-import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
+import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.tool.run.Substitute.substitute;
 
 import com.mikosik.stork.data.model.Application;
@@ -19,23 +19,22 @@ public class RecursiveRunner implements Runner {
   }
 
   public Expression run(Expression expression) {
-    return expressionSwitcherReturning(Expression.class)
+    return switchOn(expression)
         .ifVariable(variable -> run(binary.table.get(variable.name)))
         .ifPrimitive(primitive -> primitive)
         .ifApplication(application -> run(application))
         .ifLambda(lambda -> lambda)
         .ifCore(core -> core)
-        .apply(expression);
+        .elseFail();
   }
 
   private Expression run(Application application) {
-    Expression function = run(application.function);
-    return expressionSwitcherReturning(Expression.class)
+    return switchOn(run(application.function))
         .ifLambda(lambda -> run(substitute(
             lambda.body,
             lambda.parameter,
             application.argument)))
         .ifCore(core -> run(core.apply(run(application.argument))))
-        .apply(function);
+        .elseFail();
   }
 }

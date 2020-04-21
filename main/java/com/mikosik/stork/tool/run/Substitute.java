@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.run;
 
 import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
 import static com.mikosik.stork.data.model.Lambda.lambda;
+import static com.mikosik.stork.data.model.Switch.switchOn;
 
 import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
@@ -27,7 +27,7 @@ public class Substitute {
       Expression expression,
       Parameter parameter,
       Expression argument) {
-    return expressionSwitcherReturning(Expression.class)
+    return switchOn(expression)
         .ifApplication(application -> application(
             substitute(application.function, parameter, argument),
             substitute(application.argument, parameter, argument)))
@@ -41,6 +41,6 @@ public class Substitute {
             ? argument
             : foundParameter)
         .ifPrimitive(primitive -> primitive)
-        .apply(expression);
+        .elseFail();
   }
 }

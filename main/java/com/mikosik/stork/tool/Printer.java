@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.data.model.ExpressionSwitcher.expressionSwitcherReturning;
+import static com.mikosik.stork.data.model.Switch.switchOn;
 import static java.lang.String.format;
 
 import com.mikosik.stork.data.model.Definition;
@@ -10,7 +10,7 @@ import com.mikosik.stork.data.model.Library;
 
 public class Printer {
   public static String print(Expression expression) {
-    return expressionSwitcherReturning(String.class)
+    return switchOn(expression)
         .ifPrimitive(primitive -> primitive.object.toString())
         .ifVariable(variable -> variable.name)
         .ifParameter(parameter -> parameter.name)
@@ -21,7 +21,7 @@ public class Printer {
             ? format("(%s)%s", print(lambda.parameter), print(lambda.body))
             : format("(%s){%s}", print(lambda.parameter), print(lambda.body)))
         .ifCore(core -> core.toString())
-        .apply(expression);
+        .elseFail();
   }
 
   public static String print(Definition definition) {
