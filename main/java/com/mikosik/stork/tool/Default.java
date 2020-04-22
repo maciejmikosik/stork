@@ -5,7 +5,8 @@ import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.tool.Modeler.modelDefinition;
 import static com.mikosik.stork.tool.Modeler.modelExpression;
 import static com.mikosik.stork.tool.Parser.parse;
-import static com.mikosik.stork.tool.run.RecursiveRunner.recursiveRunner;
+import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
+import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -37,6 +38,6 @@ public class Default {
   }
 
   public static Runner defaultRunner(Binary binary) {
-    return recursiveRunner(binary);
+    return exhausted(stepper(binary));
   }
 }
