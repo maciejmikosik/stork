@@ -22,13 +22,13 @@ class LinkedFunctions {
           }
 
           public String toString() {
-            return format("add(%s)", numberA);
+            return format("<add(%s)>", numberA);
           }
         };
       }
 
       public String toString() {
-        return "add";
+        return "<add>";
       }
     };
   }
@@ -41,7 +41,7 @@ class LinkedFunctions {
       }
 
       public String toString() {
-        return "negate";
+        return "<negate>";
       }
     };
   }
@@ -57,13 +57,13 @@ class LinkedFunctions {
           }
 
           public String toString() {
-            return format("equal(%s)", numberA);
+            return format("<equal(%s)>", numberA);
           }
         };
       }
 
       public String toString() {
-        return "equal";
+        return "<equal>";
       }
     };
   }
@@ -79,13 +79,13 @@ class LinkedFunctions {
           }
 
           public String toString() {
-            return format("moreThan(%s)", numberA);
+            return format("<moreThan(%s)>", numberA);
           }
         };
       }
 
       public String toString() {
-        return "moreThan";
+        return "<moreThan>";
       }
     };
   }
