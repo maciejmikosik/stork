@@ -12,19 +12,20 @@ import static java.lang.String.format;
 
 import java.math.BigInteger;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.syntax.Sentence;
+import com.mikosik.stork.data.syntax.Syntax;
 
 public class Modeler {
-  public static Definition modelDefinition(Sentence sentence) {
+  public static Definition modelDefinition(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifLabel((word, tail) -> definition(word.string, modelLambda(tail)))
         .elseFail();
   }
 
-  public static Expression modelExpression(Sentence sentence) {
+  public static Expression modelExpression(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifLabel((word, tail) -> modelApplication(sentence))
         .ifInteger((word, tail) -> modelInteger(sentence))
@@ -32,21 +33,21 @@ public class Modeler {
         .elseFail();
   }
 
-  private static Expression modelInteger(Sentence sentence) {
+  private static Expression modelInteger(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifInteger((word, tail) -> tail.parts.visit(
+        .ifInteger((word, tail) -> tail.visit(
             (head2, tail2) -> fail("integer cannot be followed by sentence"),
             () -> primitive(new BigInteger(word.string))))
         .elseFail();
   }
 
-  private static Expression modelApplication(Sentence sentence) {
+  private static Expression modelApplication(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifLabel((word, tail) -> modelApplication(variable(word.string), tail))
         .elseFail();
   }
 
-  private static Expression modelApplication(Expression function, Sentence sentence) {
+  private static Expression modelApplication(Expression function, Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifEmpty(function)
         .ifRoundBracket((bracket, tail) -> modelApplication(
@@ -55,7 +56,7 @@ public class Modeler {
         .elseFail();
   }
 
-  private static Expression modelLambda(Sentence sentence) {
+  private static Expression modelLambda(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifRoundBracket((bracket, tail) -> {
           Parameter parameter = modelParameter(bracket.sentence);
@@ -67,7 +68,7 @@ public class Modeler {
         .elseFail();
   }
 
-  private static Parameter modelParameter(Sentence sentence) {
+  private static Parameter modelParameter(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifMulti(s -> fail(format("parameter must be single word, not '%s'", sentence)))
         .ifLabel((word, tail) -> parameter(word.string))
