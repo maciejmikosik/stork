@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Switch {
   private final Expression expression;
@@ -42,10 +43,18 @@ public class Switch {
     return ifType(Parameter.class, handler);
   }
 
+  public Switch ifRunning(Function<Running, ?> handler) {
+    return ifType(Running.class, handler);
+  }
+
   private <E> Switch ifType(Class<E> type, Function<E, ?> handler) {
     return !result.isPresent() && type.isInstance(expression)
         ? new Switch(expression, Optional.of(handler.apply((E) expression)))
         : this;
+  }
+
+  public <R> R elseReturn(Supplier<R> handler) {
+    return (R) result.orElseGet(handler);
   }
 
   public <R> R elseFail() {
