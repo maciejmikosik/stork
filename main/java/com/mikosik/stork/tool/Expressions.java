@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.run;
+package com.mikosik.stork.tool;
 
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Lambda.lambda;
@@ -9,7 +9,7 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Lambda;
 import com.mikosik.stork.data.model.Parameter;
 
-public class Substitute {
+public class Expressions {
   /**
    * When running {@link Application} that applies {@link Lambda} on given argument
    * {@link Expression} it is required to replace each occurrence of lambda's parameter in lambda's

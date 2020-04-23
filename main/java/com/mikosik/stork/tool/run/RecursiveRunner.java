@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.run;
 
 import static com.mikosik.stork.data.model.Switch.switchOn;
-import static com.mikosik.stork.tool.run.Substitute.substitute;
+import static com.mikosik.stork.tool.Expressions.substitute;
 
 import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
@@ -30,10 +30,7 @@ public class RecursiveRunner implements Runner {
 
   private Expression run(Application application) {
     return switchOn(run(application.function))
-        .ifLambda(lambda -> run(substitute(
-            lambda.body,
-            lambda.parameter,
-            application.argument)))
+        .ifLambda(lambda -> run(substitute(lambda, application.argument)))
         .ifCore(core -> run(core.apply(run(application.argument))))
         .elseFail();
   }
