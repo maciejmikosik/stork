@@ -1,15 +1,17 @@
 package com.mikosik.stork.data.syntax;
 
+import com.mikosik.stork.common.Chain;
+
 public class Bracket implements Syntax {
-  public final Sentence sentence;
+  public final Chain<Syntax> sentence;
   public final BracketType type;
 
-  private Bracket(BracketType type, Sentence sentence) {
+  private Bracket(BracketType type, Chain<Syntax> sentence) {
     this.type = type;
     this.sentence = sentence;
   }
 
-  public static Bracket bracket(BracketType type, Sentence sentence) {
+  public static Bracket bracket(BracketType type, Chain<Syntax> sentence) {
     return new Bracket(type, sentence);
   }
 

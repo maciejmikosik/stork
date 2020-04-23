@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.common.Chain.chainFrom;
+import static com.mikosik.stork.common.Chains.chainFrom;
 import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.tool.Modeler.modelDefinition;
 import static com.mikosik.stork.tool.Modeler.modelExpression;
