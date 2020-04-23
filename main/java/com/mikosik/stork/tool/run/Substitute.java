@@ -43,4 +43,8 @@ public class Substitute {
         .ifPrimitive(primitive -> primitive)
         .elseFail();
   }
+
+  public static Expression substitute(Lambda lambda, Expression argument) {
+    return substitute(lambda.body, lambda.parameter, argument);
+  }
 }
