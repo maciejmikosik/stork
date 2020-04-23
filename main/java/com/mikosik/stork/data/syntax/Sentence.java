@@ -1,5 +1,6 @@
 package com.mikosik.stork.data.syntax;
 
+import static com.mikosik.stork.common.Chains.stream;
 import static java.util.stream.Collectors.joining;
 
 import com.mikosik.stork.common.Chain;
@@ -16,7 +17,7 @@ public class Sentence {
   }
 
   public String toString() {
-    return parts.stream()
+    return stream(parts)
         .map(Syntax::toString)
         .collect(joining());
   }

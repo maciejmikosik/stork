@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.lib.Libraries.library;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.compileLibrary;

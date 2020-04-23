@@ -1,7 +1,10 @@
 package com.mikosik.stork.testing;
 
-import static com.mikosik.stork.common.Chain.chain;
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.add;
+import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Chains.addAll;
+import static com.mikosik.stork.common.Chains.chainOf;
+import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Library.library;
 import static com.mikosik.stork.testing.Mock.mock;
@@ -56,9 +59,9 @@ public class StorkTest extends Case {
   public static StorkTest storkTest() {
     return new StorkTest(
         "",
-        chain(),
-        chain(),
-        chain(),
+        empty(),
+        empty(),
+        empty(),
         null,
         null);
   }
@@ -80,7 +83,7 @@ public class StorkTest extends Case {
   public StorkTest givenImported(String library) {
     return new StorkTest(
         name,
-        givenImportedLibraries.add(library),
+        add(library, givenImportedLibraries),
         givenMocks,
         givenDefinitions,
         whenExpression,
@@ -102,7 +105,7 @@ public class StorkTest extends Case {
         name,
         givenImportedLibraries,
         givenMocks,
-        givenDefinitions.add(definition),
+        add(definition, givenDefinitions),
         whenExpression,
         thenReturnedExpression);
   }
@@ -128,15 +131,14 @@ public class StorkTest extends Case {
   }
 
   public void run() {
-    Chain<Definition> definitions = givenDefinitions
-        .map(Default::compileDefinition);
-    Chain<Library> libraries = givenImportedLibraries
-        .map(Libraries::library);
-    Chain<Definition> mocks = givenMocks
-        .map(name -> definition(name, mock(name)));
-    Chain<Library> allLibraries = libraries
-        .add(library(definitions))
-        .add(library(mocks));
+    Chain<Definition> definitions = map(Default::compileDefinition, givenDefinitions);
+    Chain<Library> libraries = map(Libraries::library, givenImportedLibraries);
+    Chain<Definition> mocks = map(name -> definition(name, mock(name)), givenMocks);
+    Chain<Library> allLibraries = addAll(
+        chainOf(
+            library(definitions),
+            library(mocks)),
+        libraries);
     Runner runner = defaultRunner(link(allLibraries));
 
     Expression actual = runner.run(compileExpression(whenExpression));

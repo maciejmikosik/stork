@@ -1,6 +1,8 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Chain.add;
+import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Chains.reverse;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Reading.reading;
 import static com.mikosik.stork.data.syntax.Bracket.bracket;
@@ -26,22 +28,22 @@ public class Parser {
   }
 
   private static Sentence parseSentence(Reading reading) {
-    Chain<Syntax> parts = chain();
+    Chain<Syntax> parts = empty();
     while (reading.available()) {
       char character = reading.peek();
       if (isWordSeparator(character)) {
         reading.read();
       } else if (isWordy(character)) {
-        parts = parts.add(parseWord(reading));
+        parts = add(parseWord(reading), parts);
       } else if (isOpeningBracket(character)) {
-        parts = parts.add(parseBracket(reading));
+        parts = add(parseBracket(reading), parts);
       } else if (isClosingBracket(character)) {
         break;
       } else {
         throw new RuntimeException("unknown character " + character);
       }
     }
-    return sentence(parts.reverse());
+    return sentence(reverse(parts));
   }
 
   private static Word parseWord(Reading reading) {
