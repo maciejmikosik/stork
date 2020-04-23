@@ -1,8 +1,9 @@
 package com.mikosik.stork.common;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -19,16 +20,14 @@ public class Chain<E> implements Iterable<E> {
     return (Chain<E>) EMPTY;
   }
 
-  public boolean available() {
-    return true;
+  public <R> R visit(
+      BiFunction<E, Chain<E>, R> someVisitor,
+      Supplier<R> noneVisitor) {
+    return someVisitor.apply(head, tail);
   }
 
-  public E head() {
-    return head;
-  }
-
-  public Chain<E> tail() {
-    return tail;
+  private boolean available() {
+    return this != EMPTY;
   }
 
   public Chain<E> add(E element) {
@@ -96,16 +95,10 @@ public class Chain<E> implements Iterable<E> {
   }
 
   private static Chain<Object> EMPTY = new Chain<Object>(null, null) {
-    public boolean available() {
-      return false;
-    }
-
-    public Object head() {
-      throw new NoSuchElementException();
-    }
-
-    public Chain<Object> tail() {
-      throw new NoSuchElementException();
+    public <R> R visit(
+        BiFunction<Object, Chain<Object>, R> someVisitor,
+        Supplier<R> noneVisitor) {
+      return noneVisitor.get();
     }
   };
 }

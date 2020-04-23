@@ -29,62 +29,61 @@ public class Switch {
   }
 
   public Switch ifEmpty(Object handler) {
-    return !result.isPresent()
-        && !sentence.parts.available()
-            ? withResult(handler)
-            : this;
+    return result.isPresent()
+        ? this
+        : sentence.parts.visit(
+            (head, tail) -> this,
+            () -> withResult(handler));
   }
 
   public Switch ifMulti(Function<Sentence, Object> handler) {
-    return !result.isPresent()
-        && sentence.parts.available()
-        && sentence.parts.tail().available()
-            ? new Switch(sentence, Optional.of(handler))
-            : this;
+    return result.isPresent()
+        ? this
+        : sentence.parts.visit(
+            (head, tail) -> tail.visit(
+                (head2, tail2) -> withResult(handler.apply(sentence)),
+                () -> this),
+            () -> this);
   }
 
   public Switch ifLabel(BiFunction<Word, Sentence, Object> handler) {
-    return !result.isPresent()
-        && sentence.parts.available()
-        && sentence.parts.head() instanceof Word
-        && isLabel(((Word) sentence.parts.head()).string)
-            ? withResult(handler.apply(
-                (Word) sentence.parts.head(),
-                sentence(sentence.parts.tail())))
-            : this;
+    return result.isPresent()
+        ? this
+        : sentence.parts.visit(
+            (head, tail) -> head instanceof Word && isLabel(((Word) head).string)
+                ? withResult(handler.apply((Word) head, sentence(tail)))
+                : this,
+            () -> this);
   }
 
   public Switch ifInteger(BiFunction<Word, Sentence, Object> handler) {
-    return !result.isPresent()
-        && sentence.parts.available()
-        && sentence.parts.head() instanceof Word
-        && isInteger(((Word) sentence.parts.head()).string)
-            ? withResult(handler.apply(
-                (Word) sentence.parts.head(),
-                sentence(sentence.parts.tail())))
-            : this;
+    return result.isPresent()
+        ? this
+        : sentence.parts.visit(
+            (head, tail) -> head instanceof Word && isInteger(((Word) head).string)
+                ? withResult(handler.apply((Word) head, sentence(tail)))
+                : this,
+            () -> this);
   }
 
   public Switch ifRoundBracket(BiFunction<Bracket, Sentence, Object> handler) {
-    return !result.isPresent()
-        && sentence.parts.available()
-        && sentence.parts.head() instanceof Bracket
-        && ((Bracket) sentence.parts.head()).type == ROUND
-            ? withResult(handler.apply(
-                (Bracket) sentence.parts.head(),
-                sentence(sentence.parts.tail())))
-            : this;
+    return result.isPresent()
+        ? this
+        : sentence.parts.visit(
+            (head, tail) -> head instanceof Bracket && ((Bracket) head).type == ROUND
+                ? withResult(handler.apply((Bracket) head, sentence(tail)))
+                : this,
+            () -> this);
   }
 
   public Switch ifCurlyBracket(BiFunction<Bracket, Sentence, Object> handler) {
-    return !result.isPresent()
-        && sentence.parts.available()
-        && sentence.parts.head() instanceof Bracket
-        && ((Bracket) sentence.parts.head()).type == CURLY
-            ? withResult(handler.apply(
-                (Bracket) sentence.parts.head(),
-                sentence(sentence.parts.tail())))
-            : this;
+    return result.isPresent()
+        ? this
+        : sentence.parts.visit(
+            (head, tail) -> head instanceof Bracket && ((Bracket) head).type == CURLY
+                ? withResult(handler.apply((Bracket) head, sentence(tail)))
+                : this,
+            () -> this);
   }
 
   public <R> R elseFail() {

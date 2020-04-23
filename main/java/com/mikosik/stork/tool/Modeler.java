@@ -34,13 +34,9 @@ public class Modeler {
 
   private static Expression modelInteger(Sentence sentence) {
     return switchOn(sentence)
-        .ifInteger((word, tail) -> {
-          if (tail.parts.available()) {
-            throw new RuntimeException("integer cannot be followed by sentence");
-          } else {
-            return primitive(new BigInteger(word.string));
-          }
-        })
+        .ifInteger((word, tail) -> tail.parts.visit(
+            (head2, tail2) -> fail("integer cannot be followed by sentence"),
+            () -> primitive(new BigInteger(word.string))))
         .elseFail();
   }
 
@@ -73,9 +69,7 @@ public class Modeler {
 
   private static Parameter modelParameter(Sentence sentence) {
     return switchOn(sentence)
-        .ifMulti(s -> {
-          throw new RuntimeException(format("parameter must be single word, not '%s'", sentence));
-        })
+        .ifMulti(s -> fail(format("parameter must be single word, not '%s'", sentence)))
         .ifLabel((word, tail) -> parameter(word.string))
         .elseFail();
   }
@@ -96,5 +90,9 @@ public class Modeler {
                 bind(parameter, lambda.body)))
         .ifParameter(param -> param)
         .elseFail();
+  }
+
+  private static <X> X fail(String message) {
+    throw new RuntimeException(message);
   }
 }
