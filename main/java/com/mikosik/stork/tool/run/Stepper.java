@@ -3,9 +3,9 @@ package com.mikosik.stork.tool.run;
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.common.Throwables.throwing;
-import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Running.running;
 import static com.mikosik.stork.data.model.Switch.switchOn;
+import static com.mikosik.stork.tool.Expressions.ascend;
 import static com.mikosik.stork.tool.Expressions.substitute;
 
 import com.mikosik.stork.common.Chain;
@@ -49,20 +49,8 @@ public class Stepper implements Runner {
             .ifPrimitive(primitive -> fail("cannot apply primitive " + primitive))
             .ifLambda(lambda -> running(add(substitute(lambda, application.argument), stack)))
             .elseFail())
-        .elseReturn(() -> ascend(expression, stack));
-  }
-
-  private Expression ascend(Expression expression, Chain<Expression> stack) {
-    return stack.visit(
-        (head, tail) -> ascend(expression, head, tail),
-        () -> expression);
-  }
-
-  private Expression ascend(Expression first, Expression second, Chain<Expression> stack) {
-    return switchOn(second)
-        .ifApplication(application -> switchOn(application.function)
-            .ifCore(core -> running(add(application(application.function, first), stack)))
-            .elseReturn(() -> running(add(application(first, application.argument), stack))))
-        .elseFail();
+        .elseReturn(() -> stack.visit(
+            (head, tail) -> running(add(ascend(expression, head), tail)),
+            () -> expression));
   }
 }
