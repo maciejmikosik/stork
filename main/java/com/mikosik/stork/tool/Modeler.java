@@ -3,8 +3,8 @@ package com.mikosik.stork.tool;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Lambda.lambda;
+import static com.mikosik.stork.data.model.Noun.noun;
 import static com.mikosik.stork.data.model.Parameter.parameter;
-import static com.mikosik.stork.data.model.Primitive.primitive;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.Switch.switchOn;
@@ -37,7 +37,7 @@ public class Modeler {
     return switchOn(sentence)
         .ifInteger((word, tail) -> tail.visit(
             (head2, tail2) -> fail("integer cannot be followed by sentence"),
-            () -> primitive(new BigInteger(word.string))))
+            () -> noun(new BigInteger(word.string))))
         .elseFail();
   }
 
@@ -80,7 +80,7 @@ public class Modeler {
         .ifVariable(variable -> variable.name.equals(parameter.name)
             ? parameter
             : variable)
-        .ifPrimitive(primitive -> primitive)
+        .ifNoun(noun -> noun)
         .ifApplication(application -> application(
             bind(parameter, application.function),
             bind(parameter, application.argument)))

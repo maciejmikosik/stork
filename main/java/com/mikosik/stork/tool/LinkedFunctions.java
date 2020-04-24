@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool;
 
-import static com.mikosik.stork.data.model.Primitive.primitive;
+import static com.mikosik.stork.data.model.Noun.noun;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static java.lang.String.format;
 
@@ -8,17 +8,17 @@ import java.math.BigInteger;
 
 import com.mikosik.stork.data.model.Core;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Primitive;
+import com.mikosik.stork.data.model.Noun;
 
 class LinkedFunctions {
   public static Expression addIntegerInteger() {
     return new Core() {
       public Expression apply(Expression argumentA) {
-        BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
+        BigInteger numberA = (BigInteger) ((Noun) argumentA).object;
         return new Core() {
           public Expression apply(Expression argumentB) {
-            BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
-            return primitive(numberA.add(numberB));
+            BigInteger numberB = (BigInteger) ((Noun) argumentB).object;
+            return noun(numberA.add(numberB));
           }
 
           public String toString() {
@@ -36,8 +36,8 @@ class LinkedFunctions {
   public static Expression negateInteger() {
     return new Core() {
       public Expression apply(Expression argument) {
-        BigInteger bigInteger = (BigInteger) ((Primitive) argument).object;
-        return primitive(bigInteger.negate());
+        BigInteger bigInteger = (BigInteger) ((Noun) argument).object;
+        return noun(bigInteger.negate());
       }
 
       public String toString() {
@@ -49,10 +49,10 @@ class LinkedFunctions {
   public static Expression equalIntegerInteger() {
     return new Core() {
       public Expression apply(Expression argumentA) {
-        BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
+        BigInteger numberA = (BigInteger) ((Noun) argumentA).object;
         return new Core() {
           public Expression apply(Expression argumentB) {
-            BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
+            BigInteger numberB = (BigInteger) ((Noun) argumentB).object;
             return variable("" + numberA.equals(numberB));
           }
 
@@ -71,10 +71,10 @@ class LinkedFunctions {
   public static Expression moreThanIntegerInteger() {
     return new Core() {
       public Expression apply(Expression argumentA) {
-        BigInteger numberA = (BigInteger) ((Primitive) argumentA).object;
+        BigInteger numberA = (BigInteger) ((Noun) argumentA).object;
         return new Core() {
           public Expression apply(Expression argumentB) {
-            BigInteger numberB = (BigInteger) ((Primitive) argumentB).object;
+            BigInteger numberB = (BigInteger) ((Noun) argumentB).object;
             return variable("" + (numberB.compareTo(numberA) > 0));
           }
 

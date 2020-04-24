@@ -46,7 +46,7 @@ public class Stepper implements Runner {
                 .elseReturn(() -> running(add(core.apply(application.argument), stack))))
             .ifVariable(function -> running(add(function, add(expression, stack))))
             .ifApplication(function -> running(add(function, add(expression, stack))))
-            .ifPrimitive(primitive -> fail("cannot apply primitive " + primitive))
+            .ifNoun(noun -> fail("cannot apply noun " + noun))
             .ifLambda(lambda -> running(add(substitute(lambda, application.argument), stack)))
             .elseFail())
         .elseReturn(() -> stack.visit(

@@ -17,7 +17,7 @@ import com.mikosik.stork.data.model.Library;
 public class Printer {
   public static String print(Expression expression) {
     return switchOn(expression)
-        .ifPrimitive(primitive -> primitive.object.toString())
+        .ifNoun(noun -> noun.object.toString())
         .ifVariable(variable -> variable.name)
         .ifParameter(parameter -> parameter.name)
         .ifApplication(application -> format("%s(%s)",

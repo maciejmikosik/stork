@@ -23,8 +23,8 @@ public class Switch {
     return ifType(Variable.class, handler);
   }
 
-  public Switch ifPrimitive(Function<Primitive, ?> handler) {
-    return ifType(Primitive.class, handler);
+  public Switch ifNoun(Function<Noun, ?> handler) {
+    return ifType(Noun.class, handler);
   }
 
   public Switch ifCore(Function<Core, ?> handler) {

@@ -21,7 +21,7 @@ public class RecursiveRunner implements Runner {
   public Expression run(Expression expression) {
     return switchOn(expression)
         .ifVariable(variable -> run(binary.table.get(variable.name)))
-        .ifPrimitive(primitive -> primitive)
+        .ifNoun(noun -> noun)
         .ifApplication(application -> run(application))
         .ifLambda(lambda -> lambda)
         .ifCore(core -> core)

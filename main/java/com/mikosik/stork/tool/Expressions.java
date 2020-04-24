@@ -42,7 +42,7 @@ public class Expressions {
         .ifParameter(foundParameter -> foundParameter == parameter
             ? argument
             : foundParameter)
-        .ifPrimitive(primitive -> primitive)
+        .ifNoun(noun -> noun)
         .elseFail();
   }
 
