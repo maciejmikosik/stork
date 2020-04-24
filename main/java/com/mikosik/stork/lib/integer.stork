@@ -1,7 +1,7 @@
 
-  equal(x)(y) { coreFunction }
+  equal(x)(y) { verb }
 
-  moreThan(x)(y) { coreFunction }
+  moreThan(x)(y) { verb }
 
   lessThan {
     flip(moreThan)
@@ -21,9 +21,9 @@
       (atMost(max)(number))
   }
 
-  add(x)(y) { coreFunction }
+  add(x)(y) { verb }
 
-  negate(x) { coreFunction }
+  negate(x) { verb }
 
   subtract(x) {
     add(negate(x))

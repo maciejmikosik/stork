@@ -17,7 +17,7 @@ import com.mikosik.stork.data.model.Library;
 public class Printer {
   public static String print(Expression expression) {
     return switchOn(expression)
-        .ifPrimitive(primitive -> primitive.object.toString())
+        .ifNoun(noun -> noun.object.toString())
         .ifVariable(variable -> variable.name)
         .ifParameter(parameter -> parameter.name)
         .ifApplication(application -> format("%s(%s)",
@@ -26,7 +26,7 @@ public class Printer {
         .ifLambda(lambda -> lambda.body instanceof Lambda
             ? format("(%s)%s", print(lambda.parameter), print(lambda.body))
             : format("(%s){%s}", print(lambda.parameter), print(lambda.body)))
-        .ifCore(core -> core.toString())
+        .ifVerb(verb -> verb.toString())
         .ifRunning(running -> print(ascend(mark(running.stack))))
         .elseFail();
   }

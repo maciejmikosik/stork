@@ -5,10 +5,10 @@ import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Chains.reverse;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Core;
 import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Verb;
 
-public class Mock implements Core {
+public class Mock implements Verb {
   private final String name;
   private final Chain<Expression> arguments;
 

@@ -42,7 +42,7 @@ public class Expressions {
         .ifParameter(foundParameter -> foundParameter == parameter
             ? argument
             : foundParameter)
-        .ifPrimitive(primitive -> primitive)
+        .ifNoun(verb -> verb)
         .elseFail();
   }
 
@@ -60,7 +60,7 @@ public class Expressions {
   public static Expression ascend(Expression child, Expression parent) {
     return switchOn(parent)
         .ifApplication(application -> switchOn(application.function)
-            .ifCore(core -> application(application.function, child))
+            .ifVerb(verb -> application(application.function, child))
             .elseReturn(() -> application(child, application.argument)))
         .elseFail();
   }

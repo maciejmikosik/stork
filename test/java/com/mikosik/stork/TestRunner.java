@@ -33,7 +33,7 @@ public class TestRunner {
             .given("f(g)(x) { g(x) }")
             .when("f((x){x})(mock)")
             .thenReturned("mock"))
-        .add(storkTest("primitive is ignored when binding")
+        .add(storkTest("noun is ignored when binding")
             .givenMocks("f")
             .given("function(x) { x(2) }")
             .when("function(f)")

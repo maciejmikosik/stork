@@ -1,5 +1,5 @@
 package com.mikosik.stork.data.model;
 
-public interface Core extends Expression {
+public interface Verb extends Expression {
   Expression apply(Expression argument);
 }
