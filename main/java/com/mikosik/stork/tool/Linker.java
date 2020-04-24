@@ -8,10 +8,10 @@ import static com.mikosik.stork.common.table.Put.put;
 import static com.mikosik.stork.common.table.ReplaceIfPresent.replaceIfPresent;
 import static com.mikosik.stork.common.table.Table.table;
 import static com.mikosik.stork.tool.Binary.binary;
-import static com.mikosik.stork.tool.LinkedFunctions.addIntegerInteger;
-import static com.mikosik.stork.tool.LinkedFunctions.equalIntegerInteger;
-import static com.mikosik.stork.tool.LinkedFunctions.moreThanIntegerInteger;
-import static com.mikosik.stork.tool.LinkedFunctions.negateInteger;
+import static com.mikosik.stork.tool.LinkableVerbs.addIntegerInteger;
+import static com.mikosik.stork.tool.LinkableVerbs.equalIntegerInteger;
+import static com.mikosik.stork.tool.LinkableVerbs.moreThanIntegerInteger;
+import static com.mikosik.stork.tool.LinkableVerbs.negateInteger;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.table.Mod;
