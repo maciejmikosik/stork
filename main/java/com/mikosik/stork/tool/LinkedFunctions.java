@@ -6,16 +6,16 @@ import static java.lang.String.format;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.data.model.Core;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Noun;
+import com.mikosik.stork.data.model.Verb;
 
 class LinkedFunctions {
   public static Expression addIntegerInteger() {
-    return new Core() {
+    return new Verb() {
       public Expression apply(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Noun) argumentA).object;
-        return new Core() {
+        return new Verb() {
           public Expression apply(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Noun) argumentB).object;
             return noun(numberA.add(numberB));
@@ -34,7 +34,7 @@ class LinkedFunctions {
   }
 
   public static Expression negateInteger() {
-    return new Core() {
+    return new Verb() {
       public Expression apply(Expression argument) {
         BigInteger bigInteger = (BigInteger) ((Noun) argument).object;
         return noun(bigInteger.negate());
@@ -47,10 +47,10 @@ class LinkedFunctions {
   }
 
   public static Expression equalIntegerInteger() {
-    return new Core() {
+    return new Verb() {
       public Expression apply(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Noun) argumentA).object;
-        return new Core() {
+        return new Verb() {
           public Expression apply(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Noun) argumentB).object;
             return variable("" + numberA.equals(numberB));
@@ -69,10 +69,10 @@ class LinkedFunctions {
   }
 
   public static Expression moreThanIntegerInteger() {
-    return new Core() {
+    return new Verb() {
       public Expression apply(Expression argumentA) {
         BigInteger numberA = (BigInteger) ((Noun) argumentA).object;
-        return new Core() {
+        return new Verb() {
           public Expression apply(Expression argumentB) {
             BigInteger numberB = (BigInteger) ((Noun) argumentB).object;
             return variable("" + (numberB.compareTo(numberA) > 0));

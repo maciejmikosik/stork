@@ -24,14 +24,14 @@ public class RecursiveRunner implements Runner {
         .ifNoun(noun -> noun)
         .ifApplication(application -> run(application))
         .ifLambda(lambda -> lambda)
-        .ifCore(core -> core)
+        .ifVerb(verb -> verb)
         .elseFail();
   }
 
   private Expression run(Application application) {
     return switchOn(run(application.function))
         .ifLambda(lambda -> run(substitute(lambda, application.argument)))
-        .ifCore(core -> run(core.apply(run(application.argument))))
+        .ifVerb(verb -> run(verb.apply(run(application.argument))))
         .elseFail();
   }
 }

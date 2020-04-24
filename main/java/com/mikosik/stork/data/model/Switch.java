@@ -27,8 +27,8 @@ public class Switch {
     return ifType(Noun.class, handler);
   }
 
-  public Switch ifCore(Function<Core, ?> handler) {
-    return ifType(Core.class, handler);
+  public Switch ifVerb(Function<Verb, ?> handler) {
+    return ifType(Verb.class, handler);
   }
 
   public Switch ifApplication(Function<Application, ?> handler) {

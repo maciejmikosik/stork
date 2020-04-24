@@ -26,7 +26,7 @@ public class Printer {
         .ifLambda(lambda -> lambda.body instanceof Lambda
             ? format("(%s)%s", print(lambda.parameter), print(lambda.body))
             : format("(%s){%s}", print(lambda.parameter), print(lambda.body)))
-        .ifCore(core -> core.toString())
+        .ifVerb(verb -> verb.toString())
         .ifRunning(running -> print(ascend(mark(running.stack))))
         .elseFail();
   }
