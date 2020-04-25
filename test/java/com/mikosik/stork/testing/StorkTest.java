@@ -19,7 +19,11 @@ import static com.mikosik.stork.tool.run.ModuleRunner.runner;
 import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.lang.String.format;
 
-import org.quackery.Case;
+import java.util.List;
+import java.util.function.BiFunction;
+
+import org.quackery.Body;
+import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
@@ -31,8 +35,7 @@ import com.mikosik.stork.tool.Default;
 import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
-public class StorkTest extends Case {
-  @SuppressWarnings("hiding")
+public class StorkTest implements Test {
   private final String name;
   private final Chain<String> givenImportedModules;
   private final Chain<String> givenMocks;
@@ -47,19 +50,12 @@ public class StorkTest extends Case {
       Chain<String> givenDefinitions,
       String whenExpression,
       String thenReturnedExpression) {
-    super(replaceEmptyName(name, whenExpression, thenReturnedExpression));
     this.name = name;
     this.givenMocks = givenMocks;
     this.givenDefinitions = givenDefinitions;
     this.givenImportedModules = givenImportedModules;
     this.whenExpression = whenExpression;
     this.thenReturnedExpression = thenReturnedExpression;
-  }
-
-  private static String replaceEmptyName(String name, String when, String then) {
-    return name.isEmpty()
-        ? format("%s = %s", when, then)
-        : name;
   }
 
   public static StorkTest storkTest() {
@@ -136,7 +132,19 @@ public class StorkTest extends Case {
         expression);
   }
 
-  public void run() {
+  public <R> R visit(
+      BiFunction<String, Body, R> caseHandler,
+      BiFunction<String, List<Test>, R> suiteHandler) {
+    return caseHandler.apply(name(), () -> run());
+  }
+
+  private String name() {
+    return name.isEmpty()
+        ? format("%s = %s", whenExpression, thenReturnedExpression)
+        : name;
+  }
+
+  private void run() {
     Chain<Definition> definitions = map(Default::compileDefinition, givenDefinitions);
     Chain<Module> modules = map(Modules::module, givenImportedModules);
     Chain<Definition> mocks = map(name -> definition(name, mock(name)), givenMocks);
