@@ -12,6 +12,7 @@ import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.defaultRunner;
 import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.run.ModuleRunner.runner;
 import static java.lang.String.format;
 
 import org.quackery.Case;
@@ -139,7 +140,7 @@ public class StorkTest extends Case {
             module(definitions),
             module(mocks)),
         modules);
-    Runner runner = defaultRunner(link(allModules));
+    Runner runner = defaultRunner(runner(link(allModules)));
 
     Expression actual = runner.run(compileExpression(whenExpression));
     Expression expected = runner.run(compileExpression(thenReturnedExpression));

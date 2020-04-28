@@ -7,6 +7,7 @@ import static com.mikosik.stork.tool.Default.compileModule;
 import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
 import static com.mikosik.stork.tool.run.LoggingRunner.logging;
+import static com.mikosik.stork.tool.run.ModuleRunner.runner;
 import static com.mikosik.stork.tool.run.Stepper.stepper;
 
 import com.mikosik.stork.common.Chain;
@@ -19,8 +20,8 @@ public class Demo {
     Chain<Module> modules = chainOf(
         module("integer.stork"),
         compileModule("main { add(add(1)(2))(add(5)(10)) }"));
-    Runner link = link(modules);
-    Runner runner = exhausted(logging(stepper(link)));
+    Runner moduleRunner = runner(link(modules));
+    Runner runner = exhausted(logging(stepper(moduleRunner)));
     Expression main = compileExpression("main");
     runner.run(main);
   }
