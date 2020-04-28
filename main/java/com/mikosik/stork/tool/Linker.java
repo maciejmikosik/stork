@@ -17,24 +17,24 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.table.Mod;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Library;
+import com.mikosik.stork.data.model.Module;
 
 public class Linker {
-  public static Binary link(Chain<Library> libraries) {
-    Chain<Mod<String, Expression>> libraryDefinitions = definitionsFrom(libraries);
+  public static Binary link(Chain<Module> modules) {
+    Chain<Mod<String, Expression>> moduleDefinitions = definitionsFrom(modules);
     Chain<Mod<String, Expression>> linkedDefinitions = chainOf(
         replaceIfPresent("add", addIntegerInteger()),
         replaceIfPresent("negate", negateInteger()),
         replaceIfPresent("equal", equalIntegerInteger()),
         replaceIfPresent("moreThan", moreThanIntegerInteger()));
-    Chain<Mod<String, Expression>> definitions = addAll(libraryDefinitions, linkedDefinitions);
+    Chain<Mod<String, Expression>> definitions = addAll(moduleDefinitions, linkedDefinitions);
     return binary(table(definitions));
   }
 
-  private static Chain<Mod<String, Expression>> definitionsFrom(Chain<Library> libraries) {
+  private static Chain<Mod<String, Expression>> definitionsFrom(Chain<Module> modules) {
     Chain<Mod<String, Expression>> mods = empty();
-    for (Library library : libraries) {
-      for (Definition definition : library.definitions) {
+    for (Module module : modules) {
+      for (Definition definition : module.definitions) {
         // TODO check collisions
         mods = add(put(definition.name, definition.expression), mods);
       }

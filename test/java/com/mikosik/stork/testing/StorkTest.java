@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.Chains.addAll;
 import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.Library.library;
+import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.defaultRunner;
@@ -20,15 +20,15 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Library;
-import com.mikosik.stork.lib.Libraries;
+import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.Default;
 import com.mikosik.stork.tool.run.Runner;
 
 public class StorkTest extends Case {
   @SuppressWarnings("hiding")
   private final String name;
-  private final Chain<String> givenImportedLibraries;
+  private final Chain<String> givenImportedModules;
   private final Chain<String> givenMocks;
   private final Chain<String> givenDefinitions;
   private final String whenExpression;
@@ -36,7 +36,7 @@ public class StorkTest extends Case {
 
   private StorkTest(
       String name,
-      Chain<String> givenImportedLibraries,
+      Chain<String> givenImportedModules,
       Chain<String> givenMocks,
       Chain<String> givenDefinitions,
       String whenExpression,
@@ -45,7 +45,7 @@ public class StorkTest extends Case {
     this.name = name;
     this.givenMocks = givenMocks;
     this.givenDefinitions = givenDefinitions;
-    this.givenImportedLibraries = givenImportedLibraries;
+    this.givenImportedModules = givenImportedModules;
     this.whenExpression = whenExpression;
     this.thenReturnedExpression = thenReturnedExpression;
   }
@@ -73,17 +73,17 @@ public class StorkTest extends Case {
   public StorkTest name(String name) {
     return new StorkTest(
         name,
-        givenImportedLibraries,
+        givenImportedModules,
         givenMocks,
         givenDefinitions,
         whenExpression,
         thenReturnedExpression);
   }
 
-  public StorkTest givenImported(String library) {
+  public StorkTest givenImported(String module) {
     return new StorkTest(
         name,
-        add(library, givenImportedLibraries),
+        add(module, givenImportedModules),
         givenMocks,
         givenDefinitions,
         whenExpression,
@@ -93,7 +93,7 @@ public class StorkTest extends Case {
   public StorkTest givenMocks(String... mocks) {
     return new StorkTest(
         name,
-        givenImportedLibraries,
+        givenImportedModules,
         chainOf(mocks),
         givenDefinitions,
         whenExpression,
@@ -103,7 +103,7 @@ public class StorkTest extends Case {
   public StorkTest given(String definition) {
     return new StorkTest(
         name,
-        givenImportedLibraries,
+        givenImportedModules,
         givenMocks,
         add(definition, givenDefinitions),
         whenExpression,
@@ -113,7 +113,7 @@ public class StorkTest extends Case {
   public StorkTest when(String expression) {
     return new StorkTest(
         name,
-        givenImportedLibraries,
+        givenImportedModules,
         givenMocks,
         givenDefinitions,
         expression,
@@ -123,7 +123,7 @@ public class StorkTest extends Case {
   public StorkTest thenReturned(String expression) {
     return new StorkTest(
         name,
-        givenImportedLibraries,
+        givenImportedModules,
         givenMocks,
         givenDefinitions,
         whenExpression,
@@ -132,14 +132,14 @@ public class StorkTest extends Case {
 
   public void run() {
     Chain<Definition> definitions = map(Default::compileDefinition, givenDefinitions);
-    Chain<Library> libraries = map(Libraries::library, givenImportedLibraries);
+    Chain<Module> modules = map(Modules::module, givenImportedModules);
     Chain<Definition> mocks = map(name -> definition(name, mock(name)), givenMocks);
-    Chain<Library> allLibraries = addAll(
+    Chain<Module> allModules = addAll(
         chainOf(
-            library(definitions),
-            library(mocks)),
-        libraries);
-    Runner runner = defaultRunner(link(allLibraries));
+            module(definitions),
+            module(mocks)),
+        modules);
+    Runner runner = defaultRunner(link(allModules));
 
     Expression actual = runner.run(compileExpression(whenExpression));
     Expression expected = runner.run(compileExpression(thenReturnedExpression));

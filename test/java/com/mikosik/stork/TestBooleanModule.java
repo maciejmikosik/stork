@@ -5,8 +5,8 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestBooleanLibrary {
-  public static Test testBooleanLibrary() {
+public class TestBooleanModule {
+  public static Test testBooleanModule() {
     return suite("boolean.stork")
         .add(suite("true/false")
             .add(testEqual("true(then)(else)", "then"))

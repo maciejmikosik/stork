@@ -12,7 +12,7 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Lambda;
-import com.mikosik.stork.data.model.Library;
+import com.mikosik.stork.data.model.Module;
 
 public class Printer {
   public static String print(Expression expression) {
@@ -43,9 +43,9 @@ public class Printer {
         : definition.name + "{" + print(definition.expression) + "}";
   }
 
-  public static String print(Library library) {
+  public static String print(Module module) {
     StringBuilder builder = new StringBuilder();
-    for (Definition definition : library.definitions) {
+    for (Definition definition : module.definitions) {
       builder.append(print(definition)).append("\n\n");
     }
     return builder.toString();
