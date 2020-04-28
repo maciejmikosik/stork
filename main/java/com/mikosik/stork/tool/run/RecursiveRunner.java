@@ -5,22 +5,21 @@ import static com.mikosik.stork.tool.Expressions.substitute;
 
 import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.tool.Binary;
 
 public class RecursiveRunner implements Runner {
-  private final Binary binary;
+  private final Runner moduleRunner;
 
-  private RecursiveRunner(Binary binary) {
-    this.binary = binary;
+  private RecursiveRunner(Runner moduleRunner) {
+    this.moduleRunner = moduleRunner;
   }
 
-  public static Runner recursiveRunner(Binary binary) {
-    return new RecursiveRunner(binary);
+  public static Runner recursiveRunner(Runner moduleRunner) {
+    return new RecursiveRunner(moduleRunner);
   }
 
   public Expression run(Expression expression) {
     return switchOn(expression)
-        .ifVariable(variable -> run(binary.table.get(variable.name)))
+        .ifVariable(variable -> run(moduleRunner.run(variable)))
         .ifNoun(noun -> noun)
         .ifApplication(application -> run(application))
         .ifLambda(lambda -> lambda)

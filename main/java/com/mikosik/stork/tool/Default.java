@@ -37,7 +37,7 @@ public class Default {
     return modelExpression(parse(source));
   }
 
-  public static Runner defaultRunner(Binary binary) {
-    return exhausted(stepper(binary));
+  public static Runner defaultRunner(Runner moduleRunner) {
+    return exhausted(stepper(moduleRunner));
   }
 }

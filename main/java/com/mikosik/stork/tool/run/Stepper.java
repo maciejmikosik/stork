@@ -11,17 +11,16 @@ import static com.mikosik.stork.tool.Expressions.substitute;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Running;
-import com.mikosik.stork.tool.Binary;
 
 public class Stepper implements Runner {
-  private final Binary binary;
+  private final Runner moduleRunner;
 
-  private Stepper(Binary binary) {
-    this.binary = binary;
+  private Stepper(Runner moduleRunner) {
+    this.moduleRunner = moduleRunner;
   }
 
-  public static Runner stepper(Binary binary) {
-    return new Stepper(binary);
+  public static Runner stepper(Runner moduleRunner) {
+    return new Stepper(moduleRunner);
   }
 
   public Expression run(Expression expression) {
@@ -38,7 +37,7 @@ public class Stepper implements Runner {
 
   private Expression run(Expression expression, Chain<Expression> stack) {
     return switchOn(expression)
-        .ifVariable(variable -> running(add(binary.table.get(variable.name), stack)))
+        .ifVariable(variable -> running(add(moduleRunner.run(variable), stack)))
         .ifApplication(application -> switchOn(application.function)
             .ifVerb(verb -> switchOn(application.argument)
                 .ifVariable(argument -> running(add(argument, add(expression, stack))))

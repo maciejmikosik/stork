@@ -12,7 +12,6 @@ import static com.mikosik.stork.tool.run.Stepper.stepper;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.tool.Binary;
 import com.mikosik.stork.tool.run.Runner;
 
 public class Demo {
@@ -20,7 +19,7 @@ public class Demo {
     Chain<Module> modules = chainOf(
         module("integer.stork"),
         compileModule("main { add(add(1)(2))(add(5)(10)) }"));
-    Binary link = link(modules);
+    Runner link = link(modules);
     Runner runner = exhausted(logging(stepper(link)));
     Expression main = compileExpression("main");
     runner.run(main);
