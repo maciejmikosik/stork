@@ -9,10 +9,11 @@ import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.Default.defaultRunner;
 import static com.mikosik.stork.tool.Linker.link;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
 import static com.mikosik.stork.tool.run.ModuleRunner.runner;
+import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.lang.String.format;
 
 import org.quackery.Case;
@@ -140,7 +141,7 @@ public class StorkTest extends Case {
             module(definitions),
             module(mocks)),
         modules);
-    Runner runner = defaultRunner(runner(link(allModules)));
+    Runner runner = exhausted(stepper(runner(link(allModules))));
 
     Expression actual = runner.run(compileExpression(whenExpression));
     Expression expected = runner.run(compileExpression(thenReturnedExpression));
