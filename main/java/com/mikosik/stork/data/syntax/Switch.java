@@ -37,7 +37,7 @@ public class Switch {
             () -> withResult(handler));
   }
 
-  public Switch ifMulti(Function<Chain<Syntax>, Object> handler) {
+  public Switch ifSentence(Function<Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
         : sentence.visit(
