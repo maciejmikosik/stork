@@ -9,9 +9,9 @@ import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.Printer.print;
-import static com.mikosik.stork.tool.ImplementingVerbsLinker.implementingVerbs;
+import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
+import static com.mikosik.stork.tool.link.ImplementingVerbsLinker.implementingVerbs;
 import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
 import static com.mikosik.stork.tool.run.ModuleRunner.runner;
 import static com.mikosik.stork.tool.run.Stepper.stepper;
@@ -26,7 +26,7 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.Default;
-import com.mikosik.stork.tool.Linker;
+import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
 public class StorkTest extends Case {

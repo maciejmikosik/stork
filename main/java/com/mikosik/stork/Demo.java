@@ -4,8 +4,8 @@ import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.lib.Modules.module;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Default.compileModule;
-import static com.mikosik.stork.tool.DefaultLinker.defaultLinker;
-import static com.mikosik.stork.tool.ImplementingVerbsLinker.implementingVerbs;
+import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
+import static com.mikosik.stork.tool.link.ImplementingVerbsLinker.implementingVerbs;
 import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
 import static com.mikosik.stork.tool.run.LoggingRunner.logging;
 import static com.mikosik.stork.tool.run.ModuleRunner.runner;
@@ -14,7 +14,7 @@ import static com.mikosik.stork.tool.run.Stepper.stepper;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.tool.Linker;
+import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
 public class Demo {

@@ -1,13 +1,13 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.tool.LinkableVerbs.addIntegerInteger;
-import static com.mikosik.stork.tool.LinkableVerbs.equalIntegerInteger;
-import static com.mikosik.stork.tool.LinkableVerbs.moreThanIntegerInteger;
-import static com.mikosik.stork.tool.LinkableVerbs.negateInteger;
+import static com.mikosik.stork.tool.link.LinkableVerbs.addIntegerInteger;
+import static com.mikosik.stork.tool.link.LinkableVerbs.equalIntegerInteger;
+import static com.mikosik.stork.tool.link.LinkableVerbs.moreThanIntegerInteger;
+import static com.mikosik.stork.tool.link.LinkableVerbs.negateInteger;
 
 import java.util.HashMap;
 import java.util.Map;

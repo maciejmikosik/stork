@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.data.model.Noun.noun;
 import static com.mikosik.stork.data.model.Variable.variable;

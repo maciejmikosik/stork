@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chains.chainFrom;
 import static com.mikosik.stork.common.Chains.stream;
