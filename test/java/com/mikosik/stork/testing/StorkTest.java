@@ -11,6 +11,7 @@ import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.ImplementingVerbsLinker.implementingVerbs;
 import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
 import static com.mikosik.stork.tool.run.ModuleRunner.runner;
 import static com.mikosik.stork.tool.run.Stepper.stepper;
@@ -142,7 +143,7 @@ public class StorkTest extends Case {
             module(definitions),
             module(mocks)),
         modules);
-    Linker linker = defaultLinker();
+    Linker linker = implementingVerbs(defaultLinker());
     Runner runner = exhausted(stepper(runner(linker.link(allModules))));
 
     Expression actual = runner.run(compileExpression(whenExpression));
