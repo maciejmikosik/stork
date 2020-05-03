@@ -2,43 +2,43 @@ package com.mikosik.stork.tool;
 
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Chains.addAll;
-import static com.mikosik.stork.common.Chains.chainOf;
-import static com.mikosik.stork.common.table.Put.put;
-import static com.mikosik.stork.common.table.ReplaceIfPresent.replaceIfPresent;
-import static com.mikosik.stork.common.table.Table.table;
-import static com.mikosik.stork.tool.Binary.binary;
+import static com.mikosik.stork.data.model.Definition.definition;
+import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.tool.LinkableVerbs.addIntegerInteger;
 import static com.mikosik.stork.tool.LinkableVerbs.equalIntegerInteger;
 import static com.mikosik.stork.tool.LinkableVerbs.moreThanIntegerInteger;
 import static com.mikosik.stork.tool.LinkableVerbs.negateInteger;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.common.table.Mod;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Library;
+import com.mikosik.stork.data.model.Module;
 
 public class Linker {
-  public static Binary link(Chain<Library> libraries) {
-    Chain<Mod<String, Expression>> libraryDefinitions = definitionsFrom(libraries);
-    Chain<Mod<String, Expression>> linkedDefinitions = chainOf(
-        replaceIfPresent("add", addIntegerInteger()),
-        replaceIfPresent("negate", negateInteger()),
-        replaceIfPresent("equal", equalIntegerInteger()),
-        replaceIfPresent("moreThan", moreThanIntegerInteger()));
-    Chain<Mod<String, Expression>> definitions = addAll(libraryDefinitions, linkedDefinitions);
-    return binary(table(definitions));
-  }
+  public static Module link(Chain<Module> modules) {
+    Map<String, Expression> table = new HashMap<>();
 
-  private static Chain<Mod<String, Expression>> definitionsFrom(Chain<Library> libraries) {
-    Chain<Mod<String, Expression>> mods = empty();
-    for (Library library : libraries) {
-      for (Definition definition : library.definitions) {
+    for (Module module : modules) {
+      for (Definition definition : module.definitions) {
         // TODO check collisions
-        mods = add(put(definition.name, definition.expression), mods);
+        table.put(definition.name, definition.expression);
       }
     }
-    return mods;
+
+    table.replace("add", addIntegerInteger());
+    table.replace("negate", negateInteger());
+    table.replace("equal", equalIntegerInteger());
+    table.replace("moreThan", moreThanIntegerInteger());
+
+    Chain<Definition> result = empty();
+    for (Entry<String, Expression> entry : table.entrySet()) {
+      result = add(definition(entry.getKey(), entry.getValue()), result);
+    }
+
+    return module(result);
   }
 }

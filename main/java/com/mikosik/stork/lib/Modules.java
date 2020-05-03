@@ -1,21 +1,21 @@
 package com.mikosik.stork.lib;
 
-import static com.mikosik.stork.tool.Default.compileLibrary;
+import static com.mikosik.stork.tool.Default.compileModule;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 
-import com.mikosik.stork.data.model.Library;
+import com.mikosik.stork.data.model.Module;
 
-public class Libraries {
-  public static Library library(String name) {
-    return compileLibrary(readFile(name));
+public class Modules {
+  public static Module module(String name) {
+    return compileModule(readFile(name));
   }
 
   private static String readFile(String name) {
-    Class<?> type = Libraries.class;
+    Class<?> type = Modules.class;
     try (InputStream input = new BufferedInputStream(type.getResourceAsStream(name))) {
       StringBuilder builder = new StringBuilder();
       while (input.available() > 0) {

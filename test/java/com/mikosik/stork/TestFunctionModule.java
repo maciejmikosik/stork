@@ -5,8 +5,8 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestFunctionLibrary {
-  public static Test testFunctionLibrary() {
+public class TestFunctionModule {
+  public static Test testFunctionModule() {
     return suite("function.stork")
         .add(suite("self")
             .add(testEqual("self(x)", "x")))

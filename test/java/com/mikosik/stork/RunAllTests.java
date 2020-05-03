@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.TestRunner.testRunner;
-import static com.mikosik.stork.TestStorkLibraries.testStorkLibraries;
+import static com.mikosik.stork.TestStorkModules.testStorkModules;
 import static com.mikosik.stork.testing.MoreReports.filter;
 import static com.mikosik.stork.testing.MoreReports.formatExceptions;
 import static org.quackery.Suite.suite;
@@ -15,7 +15,7 @@ public class RunAllTests {
   public static void main(String[] args) {
     Test test = suite("all tests")
         .add(testRunner())
-        .add(testStorkLibraries());
+        .add(testStorkModules());
     Test report = run(test);
 
     int total = count(Throwable.class, report);
