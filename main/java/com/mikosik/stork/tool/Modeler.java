@@ -70,7 +70,7 @@ public class Modeler {
 
   private static Parameter modelParameter(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifMulti(s -> fail(format("parameter must be single word, not '%s'", sentence)))
+        .ifSentence(s -> fail(format("parameter must be single word, not '%s'", sentence)))
         .ifLabel((word, tail) -> parameter(word.string))
         .elseFail();
   }
