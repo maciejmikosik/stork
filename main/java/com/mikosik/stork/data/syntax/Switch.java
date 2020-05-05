@@ -1,15 +1,16 @@
 package com.mikosik.stork.data.syntax;
 
+import static com.mikosik.stork.common.Strings.areAll;
+import static com.mikosik.stork.common.Strings.startsWith;
 import static com.mikosik.stork.data.syntax.BracketType.CURLY;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
-import static com.mikosik.stork.data.syntax.Legal.isInteger;
-import static com.mikosik.stork.data.syntax.Legal.isLabel;
 import static java.lang.String.format;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.mikosik.stork.common.Ascii;
 import com.mikosik.stork.common.Chain;
 
 public class Switch {
@@ -57,6 +58,11 @@ public class Switch {
             () -> this);
   }
 
+  private static boolean isLabel(String string) {
+    return startsWith(Ascii::isLetter, string)
+        && areAll(Ascii::isLetterOrDigit, string);
+  }
+
   public Switch ifInteger(BiFunction<Word, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
@@ -65,6 +71,12 @@ public class Switch {
                 ? withResult(handler.apply((Word) head, tail))
                 : this,
             () -> this);
+  }
+
+  private static boolean isInteger(String string) {
+    return startsWith(Ascii::isSign, string)
+        ? areAll(Ascii::isDigit, string.substring(1))
+        : areAll(Ascii::isDigit, string);
   }
 
   public Switch ifRoundBracket(BiFunction<Bracket, Chain<Syntax>, Object> handler) {
