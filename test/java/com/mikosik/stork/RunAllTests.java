@@ -18,6 +18,10 @@ public class RunAllTests {
         .add(testStorkModules());
     Test report = run(test);
 
+    printAndExit(report);
+  }
+
+  private static void printAndExit(Test report) {
     int total = count(Throwable.class, report);
     if (total == 0) {
       System.out.println(format(report));
