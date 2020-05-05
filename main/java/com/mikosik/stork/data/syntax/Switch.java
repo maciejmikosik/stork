@@ -1,15 +1,16 @@
 package com.mikosik.stork.data.syntax;
 
+import static com.mikosik.stork.common.Strings.areAll;
+import static com.mikosik.stork.common.Strings.startsWith;
 import static com.mikosik.stork.data.syntax.BracketType.CURLY;
 import static com.mikosik.stork.data.syntax.BracketType.ROUND;
-import static com.mikosik.stork.data.syntax.Legal.isInteger;
-import static com.mikosik.stork.data.syntax.Legal.isLabel;
 import static java.lang.String.format;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.mikosik.stork.common.Ascii;
 import com.mikosik.stork.common.Chain;
 
 public class Switch {
@@ -47,24 +48,35 @@ public class Switch {
             () -> this);
   }
 
-  public Switch ifLabel(BiFunction<Word, Chain<Syntax>, Object> handler) {
+  public Switch ifName(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
         : sentence.visit(
-            (head, tail) -> head instanceof Word && isLabel(((Word) head).string)
-                ? withResult(handler.apply((Word) head, tail))
+            (head, tail) -> head instanceof Alphanumeric && isName(((Alphanumeric) head).string)
+                ? withResult(handler.apply((Alphanumeric) head, tail))
                 : this,
             () -> this);
   }
 
-  public Switch ifInteger(BiFunction<Word, Chain<Syntax>, Object> handler) {
+  private static boolean isName(String string) {
+    return startsWith(Ascii::isLetter, string)
+        && areAll(Ascii::isLetterOrDigit, string);
+  }
+
+  public Switch ifInteger(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
         : sentence.visit(
-            (head, tail) -> head instanceof Word && isInteger(((Word) head).string)
-                ? withResult(handler.apply((Word) head, tail))
+            (head, tail) -> head instanceof Alphanumeric && isInteger(((Alphanumeric) head).string)
+                ? withResult(handler.apply((Alphanumeric) head, tail))
                 : this,
             () -> this);
+  }
+
+  private static boolean isInteger(String string) {
+    return startsWith(Ascii::isSign, string)
+        ? areAll(Ascii::isDigit, string.substring(1))
+        : areAll(Ascii::isDigit, string);
   }
 
   public Switch ifRoundBracket(BiFunction<Bracket, Chain<Syntax>, Object> handler) {
