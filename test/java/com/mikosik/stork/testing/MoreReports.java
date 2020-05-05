@@ -2,14 +2,14 @@ package com.mikosik.stork.testing;
 
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Suite.suite;
+import static org.quackery.help.Helpers.thrownBy;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Optional;
 
-import org.quackery.Case;
-import org.quackery.Suite;
+import org.quackery.Body;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
@@ -21,18 +21,22 @@ public class MoreReports {
   }
 
   private static void format(StringBuilder builder, String path, Test report) {
-    if (report instanceof Case) {
-      format(builder, path, (Case) report);
-    } else {
-      format(builder, path, (Suite) report);
-    }
+    report.visit(
+        (name, body) -> {
+          format(builder, path, name, body);
+          return null;
+        },
+        (name, children) -> {
+          format(builder, path, name, children);
+          return null;
+        });
   }
 
-  private static void format(StringBuilder builder, String path, Case report) {
+  private static void format(StringBuilder builder, String path, String name, Body body) {
     try {
-      report.run();
+      body.run();
     } catch (Throwable exception) {
-      builder.append(path).append(report.name).append("\n");
+      builder.append(path).append(name).append("\n");
       builder.append("\n");
       if (exception instanceof AssertException) {
         builder.append(exception.getMessage());
@@ -45,9 +49,9 @@ public class MoreReports {
     }
   }
 
-  private static void format(StringBuilder builder, String path, Suite report) {
-    for (Test child : report.tests) {
-      format(builder, path + report.name + " / ", child);
+  private static void format(StringBuilder builder, String path, String name, List<Test> children) {
+    for (Test child : children) {
+      format(builder, path + name + " / ", child);
     }
   }
 
@@ -58,34 +62,26 @@ public class MoreReports {
   }
 
   public static Optional<Test> filter(Class<? extends Throwable> type, Test test) {
-    return test instanceof Case
-        ? filter(type, (Case) test)
-        : filter(type, (Suite) test);
+    return test.visit(
+        (name, body) -> thrownBy(body)
+            .flatMap(throwable -> type.isInstance(throwable)
+                ? Optional.of(throwable)
+                : Optional.empty())
+            .map(throwable -> test),
+        (name, children) -> filter(type, name, children));
   }
 
-  public static Optional<Test> filter(Class<? extends Throwable> type, Case test) {
-    return isThrowing(test)
-        ? Optional.of(test)
-        : Optional.empty();
-  }
-
-  public static Optional<Test> filter(Class<? extends Throwable> type, Suite test) {
-    List<Test> filteredSubtests = test.tests.stream()
-        .map(subtest -> filter(type, subtest))
+  private static Optional<Test> filter(
+      Class<? extends Throwable> type,
+      String name,
+      List<Test> children) {
+    List<Test> filteredChildren = children.stream()
+        .map(child -> filter(type, child))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(toList());
-    return filteredSubtests.isEmpty()
+    return filteredChildren.isEmpty()
         ? Optional.empty()
-        : Optional.of(suite(test.name).addAll(filteredSubtests));
-  }
-
-  private static boolean isThrowing(Case test) {
-    try {
-      test.run();
-      return false;
-    } catch (Throwable e) {
-      return true;
-    }
+        : Optional.of(suite(name).addAll(filteredChildren));
   }
 }

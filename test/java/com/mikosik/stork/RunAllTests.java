@@ -1,10 +1,8 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.TestRunner.testRunner;
-import static com.mikosik.stork.TestStorkModules.testStorkModules;
+import static com.mikosik.stork.TestEverything.testEverythingUsingAllStrategies;
 import static com.mikosik.stork.testing.MoreReports.filter;
 import static com.mikosik.stork.testing.MoreReports.formatExceptions;
-import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.count;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
@@ -13,11 +11,12 @@ import org.quackery.Test;
 
 public class RunAllTests {
   public static void main(String[] args) {
-    Test test = suite("all tests")
-        .add(testRunner())
-        .add(testStorkModules());
+    Test test = testEverythingUsingAllStrategies();
     Test report = run(test);
+    printAndExit(report);
+  }
 
+  private static void printAndExit(Test report) {
     int total = count(Throwable.class, report);
     if (total == 0) {
       System.out.println(format(report));
