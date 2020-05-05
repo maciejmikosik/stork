@@ -14,8 +14,15 @@ public class Ascii {
     return isLetter(character) || isDigit(character);
   }
 
-  public static boolean isMinus(char character) {
-    return character == '-';
+  public static boolean isSign(char character) {
+    return character == '+'
+        || character == '-';
+  }
+
+  public static boolean isAlphanumeric(char character) {
+    return isLetter(character)
+        || isDigit(character)
+        || isSign(character);
   }
 
   public static boolean isWhitespace(char character) {

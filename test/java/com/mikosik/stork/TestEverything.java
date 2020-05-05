@@ -4,6 +4,7 @@ import static com.mikosik.stork.RunningStrategies.recursiveStrategy;
 import static com.mikosik.stork.RunningStrategies.steppingStrategy;
 import static com.mikosik.stork.TestBooleanModule.testBooleanModule;
 import static com.mikosik.stork.TestFunctionModule.testFunctionModule;
+import static com.mikosik.stork.TestIntegerModule.testIntegerModule;
 import static com.mikosik.stork.TestOptionalModule.testOptionalModule;
 import static com.mikosik.stork.TestRunner.testRunner;
 import static org.quackery.Suite.suite;
@@ -31,6 +32,7 @@ public class TestEverything {
         .add(suite("stork modules")
             .add(testFunctionModule())
             .add(testBooleanModule())
+            .add(testIntegerModule())
             .add(testOptionalModule())));
   }
 
