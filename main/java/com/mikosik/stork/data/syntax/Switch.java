@@ -48,17 +48,17 @@ public class Switch {
             () -> this);
   }
 
-  public Switch ifLabel(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
+  public Switch ifName(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
         : sentence.visit(
-            (head, tail) -> head instanceof Alphanumeric && isLabel(((Alphanumeric) head).string)
+            (head, tail) -> head instanceof Alphanumeric && isName(((Alphanumeric) head).string)
                 ? withResult(handler.apply((Alphanumeric) head, tail))
                 : this,
             () -> this);
   }
 
-  private static boolean isLabel(String string) {
+  private static boolean isName(String string) {
     return startsWith(Ascii::isLetter, string)
         && areAll(Ascii::isLetterOrDigit, string);
   }

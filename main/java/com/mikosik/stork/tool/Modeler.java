@@ -21,13 +21,13 @@ import com.mikosik.stork.data.syntax.Syntax;
 public class Modeler {
   public static Definition modelDefinition(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifLabel((alphanumeric, tail) -> definition(alphanumeric.string, modelLambda(tail)))
+        .ifName((alphanumeric, tail) -> definition(alphanumeric.string, modelLambda(tail)))
         .elseFail();
   }
 
   public static Expression modelExpression(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifLabel((alphanumeric, tail) -> modelApplication(sentence))
+        .ifName((alphanumeric, tail) -> modelApplication(sentence))
         .ifInteger((alphanumeric, tail) -> modelInteger(sentence))
         .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
         .elseFail();
@@ -43,7 +43,7 @@ public class Modeler {
 
   private static Expression modelApplication(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifLabel((alphanumeric, tail) -> modelApplication(variable(alphanumeric.string), tail))
+        .ifName((alphanumeric, tail) -> modelApplication(variable(alphanumeric.string), tail))
         .elseFail();
   }
 
@@ -71,7 +71,7 @@ public class Modeler {
   private static Parameter modelParameter(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifSentence(s -> fail(format("parameter must be single word, not '%s'", sentence)))
-        .ifLabel((alphanumeric, tail) -> parameter(alphanumeric.string))
+        .ifName((alphanumeric, tail) -> parameter(alphanumeric.string))
         .elseFail();
   }
 
