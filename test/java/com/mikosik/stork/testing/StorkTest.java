@@ -36,36 +36,17 @@ import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
 public class StorkTest implements Test {
-  private final String name;
-  private final Chain<String> givenImportedModules;
-  private final Chain<String> givenMocks;
-  private final Chain<String> givenDefinitions;
-  private final String whenExpression;
-  private final String thenReturnedExpression;
+  private String name;
+  private Chain<String> givenImportedModules = empty();
+  private Chain<String> givenMocks = empty();
+  private Chain<String> givenDefinitions = empty();
+  private String whenExpression;
+  private String thenReturnedExpression;
 
-  private StorkTest(
-      String name,
-      Chain<String> givenImportedModules,
-      Chain<String> givenMocks,
-      Chain<String> givenDefinitions,
-      String whenExpression,
-      String thenReturnedExpression) {
-    this.name = name;
-    this.givenMocks = givenMocks;
-    this.givenDefinitions = givenDefinitions;
-    this.givenImportedModules = givenImportedModules;
-    this.whenExpression = whenExpression;
-    this.thenReturnedExpression = thenReturnedExpression;
-  }
+  private StorkTest() {}
 
   public static StorkTest storkTest() {
-    return new StorkTest(
-        "",
-        empty(),
-        empty(),
-        empty(),
-        null,
-        null);
+    return new StorkTest();
   }
 
   public static StorkTest storkTest(String name) {
@@ -73,63 +54,50 @@ public class StorkTest implements Test {
   }
 
   public StorkTest name(String name) {
-    return new StorkTest(
-        name,
-        givenImportedModules,
-        givenMocks,
-        givenDefinitions,
-        whenExpression,
-        thenReturnedExpression);
+    StorkTest copy = copy();
+    copy.name = name;
+    return copy;
   }
 
   public StorkTest givenImported(String module) {
-    return new StorkTest(
-        name,
-        add(module, givenImportedModules),
-        givenMocks,
-        givenDefinitions,
-        whenExpression,
-        thenReturnedExpression);
+    StorkTest copy = copy();
+    copy.givenImportedModules = add(module, givenImportedModules);
+    return copy;
   }
 
   public StorkTest givenMocks(String... mocks) {
-    return new StorkTest(
-        name,
-        givenImportedModules,
-        chainOf(mocks),
-        givenDefinitions,
-        whenExpression,
-        thenReturnedExpression);
+    StorkTest copy = copy();
+    copy.givenMocks = chainOf(mocks);
+    return copy;
   }
 
   public StorkTest given(String definition) {
-    return new StorkTest(
-        name,
-        givenImportedModules,
-        givenMocks,
-        add(definition, givenDefinitions),
-        whenExpression,
-        thenReturnedExpression);
+    StorkTest copy = copy();
+    copy.givenDefinitions = add(definition, givenDefinitions);
+    return copy;
   }
 
   public StorkTest when(String expression) {
-    return new StorkTest(
-        name,
-        givenImportedModules,
-        givenMocks,
-        givenDefinitions,
-        expression,
-        thenReturnedExpression);
+    StorkTest copy = copy();
+    copy.whenExpression = expression;
+    return copy;
   }
 
   public StorkTest thenReturned(String expression) {
-    return new StorkTest(
-        name,
-        givenImportedModules,
-        givenMocks,
-        givenDefinitions,
-        whenExpression,
-        expression);
+    StorkTest copy = copy();
+    copy.thenReturnedExpression = expression;
+    return copy;
+  }
+
+  private StorkTest copy() {
+    StorkTest copy = new StorkTest();
+    copy.name = name;
+    copy.givenImportedModules = givenImportedModules;
+    copy.givenMocks = givenMocks;
+    copy.givenDefinitions = givenDefinitions;
+    copy.whenExpression = whenExpression;
+    copy.thenReturnedExpression = thenReturnedExpression;
+    return copy;
   }
 
   public <R> R visit(
@@ -139,7 +107,7 @@ public class StorkTest implements Test {
   }
 
   private String name() {
-    return name.isEmpty()
+    return name == null
         ? format("%s = %s", whenExpression, thenReturnedExpression)
         : name;
   }
