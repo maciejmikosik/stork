@@ -19,6 +19,12 @@ public class Ascii {
         || character == '-';
   }
 
+  public static boolean isAlphanumeric(char character) {
+    return isLetter(character)
+        || isDigit(character)
+        || isSign(character);
+  }
+
   public static boolean isWhitespace(char character) {
     return character == ' '
         || character == '\n'

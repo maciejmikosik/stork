@@ -1,5 +1,6 @@
 package com.mikosik.stork.tool;
 
+import static com.mikosik.stork.common.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Chains.reverse;
@@ -10,7 +11,6 @@ import static com.mikosik.stork.data.syntax.BracketType.bracketByCharacter;
 import static com.mikosik.stork.data.syntax.BracketType.isClosingBracket;
 import static com.mikosik.stork.data.syntax.BracketType.isOpeningBracket;
 import static com.mikosik.stork.data.syntax.Legal.isWordSeparator;
-import static com.mikosik.stork.data.syntax.Legal.isWordy;
 import static com.mikosik.stork.data.syntax.Word.word;
 
 import com.mikosik.stork.common.Chain;
@@ -31,7 +31,7 @@ public class Parser {
       char character = reading.peek();
       if (isWordSeparator(character)) {
         reading.read();
-      } else if (isWordy(character)) {
+      } else if (isAlphanumeric(character)) {
         sentence = add(parseWord(reading), sentence);
       } else if (isOpeningBracket(character)) {
         sentence = add(parseBracket(reading), sentence);
@@ -46,7 +46,7 @@ public class Parser {
 
   private static Word parseWord(Reading reading) {
     StringBuilder builder = new StringBuilder();
-    while (reading.available() && isWordy(reading.peek())) {
+    while (reading.available() && isAlphanumeric(reading.peek())) {
       builder.append(reading.read());
     }
     return word(builder.toString());
