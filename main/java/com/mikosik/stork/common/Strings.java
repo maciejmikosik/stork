@@ -17,4 +17,10 @@ public class Strings {
         .mapToObj(i -> (char) i)
         .allMatch(predicate);
   }
+
+  public static String reverse(String string) {
+    return new StringBuilder(string)
+        .reverse()
+        .toString();
+  }
 }

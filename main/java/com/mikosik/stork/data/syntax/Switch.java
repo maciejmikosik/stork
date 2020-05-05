@@ -63,6 +63,16 @@ public class Switch {
         && areAll(Ascii::isLetterOrDigit, string);
   }
 
+  public Switch ifQuote(BiFunction<Quote, Chain<Syntax>, Object> handler) {
+    return result.isPresent()
+        ? this
+        : sentence.visit(
+            (head, tail) -> head instanceof Quote
+                ? withResult(handler.apply((Quote) head, tail))
+                : this,
+            () -> this);
+  }
+
   public Switch ifInteger(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this

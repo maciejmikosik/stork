@@ -1,6 +1,7 @@
 package com.mikosik.stork.tool;
 
 import static com.mikosik.stork.common.Ascii.isAlphanumeric;
+import static com.mikosik.stork.common.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.Ascii.isWhitespace;
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
@@ -12,6 +13,7 @@ import static com.mikosik.stork.data.syntax.Bracket.bracket;
 import static com.mikosik.stork.data.syntax.BracketType.bracketByCharacter;
 import static com.mikosik.stork.data.syntax.BracketType.isClosingBracket;
 import static com.mikosik.stork.data.syntax.BracketType.isOpeningBracket;
+import static com.mikosik.stork.data.syntax.Quote.quote;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Reading;
@@ -31,6 +33,8 @@ public class Parser {
         reading.read();
       } else if (isAlphanumeric(character)) {
         sentence = add(parseAlphanumeric(reading), sentence);
+      } else if (isDoubleQuote(character)) {
+        sentence = add(parseDoubleQuote(reading), sentence);
       } else if (isOpeningBracket(character)) {
         sentence = add(parseBracket(reading), sentence);
       } else if (isClosingBracket(character)) {
@@ -56,5 +60,15 @@ public class Parser {
     BracketType closingBracket = bracketByCharacter(reading.read());
     check(openingBracket == closingBracket);
     return bracket(openingBracket, sentence);
+  }
+
+  private static Syntax parseDoubleQuote(Reading reading) {
+    StringBuilder builder = new StringBuilder();
+    reading.read();
+    while (reading.available() && !isDoubleQuote(reading.peek())) {
+      builder.append(reading.read());
+    }
+    reading.read();
+    return quote(builder.toString());
   }
 }

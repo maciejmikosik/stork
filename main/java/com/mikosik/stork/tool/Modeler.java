@@ -1,5 +1,6 @@
 package com.mikosik.stork.tool;
 
+import static com.mikosik.stork.common.Strings.reverse;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Lambda.lambda;
@@ -29,8 +30,26 @@ public class Modeler {
     return switchOn(sentence)
         .ifName((alphanumeric, tail) -> modelApplication(sentence))
         .ifInteger((alphanumeric, tail) -> modelInteger(sentence))
+        .ifQuote((quote, tail) -> modelString(sentence))
         .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
         .elseFail();
+  }
+
+  private static Expression modelString(Chain<Syntax> sentence) {
+    return switchOn(sentence)
+        .ifSentence(s -> fail("double quoted text cannot be followed by sentence"))
+        .ifQuote((quote, tail) -> buildStream(quote.ascii))
+        .elseFail();
+  }
+
+  private static Expression buildStream(String ascii) {
+    Expression some = variable("some");
+    Expression result = variable("none");
+    for (char asciiCharacter : reverse(ascii).toCharArray()) {
+      Expression integer = noun(BigInteger.valueOf(asciiCharacter));
+      result = application(application(some, integer), result);
+    }
+    return result;
   }
 
   private static Expression modelInteger(Chain<Syntax> sentence) {
