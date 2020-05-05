@@ -48,12 +48,12 @@ public class Switch {
             () -> this);
   }
 
-  public Switch ifLabel(BiFunction<Word, Chain<Syntax>, Object> handler) {
+  public Switch ifLabel(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
         : sentence.visit(
-            (head, tail) -> head instanceof Word && isLabel(((Word) head).string)
-                ? withResult(handler.apply((Word) head, tail))
+            (head, tail) -> head instanceof Alphanumeric && isLabel(((Alphanumeric) head).string)
+                ? withResult(handler.apply((Alphanumeric) head, tail))
                 : this,
             () -> this);
   }
@@ -63,12 +63,12 @@ public class Switch {
         && areAll(Ascii::isLetterOrDigit, string);
   }
 
-  public Switch ifInteger(BiFunction<Word, Chain<Syntax>, Object> handler) {
+  public Switch ifInteger(BiFunction<Alphanumeric, Chain<Syntax>, Object> handler) {
     return result.isPresent()
         ? this
         : sentence.visit(
-            (head, tail) -> head instanceof Word && isInteger(((Word) head).string)
-                ? withResult(handler.apply((Word) head, tail))
+            (head, tail) -> head instanceof Alphanumeric && isInteger(((Alphanumeric) head).string)
+                ? withResult(handler.apply((Alphanumeric) head, tail))
                 : this,
             () -> this);
   }

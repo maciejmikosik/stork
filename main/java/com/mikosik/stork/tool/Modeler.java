@@ -21,14 +21,14 @@ import com.mikosik.stork.data.syntax.Syntax;
 public class Modeler {
   public static Definition modelDefinition(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifLabel((word, tail) -> definition(word.string, modelLambda(tail)))
+        .ifLabel((alphanumeric, tail) -> definition(alphanumeric.string, modelLambda(tail)))
         .elseFail();
   }
 
   public static Expression modelExpression(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifLabel((word, tail) -> modelApplication(sentence))
-        .ifInteger((word, tail) -> modelInteger(sentence))
+        .ifLabel((alphanumeric, tail) -> modelApplication(sentence))
+        .ifInteger((alphanumeric, tail) -> modelInteger(sentence))
         .ifRoundBracket((bracket, tail) -> modelLambda(sentence))
         .elseFail();
   }
@@ -37,13 +37,13 @@ public class Modeler {
     return switchOn(sentence)
         // TODO test integer followed by sentence
         .ifSentence(s -> fail("integer cannot be followed by sentence"))
-        .ifInteger((word, tail) -> noun(new BigInteger(word.string)))
+        .ifInteger((alphanumeric, tail) -> noun(new BigInteger(alphanumeric.string)))
         .elseFail();
   }
 
   private static Expression modelApplication(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifLabel((word, tail) -> modelApplication(variable(word.string), tail))
+        .ifLabel((alphanumeric, tail) -> modelApplication(variable(alphanumeric.string), tail))
         .elseFail();
   }
 
@@ -71,7 +71,7 @@ public class Modeler {
   private static Parameter modelParameter(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifSentence(s -> fail(format("parameter must be single word, not '%s'", sentence)))
-        .ifLabel((word, tail) -> parameter(word.string))
+        .ifLabel((alphanumeric, tail) -> parameter(alphanumeric.string))
         .elseFail();
   }
 
