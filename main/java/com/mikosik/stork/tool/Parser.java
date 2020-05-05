@@ -15,8 +15,6 @@ import static com.mikosik.stork.data.syntax.BracketType.isOpeningBracket;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Reading;
-import com.mikosik.stork.data.syntax.Alphanumeric;
-import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.BracketType;
 import com.mikosik.stork.data.syntax.Syntax;
 
@@ -44,7 +42,7 @@ public class Parser {
     return reverse(sentence);
   }
 
-  private static Alphanumeric parseAlphanumeric(Reading reading) {
+  private static Syntax parseAlphanumeric(Reading reading) {
     StringBuilder builder = new StringBuilder();
     while (reading.available() && isAlphanumeric(reading.peek())) {
       builder.append(reading.read());
@@ -52,7 +50,7 @@ public class Parser {
     return alphanumeric(builder.toString());
   }
 
-  private static Bracket parseBracket(Reading reading) {
+  private static Syntax parseBracket(Reading reading) {
     BracketType openingBracket = bracketByCharacter(reading.read());
     Chain<Syntax> sentence = parseSentence(reading);
     BracketType closingBracket = bracketByCharacter(reading.read());
