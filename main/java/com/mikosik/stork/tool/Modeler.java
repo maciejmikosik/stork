@@ -35,9 +35,9 @@ public class Modeler {
 
   private static Expression modelInteger(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifInteger((word, tail) -> tail.visit(
-            (head2, tail2) -> fail("integer cannot be followed by sentence"),
-            () -> noun(new BigInteger(word.string))))
+        // TODO test integer followed by sentence
+        .ifSentence(s -> fail("integer cannot be followed by sentence"))
+        .ifInteger((word, tail) -> noun(new BigInteger(word.string)))
         .elseFail();
   }
 
