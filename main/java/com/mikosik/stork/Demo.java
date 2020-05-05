@@ -3,7 +3,6 @@ package com.mikosik.stork;
 import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.lib.Modules.module;
 import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.Default.compileModule;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
@@ -22,8 +21,9 @@ import com.mikosik.stork.tool.run.Runner;
 public class Demo {
   public static void main(String[] args) {
     Chain<Module> modules = chainOf(
-        module("integer.stork"),
-        compileModule("main { add(add(1)(2))(add(5)(10)) }"));
+        module("function.stork"),
+        module("stream.stork"),
+        module("demo.stork"));
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
     Runner moduleRunner = runner(linker.link(modules));
     Runner runner = exhausted(logging(stepper(moduleRunner)));
