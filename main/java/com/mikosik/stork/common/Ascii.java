@@ -25,6 +25,10 @@ public class Ascii {
         || isSign(character);
   }
 
+  public static boolean isDoubleQuote(char character) {
+    return character == '\"';
+  }
+
   public static boolean isWhitespace(char character) {
     return character == ' '
         || character == '\n'

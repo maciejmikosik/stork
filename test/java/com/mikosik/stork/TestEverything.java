@@ -7,6 +7,7 @@ import static com.mikosik.stork.TestFunctionModule.testFunctionModule;
 import static com.mikosik.stork.TestIntegerModule.testIntegerModule;
 import static com.mikosik.stork.TestOptionalModule.testOptionalModule;
 import static com.mikosik.stork.TestRunner.testRunner;
+import static com.mikosik.stork.TestStringModule.testStringModule;
 import static org.quackery.Suite.suite;
 import static org.quackery.help.Helpers.traverse;
 
@@ -33,7 +34,8 @@ public class TestEverything {
             .add(testFunctionModule())
             .add(testBooleanModule())
             .add(testIntegerModule())
-            .add(testOptionalModule())));
+            .add(testOptionalModule())
+            .add(testStringModule())));
   }
 
   private static Test use(Function<Chain<Module>, Runner> runningStrategy, Test root) {
