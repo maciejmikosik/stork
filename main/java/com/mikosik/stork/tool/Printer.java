@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.Throwables.throwing;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.tool.Expressions.ascend;
+import static com.mikosik.stork.tool.common.Ascend.ascend;
 import static java.lang.String.format;
 
 import com.mikosik.stork.common.Chain;

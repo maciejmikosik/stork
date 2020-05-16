@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.common.Throwables.throwing;
 import static com.mikosik.stork.data.model.Running.running;
 import static com.mikosik.stork.data.model.Switch.switchOn;
-import static com.mikosik.stork.tool.Expressions.ascend;
+import static com.mikosik.stork.tool.common.Ascend.ascend;
 import static com.mikosik.stork.tool.common.Substitute.substitute;
 
 import com.mikosik.stork.common.Chain;
