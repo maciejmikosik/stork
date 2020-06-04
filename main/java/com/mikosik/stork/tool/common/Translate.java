@@ -8,6 +8,7 @@ import static com.mikosik.stork.data.model.Variable.variable;
 import java.math.BigInteger;
 
 import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Noun;
 
 public class Translate {
   /**
@@ -23,5 +24,10 @@ public class Translate {
       stream = application(application(some, integer), stream);
     }
     return stream;
+  }
+
+  public static BigInteger asJavaBigInteger(Expression expression) {
+    Noun noun = (Noun) expression;
+    return (BigInteger) noun.object;
   }
 }
