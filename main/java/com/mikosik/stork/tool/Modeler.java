@@ -8,7 +8,7 @@ import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.syntax.Switch.switchOn;
-import static com.mikosik.stork.tool.common.StringExpression.stringExpression;
+import static com.mikosik.stork.tool.common.Translate.asStorkStream;
 import static java.lang.String.format;
 
 import java.math.BigInteger;
@@ -38,7 +38,7 @@ public class Modeler {
   private static Expression modelString(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifSentence(s -> fail("double quoted text cannot be followed by sentence"))
-        .ifQuote((quote, tail) -> stringExpression(quote.ascii))
+        .ifQuote((quote, tail) -> asStorkStream(quote.ascii))
         .elseFail();
   }
 
