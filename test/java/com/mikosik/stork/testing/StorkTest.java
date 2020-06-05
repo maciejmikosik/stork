@@ -10,11 +10,17 @@ import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
+import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
+import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
+import static com.mikosik.stork.tool.link.VerbModule.verbModule;
+import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
+import static com.mikosik.stork.tool.run.ModuleRunner.runner;
+import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.lang.String.format;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.quackery.Body;
 import org.quackery.Test;
@@ -26,11 +32,11 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.Default;
+import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
 public class StorkTest implements Test {
   private String name;
-  private Function<Chain<Module>, Runner> runningStrategy;
   private Chain<String> givenImportedModules = empty();
   private Chain<String> givenMocks = empty();
   private Chain<String> givenDefinitions = empty();
@@ -50,12 +56,6 @@ public class StorkTest implements Test {
   public StorkTest name(String name) {
     StorkTest copy = copy();
     copy.name = name;
-    return copy;
-  }
-
-  public StorkTest runningStrategy(Function<Chain<Module>, Runner> runningStrategy) {
-    StorkTest copy = copy();
-    copy.runningStrategy = runningStrategy;
     return copy;
   }
 
@@ -121,7 +121,9 @@ public class StorkTest implements Test {
             module(definitions),
             module(mocks)),
         modules);
-    Runner runner = runningStrategy.apply(allModules);
+
+    Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
+    Runner runner = exhausted(stepper(runner(linker.link(allModules))));
 
     Expression actual = runner.run(compileExpression(whenExpression));
     Expression expected = runner.run(compileExpression(thenReturnedExpression));
