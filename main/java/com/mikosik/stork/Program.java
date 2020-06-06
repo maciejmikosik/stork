@@ -6,9 +6,9 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.data.model.Verbs.verb;
 import static com.mikosik.stork.tool.Default.compileDefinition;
 import static com.mikosik.stork.tool.Default.compileExpression;
+import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
@@ -18,13 +18,11 @@ import static com.mikosik.stork.tool.run.ModuleRunner.runner;
 import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.lang.String.format;
 
-import java.math.BigInteger;
-
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Noun;
+import com.mikosik.stork.data.model.Verb;
 import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
@@ -49,13 +47,19 @@ public class Program {
   }
 
   private static Module programModule() {
-    Definition writeByte = definition("writeByte", verb("writeByte", integer -> {
-      int oneByte = asBigInteger(integer).intValueExact();
-      check(0 <= oneByte && oneByte <= 255);
-      System.out.write(oneByte);
-      System.out.flush();
-      return variable("self");
-    }));
+    Definition writeByte = definition("writeByte", new Verb() {
+      public String toString() {
+        return "$writeByte";
+      }
+
+      public Expression apply(Expression argument) {
+        int oneByte = asJavaBigInteger(argument).intValueExact();
+        check(0 <= oneByte && oneByte <= 255);
+        System.out.write(oneByte);
+        System.out.flush();
+        return variable("self");
+      }
+    });
     Definition writeStream = compileDefinition(""
         + "writeStream(stream) {"
         + "  stream"
@@ -65,9 +69,5 @@ public class Program {
         + "    (none)"
         + "}");
     return module(chainOf(writeByte, writeStream));
-  }
-
-  private static BigInteger asBigInteger(Expression integer) {
-    return (BigInteger) ((Noun) integer).object;
   }
 }
