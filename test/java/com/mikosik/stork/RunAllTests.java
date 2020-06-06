@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.TestEverything.testEverythingUsingAllStrategies;
+import static com.mikosik.stork.TestEverything.testEverything;
 import static com.mikosik.stork.testing.MoreReports.filter;
 import static com.mikosik.stork.testing.MoreReports.formatExceptions;
 import static org.quackery.report.Reports.count;
@@ -11,7 +11,7 @@ import org.quackery.Test;
 
 public class RunAllTests {
   public static void main(String[] args) {
-    Test test = testEverythingUsingAllStrategies();
+    Test test = testEverything();
     Test report = run(test);
     printAndExit(report);
   }
