@@ -3,8 +3,8 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Noun.noun;
-import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
+import static com.mikosik.stork.tool.common.Translate.asStorkInteger;
 import static com.mikosik.stork.tool.common.Verbs.opInt;
 import static com.mikosik.stork.tool.common.Verbs.opIntInt;
 
@@ -16,13 +16,13 @@ public class VerbModule {
   public static Module verbModule() {
     Chain<Definition> definitions = chainOf(
         definition("add", opIntInt("addIntInt",
-            (numberA, numberB) -> noun(numberA.add(numberB)))),
+            (numberA, numberB) -> asStorkInteger(numberA.add(numberB)))),
         definition("negate", opInt("negateInt",
-            number -> noun(number.negate()))),
+            number -> asStorkInteger(number.negate()))),
         definition("equal", opIntInt("equalIntInt",
-            (numberA, numberB) -> variable("" + numberA.equals(numberB)))),
+            (numberA, numberB) -> asStorkBoolean(numberA.equals(numberB)))),
         definition("moreThan", opIntInt("moreThanIntInt",
-            (numberA, numberB) -> variable("" + (numberB.compareTo(numberA) > 0)))));
+            (numberA, numberB) -> asStorkBoolean(numberB.compareTo(numberA) > 0))));
     return module(definitions);
   }
 }

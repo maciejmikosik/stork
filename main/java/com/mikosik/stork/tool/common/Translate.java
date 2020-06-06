@@ -11,6 +11,14 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Noun;
 
 public class Translate {
+  public static Expression asStorkBoolean(boolean bool) {
+    return variable(Boolean.toString(bool));
+  }
+
+  public static Expression asStorkInteger(BigInteger bigInteger) {
+    return noun(bigInteger);
+  }
+
   /**
    * Builds expression which is stream of integers. Each integer is unicode codepoint of consecutive
    * character in string. String must contain only ASCII characters. If string is
