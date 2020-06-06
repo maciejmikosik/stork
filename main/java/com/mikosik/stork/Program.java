@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.data.model.Verbs.verb;
 import static com.mikosik.stork.tool.Default.compileDefinition;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
@@ -21,7 +20,9 @@ import static java.lang.String.format;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
+import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.data.model.Verb;
 import com.mikosik.stork.tool.link.Linker;
 import com.mikosik.stork.tool.run.Runner;
 
@@ -46,13 +47,19 @@ public class Program {
   }
 
   private static Module programModule() {
-    Definition writeByte = definition("writeByte", verb("writeByte", expression -> {
-      int oneByte = asJavaBigInteger(expression).intValueExact();
-      check(0 <= oneByte && oneByte <= 255);
-      System.out.write(oneByte);
-      System.out.flush();
-      return variable("self");
-    }));
+    Definition writeByte = definition("writeByte", new Verb() {
+      public String toString() {
+        return "$writeByte";
+      }
+
+      public Expression apply(Expression argument) {
+        int oneByte = asJavaBigInteger(argument).intValueExact();
+        check(0 <= oneByte && oneByte <= 255);
+        System.out.write(oneByte);
+        System.out.flush();
+        return variable("self");
+      }
+    });
     Definition writeStream = compileDefinition(""
         + "writeStream(stream) {"
         + "  stream"
