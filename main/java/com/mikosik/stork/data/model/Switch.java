@@ -3,7 +3,6 @@ package com.mikosik.stork.data.model;
 import static java.lang.String.format;
 
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Switch {
@@ -19,37 +18,37 @@ public class Switch {
     return new Switch(expression, Optional.empty());
   }
 
-  public Switch ifVariable(Function<Variable, ?> handler) {
+  public Switch ifVariable(Handler<Variable> handler) {
     return ifType(Variable.class, handler);
   }
 
-  public Switch ifNoun(Function<Noun, ?> handler) {
+  public Switch ifNoun(Handler<Noun> handler) {
     return ifType(Noun.class, handler);
   }
 
-  public Switch ifVerb(Function<Verb, ?> handler) {
+  public Switch ifVerb(Handler<Verb> handler) {
     return ifType(Verb.class, handler);
   }
 
-  public Switch ifApplication(Function<Application, ?> handler) {
+  public Switch ifApplication(Handler<Application> handler) {
     return ifType(Application.class, handler);
   }
 
-  public Switch ifLambda(Function<Lambda, ?> handler) {
+  public Switch ifLambda(Handler<Lambda> handler) {
     return ifType(Lambda.class, handler);
   }
 
-  public Switch ifParameter(Function<Parameter, ?> handler) {
+  public Switch ifParameter(Handler<Parameter> handler) {
     return ifType(Parameter.class, handler);
   }
 
-  public Switch ifRunning(Function<Running, ?> handler) {
+  public Switch ifRunning(Handler<Running> handler) {
     return ifType(Running.class, handler);
   }
 
-  private <E> Switch ifType(Class<E> type, Function<E, ?> handler) {
+  private <E> Switch ifType(Class<E> type, Handler<E> handler) {
     return !result.isPresent() && type.isInstance(expression)
-        ? new Switch(expression, Optional.of(handler.apply((E) expression)))
+        ? new Switch(expression, Optional.of(handler.handle((E) expression)))
         : this;
   }
 
@@ -62,5 +61,9 @@ public class Switch {
         format("cannot handle expression '%s' of type %s",
             expression,
             expression.getClass().getName())));
+  }
+
+  public static interface Handler<E> {
+    Object handle(E element);
   }
 }
