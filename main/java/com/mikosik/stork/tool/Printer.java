@@ -27,7 +27,7 @@ public class Printer {
             ? format("(%s)%s", print(lambda.parameter), print(lambda.body))
             : format("(%s){%s}", print(lambda.parameter), print(lambda.body)))
         .ifVerb(verb -> verb.toString())
-        .ifRunning(running -> print(ascend(mark(running.stack))))
+        .ifComputation(computation -> print(ascend(mark(computation.stack))))
         .elseFail();
   }
 

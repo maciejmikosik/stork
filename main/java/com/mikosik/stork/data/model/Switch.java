@@ -42,8 +42,8 @@ public class Switch {
     return ifType(Parameter.class, handler);
   }
 
-  public Switch ifRunning(Handler<Running> handler) {
-    return ifType(Running.class, handler);
+  public Switch ifComputation(Handler<Computation> handler) {
+    return ifType(Computation.class, handler);
   }
 
   private <E> Switch ifType(Class<E> type, Handler<E> handler) {

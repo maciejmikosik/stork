@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.run;
+package com.mikosik.stork.tool.comp;
 
 import static com.mikosik.stork.data.model.Switch.switchOn;
 
@@ -9,22 +9,22 @@ import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 
-public class ModuleRunner implements Runner {
+public class ModuleComputer implements Computer {
   private final Map<String, Expression> table;
 
-  private ModuleRunner(Map<String, Expression> table) {
+  private ModuleComputer(Map<String, Expression> table) {
     this.table = table;
   }
 
-  public static Runner runner(Module module) {
+  public static Computer computer(Module module) {
     Map<String, Expression> table = new HashMap<>();
     for (Definition definition : module.definitions) {
       table.put(definition.name, definition.expression);
     }
-    return new ModuleRunner(table);
+    return new ModuleComputer(table);
   }
 
-  public Expression run(Expression expression) {
+  public Expression compute(Expression expression) {
     return switchOn(expression)
         .ifVariable(variable -> table.get(variable.name))
         .elseFail();
