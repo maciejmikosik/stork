@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.comp;
 
-import com.mikosik.stork.data.model.Computation;
 import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.comp.Computation;
 
 public class ExhaustedComputer implements Computer {
   private final Computer computer;

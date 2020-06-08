@@ -1,8 +1,9 @@
-package com.mikosik.stork.data.model;
+package com.mikosik.stork.data.model.comp;
 
 import static com.mikosik.stork.common.Chains.chainOf;
 
 import com.mikosik.stork.common.Chain;
+import com.mikosik.stork.data.model.Expression;
 
 public class Computation implements Expression {
   public final Chain<Expression> stack;
