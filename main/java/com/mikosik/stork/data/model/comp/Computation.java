@@ -1,22 +1,23 @@
 package com.mikosik.stork.data.model.comp;
 
-import static com.mikosik.stork.common.Chains.chainOf;
+import static com.mikosik.stork.data.model.comp.Empty.empty;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 
 public class Computation implements Expression {
-  public final Chain<Expression> stack;
+  public final Expression expression;
+  public final Stack stack;
 
-  private Computation(Chain<Expression> stack) {
+  private Computation(Expression expression, Stack stack) {
+    this.expression = expression;
     this.stack = stack;
   }
 
-  public static Expression computation(Chain<Expression> stack) {
-    return new Computation(stack);
+  public static Computation computation(Expression expression, Stack stack) {
+    return new Computation(expression, stack);
   }
 
-  public static Expression computation(Expression expression) {
-    return new Computation(chainOf(expression));
+  public static Computation computation(Expression expression) {
+    return new Computation(expression, empty());
   }
 }
