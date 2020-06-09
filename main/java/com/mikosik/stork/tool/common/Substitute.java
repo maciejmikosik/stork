@@ -11,7 +11,7 @@ import com.mikosik.stork.data.model.Parameter;
 
 public class Substitute {
   /**
-   * When running {@link Application} that applies {@link Lambda} on given argument
+   * When computing {@link Application} that applies {@link Lambda} on given argument
    * {@link Expression} it is required to replace each occurrence of lambda's parameter in lambda's
    * body by given argument. This method performs this.
    */

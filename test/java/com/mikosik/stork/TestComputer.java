@@ -5,9 +5,9 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestRunner {
-  public static Test testRunner() {
-    return suite("compiling and running")
+public class TestComputer {
+  public static Test testComputer() {
+    return suite("compiling and computing")
         .add(storkTest("returning constant")
             .givenMocks("x")
             .given("main{x}")

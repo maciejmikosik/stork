@@ -9,13 +9,13 @@ import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.tool.Default.compileDefinition;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
+import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
+import static com.mikosik.stork.tool.comp.ModuleComputer.computer;
+import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
 import static com.mikosik.stork.tool.link.VerbModule.verbModule;
-import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
-import static com.mikosik.stork.tool.run.ModuleRunner.runner;
-import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.lang.String.format;
 
 import com.mikosik.stork.common.Chain;
@@ -23,8 +23,8 @@ import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.Verb;
+import com.mikosik.stork.tool.comp.Computer;
 import com.mikosik.stork.tool.link.Linker;
-import com.mikosik.stork.tool.run.Runner;
 
 public class Program {
   private final String main;
@@ -41,9 +41,9 @@ public class Program {
 
   public void run() {
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
-    Runner moduleRunner = runner(linker.link(add(programModule(), modules)));
-    Runner runner = exhausted(stepper(moduleRunner));
-    runner.run(compileExpression(format("writeStream(%s)", main)));
+    Computer moduleComputer = computer(linker.link(add(programModule(), modules)));
+    Computer computer = exhausted(stepping(moduleComputer));
+    computer.compute(compileExpression(format("writeStream(%s)", main)));
   }
 
   private static Module programModule() {

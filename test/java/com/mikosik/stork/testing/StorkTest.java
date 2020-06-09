@@ -10,13 +10,13 @@ import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
+import static com.mikosik.stork.tool.comp.ModuleComputer.computer;
+import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
 import static com.mikosik.stork.tool.link.VerbModule.verbModule;
-import static com.mikosik.stork.tool.run.ExhaustedRunner.exhausted;
-import static com.mikosik.stork.tool.run.ModuleRunner.runner;
-import static com.mikosik.stork.tool.run.Stepper.stepper;
 import static java.lang.String.format;
 
 import java.util.List;
@@ -32,8 +32,8 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.Default;
+import com.mikosik.stork.tool.comp.Computer;
 import com.mikosik.stork.tool.link.Linker;
-import com.mikosik.stork.tool.run.Runner;
 
 public class StorkTest implements Test {
   private String name;
@@ -123,10 +123,10 @@ public class StorkTest implements Test {
         modules);
 
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
-    Runner runner = exhausted(stepper(runner(linker.link(allModules))));
+    Computer computer = exhausted(stepping(computer(linker.link(allModules))));
 
-    Expression actual = runner.run(compileExpression(whenExpression));
-    Expression expected = runner.run(compileExpression(thenReturnedExpression));
+    Expression actual = computer.compute(compileExpression(whenExpression));
+    Expression expected = computer.compute(compileExpression(thenReturnedExpression));
 
     if (!expected.toString().equals(actual.toString())) {
       throw new AssertException(format(""
