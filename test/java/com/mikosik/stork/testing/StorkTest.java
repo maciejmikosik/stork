@@ -103,13 +103,7 @@ public class StorkTest implements Test {
   public <R> R visit(
       BiFunction<String, Body, R> caseHandler,
       BiFunction<String, List<Test>, R> suiteHandler) {
-    return caseHandler.apply(name(), () -> run());
-  }
-
-  private String name() {
-    return name == null
-        ? format("%s = %s", whenExpression, thenReturnedExpression)
-        : name;
+    return caseHandler.apply(name, () -> run());
   }
 
   private void run() {
