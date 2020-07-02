@@ -9,6 +9,7 @@ public class StorkModuleTest {
   public static Test testEqual(String expression, String expected) {
     return storkTest()
         .name(format("%s = %s", expression, expected))
+        .humane()
         .givenImported("boolean.stork")
         .givenImported("integer.stork")
         .givenImported("stream.stork")
