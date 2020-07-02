@@ -33,10 +33,12 @@ import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.Default;
 import com.mikosik.stork.tool.comp.Computer;
+import com.mikosik.stork.tool.comp.HumaneComputer;
 import com.mikosik.stork.tool.link.Linker;
 
 public class StorkTest implements Test {
   private String name;
+  private boolean humane;
   private Chain<String> givenImportedModules = empty();
   private Chain<String> givenMocks = empty();
   private Chain<String> givenDefinitions = empty();
@@ -56,6 +58,12 @@ public class StorkTest implements Test {
   public StorkTest name(String name) {
     StorkTest copy = copy();
     copy.name = name;
+    return copy;
+  }
+
+  public StorkTest humane() {
+    StorkTest copy = copy();
+    copy.humane = true;
     return copy;
   }
 
@@ -92,6 +100,7 @@ public class StorkTest implements Test {
   private StorkTest copy() {
     StorkTest copy = new StorkTest();
     copy.name = name;
+    copy.humane = humane;
     copy.givenImportedModules = givenImportedModules;
     copy.givenMocks = givenMocks;
     copy.givenDefinitions = givenDefinitions;
@@ -103,13 +112,7 @@ public class StorkTest implements Test {
   public <R> R visit(
       BiFunction<String, Body, R> caseHandler,
       BiFunction<String, List<Test>, R> suiteHandler) {
-    return caseHandler.apply(name(), () -> run());
-  }
-
-  private String name() {
-    return name == null
-        ? format("%s = %s", whenExpression, thenReturnedExpression)
-        : name;
+    return caseHandler.apply(name, () -> run());
   }
 
   private void run() {
@@ -123,7 +126,7 @@ public class StorkTest implements Test {
         modules);
 
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
-    Computer computer = exhausted(stepping(computer(linker.link(allModules))));
+    Computer computer = exhausted(maybeHumane(stepping(computer(linker.link(allModules)))));
 
     Expression actual = computer.compute(compileExpression(whenExpression));
     Expression expected = computer.compute(compileExpression(thenReturnedExpression));
@@ -143,5 +146,11 @@ public class StorkTest implements Test {
           print(expected),
           print(actual)));
     }
+  }
+
+  private Computer maybeHumane(Computer computer) {
+    return humane
+        ? HumaneComputer.humane(computer)
+        : computer;
   }
 }

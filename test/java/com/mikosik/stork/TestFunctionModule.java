@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.testing.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkModuleTest.testEqual;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -18,13 +18,5 @@ public class TestFunctionModule {
         .add(suite("flip")
             .add(testEqual("flip(f)(x)(y)", "f(y)(x)"))
             .add(testEqual("flip(f)(x)(y)(z)", "f(y)(x)(z)")));
-  }
-
-  private static Test testEqual(String expression, String expected) {
-    return storkTest()
-        .givenImported("function.stork")
-        .givenMocks("x", "y", "z", "f", "g", "h", "i")
-        .when(expression)
-        .thenReturned(expected);
   }
 }

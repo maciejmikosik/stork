@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.testing.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkModuleTest.testEqual;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -9,8 +9,8 @@ public class TestBooleanModule {
   public static Test testBooleanModule() {
     return suite("boolean.stork")
         .add(suite("true/false")
-            .add(testEqual("true(then)(else)", "then"))
-            .add(testEqual("false(then)(else)", "else")))
+            .add(testEqual("true(x)(y)", "x"))
+            .add(testEqual("false(x)(y)", "y")))
         .add(suite("not")
             .add(testEqual("not(true)", "false"))
             .add(testEqual("not(false)", "true")))
@@ -24,13 +24,5 @@ public class TestBooleanModule {
             .add(testEqual("or(false)(true)", "true"))
             .add(testEqual("or(true)(false)", "true"))
             .add(testEqual("or(false)(false)", "false")));
-  }
-
-  private static Test testEqual(String expression, String expected) {
-    return storkTest()
-        .givenImported("boolean.stork")
-        .givenMocks("then", "else")
-        .when(expression)
-        .thenReturned(expected);
   }
 }

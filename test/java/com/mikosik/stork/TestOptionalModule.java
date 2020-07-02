@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.testing.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkModuleTest.testEqual;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -14,14 +14,5 @@ public class TestOptionalModule {
         .add(suite("else")
             .add(testEqual("else(y)(present(x))", "x"))
             .add(testEqual("else(y)(absent)", "y")));
-  }
-
-  private static Test testEqual(String expression, String expected) {
-    return storkTest()
-        .givenImported("function.stork")
-        .givenImported("optional.stork")
-        .givenMocks("x", "y", "f", "g")
-        .when(expression)
-        .thenReturned(expected);
   }
 }

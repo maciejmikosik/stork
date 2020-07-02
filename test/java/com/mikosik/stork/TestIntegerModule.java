@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.testing.StorkTest.storkTest;
+import static com.mikosik.stork.testing.StorkModuleTest.testEqual;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -31,12 +31,5 @@ public class TestIntegerModule {
             .add(testEqual("negate(0)", "0"))
             .add(testEqual("negate(5)", "-5"))
             .add(testEqual("negate(-3)", "3")));
-  }
-
-  private static Test testEqual(String expression, String expected) {
-    return storkTest()
-        .givenImported("integer.stork")
-        .when(expression)
-        .thenReturned(expected);
   }
 }
