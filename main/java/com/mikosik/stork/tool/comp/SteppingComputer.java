@@ -2,9 +2,7 @@ package com.mikosik.stork.tool.comp;
 
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.data.model.Switch.switchOn;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Switch.switchOn;
-import static com.mikosik.stork.tool.common.Substitute.substitute;
 import static java.lang.String.format;
 
 import com.mikosik.stork.data.model.Expression;
@@ -28,11 +26,7 @@ public class SteppingComputer implements Computer {
     return switchOn(expression)
         .ifVariable(variable -> nextComputer.compute(computation))
         .ifApplication(application -> nextComputer.compute(computation))
-        .ifLambda(lambda -> switchOn(stack)
-            .ifArgument(argument -> computation(
-                substitute(lambda, argument.expression),
-                argument.stack))
-            .elseFail())
+        .ifLambda(lambda -> nextComputer.compute(computation))
         .ifNoun(noun -> switchOn(stack)
             .ifArgument(argument -> fail(format("cannot apply noun %s to argument %s",
                 noun, argument)))
