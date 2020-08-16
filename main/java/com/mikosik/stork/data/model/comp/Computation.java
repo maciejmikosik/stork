@@ -4,7 +4,7 @@ import static com.mikosik.stork.data.model.comp.Empty.empty;
 
 import com.mikosik.stork.data.model.Expression;
 
-public class Computation implements Expression {
+public class Computation {
   public final Expression expression;
   public final Stack stack;
 
