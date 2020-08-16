@@ -10,9 +10,10 @@ import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.Default.compileDefinition;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
+import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
-import static com.mikosik.stork.tool.comp.ModuleComputer.computer;
 import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
+import static com.mikosik.stork.tool.comp.VariableComputer.variable;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
@@ -42,7 +43,8 @@ public class Program {
 
   public void run() {
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
-    Computer moduleComputer = computer(linker.link(add(programModule(), modules)));
+    Module linkedModule = linker.link(add(programModule(), modules));
+    Computer moduleComputer = variable(linkedModule, computer());
     Computer computer = exhausted(stepping(moduleComputer));
     computer.compute(computation(compileExpression(format("writeStream(%s)", main))));
   }

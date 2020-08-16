@@ -12,9 +12,10 @@ import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Expressions.print;
+import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
-import static com.mikosik.stork.tool.comp.ModuleComputer.computer;
 import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
+import static com.mikosik.stork.tool.comp.VariableComputer.variable;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
@@ -128,7 +129,8 @@ public class StorkTest implements Test {
         modules);
 
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
-    Computer computer = maybeHumane(stepping(computer(linker.link(allModules))));
+    Module linkedModule = linker.link(allModules);
+    Computer computer = maybeHumane(stepping(variable(linkedModule, computer())));
 
     Expression actual = abort(computer.compute(computation(
         compileExpression(whenExpression))));

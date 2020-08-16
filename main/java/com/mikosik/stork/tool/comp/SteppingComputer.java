@@ -14,21 +14,21 @@ import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.data.model.comp.Stack;
 
 public class SteppingComputer implements Computer {
-  private final Computer moduleComputer;
+  private final Computer nextComputer;
 
-  private SteppingComputer(Computer moduleComputer) {
-    this.moduleComputer = moduleComputer;
+  private SteppingComputer(Computer nextComputer) {
+    this.nextComputer = nextComputer;
   }
 
-  public static Computer stepping(Computer moduleComputer) {
-    return new SteppingComputer(moduleComputer);
+  public static Computer stepping(Computer nextComputer) {
+    return new SteppingComputer(nextComputer);
   }
 
   public Computation compute(Computation computation) {
     Stack stack = computation.stack;
     Expression expression = computation.expression;
     return switchOn(expression)
-        .ifVariable(variable -> moduleComputer.compute(computation))
+        .ifVariable(variable -> nextComputer.compute(computation))
         .ifApplication(application -> computation(
             application.function,
             argument(application.argument, stack)))
