@@ -2,7 +2,6 @@ package com.mikosik.stork.tool.comp;
 
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.data.model.Switch.switchOn;
-import static com.mikosik.stork.data.model.comp.Argument.argument;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
 import static com.mikosik.stork.data.model.comp.Switch.switchOn;
@@ -29,9 +28,7 @@ public class SteppingComputer implements Computer {
     Expression expression = computation.expression;
     return switchOn(expression)
         .ifVariable(variable -> nextComputer.compute(computation))
-        .ifApplication(application -> computation(
-            application.function,
-            argument(application.argument, stack)))
+        .ifApplication(application -> nextComputer.compute(computation))
         .ifLambda(lambda -> switchOn(stack)
             .ifArgument(argument -> computation(
                 substitute(lambda, argument.expression),
@@ -40,9 +37,7 @@ public class SteppingComputer implements Computer {
         .ifNoun(noun -> switchOn(stack)
             .ifArgument(argument -> fail(format("cannot apply noun %s to argument %s",
                 noun, argument)))
-            .ifFunction(function -> computation(
-                function.expression,
-                argument(noun, function.stack)))
+            .ifFunction(function -> nextComputer.compute(computation))
             .elseFail())
         .ifVerb(verb -> switchOn(stack)
             .ifArgument(argument -> switchOn(argument.expression)
@@ -55,9 +50,7 @@ public class SteppingComputer implements Computer {
                 .elseReturn(() -> computation(
                     verb.apply(argument.expression),
                     argument.stack)))
-            .ifFunction(function -> computation(
-                function.expression,
-                argument(verb, function.stack)))
+            .ifFunction(function -> nextComputer.compute(computation))
             .elseFail())
         .elseFail();
   }
