@@ -3,8 +3,8 @@ package com.mikosik.stork.tool.comp;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.Printer.print;
 import static com.mikosik.stork.tool.common.Computations.abort;
+import static com.mikosik.stork.tool.common.Expressions.print;
 
 import com.mikosik.stork.data.model.comp.Computation;
 
