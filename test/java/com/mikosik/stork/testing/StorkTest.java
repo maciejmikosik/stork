@@ -11,7 +11,7 @@ import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Printer.print;
-import static com.mikosik.stork.tool.common.Abort.abort;
+import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.comp.ModuleComputer.computer;
 import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;

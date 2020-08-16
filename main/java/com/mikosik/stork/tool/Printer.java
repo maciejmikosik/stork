@@ -4,7 +4,7 @@ import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.common.Abort.abort;
+import static com.mikosik.stork.tool.common.Computations.abort;
 import static java.lang.String.format;
 
 import com.mikosik.stork.data.model.Definition;
