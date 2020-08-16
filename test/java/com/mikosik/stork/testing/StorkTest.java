@@ -15,7 +15,6 @@ import static com.mikosik.stork.tool.common.Expressions.print;
 import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.comp.StackingComputer.stacking;
-import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
 import static com.mikosik.stork.tool.comp.SubstitutingComputer.substituting;
 import static com.mikosik.stork.tool.comp.VariableComputer.variable;
 import static com.mikosik.stork.tool.comp.VerbComputer.verb;
@@ -133,8 +132,8 @@ public class StorkTest implements Test {
 
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
     Module linkedModule = linker.link(allModules);
-    Computer computer = maybeHumane(stepping(
-        stacking(substituting(variable(linkedModule, verb(computer()))))));
+    Computer computer = maybeHumane(
+        stacking(substituting(variable(linkedModule, verb(computer())))));
     Expression actual = abort(computer.compute(computation(
         compileExpression(whenExpression))));
     Expression expected = abort(computer.compute(computation(

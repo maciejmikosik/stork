@@ -13,7 +13,6 @@ import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.comp.StackingComputer.stacking;
-import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
 import static com.mikosik.stork.tool.comp.SubstitutingComputer.substituting;
 import static com.mikosik.stork.tool.comp.VariableComputer.variable;
 import static com.mikosik.stork.tool.comp.VerbComputer.verb;
@@ -47,8 +46,8 @@ public class Program {
   public void run() {
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
     Module linkedModule = linker.link(add(programModule(), modules));
-    Computer computer = exhausted(stepping(
-        stacking(substituting(variable(linkedModule, verb(computer()))))));
+    Computer computer = exhausted(
+        stacking(substituting(variable(linkedModule, verb(computer())))));
     computer.compute(computation(compileExpression(format("writeStream(%s)", main))));
   }
 
