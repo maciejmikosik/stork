@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static java.lang.String.format;
@@ -8,7 +8,7 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Lambda;
 import com.mikosik.stork.data.model.Module;
 
-public class Printer {
+public class Expressions {
   public static String print(Expression expression) {
     return switchOn(expression)
         .ifNoun(noun -> noun.object.toString())
