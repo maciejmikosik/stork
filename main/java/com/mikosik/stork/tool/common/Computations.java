@@ -37,10 +37,14 @@ public class Computations {
         .elseFail();
   }
 
+  public static boolean isComputable(Expression expression) {
+    return expression instanceof Variable
+        || expression instanceof Application;
+  }
+
   public static boolean isComputable(Computation computation) {
     return !(computation.stack instanceof Empty)
-        || computation.expression instanceof Variable
-        || computation.expression instanceof Application;
+        || isComputable(computation.expression);
   }
 
   public static boolean isHumane(Computation computation) {

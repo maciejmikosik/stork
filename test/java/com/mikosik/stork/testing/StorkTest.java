@@ -10,14 +10,10 @@ import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
+import static com.mikosik.stork.tool.Default.exhaustedComputer;
+import static com.mikosik.stork.tool.Default.humaneComputer;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Expressions.print;
-import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
-import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
-import static com.mikosik.stork.tool.comp.StackingComputer.stacking;
-import static com.mikosik.stork.tool.comp.SubstitutingComputer.substituting;
-import static com.mikosik.stork.tool.comp.VariableComputer.variable;
-import static com.mikosik.stork.tool.comp.VerbComputer.verb;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
@@ -38,7 +34,6 @@ import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.Default;
 import com.mikosik.stork.tool.comp.Computer;
-import com.mikosik.stork.tool.comp.HumaneComputer;
 import com.mikosik.stork.tool.link.Linker;
 
 public class StorkTest implements Test {
@@ -132,8 +127,9 @@ public class StorkTest implements Test {
 
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
     Module linkedModule = linker.link(allModules);
-    Computer computer = maybeHumane(
-        stacking(substituting(variable(linkedModule, verb(computer())))));
+    Computer computer = humane
+        ? humaneComputer(linkedModule)
+        : exhaustedComputer(linkedModule);
     Expression actual = abort(computer.compute(computation(
         compileExpression(whenExpression))));
     Expression expected = abort(computer.compute(computation(
@@ -154,11 +150,5 @@ public class StorkTest implements Test {
           print(expected),
           print(actual)));
     }
-  }
-
-  private Computer maybeHumane(Computer computer) {
-    return humane
-        ? HumaneComputer.humane(computer)
-        : exhausted(computer);
   }
 }
