@@ -1,8 +1,12 @@
 package com.mikosik.stork.tool.comp;
 
+import static com.mikosik.stork.data.model.Application.application;
+import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.common.Computations.abort;
 
-import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.comp.Computation;
 
 public class LoggingComputer implements Computer {
   private final Computer computer;
@@ -15,8 +19,14 @@ public class LoggingComputer implements Computer {
     return new LoggingComputer(computer);
   }
 
-  public Expression compute(Expression expression) {
-    System.out.println(print(expression));
-    return computer.compute(expression);
+  public Computation compute(Computation computation) {
+    System.out.println(print(abort(mark(computation))));
+    return computer.compute(computation);
+  }
+
+  private static Computation mark(Computation computation) {
+    return computation(
+        application(variable("@"), computation.expression),
+        computation.stack);
   }
 }

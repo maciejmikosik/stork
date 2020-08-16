@@ -6,6 +6,7 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.Default.compileDefinition;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
@@ -43,7 +44,7 @@ public class Program {
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
     Computer moduleComputer = computer(linker.link(add(programModule(), modules)));
     Computer computer = exhausted(stepping(moduleComputer));
-    computer.compute(compileExpression(format("writeStream(%s)", main)));
+    computer.compute(computation(compileExpression(format("writeStream(%s)", main))));
   }
 
   private static Module programModule() {

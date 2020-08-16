@@ -5,8 +5,6 @@ import static java.lang.String.format;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.mikosik.stork.data.model.comp.Computation;
-
 public class Switch {
   private final Expression expression;
   private final Optional<Object> result;
@@ -42,10 +40,6 @@ public class Switch {
 
   public Switch ifParameter(Handler<Parameter> handler) {
     return ifType(Parameter.class, handler);
-  }
-
-  public Switch ifComputation(Handler<Computation> handler) {
-    return ifType(Computation.class, handler);
   }
 
   private <E> Switch ifType(Class<E> type, Handler<E> handler) {

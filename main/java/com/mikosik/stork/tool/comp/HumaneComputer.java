@@ -1,12 +1,9 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Abort.abort;
+import static com.mikosik.stork.tool.common.Computations.isComputable;
+import static com.mikosik.stork.tool.common.Computations.isHumane;
 
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Lambda;
-import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.data.model.comp.Stack;
 
 public class HumaneComputer implements Computer {
   private final Computer computer;
@@ -19,46 +16,15 @@ public class HumaneComputer implements Computer {
     return new HumaneComputer(computer);
   }
 
-  public Expression compute(Expression expression) {
-    Expression computed = computer.compute(expression);
-    return computed instanceof Computation
-        ? isHumane((Computation) computed)
-            ? computed
-            : abortIfComputation(expression)
-        : computed instanceof Lambda
-            ? abortIfComputation(expression)
-            : computed;
-  }
-
-  private static boolean isHumane(Computation computation) {
-    return countParameters(computation) <= countArguments(computation);
-  }
-
-  private static int countArguments(Computation computation) {
-    Stack stack = computation.stack;
-    int count = 0;
-    while (stack instanceof Argument) {
-      Argument argument = (Argument) stack;
-      stack = argument.stack;
-      count++;
+  public Computation compute(Computation computation) {
+    while (isComputable(computation)) {
+      Computation computed = computer.compute(computation);
+      if (isHumane(computed)) {
+        computation = computed;
+      } else {
+        break;
+      }
     }
-    return count;
-  }
-
-  private static int countParameters(Computation computation) {
-    Expression expression = computation.expression;
-    int count = 0;
-    while (expression instanceof Lambda) {
-      Lambda lambda = (Lambda) expression;
-      expression = lambda.body;
-      count++;
-    }
-    return count;
-  }
-
-  private static Expression abortIfComputation(Expression expression) {
-    return expression instanceof Computation
-        ? abort((Computation) expression)
-        : expression;
+    return computation;
   }
 }

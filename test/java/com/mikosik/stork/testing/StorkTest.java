@@ -7,9 +7,11 @@ import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
+import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.testing.Mock.mock;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.Printer.print;
+import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.comp.ModuleComputer.computer;
 import static com.mikosik.stork.tool.comp.SteppingComputer.stepping;
@@ -126,10 +128,12 @@ public class StorkTest implements Test {
         modules);
 
     Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
-    Computer computer = exhausted(maybeHumane(stepping(computer(linker.link(allModules)))));
+    Computer computer = maybeHumane(stepping(computer(linker.link(allModules))));
 
-    Expression actual = computer.compute(compileExpression(whenExpression));
-    Expression expected = computer.compute(compileExpression(thenReturnedExpression));
+    Expression actual = abort(computer.compute(computation(
+        compileExpression(whenExpression))));
+    Expression expected = abort(computer.compute(computation(
+        compileExpression(thenReturnedExpression))));
 
     if (!expected.toString().equals(actual.toString())) {
       throw new AssertException(format(""
@@ -151,6 +155,6 @@ public class StorkTest implements Test {
   private Computer maybeHumane(Computer computer) {
     return humane
         ? HumaneComputer.humane(computer)
-        : computer;
+        : exhausted(computer);
   }
 }

@@ -1,6 +1,7 @@
 package com.mikosik.stork.tool.comp;
 
-import com.mikosik.stork.data.model.Expression;
+import static com.mikosik.stork.tool.common.Computations.isComputable;
+
 import com.mikosik.stork.data.model.comp.Computation;
 
 public class ExhaustedComputer implements Computer {
@@ -14,11 +15,10 @@ public class ExhaustedComputer implements Computer {
     return new ExhaustedComputer(computer);
   }
 
-  public Expression compute(Expression expression) {
-    Expression result = computer.compute(expression);
-    while (result instanceof Computation) {
-      result = computer.compute(result);
+  public Computation compute(Computation computation) {
+    while (isComputable(computation)) {
+      computation = computer.compute(computation);
     }
-    return result;
+    return computation;
   }
 }
