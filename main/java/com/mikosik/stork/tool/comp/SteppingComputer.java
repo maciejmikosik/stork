@@ -3,7 +3,6 @@ package com.mikosik.stork.tool.comp;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.data.model.comp.Function.function;
 import static com.mikosik.stork.data.model.comp.Switch.switchOn;
 import static com.mikosik.stork.tool.common.Substitute.substitute;
 import static java.lang.String.format;
@@ -40,16 +39,7 @@ public class SteppingComputer implements Computer {
             .ifFunction(function -> nextComputer.compute(computation))
             .elseFail())
         .ifVerb(verb -> switchOn(stack)
-            .ifArgument(argument -> switchOn(argument.expression)
-                .ifApplication(application -> computation(
-                    application,
-                    function(verb, argument.stack)))
-                .ifVariable(variable -> computation(
-                    variable,
-                    function(verb, argument.stack)))
-                .elseReturn(() -> computation(
-                    verb.apply(argument.expression),
-                    argument.stack)))
+            .ifArgument(argument -> nextComputer.compute(computation))
             .ifFunction(function -> nextComputer.compute(computation))
             .elseFail())
         .elseFail();
