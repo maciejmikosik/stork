@@ -1,7 +1,9 @@
 package com.mikosik.stork.tool.comp;
 
-import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Application;
+import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.data.model.comp.Empty;
 
 public class ExhaustedComputer implements Computer {
   private final Computer computer;
@@ -14,11 +16,12 @@ public class ExhaustedComputer implements Computer {
     return new ExhaustedComputer(computer);
   }
 
-  public Expression compute(Expression expression) {
-    Expression result = computer.compute(expression);
-    while (result instanceof Computation) {
-      result = computer.compute(result);
+  public Computation compute(Computation computation) {
+    while (!(computation.stack instanceof Empty)
+        || computation.expression instanceof Variable
+        || computation.expression instanceof Application) {
+      computation = computer.compute(computation);
     }
-    return result;
+    return computation;
   }
 }

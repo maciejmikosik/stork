@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.comp;
 
-import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.comp.Computation;
 
 public interface Computer {
-  Expression compute(Expression expression);
+  Computation compute(Computation computation);
 }

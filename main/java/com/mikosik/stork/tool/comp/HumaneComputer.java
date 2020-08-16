@@ -1,11 +1,12 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Abort.abort;
-
+import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Lambda;
+import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.data.model.comp.Empty;
 import com.mikosik.stork.data.model.comp.Stack;
 
 public class HumaneComputer implements Computer {
@@ -19,15 +20,18 @@ public class HumaneComputer implements Computer {
     return new HumaneComputer(computer);
   }
 
-  public Expression compute(Expression expression) {
-    Expression computed = computer.compute(expression);
-    return computed instanceof Computation
-        ? isHumane((Computation) computed)
-            ? computed
-            : abortIfComputation(expression)
-        : computed instanceof Lambda
-            ? abortIfComputation(expression)
-            : computed;
+  public Computation compute(Computation computation) {
+    while (!(computation.stack instanceof Empty)
+        || computation.expression instanceof Variable
+        || computation.expression instanceof Application) {
+      Computation computed = computer.compute(computation);
+      if (isHumane(computed)) {
+        computation = computed;
+      } else {
+        break;
+      }
+    }
+    return computation;
   }
 
   private static boolean isHumane(Computation computation) {
@@ -54,11 +58,5 @@ public class HumaneComputer implements Computer {
       count++;
     }
     return count;
-  }
-
-  private static Expression abortIfComputation(Expression expression) {
-    return expression instanceof Computation
-        ? abort((Computation) expression)
-        : expression;
   }
 }

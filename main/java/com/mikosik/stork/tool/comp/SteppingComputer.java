@@ -24,19 +24,11 @@ public class SteppingComputer implements Computer {
     return new SteppingComputer(moduleComputer);
   }
 
-  public Expression compute(Expression expression) {
-    return switchOn(expression)
-        .ifComputation(computation -> compute(computation))
-        .elseReturn(() -> computation(expression));
-  }
-
-  private Expression compute(Computation computation) {
+  public Computation compute(Computation computation) {
     Stack stack = computation.stack;
     Expression expression = computation.expression;
     return switchOn(expression)
-        .ifVariable(variable -> computation(
-            moduleComputer.compute(variable),
-            stack))
+        .ifVariable(variable -> moduleComputer.compute(computation))
         .ifApplication(application -> computation(
             application.function,
             argument(application.argument, stack)))
@@ -44,7 +36,6 @@ public class SteppingComputer implements Computer {
             .ifArgument(argument -> computation(
                 substitute(lambda, argument.expression),
                 argument.stack))
-            .ifEmpty(empty -> expression)
             .elseFail())
         .ifNoun(noun -> switchOn(stack)
             .ifArgument(argument -> fail(format("cannot apply noun %s to argument %s",
@@ -52,7 +43,6 @@ public class SteppingComputer implements Computer {
             .ifFunction(function -> computation(
                 function.expression,
                 argument(noun, function.stack)))
-            .ifEmpty(empty -> expression)
             .elseFail())
         .ifVerb(verb -> switchOn(stack)
             .ifArgument(argument -> switchOn(argument.expression)
@@ -68,7 +58,6 @@ public class SteppingComputer implements Computer {
             .ifFunction(function -> computation(
                 function.expression,
                 argument(verb, function.stack)))
-            .ifEmpty(empty -> expression)
             .elseFail())
         .elseFail();
   }
