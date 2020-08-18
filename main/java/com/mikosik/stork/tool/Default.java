@@ -8,6 +8,7 @@ import static com.mikosik.stork.tool.Parser.parse;
 import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.comp.HumaneComputer.humane;
+import static com.mikosik.stork.tool.comp.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.tool.comp.StackingComputer.stacking;
 import static com.mikosik.stork.tool.comp.SubstitutingComputer.substituting;
 import static com.mikosik.stork.tool.comp.VariableComputer.variable;
@@ -51,6 +52,6 @@ public class Default {
   }
 
   private static Computer oneStepComputer(Module module) {
-    return stacking(substituting(variable(module, verb(computer()))));
+    return interruptible(stacking(substituting(variable(module, verb(computer())))));
   }
 }
