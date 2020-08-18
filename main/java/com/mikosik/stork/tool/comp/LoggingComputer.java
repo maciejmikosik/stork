@@ -2,21 +2,26 @@ package com.mikosik.stork.tool.comp;
 
 import static com.mikosik.stork.tool.common.Computations.print;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import com.mikosik.stork.data.model.comp.Computation;
 
 public class LoggingComputer implements Computer {
+  private final PrintStream output;
   private final Computer computer;
 
-  private LoggingComputer(Computer computer) {
+  private LoggingComputer(PrintStream output, Computer computer) {
+    this.output = output;
     this.computer = computer;
   }
 
-  public static Computer logging(Computer computer) {
-    return new LoggingComputer(computer);
+  public static Computer logging(OutputStream output, Computer computer) {
+    return new LoggingComputer(new PrintStream(output), computer);
   }
 
   public Computation compute(Computation computation) {
-    System.out.println(print(computation));
+    output.println(print(computation));
     return computer.compute(computation);
   }
 }
