@@ -25,13 +25,13 @@ public class SubstitutingComputer implements Computer {
   public Computation compute(Computation computation) {
     return computation.expression instanceof Lambda
         && computation.stack instanceof Argument
-            ? substitute(
+            ? compute(
                 (Lambda) computation.expression,
                 (Argument) computation.stack)
             : nextComputer.compute(computation);
   }
 
-  private Computation substitute(Lambda lambda, Argument argument) {
+  private Computation compute(Lambda lambda, Argument argument) {
     return computation(
         substitute(lambda.body, lambda.parameter, argument.expression),
         argument.stack);
