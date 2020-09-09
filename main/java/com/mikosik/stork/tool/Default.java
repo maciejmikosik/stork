@@ -5,14 +5,6 @@ import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.tool.Modeler.modelDefinition;
 import static com.mikosik.stork.tool.Modeler.modelExpression;
 import static com.mikosik.stork.tool.Parser.parse;
-import static com.mikosik.stork.tool.comp.DefaultComputer.computer;
-import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
-import static com.mikosik.stork.tool.comp.HumaneComputer.humane;
-import static com.mikosik.stork.tool.comp.InterruptibleComputer.interruptible;
-import static com.mikosik.stork.tool.comp.StackingComputer.stacking;
-import static com.mikosik.stork.tool.comp.SubstitutingComputer.substituting;
-import static com.mikosik.stork.tool.comp.VariableComputer.variable;
-import static com.mikosik.stork.tool.comp.VerbComputer.verb;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -22,7 +14,6 @@ import com.mikosik.stork.common.Strings;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.tool.comp.Computer;
 
 public class Default {
   // TODO create module modeler that uses separator
@@ -41,17 +32,5 @@ public class Default {
 
   public static Expression compileExpression(String source) {
     return modelExpression(parse(source));
-  }
-
-  public static Computer exhaustedComputer(Module module) {
-    return exhausted(oneStepComputer(module));
-  }
-
-  public static Computer humaneComputer(Module module) {
-    return humane(oneStepComputer(module));
-  }
-
-  private static Computer oneStepComputer(Module module) {
-    return interruptible(stacking(substituting(variable(module, verb(computer())))));
   }
 }
