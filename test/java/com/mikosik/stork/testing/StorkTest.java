@@ -14,8 +14,6 @@ import static com.mikosik.stork.tool.comp.Computers.steppingComputer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
-import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
-import static com.mikosik.stork.tool.link.VerbModule.verbModule;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
@@ -128,7 +126,7 @@ public class StorkTest implements Test {
     Chain<Module> modules = map(Modules::module, givenImportedModules);
     Chain<Module> allModules = add(module(definitions), modules);
 
-    Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
+    Linker linker = noncolliding(defaultLinker());
     Module linkedModule = linker.link(allModules);
     Computer computer = humaneOrExhausted(mocking(mockPredicate, steppingComputer(linkedModule)));
     Expression actual = abort(computer.compute(computation(

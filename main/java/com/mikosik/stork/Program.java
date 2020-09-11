@@ -14,8 +14,6 @@ import static com.mikosik.stork.tool.comp.Computers.steppingComputer;
 import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
-import static com.mikosik.stork.tool.link.OverridingLinker.overriding;
-import static com.mikosik.stork.tool.link.VerbModule.verbModule;
 import static java.lang.String.format;
 
 import com.mikosik.stork.common.Chain;
@@ -40,7 +38,7 @@ public class Program {
   }
 
   public void run() {
-    Linker linker = overriding(verbModule(), noncolliding(defaultLinker()));
+    Linker linker = noncolliding(defaultLinker());
     Module linkedModule = linker.link(add(programModule(), modules));
     Computer computer = exhausted(steppingComputer(linkedModule));
     computer.compute(computation(compileExpression(format("writeStream(%s)", main))));
