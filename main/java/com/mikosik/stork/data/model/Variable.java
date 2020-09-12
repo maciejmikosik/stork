@@ -7,7 +7,7 @@ public class Variable implements Expression {
     this.name = name;
   }
 
-  public static Expression variable(String name) {
+  public static Variable variable(String name) {
     return new Variable(name);
   }
 
