@@ -23,7 +23,7 @@ public class VariableComputer implements Computer {
   public static Computer variable(Module module, Computer nextComputer) {
     Map<String, Expression> table = new HashMap<>();
     for (Definition definition : module.definitions) {
-      table.put(definition.name, definition.expression);
+      table.put(definition.variable.name, definition.expression);
     }
     return new VariableComputer(table, nextComputer);
   }

@@ -25,8 +25,8 @@ public class Expressions {
 
   public static String print(Definition definition) {
     return definition.expression instanceof Lambda
-        ? definition.name + print(definition.expression)
-        : definition.name + "{" + print(definition.expression) + "}";
+        ? print(definition.variable) + print(definition.expression)
+        : print(definition.variable) + "{" + print(definition.expression) + "}";
   }
 
   public static String print(Module module) {
