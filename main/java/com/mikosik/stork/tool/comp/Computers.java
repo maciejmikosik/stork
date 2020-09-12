@@ -6,12 +6,11 @@ import static com.mikosik.stork.tool.comp.OpcodingComputer.opcoding;
 import static com.mikosik.stork.tool.comp.StackingComputer.stacking;
 import static com.mikosik.stork.tool.comp.SubstitutingComputer.substituting;
 import static com.mikosik.stork.tool.comp.VariableComputer.variable;
-import static com.mikosik.stork.tool.comp.VerbComputer.verb;
 
 import com.mikosik.stork.data.model.Module;
 
 public class Computers {
   public static Computer steppingComputer(Module module) {
-    return interruptible(stacking(substituting(opcoding(variable(module, verb(computer()))))));
+    return interruptible(stacking(substituting(opcoding(variable(module, computer())))));
   }
 }
