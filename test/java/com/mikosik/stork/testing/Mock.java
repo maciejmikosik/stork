@@ -6,9 +6,8 @@ import static com.mikosik.stork.common.Chains.reverse;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Verb;
 
-public class Mock implements Verb {
+public class Mock implements Expression {
   private final String name;
   private final Chain<Expression> arguments;
 
@@ -21,7 +20,7 @@ public class Mock implements Verb {
     return new Mock(name, empty());
   }
 
-  public Expression apply(Expression argument) {
+  public Mock apply(Expression argument) {
     return new Mock(name, add(argument, arguments));
   }
 
