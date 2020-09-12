@@ -16,9 +16,8 @@ public class ExhaustedComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    while (isComputable(computation)) {
-      computation = computer.compute(computation);
-    }
-    return computation;
+    return isComputable(computation)
+        ? computer.compute(computation)
+        : computation;
   }
 }

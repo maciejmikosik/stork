@@ -1,6 +1,5 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Computations.isComputable;
 import static com.mikosik.stork.tool.common.Computations.isHumane;
 
 import com.mikosik.stork.data.model.comp.Computation;
@@ -17,14 +16,9 @@ public class HumaneComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    while (isComputable(computation)) {
-      Computation computed = computer.compute(computation);
-      if (isHumane(computed)) {
-        computation = computed;
-      } else {
-        break;
-      }
-    }
-    return computation;
+    Computation computed = computer.compute(computation);
+    return isHumane(computed)
+        ? computed
+        : computation;
   }
 }

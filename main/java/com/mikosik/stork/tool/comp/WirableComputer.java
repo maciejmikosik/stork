@@ -49,6 +49,18 @@ public class WirableComputer implements Computer {
     return new WirableComputer(LoggingComputer.logging(stream, delegate));
   }
 
+  public WirableComputer exhausted() {
+    return new WirableComputer(ExhaustedComputer.exhausted(delegate));
+  }
+
+  public WirableComputer humane() {
+    return new WirableComputer(HumaneComputer.humane(delegate));
+  }
+
+  public WirableComputer looping() {
+    return new WirableComputer(LoopingComputer.looping(delegate));
+  }
+
   public Computation compute(Computation computation) {
     return delegate.compute(computation);
   }
