@@ -73,6 +73,10 @@ public class StreamingComputer implements Computer {
             writeStreamFunction(),
             computation.stack);
       }
+    } else if (computation.expression instanceof Streamed) {
+      Parameter x = parameter("x");
+      Expression identity = lambda(x, x);
+      return computation(identity, computation.stack);
     }
     return nextComputer.compute(computation);
   }

@@ -1,8 +1,6 @@
 package com.mikosik.stork.main;
 
 import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.main.StreamingComputer.writeStream;
@@ -11,9 +9,7 @@ import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
 import com.mikosik.stork.tool.link.Linker;
@@ -42,22 +38,18 @@ public class Program {
         .interruptible()
         .wire(StreamingComputer::streaming);
 
-    Parameter x = parameter("x");
-    Expression identity = lambda(x, x);
-
     for (Computation computation = computation(
         application(writeStream, variable(main)));;) {
 
-      while (!(computation.expression instanceof Streamed)) {
+      do {
         computation = computer.compute(computation);
-      }
+      } while (!(computation.expression instanceof Streamed));
       Streamed streamed = (Streamed) computation.expression;
       if (streamed.oneByte == -1) {
         break;
       }
       System.out.write(streamed.oneByte);
       System.out.flush();
-      computation = computation(identity, computation.stack);
     }
   }
 }
