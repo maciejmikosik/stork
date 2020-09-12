@@ -23,16 +23,20 @@ public class VariableComputer implements Computer {
   public static Computer variable(Module module, Computer nextComputer) {
     Map<String, Expression> table = new HashMap<>();
     for (Definition definition : module.definitions) {
-      table.put(definition.name, definition.expression);
+      table.put(definition.variable.name, definition.expression);
     }
     return new VariableComputer(table, nextComputer);
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Variable
-        ? computation(
-            table.get(((Variable) computation.expression).name),
-            computation.stack)
-        : nextComputer.compute(computation);
+    if (computation.expression instanceof Variable) {
+      Variable variable = (Variable) computation.expression;
+      if (table.containsKey(variable.name)) {
+        return computation(
+            table.get(variable.name),
+            computation.stack);
+      }
+    }
+    return nextComputer.compute(computation);
   }
 }

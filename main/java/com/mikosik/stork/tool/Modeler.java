@@ -22,7 +22,9 @@ import com.mikosik.stork.data.syntax.Syntax;
 public class Modeler {
   public static Definition modelDefinition(Chain<Syntax> sentence) {
     return switchOn(sentence)
-        .ifName((alphanumeric, tail) -> definition(alphanumeric.string, modelLambda(tail)))
+        .ifName((alphanumeric, tail) -> definition(
+            variable(alphanumeric.string),
+            modelLambda(tail)))
         .elseFail();
   }
 

@@ -19,8 +19,8 @@ import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
 
 public class StreamingComputer implements Computer {
-  public static final Variable writeByte = (Variable) variable("program.writeByte");
-  public static final Variable writeStream = (Variable) variable("program.writeStream");
+  public static final Variable writeByte = variable("program.writeByte");
+  public static final Variable writeStream = variable("program.writeStream");
 
   private final Computer nextComputer;
 

@@ -1,21 +1,21 @@
 package com.mikosik.stork.data.model;
 
 public class Definition {
-  public final String name;
+  public final Variable variable;
   public final Expression expression;
 
-  private Definition(String name, Expression expression) {
-    this.name = name;
+  private Definition(Variable variable, Expression expression) {
+    this.variable = variable;
     this.expression = expression;
   }
 
-  public static Definition definition(String name, Expression expression) {
-    return new Definition(name, expression);
+  public static Definition definition(Variable variable, Expression expression) {
+    return new Definition(variable, expression);
   }
 
   public String toString() {
     return expression instanceof Lambda
-        ? name + expression
-        : name + "{" + expression + "}";
+        ? "" + variable + expression
+        : "" + variable + "{" + expression + "}";
   }
 }

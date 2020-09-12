@@ -26,8 +26,8 @@ public class NoncollidingLinker implements Linker {
     Set<String> keys = new HashSet<>();
     stream(module.definitions)
         .forEach(definition -> {
-          check(!keys.contains(definition.name));
-          keys.add(definition.name);
+          check(!keys.contains(definition.variable.name));
+          keys.add(definition.variable.name);
         });
     return linker.link(modules);
   }
