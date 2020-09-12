@@ -20,8 +20,7 @@ public class Expressions {
         .ifLambda(lambda -> lambda.body instanceof Lambda
             ? format("(%s)%s", print(lambda.parameter), print(lambda.body))
             : format("(%s){%s}", print(lambda.parameter), print(lambda.body)))
-        .ifVerb(verb -> verb.toString())
-        .elseFail();
+        .elseReturn(() -> String.valueOf(expression));
   }
 
   public static String print(Definition definition) {

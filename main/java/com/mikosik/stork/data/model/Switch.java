@@ -26,10 +26,6 @@ public class Switch {
     return ifType(Noun.class, handler);
   }
 
-  public Switch ifVerb(Handler<Verb> handler) {
-    return ifType(Verb.class, handler);
-  }
-
   public Switch ifApplication(Handler<Application> handler) {
     return ifType(Application.class, handler);
   }

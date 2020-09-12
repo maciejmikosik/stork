@@ -15,7 +15,7 @@ public class StorkModuleTest {
         .givenImported("stream.stork")
         .givenImported("optional.stork")
         .givenImported("function.stork")
-        .givenMocks("x", "y", "z", "f", "g", "h", "i")
+        .givenMocks(name -> name.length() == 1)
         .when(expression)
         .thenReturned(expected);
   }

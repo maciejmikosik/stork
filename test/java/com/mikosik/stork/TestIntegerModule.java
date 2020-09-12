@@ -30,6 +30,20 @@ public class TestIntegerModule {
         .add(suite("negate")
             .add(testEqual("negate(0)", "0"))
             .add(testEqual("negate(5)", "-5"))
-            .add(testEqual("negate(-3)", "3")));
+            .add(testEqual("negate(-3)", "3")))
+        .add(suite("equal")
+            .add(testEqual("equal(0)(0)", "true"))
+            .add(testEqual("equal(1)(1)", "true"))
+            .add(testEqual("equal(-1)(-1)", "true"))
+            .add(testEqual("equal(0)(1)", "false"))
+            .add(testEqual("equal(1)(0)", "false"))
+            .add(testEqual("equal(1)(-1)", "false"))
+            .add(testEqual("equal(-1)(1)", "false")))
+        .add(suite("moreThan")
+            .add(testEqual("moreThan(0)(1)", "true"))
+            .add(testEqual("moreThan(1)(0)", "false"))
+            .add(testEqual("moreThan(0)(0)", "false"))
+            .add(testEqual("moreThan(-1)(1)", "true"))
+            .add(testEqual("moreThan(1)(-1)", "false")));
   }
 }
