@@ -8,6 +8,8 @@ import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 
+import java.io.InputStream;
+
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Computation;
@@ -27,7 +29,7 @@ public class Program {
     return new Program(main, modules);
   }
 
-  public void run() {
+  public InputStream run() {
     Linker linker = noncolliding(defaultLinker());
     Module linkedModule = linker.link(modules);
     Computer computer = computer()
@@ -38,18 +40,28 @@ public class Program {
         .interruptible()
         .wire(StreamingComputer::streaming);
 
-    for (Computation computation = computation(
-        application(writeStream, variable(main)));;) {
+    return new InputStream() {
+      boolean closed;
+      Computation computation = computation(application(writeStream, variable(main)));
 
-      do {
-        computation = computer.compute(computation);
-      } while (!(computation.expression instanceof Streamed));
-      Streamed streamed = (Streamed) computation.expression;
-      if (streamed.oneByte == -1) {
-        break;
+      public int read() {
+        if (closed) {
+          return -1;
+        }
+        do {
+          computation = computer.compute(computation);
+        } while (!(computation.expression instanceof Streamed));
+
+        Streamed streamed = (Streamed) computation.expression;
+        if (streamed.oneByte == -1) {
+          closed = true;
+        }
+        return streamed.oneByte;
       }
-      System.out.write(streamed.oneByte);
-      System.out.flush();
-    }
+
+      public void close() {
+        closed = true;
+      }
+    };
   }
 }

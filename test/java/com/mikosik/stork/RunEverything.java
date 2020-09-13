@@ -2,6 +2,7 @@ package com.mikosik.stork;
 
 import static com.mikosik.stork.TestEverything.testEverything;
 import static com.mikosik.stork.common.Chains.chainOf;
+import static com.mikosik.stork.common.InputOutput.pump;
 import static com.mikosik.stork.lib.Modules.module;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.testing.MoreReports.filter;
@@ -9,6 +10,8 @@ import static com.mikosik.stork.testing.MoreReports.formatExceptions;
 import static java.lang.String.format;
 import static org.quackery.report.Reports.count;
 import static org.quackery.run.Runners.run;
+
+import java.io.InputStream;
 
 import org.quackery.Test;
 import org.quackery.report.Reports;
@@ -30,7 +33,9 @@ public class RunEverything {
         module("boolean.stork"),
         module("demo.stork"));
     Program program = program("main", modules);
-    program.run();
+    InputStream input = program.run();
+    pump(input, System.out);
+    System.out.flush();
   }
 
   private static void print(Test report) {
