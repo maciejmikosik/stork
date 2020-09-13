@@ -1,4 +1,4 @@
-package com.mikosik.stork;
+package com.mikosik.stork.main;
 
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Lambda.lambda;
@@ -15,8 +15,6 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.main.Streamed;
-import com.mikosik.stork.main.StreamingComputer;
 import com.mikosik.stork.tool.comp.Computer;
 import com.mikosik.stork.tool.link.Linker;
 
