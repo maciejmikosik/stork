@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Computations.isComputable;
-
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.data.model.comp.Empty;
+import com.mikosik.stork.tool.common.Computations;
 
 public class ExhaustedComputer implements Computer {
   private final Computer computer;
@@ -16,9 +16,13 @@ public class ExhaustedComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    while (isComputable(computation)) {
-      computation = computer.compute(computation);
-    }
-    return computation;
+    return isComputable(computation)
+        ? computer.compute(computation)
+        : computation;
+  }
+
+  private static boolean isComputable(Computation computation) {
+    return !(computation.stack instanceof Empty)
+        || Computations.isComputable(computation.expression);
   }
 }

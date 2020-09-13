@@ -10,8 +10,7 @@ import static com.mikosik.stork.testing.MockingComputer.mocking;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Expressions.print;
-import static com.mikosik.stork.tool.comp.Computers.steppingComputer;
-import static com.mikosik.stork.tool.comp.ExhaustedComputer.exhausted;
+import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static java.lang.String.format;
@@ -128,7 +127,16 @@ public class StorkTest implements Test {
 
     Linker linker = noncolliding(defaultLinker());
     Module linkedModule = linker.link(allModules);
-    Computer computer = humaneOrExhausted(mocking(mockPredicate, steppingComputer(linkedModule)));
+    Computer computer = computer()
+        .module(linkedModule)
+        .opcoding()
+        .substituting()
+        .stacking()
+        .interruptible()
+        .wire(c -> mocking(mockPredicate, c))
+        .wire(this::maybeHumane)
+        .exhausted()
+        .looping();
     Expression actual = abort(computer.compute(computation(
         compileExpression(whenExpression))));
     Expression expected = abort(computer.compute(computation(
@@ -151,9 +159,9 @@ public class StorkTest implements Test {
     }
   }
 
-  private Computer humaneOrExhausted(Computer computer) {
+  private Computer maybeHumane(Computer computer) {
     return humane
         ? HumaneComputer.humane(computer)
-        : exhausted(computer);
+        : computer;
   }
 }
