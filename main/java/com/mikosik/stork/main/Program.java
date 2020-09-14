@@ -1,22 +1,20 @@
-package com.mikosik.stork;
+package com.mikosik.stork.main;
 
+import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.main.StreamingComputer.writeStream;
+import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 
+import java.io.InputStream;
+
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Parameter;
+import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.main.Streamed;
-import com.mikosik.stork.main.StreamingComputer;
 import com.mikosik.stork.tool.comp.Computer;
 import com.mikosik.stork.tool.link.Linker;
 
@@ -33,7 +31,7 @@ public class Program {
     return new Program(main, modules);
   }
 
-  public void run() {
+  public InputStream run() {
     Linker linker = noncolliding(defaultLinker());
     Module linkedModule = linker.link(modules);
     Computer computer = computer()
@@ -42,24 +40,31 @@ public class Program {
         .substituting()
         .stacking()
         .interruptible()
-        .wire(StreamingComputer::streaming);
+        .wire(StreamingComputer::streaming)
+        .wire(WritingComputer::writing);
 
-    Parameter x = parameter("x");
-    Expression identity = lambda(x, x);
+    return new InputStream() {
+      boolean closed;
+      Computation computation = computation(
+          application(
+              variable("writeStream"),
+              variable(main)));
 
-    for (Computation computation = computation(
-        application(writeStream, variable(main)));;) {
-
-      while (!(computation.expression instanceof Streamed)) {
+      public int read() {
+        if (closed) {
+          return -1;
+        }
         computation = computer.compute(computation);
+        Argument argument = (Argument) computation.stack;
+        int oneByte = asJavaBigInteger(argument.expression).intValueExact();
+        check(-1 <= oneByte && oneByte <= 255);
+        closed = (oneByte == -1);
+        return oneByte;
       }
-      Streamed streamed = (Streamed) computation.expression;
-      if (streamed.oneByte == -1) {
-        break;
+
+      public void close() {
+        closed = true;
       }
-      System.out.write(streamed.oneByte);
-      System.out.flush();
-      computation = computation(identity, computation.stack);
-    }
+    };
   }
 }
