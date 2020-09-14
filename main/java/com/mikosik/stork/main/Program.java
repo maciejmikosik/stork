@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.common.Computations.isComputable;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
@@ -14,7 +13,6 @@ import java.io.InputStream;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
@@ -42,7 +40,8 @@ public class Program {
         .substituting()
         .stacking()
         .interruptible()
-        .wire(StreamingComputer::streaming);
+        .wire(StreamingComputer::streaming)
+        .wire(WritingComputer::writing);
 
     return new InputStream() {
       boolean closed;
@@ -55,10 +54,7 @@ public class Program {
         if (closed) {
           return -1;
         }
-        do {
-          computation = computer.compute(computation);
-        } while (!hasWrittenByte(computation));
-
+        computation = computer.compute(computation);
         Argument argument = (Argument) computation.stack;
         int oneByte = asJavaBigInteger(argument.expression).intValueExact();
         check(-1 <= oneByte && oneByte <= 255);
@@ -70,11 +66,5 @@ public class Program {
         closed = true;
       }
     };
-  }
-
-  private static boolean hasWrittenByte(Computation computation) {
-    return computation.expression instanceof Variable
-        && ((Variable) computation.expression).name.equals("writeByte")
-        && !isComputable(((Argument) computation.stack).expression);
   }
 }
