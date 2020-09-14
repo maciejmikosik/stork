@@ -1,0 +1,12 @@
+
+  writeStream(stream) {
+    stream
+      ((head)(tail) {
+        writeByte(head)(writeStream(tail))
+      })
+      (writeByte(-1))
+  }
+
+  writeByte(byte)(continue) {
+    continue
+  }

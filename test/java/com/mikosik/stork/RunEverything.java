@@ -31,6 +31,7 @@ public class RunEverything {
         module("stream.stork"),
         module("integer.stork"),
         module("boolean.stork"),
+        module("program.stork"),
         module("demo.stork"));
     Program program = program("main", modules);
     InputStream input = program.run();

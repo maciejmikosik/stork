@@ -1,9 +1,11 @@
 package com.mikosik.stork.main;
 
+import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.main.StreamingComputer.writeStream;
+import static com.mikosik.stork.tool.common.Computations.isComputable;
+import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
@@ -12,6 +14,8 @@ import java.io.InputStream;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
 import com.mikosik.stork.tool.link.Linker;
@@ -42,7 +46,10 @@ public class Program {
 
     return new InputStream() {
       boolean closed;
-      Computation computation = computation(application(writeStream, variable(main)));
+      Computation computation = computation(
+          application(
+              variable("writeStream"),
+              variable(main)));
 
       public int read() {
         if (closed) {
@@ -50,18 +57,24 @@ public class Program {
         }
         do {
           computation = computer.compute(computation);
-        } while (!(computation.expression instanceof Streamed));
+        } while (!hasWrittenByte(computation));
 
-        Streamed streamed = (Streamed) computation.expression;
-        if (streamed.oneByte == -1) {
-          closed = true;
-        }
-        return streamed.oneByte;
+        Argument argument = (Argument) computation.stack;
+        int oneByte = asJavaBigInteger(argument.expression).intValueExact();
+        check(-1 <= oneByte && oneByte <= 255);
+        closed = (oneByte == -1);
+        return oneByte;
       }
 
       public void close() {
         closed = true;
       }
     };
+  }
+
+  private static boolean hasWrittenByte(Computation computation) {
+    return computation.expression instanceof Variable
+        && ((Variable) computation.expression).name.equals("writeByte")
+        && !isComputable(((Argument) computation.stack).expression);
   }
 }
