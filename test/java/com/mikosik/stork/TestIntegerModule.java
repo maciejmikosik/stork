@@ -44,6 +44,11 @@ public class TestIntegerModule {
             .add(moduleTest("moreThan(1)(0)", "false"))
             .add(moduleTest("moreThan(0)(0)", "false"))
             .add(moduleTest("moreThan(-1)(1)", "true"))
-            .add(moduleTest("moreThan(1)(-1)", "false")));
+            .add(moduleTest("moreThan(1)(-1)", "false")))
+        .add(suite("handles uncomputed arguments")
+            .add(moduleTest("add(add(1)(2))(add(3)(4))", "10"))
+            .add(moduleTest("negate(negate(5))", "5"))
+            .add(moduleTest("equal(negate(1))(negate(2))", "false"))
+            .add(moduleTest("moreThan(negate(2))(negate(3))", "false")));
   }
 }
