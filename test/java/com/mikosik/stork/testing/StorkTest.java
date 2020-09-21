@@ -3,10 +3,8 @@ package com.mikosik.stork.testing;
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Chains.map;
-import static com.mikosik.stork.common.Functions.none;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.testing.MockingComputer.mocking;
 import static com.mikosik.stork.tool.Default.compileExpression;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Expressions.print;
@@ -14,12 +12,9 @@ import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 import org.quackery.Body;
 import org.quackery.Test;
@@ -39,7 +34,6 @@ public class StorkTest implements Test {
   private String name;
   private boolean humane;
   private Chain<String> givenImportedModules = empty();
-  private Predicate<String> mockPredicate = none();
   private Chain<String> givenDefinitions = empty();
   private String whenExpression;
   private String thenReturnedExpression;
@@ -72,18 +66,6 @@ public class StorkTest implements Test {
     return copy;
   }
 
-  public StorkTest givenMocks(Predicate<String> mockPredicate) {
-    StorkTest copy = copy();
-    copy.mockPredicate = mockPredicate;
-    return copy;
-  }
-
-  public StorkTest givenMocks(String... mocks) {
-    StorkTest copy = copy();
-    copy.mockPredicate = new HashSet<>(asList(mocks))::contains;
-    return copy;
-  }
-
   public StorkTest given(String definition) {
     StorkTest copy = copy();
     copy.givenDefinitions = add(definition, givenDefinitions);
@@ -107,7 +89,6 @@ public class StorkTest implements Test {
     copy.name = name;
     copy.humane = humane;
     copy.givenImportedModules = givenImportedModules;
-    copy.mockPredicate = mockPredicate;
     copy.givenDefinitions = givenDefinitions;
     copy.whenExpression = whenExpression;
     copy.thenReturnedExpression = thenReturnedExpression;
@@ -133,7 +114,7 @@ public class StorkTest implements Test {
         .substituting()
         .stacking()
         .interruptible()
-        .wire(c -> mocking(mockPredicate, c))
+        .wire(MockingComputer::mocking)
         .wire(this::maybeHumane)
         .exhausted()
         .looping();
