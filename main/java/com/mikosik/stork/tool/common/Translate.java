@@ -2,21 +2,21 @@ package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.common.Strings.reverse;
 import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Noun.noun;
+import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Variable.variable;
 
 import java.math.BigInteger;
 
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Noun;
+import com.mikosik.stork.data.model.Integer;
 
 public class Translate {
   public static Expression asStorkBoolean(boolean bool) {
     return variable(Boolean.toString(bool));
   }
 
-  public static Expression asStorkInteger(BigInteger bigInteger) {
-    return noun(bigInteger);
+  public static Expression asStorkInteger(BigInteger value) {
+    return integer(value);
   }
 
   /**
@@ -28,14 +28,14 @@ public class Translate {
     Expression some = variable("some");
     Expression stream = variable("none");
     for (char asciiCharacter : reverse(ascii).toCharArray()) {
-      Expression integer = noun(BigInteger.valueOf(asciiCharacter));
+      Expression integer = integer(BigInteger.valueOf(asciiCharacter));
       stream = application(application(some, integer), stream);
     }
     return stream;
   }
 
   public static BigInteger asJavaBigInteger(Expression expression) {
-    Noun noun = (Noun) expression;
-    return (BigInteger) noun.object;
+    Integer integer = (Integer) expression;
+    return integer.value;
   }
 }

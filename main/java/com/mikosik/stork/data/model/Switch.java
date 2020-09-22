@@ -22,8 +22,8 @@ public class Switch {
     return ifType(Variable.class, handler);
   }
 
-  public Switch ifNoun(Handler<Noun> handler) {
-    return ifType(Noun.class, handler);
+  public Switch ifInteger(Handler<Integer> handler) {
+    return ifType(Integer.class, handler);
   }
 
   public Switch ifApplication(Handler<Application> handler) {
