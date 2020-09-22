@@ -1,5 +1,6 @@
 package com.mikosik.stork.common;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,5 +16,11 @@ public class InputOutput {
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+  }
+
+  public static byte[] readAllBytes(InputStream input) {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    pump(input, buffer);
+    return buffer.toByteArray();
   }
 }

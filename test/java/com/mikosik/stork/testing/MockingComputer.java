@@ -4,8 +4,6 @@ import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
 import static com.mikosik.stork.tool.common.Computations.isComputable;
 
-import java.util.function.Predicate;
-
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
@@ -13,21 +11,19 @@ import com.mikosik.stork.tool.comp.Computer;
 
 public class MockingComputer implements Computer {
   private final Computer nextComputer;
-  private final Predicate<String> mockPredicate;
 
-  private MockingComputer(Predicate<String> mockPredicate, Computer nextComputer) {
-    this.mockPredicate = mockPredicate;
+  private MockingComputer(Computer nextComputer) {
     this.nextComputer = nextComputer;
   }
 
-  public static Computer mocking(Predicate<String> mockPredicate, Computer nextComputer) {
-    return new MockingComputer(mockPredicate, nextComputer);
+  public static Computer mocking(Computer nextComputer) {
+    return new MockingComputer(nextComputer);
   }
 
   public Computation compute(Computation computation) {
     if (computation.expression instanceof Variable) {
       Variable variable = (Variable) computation.expression;
-      if (mockPredicate.test(variable.name)) {
+      if (variable.name.length() == 1) {
         return computation(Mock.mock(variable.name), computation.stack);
       } else {
         return nextComputer.compute(computation);
