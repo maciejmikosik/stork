@@ -2,7 +2,7 @@
   writeStream(stream) {
     stream
       ((head)(tail) {
-        writeByte(head)(writeStream(tail))
+        opArg(writeByte)(head)(writeStream(tail))
       })
       (writeByte(-1))
   }
