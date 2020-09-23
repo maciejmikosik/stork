@@ -1,74 +1,86 @@
 package com.mikosik.stork.tool.comp;
 
+import static com.mikosik.stork.data.model.Integer.integer;
+import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
-import static com.mikosik.stork.tool.common.Computations.isComputable;
 import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
-import static com.mikosik.stork.tool.common.Translate.asStorkInteger;
-import static com.mikosik.stork.tool.comp.Opcode.opcode;
+import static com.mikosik.stork.tool.comp.Operands.operands;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.math.BigInteger;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Variable;
-import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.data.model.comp.Stack;
 
 public class OpcodingComputer implements Computer {
-  private final Map<String, Expression> opcodes = opcodes();
+  private static final Variable opArg = variable("opArg");
+  private static final Variable opNegate = variable("opNegate");
+  private static final Variable opAdd = variable("opAdd");
+  private static final Variable opEqual = variable("opEqual");
+  private static final Variable opMoreThan = variable("opMoreThan");
+
   private final Computer nextComputer;
 
-  private OpcodingComputer(Computer nextComputer) {
-    this.nextComputer = nextComputer;
+  private OpcodingComputer(Computer computer) {
+    this.nextComputer = computer;
   }
 
-  public static Computer opcoding(Computer nextComputer) {
-    return new OpcodingComputer(nextComputer);
+  public static Computer opcoding(Computer computer) {
+    return new OpcodingComputer(computer);
   }
 
   public Computation compute(Computation computation) {
+    Operands operands = operands(computation.stack);
     if (computation.expression instanceof Variable) {
       Variable variable = (Variable) computation.expression;
-      return Optional
-          .ofNullable(opcodes.get(variable.name))
-          .map(opcode -> computation(opcode, computation.stack))
-          .orElseGet(() -> nextComputer.compute(computation));
-    } else if (computation.expression instanceof Opcode) {
-      Opcode opcode = (Opcode) computation.expression;
-      Argument argument = (Argument) computation.stack;
-      return isComputable(argument.expression)
-          ? computation(
-              argument.expression,
-              function(opcode, argument.stack))
-          : computation(
-              opcode.apply(argument.expression).invokeIfReady(),
-              argument.stack);
-    } else {
-      return nextComputer.compute(computation);
+      if (variable.name.equals(opArg.name)) {
+        return handleOpArg(operands);
+      } else if (variable.name.equals(opNegate.name)) {
+        return handle(operands, x -> integer(x.negate()));
+      } else if (variable.name.equals(opAdd.name)) {
+        return handle(operands, (x, y) -> integer(x.add(y)));
+      } else if (variable.name.equals(opEqual.name)) {
+        return handle(operands, (x, y) -> asStorkBoolean(x.equals(y)));
+      } else if (variable.name.equals(opMoreThan.name)) {
+        return handle(operands, (x, y) -> asStorkBoolean(y.compareTo(x) > 0));
+      }
     }
+    return nextComputer.compute(computation);
   }
 
-  // TODO make opcoding computer parametrized by opcodes
-  private Map<String, Expression> opcodes() {
-    Map<String, Expression> opcodes = new HashMap<String, Expression>();
-    opcodes.put("negate", opcode()
-        .name("opcode.negate")
-        .nArguments(1)
-        .operatorInt(number -> asStorkInteger(number.negate())));
-    opcodes.put("add", opcode()
-        .name("opcode.add")
-        .nArguments(2)
-        .operatorIntInt((a, b) -> asStorkInteger(a.add(b))));
-    opcodes.put("equal", opcode()
-        .name("opcode.equal")
-        .nArguments(2)
-        .operatorIntInt((a, b) -> asStorkBoolean(a.equals(b))));
-    opcodes.put("moreThan", opcode()
-        .name("opcode.moreThan")
-        .nArguments(2)
-        .operatorIntInt((a, b) -> asStorkBoolean(b.compareTo(a) > 0)));
-    return opcodes;
+  private Computation handleOpArg(Operands operands) {
+    Expression function = operands.next();
+    Expression argument = operands.next();
+    Stack stack = operands.stack();
+    return computation(
+        argument,
+        function(
+            function,
+            stack));
+  }
+
+  private static Computation handle(
+      Operands operands,
+      Function<BigInteger, Expression> logic) {
+    BigInteger x = operands.nextJavaBigInteger();
+    Stack stack = operands.stack();
+    return computation(
+        logic.apply(x),
+        stack);
+  }
+
+  private static Computation handle(
+      Operands operands,
+      BiFunction<BigInteger, BigInteger, Expression> logic) {
+    BigInteger x = operands.nextJavaBigInteger();
+    BigInteger y = operands.nextJavaBigInteger();
+    Stack stack = operands.stack();
+    return computation(
+        logic.apply(x, y),
+        stack);
   }
 }

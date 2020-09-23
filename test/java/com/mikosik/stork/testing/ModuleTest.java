@@ -30,6 +30,7 @@ public class ModuleTest {
 
   private static void run(String question, String answer) {
     Chain<Module> modules = map(Modules::module, chainOf(
+        "opcode.stork",
         "boolean.stork",
         "integer.stork",
         "stream.stork",

@@ -1,0 +1,32 @@
+
+  opArg(function)(argument) {
+    implementedByRuntime
+  }
+
+  opArg2(f)(x)(y) {
+    opArg
+      (opArg
+        (opReorder(f))
+        (y))
+      (x)
+  }
+
+  opReorder(f)(x)(y) {
+    f(y)(x)
+  }
+
+  opNegate(x) {
+    implementedByRuntime
+  }
+
+  opAdd(x)(y) {
+    implementedByRuntime
+  }
+
+  opEqual(x)(y) {
+    implementedByRuntime
+  }
+
+  opMoreThan(x)(y) {
+    implementedByRuntime
+  }

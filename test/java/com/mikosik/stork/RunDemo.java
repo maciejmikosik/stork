@@ -14,6 +14,7 @@ import com.mikosik.stork.main.Program;
 public class RunDemo {
   public static void main(String[] args) {
     Chain<Module> modules = chainOf(
+        module("opcode.stork"),
         module("function.stork"),
         module("stream.stork"),
         module("integer.stork"),

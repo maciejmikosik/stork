@@ -1,7 +1,11 @@
 
-  equal(x)(y) { verb }
+  equal {
+    opArg2(opEqual)
+  }
 
-  moreThan(x)(y) { verb }
+  moreThan {
+    opArg2(opMoreThan)
+  }
 
   lessThan {
     flip(moreThan)
@@ -21,9 +25,13 @@
       (atMost(max)(number))
   }
 
-  add(x)(y) { verb }
+  add {
+    opArg2(opAdd)
+  }
 
-  negate(x) { verb }
+  negate {
+    opArg(opNegate)
+  }
 
   subtract(x) {
     add(negate(x))
