@@ -88,7 +88,6 @@ public class ComputerTest implements Test {
 
     Computer computer = computer()
         .module(linkedModule)
-        .opcoding()
         .substituting()
         .stacking()
         .interruptible()

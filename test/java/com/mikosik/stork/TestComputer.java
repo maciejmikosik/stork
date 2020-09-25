@@ -28,7 +28,7 @@ public class TestComputer {
             .given("apply(f)(x) { f(x) }")
             .when("apply((x){x})(a)")
             .then("a"))
-        .add(computerTest("noun is ignored when binding")
+        .add(computerTest("integer is ignored when binding")
             .given("function(x) { x(2) }")
             .when("function(f)")
             .then("f(2)"))

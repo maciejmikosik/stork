@@ -40,7 +40,6 @@ public class Program {
         .substituting()
         .stacking()
         .interruptible()
-        .wire(StreamingComputer::streaming)
         .wire(WritingComputer::writing);
 
     return new InputStream() {

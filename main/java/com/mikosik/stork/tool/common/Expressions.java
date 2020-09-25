@@ -11,7 +11,7 @@ import com.mikosik.stork.data.model.Module;
 public class Expressions {
   public static String print(Expression expression) {
     return switchOn(expression)
-        .ifNoun(noun -> noun.object.toString())
+        .ifInteger(integer -> integer.value.toString())
         .ifVariable(variable -> variable.name)
         .ifParameter(parameter -> parameter.name)
         .ifApplication(application -> format("%s(%s)",

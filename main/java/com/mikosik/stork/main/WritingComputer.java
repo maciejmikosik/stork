@@ -1,9 +1,6 @@
 package com.mikosik.stork.main;
 
-import static com.mikosik.stork.tool.common.Computations.isComputable;
-
 import com.mikosik.stork.data.model.Variable;
-import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
 
@@ -27,7 +24,6 @@ public class WritingComputer implements Computer {
 
   private static boolean hasWrittenByte(Computation computation) {
     return computation.expression instanceof Variable
-        && ((Variable) computation.expression).name.equals("writeByte")
-        && !isComputable(((Argument) computation.stack).expression);
+        && ((Variable) computation.expression).name.equals("writeByte");
   }
 }
