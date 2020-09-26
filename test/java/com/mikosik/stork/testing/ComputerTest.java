@@ -5,22 +5,16 @@ import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.common.Computations.abort;
-import static com.mikosik.stork.tool.common.Expressions.print;
+import static com.mikosik.stork.testing.Asserter.asserter;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
-import static java.lang.String.format;
-import static java.util.Objects.deepEquals;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
 import org.quackery.Body;
 import org.quackery.Test;
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
@@ -95,27 +89,7 @@ public class ComputerTest implements Test {
         .exhausted()
         .looping();
 
-    String computedWhenCode = compute(whenCode, computer);
-    String computedThenCode = compute(thenCode, computer);
-
-    if (!deepEquals(computedWhenCode, computedThenCode)) {
-      throw new AssertException(format(""
-          + "expected that expression\n"
-          + "  %s\n"
-          + "is equal to\n"
-          + "  %s\n"
-          + "which computes to\n"
-          + "  %s\n"
-          + "but expression computed to\n"
-          + "  %s\n",
-          whenCode,
-          thenCode,
-          computedThenCode,
-          computedWhenCode));
-    }
-  }
-
-  private static String compute(String code, Computer computer) {
-    return print(abort(computer.compute(computation(compileExpression(code)))));
+    asserter(computer)
+        .assertEqual(whenCode, thenCode);
   }
 }
