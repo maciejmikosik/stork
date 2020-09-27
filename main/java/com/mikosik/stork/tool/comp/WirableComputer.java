@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.tool.Decompiler;
 
 public class WirableComputer implements Computer {
   private final Computer delegate;
@@ -43,8 +44,8 @@ public class WirableComputer implements Computer {
     return new WirableComputer(InterruptibleComputer.interruptible(delegate));
   }
 
-  public WirableComputer logging(OutputStream stream) {
-    return new WirableComputer(LoggingComputer.logging(stream, delegate));
+  public WirableComputer logging(OutputStream stream, Decompiler decompiler) {
+    return new WirableComputer(LoggingComputer.logging(stream, decompiler, delegate));
   }
 
   public WirableComputer exhausted() {
