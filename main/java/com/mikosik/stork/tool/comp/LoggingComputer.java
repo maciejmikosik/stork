@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Computations.print;
+import static com.mikosik.stork.tool.Decompiler.decompiler;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -21,7 +21,7 @@ public class LoggingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    output.println(print(computation));
+    output.println(decompiler().decompile(computation));
     return computer.compute(computation);
   }
 }

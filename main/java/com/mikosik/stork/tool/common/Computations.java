@@ -1,7 +1,6 @@
 package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Switch.switchOn;
 
@@ -37,15 +36,5 @@ public class Computations {
   public static boolean isComputable(Expression expression) {
     return expression instanceof Variable
         || expression instanceof Application;
-  }
-
-  public static String print(Computation computation) {
-    return Expressions.print(abort(mark(computation)));
-  }
-
-  private static Computation mark(Computation computation) {
-    return computation(
-        application(variable("@"), computation.expression),
-        computation.stack);
   }
 }
