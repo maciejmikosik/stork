@@ -4,7 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.UncheckedIOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public class InputOutput {
   public static void pump(InputStream input, OutputStream output) {
@@ -22,5 +25,13 @@ public class InputOutput {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     pump(input, buffer);
     return buffer.toByteArray();
+  }
+
+  public static PrintStream printStream(OutputStream output, Charset charset) {
+    try {
+      return new PrintStream(output, false, charset.name());
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

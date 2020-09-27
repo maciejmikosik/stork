@@ -2,19 +2,14 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Chains.map;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.common.Computations.abort;
-import static com.mikosik.stork.tool.common.Expressions.print;
+import static com.mikosik.stork.testing.Asserter.asserter;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
 import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 import static java.lang.String.format;
-import static java.util.Objects.deepEquals;
 import static org.quackery.Case.newCase;
 
 import org.quackery.Test;
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
@@ -49,27 +44,7 @@ public class ModuleTest {
         .exhausted()
         .looping();
 
-    String computedQuestion = compute(question, computer);
-    String computedAnswer = compute(answer, computer);
-
-    if (!deepEquals(computedQuestion, computedAnswer)) {
-      throw new AssertException(format(""
-          + "expected that expression\n"
-          + "  %s\n"
-          + "is equal to\n"
-          + "  %s\n"
-          + "which computes to\n"
-          + "  %s\n"
-          + "but expression computed to\n"
-          + "  %s\n",
-          question,
-          answer,
-          computedAnswer,
-          computedQuestion));
-    }
-  }
-
-  private static String compute(String code, Computer computer) {
-    return print(abort(computer.compute(computation(compileExpression(code)))));
+    asserter(computer)
+        .assertEqual(question, answer);
   }
 }

@@ -1,12 +1,11 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Computations.print;
-
 import java.io.OutputStream;
 import java.util.function.Function;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.tool.Decompiler;
 
 public class WirableComputer implements Computer {
   private final Computer delegate;
@@ -17,7 +16,7 @@ public class WirableComputer implements Computer {
 
   public static WirableComputer computer() {
     return new WirableComputer(computation -> {
-      throw new RuntimeException(print(computation));
+      throw new RuntimeException();
     });
   }
 
@@ -45,8 +44,8 @@ public class WirableComputer implements Computer {
     return new WirableComputer(InterruptibleComputer.interruptible(delegate));
   }
 
-  public WirableComputer logging(OutputStream stream) {
-    return new WirableComputer(LoggingComputer.logging(stream, delegate));
+  public WirableComputer logging(OutputStream stream, Decompiler decompiler) {
+    return new WirableComputer(LoggingComputer.logging(stream, decompiler, delegate));
   }
 
   public WirableComputer exhausted() {
