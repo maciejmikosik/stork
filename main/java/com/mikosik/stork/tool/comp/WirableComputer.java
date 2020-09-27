@@ -1,7 +1,5 @@
 package com.mikosik.stork.tool.comp;
 
-import static com.mikosik.stork.tool.common.Computations.print;
-
 import java.io.OutputStream;
 import java.util.function.Function;
 
@@ -17,7 +15,7 @@ public class WirableComputer implements Computer {
 
   public static WirableComputer computer() {
     return new WirableComputer(computation -> {
-      throw new RuntimeException(print(computation));
+      throw new RuntimeException();
     });
   }
 
