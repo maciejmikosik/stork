@@ -1,0 +1,94 @@
+
+  concat3(a)(b)(c) {
+    flatten(array(3)(a)(b)(c))
+  }
+
+  unsortedArray {
+    array(8)
+      (4)(8)(3)(6)(1)(7)(5)(2)
+  }
+
+  unsortedArray2 {
+    array(8)
+      (4)(8)(4)(6)(2)(8)(6)(2)
+  }
+
+
+  printIntegers(stream) {
+    stream
+      ((head)(tail){
+        concat3
+          (format(head))
+          (" ")
+          (printIntegers(tail))
+      })
+      ("")
+  }
+
+
+  insertSort(comparator)(unsorted) {
+    insertSort2(comparator)(none)(unsorted)
+  }
+
+  insertSort2(comparator)(sorted)(unsorted) {
+    unsorted
+      (insertSort3(comparator)(sorted))
+      (sorted)
+  }
+
+  insertSort3(comparator)(sorted)(unsortedHead)(unsortedTail) {
+    insertSort2
+      (comparator)
+      (insertElement(comparator)(unsortedHead)(sorted))
+      (unsortedTail)
+  }
+
+  insertElement(comparator)(element)(sorted) {
+    sorted
+      (insertElement2(comparator)(element))
+      (single(element))
+  }
+
+  insertElement2(comparator)(element)(sortedHead)(sortedTail) {
+    comparator(sortedHead)(element)
+      (prepend
+        (single(sortedHead))
+        (insertElement(comparator)(element)(sortedTail)))
+      (concat3(single(element))(single(sortedHead))(sortedTail))
+  }
+
+  quickSort(comparator)(stream) {
+    stream
+      (quickSort2(comparator))
+      (stream)
+  }
+
+  quickSort2(comparator)(head)(tail) {
+    concat3
+      (quickSort
+        (comparator)
+        (filter
+          (neg(comparator(head)))
+          (tail)))
+      (single(head))
+      (quickSort
+        (comparator)
+        (filter
+          (comparator(head))
+          (tail)))
+  }
+
+  neg(predicate)(x) {
+    not(predicate(x))
+  }
+
+  sort {
+    quickSort
+  }
+
+  main(stdin) {
+    printIntegers(
+      sort
+        (flip(moreThan))
+        (unsortedArray2))
+  }
