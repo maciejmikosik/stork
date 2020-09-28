@@ -1,5 +1,12 @@
+lang.stream.none
 lang.stream.single
 lang.stream.array
 lang.stream.append
+lang.stream.prepend
 lang.stream.each
+lang.stream.filter
 lang.stream.flatten
+lang.function.flip
+lang.boolean.not
+lang.integer.moreThan
+lang.integer.format
