@@ -6,36 +6,31 @@ import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
-import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
 
 import java.io.InputStream;
 
-import com.mikosik.stork.common.Chain;
+import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
-import com.mikosik.stork.tool.link.Linker;
 
 public class Program {
-  private final String main;
-  private final Chain<Module> modules;
+  private final Expression main;
+  private final Module module;
 
-  private Program(String main, Chain<Module> modules) {
+  private Program(Expression main, Module module) {
     this.main = main;
-    this.modules = modules;
+    this.module = module;
   }
 
-  public static Program program(String main, Chain<Module> modules) {
-    return new Program(main, modules);
+  public static Program program(Expression main, Module module) {
+    return new Program(main, module);
   }
 
   public InputStream run() {
-    Linker linker = noncolliding(defaultLinker());
-    Module linkedModule = linker.link(modules);
     Computer computer = computer()
-        .module(linkedModule)
+        .module(module)
         .opcoding()
         .substituting()
         .stacking()
@@ -47,7 +42,7 @@ public class Program {
       Computation computation = computation(
           application(
               variable("writeStream"),
-              variable(main)));
+              main));
 
       public int read() {
         if (closed) {
