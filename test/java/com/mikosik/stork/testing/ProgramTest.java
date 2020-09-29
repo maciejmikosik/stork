@@ -3,7 +3,7 @@ package com.mikosik.stork.testing;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.link.Linker.programModule;
+import static com.mikosik.stork.tool.link.Linker.coreModule;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.deepEquals;
@@ -22,7 +22,7 @@ public class ProgramTest {
   }
 
   private static void run(String main, String expectedOutput) {
-    Program program = program(compileExpression(main), programModule());
+    Program program = program(compileExpression(main), coreModule());
     byte[] allBytes = readAllBytes(program.run());
     String output = new String(allBytes, UTF_8);
 

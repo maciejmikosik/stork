@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.common.Chains.stream;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.lib.Modules.module;
 import static java.util.stream.Collectors.toList;
 
 import java.util.HashSet;
@@ -27,12 +26,6 @@ public class Linker {
         "stream.stork",
         "optional.stork",
         "function.stork")));
-  }
-
-  public static Module programModule() {
-    return link(chainOf(
-        module("program.stork"),
-        coreModule()));
   }
 
   public static Module link(Chain<Module> modules) {
