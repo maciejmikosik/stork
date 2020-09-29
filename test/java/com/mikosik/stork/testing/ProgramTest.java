@@ -5,8 +5,7 @@ import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
-import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
+import static com.mikosik.stork.tool.link.Linker.link;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.deepEquals;
@@ -19,7 +18,6 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.main.Program;
-import com.mikosik.stork.tool.link.Linker;
 
 public class ProgramTest {
   public static Test programTest(String mainUsingSingleQuotes, String expectedOutput) {
@@ -39,8 +37,7 @@ public class ProgramTest {
 
     Chain<Module> allModules = modules;
 
-    Linker linker = noncolliding(defaultLinker());
-    Module linkedModule = linker.link(allModules);
+    Module linkedModule = link(allModules);
 
     Program program = program(compileExpression(main), linkedModule);
     byte[] allBytes = readAllBytes(program.run());

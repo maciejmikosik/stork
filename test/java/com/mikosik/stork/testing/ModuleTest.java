@@ -4,8 +4,7 @@ import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.testing.Asserter.asserter;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
-import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
+import static com.mikosik.stork.tool.link.Linker.link;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 
@@ -15,7 +14,6 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.tool.comp.Computer;
-import com.mikosik.stork.tool.link.Linker;
 
 public class ModuleTest {
   public static Test moduleTest(String question, String answer) {
@@ -31,8 +29,7 @@ public class ModuleTest {
         "stream.stork",
         "optional.stork",
         "function.stork"));
-    Linker linker = noncolliding(defaultLinker());
-    Module linkedModule = linker.link(modules);
+    Module linkedModule = link(modules);
     Computer computer = computer()
         .module(linkedModule)
         .opcoding()

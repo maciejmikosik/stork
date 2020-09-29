@@ -5,15 +5,13 @@ import static com.mikosik.stork.common.InputOutput.pump;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.lib.Modules.module;
 import static com.mikosik.stork.main.Program.program;
-import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
-import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
+import static com.mikosik.stork.tool.link.Linker.link;
 
 import java.io.InputStream;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.main.Program;
-import com.mikosik.stork.tool.link.Linker;
 
 public class RunDemo {
   public static void main(String[] args) {
@@ -26,8 +24,7 @@ public class RunDemo {
         module("program.stork"),
         module("demo.stork"));
 
-    Linker linker = noncolliding(defaultLinker());
-    Module linkedModule = linker.link(modules);
+    Module linkedModule = link(modules);
 
     Program program = program(variable("main"), linkedModule);
     InputStream input = program.run();
