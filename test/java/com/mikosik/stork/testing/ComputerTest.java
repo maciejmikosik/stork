@@ -2,12 +2,10 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Asserter.asserter;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.Linker.link;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -17,7 +15,6 @@ import org.quackery.Test;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.Default;
 import com.mikosik.stork.tool.comp.Computer;
 
@@ -74,11 +71,9 @@ public class ComputerTest implements Test {
 
   private void run() {
     Chain<Definition> definitions = map(Default::compileDefinition, givenCode);
-    Chain<Module> modules = chainOf(module(definitions));
-    Module linkedModule = link(modules);
 
     Computer computer = computer()
-        .module(linkedModule)
+        .module(module(definitions))
         .substituting()
         .stacking()
         .interruptible()

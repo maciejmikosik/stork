@@ -1,11 +1,9 @@
 package com.mikosik.stork.testing;
 
-import static com.mikosik.stork.common.Chains.chainOf;
-import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.Default.compileExpression;
-import static com.mikosik.stork.tool.link.Linker.link;
+import static com.mikosik.stork.tool.link.Linker.programModule;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.deepEquals;
@@ -14,9 +12,6 @@ import static org.quackery.Case.newCase;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.lib.Modules;
 import com.mikosik.stork.main.Program;
 
 public class ProgramTest {
@@ -27,19 +22,7 @@ public class ProgramTest {
   }
 
   private static void run(String main, String expectedOutput) {
-    Chain<Module> modules = map(Modules::module, chainOf(
-        "boolean.stork",
-        "integer.stork",
-        "stream.stork",
-        "optional.stork",
-        "function.stork",
-        "program.stork"));
-
-    Chain<Module> allModules = modules;
-
-    Module linkedModule = link(allModules);
-
-    Program program = program(compileExpression(main), linkedModule);
+    Program program = program(compileExpression(main), programModule());
     byte[] allBytes = readAllBytes(program.run());
     String output = new String(allBytes, UTF_8);
 
