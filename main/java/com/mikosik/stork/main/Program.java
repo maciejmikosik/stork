@@ -1,53 +1,57 @@
 package com.mikosik.stork.main;
 
+import static com.mikosik.stork.common.Chains.chainOf;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.InputOutput.readResource;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.tool.Default.compileModule;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.comp.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.DefaultLinker.defaultLinker;
-import static com.mikosik.stork.tool.link.NoncollidingLinker.noncolliding;
+import static com.mikosik.stork.tool.link.Linker.link;
 
 import java.io.InputStream;
 
-import com.mikosik.stork.common.Chain;
+import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
-import com.mikosik.stork.tool.link.Linker;
 
 public class Program {
-  private final String main;
-  private final Chain<Module> modules;
+  private final Expression main;
+  private final Module module;
 
-  private Program(String main, Chain<Module> modules) {
+  private Program(Expression main, Module module) {
     this.main = main;
-    this.modules = modules;
+    this.module = module;
   }
 
-  public static Program program(String main, Chain<Module> modules) {
-    return new Program(main, modules);
+  public static Program program(Expression main, Module module) {
+    return new Program(main, module);
   }
 
   public InputStream run() {
-    Linker linker = noncolliding(defaultLinker());
-    Module linkedModule = linker.link(modules);
+    Module programModule = link(chainOf(
+        compileModule(readResource(Program.class, "program.stork")),
+        module));
+
     Computer computer = computer()
-        .module(linkedModule)
+        .module(programModule)
         .opcoding()
         .substituting()
         .stacking()
         .interruptible()
-        .wire(WritingComputer::writing);
+        .wire(Program::programComputer);
 
     return new InputStream() {
       boolean closed;
       Computation computation = computation(
           application(
               variable("writeStream"),
-              variable(main)));
+              main));
 
       public int read() {
         if (closed) {
@@ -63,6 +67,22 @@ public class Program {
 
       public void close() {
         closed = true;
+      }
+    };
+  }
+
+  private static Computer programComputer(Computer nextComputer) {
+    return new Computer() {
+      public Computation compute(Computation computation) {
+        do {
+          computation = nextComputer.compute(computation);
+        } while (!hasWrittenByte(computation));
+        return computation;
+      }
+
+      private boolean hasWrittenByte(Computation computation) {
+        return computation.expression instanceof Variable
+            && ((Variable) computation.expression).name.equals("writeByte");
       }
     };
   }

@@ -1,5 +1,6 @@
 package com.mikosik.stork.common;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +33,22 @@ public class InputOutput {
       return new PrintStream(output, false, charset.name());
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public static InputStream buffered(InputStream input) {
+    return new BufferedInputStream(input);
+  }
+
+  public static String readResource(Class<?> type, String name) {
+    try (InputStream input = buffered(type.getResourceAsStream(name))) {
+      StringBuilder builder = new StringBuilder();
+      while (input.available() > 0) {
+        builder.append((char) input.read());
+      }
+      return builder.toString();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
     }
   }
 }
