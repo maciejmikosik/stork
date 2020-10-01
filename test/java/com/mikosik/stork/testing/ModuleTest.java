@@ -11,24 +11,19 @@ import org.quackery.Test;
 import com.mikosik.stork.tool.comp.Computer;
 
 public class ModuleTest {
+  private static final Computer computer = computer()
+      .module(coreModule())
+      .opcoding()
+      .substituting()
+      .stacking()
+      .interruptible()
+      .wire(MockingComputer::mocking)
+      .humane()
+      .exhausted()
+      .looping();
+
   public static Test moduleTest(String question, String answer) {
     String name = format("%s = %s", question, answer);
-    return newCase(name, () -> run(question, answer));
-  }
-
-  private static void run(String question, String answer) {
-    Computer computer = computer()
-        .module(coreModule())
-        .opcoding()
-        .substituting()
-        .stacking()
-        .interruptible()
-        .wire(MockingComputer::mocking)
-        .humane()
-        .exhausted()
-        .looping();
-
-    asserter(computer)
-        .assertEqual(question, answer);
+    return newCase(name, () -> asserter(computer).assertEqual(question, answer));
   }
 }
