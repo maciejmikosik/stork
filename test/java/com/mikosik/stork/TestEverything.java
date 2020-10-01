@@ -1,12 +1,8 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.TestBooleanModule.testBooleanModule;
 import static com.mikosik.stork.TestComputer.testComputer;
-import static com.mikosik.stork.TestFunctionModule.testFunctionModule;
-import static com.mikosik.stork.TestIntegerModule.testIntegerModule;
-import static com.mikosik.stork.TestOptionalModule.testOptionalModule;
 import static com.mikosik.stork.TestProgram.testProgram;
-import static com.mikosik.stork.TestStringModule.testStringModule;
+import static com.mikosik.stork.testing.ModuleTest.testModule;
 import static org.quackery.Suite.suite;
 import static org.quackery.run.Runners.timeout;
 
@@ -17,11 +13,11 @@ public class TestEverything {
     return timeout(0.1, suite("test everything")
         .add(testComputer())
         .add(testProgram())
-        .add(suite("stork modules")
-            .add(testFunctionModule())
-            .add(testBooleanModule())
-            .add(testIntegerModule())
-            .add(testOptionalModule())
-            .add(testStringModule())));
+        .add(suite("modules")
+            .add(testModule("function.stork", "testFunction"))
+            .add(testModule("boolean.stork", "testBoolean"))
+            .add(testModule("optional.stork", "testOptional"))
+            .add(testModule("integer.stork", "testInteger"))
+            .add(testModule("stream.stork", "testStream"))));
   }
 }

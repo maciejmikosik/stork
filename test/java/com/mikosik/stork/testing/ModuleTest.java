@@ -3,7 +3,6 @@ package com.mikosik.stork.testing;
 import static com.mikosik.stork.common.Chains.stream;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.testing.Asserter.asserter;
 import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
@@ -43,11 +42,6 @@ public class ModuleTest {
       .looping();
   private static final Decompiler decompiler = mockingDecompiler();
   private static final Repository repository = repository();
-
-  public static Test moduleTest(String question, String answer) {
-    String name = format("%s = %s", question, answer);
-    return newCase(name, () -> asserter(computer).assertEqual(question, answer));
-  }
 
   public static Test testModule(String fileName, String functionName) {
     return buildTest(repository.module(fileName), functionName);
