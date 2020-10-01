@@ -165,3 +165,18 @@
   countFrom {
     generate(increment)
   }
+
+
+  testStream {
+    suite("stream.stork")
+      (suite("parsing")
+        (case(" = none")
+          ("")
+          (none))
+        (case("a = some(97)(none)")
+          ("a")
+          (some(97)(none)))
+        (case("012 = some(48)(some(49)(some(50)(none)))")
+          ("012")
+          (some(48)(some(49)(some(50)(none))))))
+  }
