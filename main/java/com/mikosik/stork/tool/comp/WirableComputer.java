@@ -25,39 +25,39 @@ public class WirableComputer implements Computer {
   }
 
   public WirableComputer module(Module module) {
-    return new WirableComputer(VariableComputer.variable(module, delegate));
+    return wire(computer -> VariableComputer.variable(module, computer));
   }
 
   public WirableComputer opcoding() {
-    return new WirableComputer(OpcodingComputer.opcoding(delegate));
+    return wire(OpcodingComputer::opcoding);
   }
 
   public WirableComputer substituting() {
-    return new WirableComputer(SubstitutingComputer.substituting(delegate));
+    return wire(SubstitutingComputer::substituting);
   }
 
   public WirableComputer stacking() {
-    return new WirableComputer(StackingComputer.stacking(delegate));
+    return wire(StackingComputer::stacking);
   }
 
   public WirableComputer interruptible() {
-    return new WirableComputer(InterruptibleComputer.interruptible(delegate));
+    return wire(InterruptibleComputer::interruptible);
   }
 
   public WirableComputer logging(OutputStream stream, Decompiler decompiler) {
-    return new WirableComputer(LoggingComputer.logging(stream, decompiler, delegate));
+    return wire(computer -> LoggingComputer.logging(stream, decompiler, computer));
   }
 
   public WirableComputer exhausted() {
-    return new WirableComputer(ExhaustedComputer.exhausted(delegate));
+    return wire(ExhaustedComputer::exhausted);
   }
 
   public WirableComputer humane() {
-    return new WirableComputer(HumaneComputer.humane(delegate));
+    return wire(HumaneComputer::humane);
   }
 
   public WirableComputer looping() {
-    return new WirableComputer(LoopingComputer.looping(delegate));
+    return wire(LoopingComputer::looping);
   }
 
   public Computation compute(Computation computation) {
