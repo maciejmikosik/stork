@@ -23,10 +23,10 @@ public class OpcodingComputer implements Computer {
   private static final Variable opEqual = variable("opEqual");
   private static final Variable opMoreThan = variable("opMoreThan");
 
-  private final Computer nextComputer;
+  private final Computer computer;
 
   private OpcodingComputer(Computer computer) {
-    this.nextComputer = computer;
+    this.computer = computer;
   }
 
   public static Computer opcoding(Computer computer) {
@@ -49,7 +49,7 @@ public class OpcodingComputer implements Computer {
         return handle(operands, (x, y) -> asStorkBoolean(y.compareTo(x) > 0));
       }
     }
-    return nextComputer.compute(computation);
+    return computer.compute(computation);
   }
 
   private Computation handleOpArg(Operands operands) {

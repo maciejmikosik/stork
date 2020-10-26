@@ -8,8 +8,8 @@ import com.mikosik.stork.tool.Decompiler;
 
 public class LoggingComputer implements Computer {
   private final PrintStream output;
-  private final Computer computer;
   private final Decompiler decompiler;
+  private final Computer computer;
 
   private LoggingComputer(PrintStream output, Decompiler decompiler, Computer computer) {
     this.output = output;

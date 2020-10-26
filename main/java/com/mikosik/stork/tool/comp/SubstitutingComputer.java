@@ -12,14 +12,14 @@ import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 
 public class SubstitutingComputer implements Computer {
-  private final Computer nextComputer;
+  private final Computer computer;
 
-  private SubstitutingComputer(Computer nextComputer) {
-    this.nextComputer = nextComputer;
+  private SubstitutingComputer(Computer computer) {
+    this.computer = computer;
   }
 
-  public static Computer substituting(Computer nextComputer) {
-    return new SubstitutingComputer(nextComputer);
+  public static Computer substituting(Computer computer) {
+    return new SubstitutingComputer(computer);
   }
 
   public Computation compute(Computation computation) {
@@ -28,7 +28,7 @@ public class SubstitutingComputer implements Computer {
             ? compute(
                 (Lambda) computation.expression,
                 (Argument) computation.stack)
-            : nextComputer.compute(computation);
+            : computer.compute(computation);
   }
 
   private Computation compute(Lambda lambda, Argument argument) {

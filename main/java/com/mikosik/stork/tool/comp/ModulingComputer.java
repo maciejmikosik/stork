@@ -13,19 +13,19 @@ import com.mikosik.stork.data.model.comp.Computation;
 
 public class ModulingComputer implements Computer {
   private final Map<String, Expression> table;
-  private final Computer nextComputer;
+  private final Computer computer;
 
-  private ModulingComputer(Map<String, Expression> table, Computer nextComputer) {
+  private ModulingComputer(Map<String, Expression> table, Computer computer) {
     this.table = table;
-    this.nextComputer = nextComputer;
+    this.computer = computer;
   }
 
-  public static Computer moduling(Module module, Computer nextComputer) {
+  public static Computer moduling(Module module, Computer computer) {
     Map<String, Expression> table = new HashMap<>();
     for (Definition definition : module.definitions) {
       table.put(definition.variable.name, definition.expression);
     }
-    return new ModulingComputer(table, nextComputer);
+    return new ModulingComputer(table, computer);
   }
 
   public Computation compute(Computation computation) {
@@ -37,6 +37,6 @@ public class ModulingComputer implements Computer {
             computation.stack);
       }
     }
-    return nextComputer.compute(computation);
+    return computer.compute(computation);
   }
 }

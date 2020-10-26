@@ -11,14 +11,14 @@ import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.comp.Computer;
 
 public class MockingComputer implements Computer {
-  private final Computer nextComputer;
+  private final Computer computer;
 
-  private MockingComputer(Computer nextComputer) {
-    this.nextComputer = nextComputer;
+  private MockingComputer(Computer computer) {
+    this.computer = computer;
   }
 
-  public static Computer mocking(Computer nextComputer) {
-    return new MockingComputer(nextComputer);
+  public static Computer mocking(Computer computer) {
+    return new MockingComputer(computer);
   }
 
   public Computation compute(Computation computation) {
@@ -27,7 +27,7 @@ public class MockingComputer implements Computer {
       if (variable.name.length() == 1) {
         return computation(Mock.mock(variable.name), computation.stack);
       } else {
-        return nextComputer.compute(computation);
+        return computer.compute(computation);
       }
     } else if (computation.expression instanceof Mock
         && computation.stack instanceof Argument) {
@@ -43,7 +43,7 @@ public class MockingComputer implements Computer {
             argument.stack);
       }
     } else {
-      return nextComputer.compute(computation);
+      return computer.compute(computation);
     }
   }
 
