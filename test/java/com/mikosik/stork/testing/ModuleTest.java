@@ -31,7 +31,7 @@ import com.mikosik.stork.tool.link.Repository;
 
 public class ModuleTest {
   private static final Computer computer = computer()
-      .module(coreModule())
+      .moduling(coreModule())
       .opcoding()
       .substituting()
       .stacking()

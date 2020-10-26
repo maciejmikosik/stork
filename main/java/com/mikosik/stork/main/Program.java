@@ -39,7 +39,7 @@ public class Program {
         module));
 
     Computer computer = computer()
-        .module(programModule)
+        .moduling(programModule)
         .opcoding()
         .substituting()
         .stacking()

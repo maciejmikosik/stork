@@ -73,7 +73,7 @@ public class ComputerTest implements Test {
     Chain<Definition> definitions = map(Default::compileDefinition, givenCode);
 
     Computer computer = computer()
-        .module(module(definitions))
+        .moduling(module(definitions))
         .substituting()
         .stacking()
         .interruptible()

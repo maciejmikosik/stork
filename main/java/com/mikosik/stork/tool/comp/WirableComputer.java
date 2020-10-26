@@ -24,8 +24,8 @@ public class WirableComputer implements Computer {
     return new WirableComputer(wrapper.apply(delegate));
   }
 
-  public WirableComputer module(Module module) {
-    return wire(computer -> VariableComputer.variable(module, computer));
+  public WirableComputer moduling(Module module) {
+    return wire(computer -> ModulingComputer.moduling(module, computer));
   }
 
   public WirableComputer opcoding() {
