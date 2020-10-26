@@ -15,9 +15,7 @@ public class WirableComputer implements Computer {
   }
 
   public static WirableComputer computer() {
-    return new WirableComputer(computation -> {
-      throw new RuntimeException();
-    });
+    return new WirableComputer(computation -> computation);
   }
 
   public WirableComputer wire(Function<Computer, Computer> wrapper) {
@@ -46,10 +44,6 @@ public class WirableComputer implements Computer {
 
   public WirableComputer logging(OutputStream stream, Decompiler decompiler) {
     return wire(computer -> LoggingComputer.logging(stream, decompiler, computer));
-  }
-
-  public WirableComputer exhausted() {
-    return wire(ExhaustedComputer::exhausted);
   }
 
   public WirableComputer humane() {

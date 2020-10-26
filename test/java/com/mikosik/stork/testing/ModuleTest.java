@@ -38,7 +38,6 @@ public class ModuleTest {
       .interruptible()
       .wire(MockingComputer::mocking)
       .humane()
-      .exhausted()
       .looping();
   private static final Decompiler decompiler = mockingDecompiler();
   private static final Repository repository = repository();
