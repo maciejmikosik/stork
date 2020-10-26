@@ -2,8 +2,9 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
-import static com.mikosik.stork.tool.common.Computations.isComputable;
 
+import com.mikosik.stork.data.model.Application;
+import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
@@ -44,5 +45,10 @@ public class MockingComputer implements Computer {
     } else {
       return nextComputer.compute(computation);
     }
+  }
+
+  private static boolean isComputable(Expression expression) {
+    return expression instanceof Variable
+        || expression instanceof Application;
   }
 }

@@ -4,9 +4,7 @@ import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Switch.switchOn;
 
-import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.data.model.comp.Empty;
 
@@ -31,10 +29,5 @@ public class Computations {
             application(function.expression, computation.expression),
             function.stack))
         .elseFail();
-  }
-
-  public static boolean isComputable(Expression expression) {
-    return expression instanceof Variable
-        || expression instanceof Application;
   }
 }
