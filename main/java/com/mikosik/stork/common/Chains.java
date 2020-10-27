@@ -2,9 +2,11 @@ package com.mikosik.stork.common;
 
 import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Throwables.fail;
 
 import java.util.Iterator;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -51,5 +53,45 @@ public class Chains {
 
   public static <E> Chain<E> reverse(Chain<E> chain) {
     return addAll(chain, empty());
+  }
+
+  public static boolean isEmpty(Chain<?> chain) {
+    return chain == empty();
+  }
+
+  public static <E> E head(Chain<E> chain) {
+    return chain.visit(
+        (head, tail) -> head,
+        () -> fail(""));
+  }
+
+  public static <E> Chain<E> tail(Chain<E> chain) {
+    return chain.visit(
+        (head, tail) -> tail,
+        () -> fail(""));
+  }
+
+  public static <E> Chain<E> takeUntil(Predicate<E> separator, Chain<E> chain) {
+    Chain<E> result = empty();
+    while (!isEmpty(chain)) {
+      E head = head(chain);
+      result = add(head, result);
+      chain = tail(chain);
+      if (separator.test(head)) {
+        break;
+      }
+    }
+    return reverse(result);
+  }
+
+  public static <E> Chain<E> takeAfter(Predicate<E> separator, Chain<E> chain) {
+    while (!isEmpty(chain)) {
+      E head = head(chain);
+      chain = tail(chain);
+      if (separator.test(head)) {
+        break;
+      }
+    }
+    return chain;
   }
 }

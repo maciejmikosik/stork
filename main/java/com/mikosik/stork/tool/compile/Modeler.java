@@ -1,12 +1,20 @@
 package com.mikosik.stork.tool.compile;
 
+import static com.mikosik.stork.common.Chain.add;
+import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Chains.isEmpty;
+import static com.mikosik.stork.common.Chains.reverse;
+import static com.mikosik.stork.common.Chains.takeAfter;
+import static com.mikosik.stork.common.Chains.takeUntil;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Lambda.lambda;
+import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.data.syntax.BracketType.CURLY;
 import static com.mikosik.stork.data.syntax.Switch.switchOn;
 import static com.mikosik.stork.tool.common.Translate.asStorkStream;
 import static java.lang.String.format;
@@ -16,10 +24,28 @@ import java.math.BigInteger;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.Parameter;
+import com.mikosik.stork.data.syntax.Bracket;
 import com.mikosik.stork.data.syntax.Syntax;
 
 public class Modeler {
+  public static Module modelModule(Chain<Syntax> sentence) {
+    Chain<Definition> definitions = empty();
+    while (!isEmpty(sentence)) {
+      Chain<Syntax> subsentence = takeUntil(Modeler::isCurlyBracket, sentence);
+      Definition definition = modelDefinition(subsentence);
+      definitions = add(definition, definitions);
+      sentence = takeAfter(Modeler::isCurlyBracket, sentence);
+    }
+    return module(reverse(definitions));
+  }
+
+  private static boolean isCurlyBracket(Syntax syntax) {
+    return syntax instanceof Bracket
+        && ((Bracket) syntax).type == CURLY;
+  }
+
   public static Definition modelDefinition(Chain<Syntax> sentence) {
     return switchOn(sentence)
         .ifName((alphanumeric, tail) -> definition(
