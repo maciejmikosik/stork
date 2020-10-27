@@ -24,7 +24,15 @@ public class Modeler {
     return switchOn(sentence)
         .ifName((alphanumeric, tail) -> definition(
             variable(alphanumeric.string),
-            modelLambda(tail)))
+            modelExpression(unwrapIfParameterless(tail))))
+        .elseFail();
+  }
+
+  private static Chain<Syntax> unwrapIfParameterless(Chain<Syntax> lambdaSyntax) {
+    return switchOn(lambdaSyntax)
+        .ifRoundBracket((roundBracket, tail) -> lambdaSyntax)
+        // TODO assert that tail is empty
+        .ifCurlyBracket((curlyBracket, nothing) -> curlyBracket.sentence)
         .elseFail();
   }
 
