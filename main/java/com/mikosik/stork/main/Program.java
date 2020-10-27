@@ -39,12 +39,12 @@ public class Program {
         module));
 
     Computer computer = computer()
-        .module(programModule)
+        .moduling(programModule)
         .opcoding()
         .substituting()
         .stacking()
         .interruptible()
-        .wire(Program::programComputer);
+        .wire(Program::writingBytes);
 
     return new InputStream() {
       boolean closed;
@@ -71,11 +71,11 @@ public class Program {
     };
   }
 
-  private static Computer programComputer(Computer nextComputer) {
+  private static Computer writingBytes(Computer computer) {
     return new Computer() {
       public Computation compute(Computation computation) {
         do {
-          computation = nextComputer.compute(computation);
+          computation = computer.compute(computation);
         } while (!hasWrittenByte(computation));
         return computation;
       }

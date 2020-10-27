@@ -12,14 +12,14 @@ import com.mikosik.stork.data.model.comp.Function;
 import com.mikosik.stork.data.model.comp.Stack;
 
 public class StackingComputer implements Computer {
-  private final Computer nextComputer;
+  private final Computer computer;
 
-  private StackingComputer(Computer nextComputer) {
-    this.nextComputer = nextComputer;
+  private StackingComputer(Computer computer) {
+    this.computer = computer;
   }
 
-  public static Computer stacking(Computer nextComputer) {
-    return new StackingComputer(nextComputer);
+  public static Computer stacking(Computer computer) {
+    return new StackingComputer(computer);
   }
 
   public Computation compute(Computation computation) {
@@ -28,11 +28,11 @@ public class StackingComputer implements Computer {
     if (expression instanceof Application) {
       return compute((Application) expression, stack);
     } else if (expression instanceof Variable) {
-      return nextComputer.compute(computation);
+      return computer.compute(computation);
     } else if (stack instanceof Function) {
       return compute(expression, (Function) stack);
     } else {
-      return nextComputer.compute(computation);
+      return computer.compute(computation);
     }
   }
 

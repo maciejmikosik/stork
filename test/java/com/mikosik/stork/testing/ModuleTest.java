@@ -31,14 +31,13 @@ import com.mikosik.stork.tool.link.Repository;
 
 public class ModuleTest {
   private static final Computer computer = computer()
-      .module(coreModule())
+      .moduling(coreModule())
       .opcoding()
       .substituting()
       .stacking()
       .interruptible()
       .wire(MockingComputer::mocking)
       .humane()
-      .exhausted()
       .looping();
   private static final Decompiler decompiler = mockingDecompiler();
   private static final Repository repository = repository();

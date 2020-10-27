@@ -11,21 +11,21 @@ import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
 
-public class VariableComputer implements Computer {
+public class ModulingComputer implements Computer {
   private final Map<String, Expression> table;
-  private final Computer nextComputer;
+  private final Computer computer;
 
-  private VariableComputer(Map<String, Expression> table, Computer nextComputer) {
+  private ModulingComputer(Map<String, Expression> table, Computer computer) {
     this.table = table;
-    this.nextComputer = nextComputer;
+    this.computer = computer;
   }
 
-  public static Computer variable(Module module, Computer nextComputer) {
+  public static Computer moduling(Module module, Computer computer) {
     Map<String, Expression> table = new HashMap<>();
     for (Definition definition : module.definitions) {
       table.put(definition.variable.name, definition.expression);
     }
-    return new VariableComputer(table, nextComputer);
+    return new ModulingComputer(table, computer);
   }
 
   public Computation compute(Computation computation) {
@@ -37,6 +37,6 @@ public class VariableComputer implements Computer {
             computation.stack);
       }
     }
-    return nextComputer.compute(computation);
+    return computer.compute(computation);
   }
 }

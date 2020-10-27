@@ -3,21 +3,21 @@ package com.mikosik.stork.tool.comp;
 import com.mikosik.stork.data.model.comp.Computation;
 
 public class LoopingComputer implements Computer {
-  private final Computer nextComputer;
+  private final Computer computer;
 
-  private LoopingComputer(Computer nextComputer) {
-    this.nextComputer = nextComputer;
+  private LoopingComputer(Computer computer) {
+    this.computer = computer;
   }
 
-  public static Computer looping(Computer nextComputer) {
-    return new LoopingComputer(nextComputer);
+  public static Computer looping(Computer computer) {
+    return new LoopingComputer(computer);
   }
 
   public Computation compute(Computation computation) {
-    Computation computed = nextComputer.compute(computation);
+    Computation computed = computer.compute(computation);
     while (computed != computation) {
       computation = computed;
-      computed = nextComputer.compute(computation);
+      computed = computer.compute(computation);
     }
     return computed;
   }
