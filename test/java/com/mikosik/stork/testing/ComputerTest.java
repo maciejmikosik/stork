@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Asserter.asserter;
-import static com.mikosik.stork.tool.comp.WirableComputer.computer;
+import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -15,8 +15,8 @@ import org.quackery.Test;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.tool.Default;
-import com.mikosik.stork.tool.comp.Computer;
+import com.mikosik.stork.tool.compile.Default;
+import com.mikosik.stork.tool.compute.Computer;
 
 public class ComputerTest implements Test {
   private final String name;

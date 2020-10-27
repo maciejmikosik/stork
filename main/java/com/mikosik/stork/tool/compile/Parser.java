@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.common.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.Ascii.isDoubleQuote;

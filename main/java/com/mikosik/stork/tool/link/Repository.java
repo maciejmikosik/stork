@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.InputOutput.readResource;
-import static com.mikosik.stork.tool.Default.compileModule;
+import static com.mikosik.stork.tool.compile.Default.compileModule;
 
 import com.mikosik.stork.data.model.Module;
 

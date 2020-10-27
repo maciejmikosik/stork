@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.comp;
+package com.mikosik.stork.tool.compute;
 
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.comp.Argument.argument;

@@ -2,7 +2,7 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
 import static com.mikosik.stork.main.Program.program;
-import static com.mikosik.stork.tool.Default.compileExpression;
+import static com.mikosik.stork.tool.compile.Default.compileExpression;
 import static com.mikosik.stork.tool.link.Linker.coreModule;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;

@@ -3,7 +3,7 @@ package com.mikosik.stork.testing;
 import java.io.PrintStream;
 
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.tool.Decompiler;
+import com.mikosik.stork.tool.compile.Decompiler;
 
 public class MockingDecompiler extends Decompiler {
   protected MockingDecompiler() {}

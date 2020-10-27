@@ -1,10 +1,10 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.common.Chains.chainFrom;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.tool.Modeler.modelDefinition;
-import static com.mikosik.stork.tool.Modeler.modelExpression;
-import static com.mikosik.stork.tool.Parser.parse;
+import static com.mikosik.stork.tool.compile.Modeler.modelDefinition;
+import static com.mikosik.stork.tool.compile.Modeler.modelExpression;
+import static com.mikosik.stork.tool.compile.Parser.parse;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 

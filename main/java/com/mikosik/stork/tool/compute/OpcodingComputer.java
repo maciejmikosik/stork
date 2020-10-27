@@ -1,11 +1,11 @@
-package com.mikosik.stork.tool.comp;
+package com.mikosik.stork.tool.compute;
 
 import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
 import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
-import static com.mikosik.stork.tool.comp.Operands.operands;
+import static com.mikosik.stork.tool.compute.Operands.operands;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;

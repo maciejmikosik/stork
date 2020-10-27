@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool;
+package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;

@@ -7,7 +7,7 @@ import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
-import static com.mikosik.stork.tool.comp.WirableComputer.computer;
+import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.Linker.coreModule;
 import static com.mikosik.stork.tool.link.Repository.repository;
 import static java.lang.String.format;
@@ -24,9 +24,9 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.tool.Decompiler;
 import com.mikosik.stork.tool.common.Invocation;
-import com.mikosik.stork.tool.comp.Computer;
+import com.mikosik.stork.tool.compile.Decompiler;
+import com.mikosik.stork.tool.compute.Computer;
 import com.mikosik.stork.tool.link.Repository;
 
 public class ModuleTest {
