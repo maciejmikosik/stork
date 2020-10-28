@@ -3,14 +3,14 @@ package com.mikosik.stork.testing;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
 import static com.mikosik.stork.tool.common.Computations.abort;
-import static com.mikosik.stork.tool.compile.Default.compileExpression;
+import static com.mikosik.stork.tool.compile.Modeler.modelExpression;
+import static com.mikosik.stork.tool.compile.Parser.parse;
 import static java.lang.String.format;
 import static java.util.Objects.deepEquals;
 
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.tool.compile.Decompiler;
 import com.mikosik.stork.tool.compute.Computer;
 
 public class Asserter {
@@ -46,8 +46,11 @@ public class Asserter {
   }
 
   private String compute(String code) {
-    Decompiler decompiler = mockingDecompiler();
-    return decompiler.decompile(compute(compileExpression(code)));
+    return mockingDecompiler().decompile(compute(compile(code)));
+  }
+
+  private Expression compile(String code) {
+    return modelExpression(parse(code));
   }
 
   private Expression compute(Expression expression) {

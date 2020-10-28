@@ -7,7 +7,8 @@ import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
-import static com.mikosik.stork.tool.compile.Default.compileModule;
+import static com.mikosik.stork.tool.compile.Modeler.modelModule;
+import static com.mikosik.stork.tool.compile.Parser.parse;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.Linker.link;
 
@@ -35,7 +36,7 @@ public class Program {
 
   public InputStream run() {
     Module programModule = link(chainOf(
-        compileModule(readResource(Program.class, "program.stork")),
+        modelModule(parse(readResource(Program.class, "program.stork"))),
         module));
 
     Computer computer = computer()
