@@ -1,10 +1,10 @@
-package com.mikosik.stork.tool.comp;
+package com.mikosik.stork.tool.compute;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
 
 import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.tool.Decompiler;
+import com.mikosik.stork.tool.compile.Decompiler;
 
 public class LoggingComputer implements Computer {
   private final PrintStream output;

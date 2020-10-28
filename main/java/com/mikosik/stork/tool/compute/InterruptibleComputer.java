@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.comp;
+package com.mikosik.stork.tool.compute;
 
 import com.mikosik.stork.common.UncheckedInterruptedException;
 import com.mikosik.stork.data.model.comp.Computation;

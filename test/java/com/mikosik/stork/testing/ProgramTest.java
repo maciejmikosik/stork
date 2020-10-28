@@ -2,7 +2,8 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
 import static com.mikosik.stork.main.Program.program;
-import static com.mikosik.stork.tool.Default.compileExpression;
+import static com.mikosik.stork.tool.compile.Modeler.modelExpression;
+import static com.mikosik.stork.tool.compile.Parser.parse;
 import static com.mikosik.stork.tool.link.Linker.coreModule;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -12,6 +13,7 @@ import static org.quackery.Case.newCase;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
+import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.main.Program;
 
 public class ProgramTest {
@@ -22,7 +24,7 @@ public class ProgramTest {
   }
 
   private static void run(String main, String expectedOutput) {
-    Program program = program(compileExpression(main), coreModule());
+    Program program = program(compile(main), coreModule());
     byte[] allBytes = readAllBytes(program.run());
     String output = new String(allBytes, UTF_8);
 
@@ -38,5 +40,9 @@ public class ProgramTest {
           expectedOutput,
           output));
     }
+  }
+
+  private static Expression compile(String main) {
+    return modelExpression(parse(main));
   }
 }

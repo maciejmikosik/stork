@@ -1,11 +1,11 @@
-package com.mikosik.stork.tool.comp;
+package com.mikosik.stork.tool.compute;
 
 import java.io.OutputStream;
 import java.util.function.Function;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.tool.Decompiler;
+import com.mikosik.stork.tool.compile.Decompiler;
 
 public class WirableComputer implements Computer {
   private final Computer delegate;
