@@ -1,8 +1,6 @@
 package com.mikosik.stork.testing;
 
-import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Chains.reverse;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
@@ -21,13 +19,13 @@ public class Mock implements Expression {
   }
 
   public Mock apply(Expression argument) {
-    return new Mock(name, add(argument, arguments));
+    return new Mock(name, arguments.add(argument));
   }
 
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append(name);
-    for (Expression argument : reverse(arguments)) {
+    for (Expression argument : arguments.reverse()) {
       builder.append("(").append(argument).append(")");
     }
     return builder.toString();

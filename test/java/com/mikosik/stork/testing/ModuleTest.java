@@ -1,6 +1,5 @@
 package com.mikosik.stork.testing;
 
-import static com.mikosik.stork.common.Chains.stream;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
@@ -47,7 +46,7 @@ public class ModuleTest {
   }
 
   private static Test buildTest(Module module, String functionName) {
-    Definition testDefinition = stream(module.definitions)
+    Definition testDefinition = module.definitions.stream()
         .filter(definition -> definition.variable.name.equals(functionName))
         .findFirst()
         .get();

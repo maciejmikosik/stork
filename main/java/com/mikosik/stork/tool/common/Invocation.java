@@ -1,6 +1,5 @@
 package com.mikosik.stork.tool.common;
 
-import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
 
 import com.mikosik.stork.common.Chain;
@@ -34,7 +33,7 @@ public class Invocation {
       Application application = (Application) expression;
       return asInvocation(
           application.function,
-          add(application.argument, arguments));
+          arguments.add(application.argument));
     } else if (expression instanceof Variable) {
       Variable variable = (Variable) expression;
       return invocation(variable, arguments);

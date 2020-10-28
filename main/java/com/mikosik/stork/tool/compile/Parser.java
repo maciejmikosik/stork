@@ -3,9 +3,7 @@ package com.mikosik.stork.tool.compile;
 import static com.mikosik.stork.common.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.Ascii.isWhitespace;
-import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Chains.reverse;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Reading.reading;
 import static com.mikosik.stork.data.syntax.Alphanumeric.alphanumeric;
@@ -32,18 +30,18 @@ public class Parser {
       if (isWhitespace(character)) {
         reading.read();
       } else if (isAlphanumeric(character)) {
-        sentence = add(parseAlphanumeric(reading), sentence);
+        sentence = sentence.add(parseAlphanumeric(reading));
       } else if (isDoubleQuote(character)) {
-        sentence = add(parseDoubleQuote(reading), sentence);
+        sentence = sentence.add(parseDoubleQuote(reading));
       } else if (isOpeningBracket(character)) {
-        sentence = add(parseBracket(reading), sentence);
+        sentence = sentence.add(parseBracket(reading));
       } else if (isClosingBracket(character)) {
         break;
       } else {
         throw new RuntimeException("unknown character " + character);
       }
     }
-    return reverse(sentence);
+    return sentence.reverse();
   }
 
   private static Syntax parseAlphanumeric(Reading reading) {

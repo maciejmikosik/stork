@@ -1,6 +1,6 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.common.Chains.chainOf;
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.InputOutput.pump;
 import static com.mikosik.stork.common.InputOutput.readResource;
 import static com.mikosik.stork.data.model.Variable.variable;

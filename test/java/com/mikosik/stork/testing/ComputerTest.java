@@ -1,8 +1,6 @@
 package com.mikosik.stork.testing;
 
-import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Chains.map;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.testing.Asserter.asserter;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
@@ -42,7 +40,7 @@ public class ComputerTest implements Test {
   public ComputerTest given(String code) {
     return new ComputerTest(
         name,
-        add(code, givenCode),
+        givenCode.add(code),
         whenCode,
         thenCode);
   }
@@ -70,7 +68,7 @@ public class ComputerTest implements Test {
   }
 
   private void run() {
-    Chain<Definition> definitions = map(Default::compileDefinition, givenCode);
+    Chain<Definition> definitions = givenCode.map(Default::compileDefinition);
 
     Computer computer = computer()
         .moduling(module(definitions))

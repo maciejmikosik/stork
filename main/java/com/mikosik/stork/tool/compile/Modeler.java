@@ -1,11 +1,6 @@
 package com.mikosik.stork.tool.compile;
 
-import static com.mikosik.stork.common.Chain.add;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Chains.isEmpty;
-import static com.mikosik.stork.common.Chains.reverse;
-import static com.mikosik.stork.common.Chains.takeAfter;
-import static com.mikosik.stork.common.Chains.takeUntil;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Integer.integer;
@@ -32,13 +27,13 @@ import com.mikosik.stork.data.syntax.Syntax;
 public class Modeler {
   public static Module modelModule(Chain<Syntax> sentence) {
     Chain<Definition> definitions = empty();
-    while (!isEmpty(sentence)) {
-      Chain<Syntax> subsentence = takeUntil(Modeler::isCurlyBracket, sentence);
+    while (!sentence.isEmpty()) {
+      Chain<Syntax> subsentence = sentence.until(Modeler::isCurlyBracket);
       Definition definition = modelDefinition(subsentence);
-      definitions = add(definition, definitions);
-      sentence = takeAfter(Modeler::isCurlyBracket, sentence);
+      definitions = definitions.add(definition);
+      sentence = sentence.after(Modeler::isCurlyBracket);
     }
-    return module(reverse(definitions));
+    return module(definitions.reverse());
   }
 
   private static boolean isCurlyBracket(Syntax syntax) {
