@@ -8,7 +8,7 @@ import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.Linker.coreModule;
+import static com.mikosik.stork.tool.link.CoreModule.coreModule;
 import static com.mikosik.stork.tool.link.Repository.repository;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;

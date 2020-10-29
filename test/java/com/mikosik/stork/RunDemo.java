@@ -7,7 +7,7 @@ import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
-import static com.mikosik.stork.tool.link.Linker.coreModule;
+import static com.mikosik.stork.tool.link.CoreModule.coreModule;
 import static com.mikosik.stork.tool.link.Linker.link;
 
 import java.io.InputStream;
