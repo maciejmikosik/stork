@@ -22,7 +22,7 @@ import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
 
 public class Decompiler {
-  protected Decompiler() {}
+  private Decompiler() {}
 
   public static Decompiler decompiler() {
     return new Decompiler();
@@ -36,7 +36,7 @@ public class Decompiler {
     return new String(buffer.toByteArray(), charset);
   }
 
-  protected void print(Object code, PrintStream output) {
+  private void print(Object code, PrintStream output) {
     if (code instanceof Expression) {
       print((Expression) code, output);
     } else if (code instanceof Definition) {
@@ -50,7 +50,7 @@ public class Decompiler {
     }
   }
 
-  protected void print(Expression expression, PrintStream output) {
+  private void print(Expression expression, PrintStream output) {
     if (expression instanceof Integer) {
       print((Integer) expression, output);
     } else if (expression instanceof Variable) {

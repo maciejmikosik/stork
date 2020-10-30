@@ -2,10 +2,10 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
+import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.Linker.coreModule;
 import static com.mikosik.stork.tool.link.Repository.repository;
@@ -35,10 +35,9 @@ public class ModuleTest {
       .substituting()
       .stacking()
       .interruptible()
-      .wire(MockingComputer::mocking)
       .humane()
       .looping();
-  private static final Decompiler decompiler = mockingDecompiler();
+  private static final Decompiler decompiler = decompiler();
   private static final Repository repository = repository();
 
   public static Test testModule(String fileName, String functionName) {

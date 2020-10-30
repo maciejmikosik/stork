@@ -1,8 +1,8 @@
 package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
 import static com.mikosik.stork.tool.common.Computations.abort;
+import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compile.Modeler.modelExpression;
 import static com.mikosik.stork.tool.compile.Parser.parse;
 import static java.lang.String.format;
@@ -46,7 +46,7 @@ public class Asserter {
   }
 
   private String compute(String code) {
-    return mockingDecompiler().decompile(compute(compile(code)));
+    return decompiler().decompile(compute(compile(code)));
   }
 
   private Expression compile(String code) {

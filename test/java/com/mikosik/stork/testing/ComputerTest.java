@@ -76,7 +76,6 @@ public class ComputerTest implements Test {
         .substituting()
         .stacking()
         .interruptible()
-        .wire(MockingComputer::mocking)
         .looping();
 
     asserter(computer)
