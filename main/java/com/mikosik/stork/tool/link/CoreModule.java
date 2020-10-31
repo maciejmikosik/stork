@@ -17,7 +17,9 @@ public class CoreModule {
         "optional.stork",
         "function.stork");
     Repository repository = repository();
-    Linker linker = linker().unique();
+    Linker linker = linker()
+        .unique()
+        .coherent();
     return linker.link(moduleNames.map(repository::module));
   }
 }

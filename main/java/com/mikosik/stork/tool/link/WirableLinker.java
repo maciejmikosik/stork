@@ -26,6 +26,10 @@ public class WirableLinker implements Linker {
     return wire(UniqueLinker::unique);
   }
 
+  public WirableLinker coherent() {
+    return wire(CoherentLinker::coherent);
+  }
+
   public Module link(Chain<Module> modules) {
     return linker.link(modules);
   }

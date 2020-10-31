@@ -36,7 +36,9 @@ public class Program {
   }
 
   public InputStream run() {
-    Linker linker = linker().unique();
+    Linker linker = linker()
+        .unique()
+        .coherent();
     Module programModule = linker.link(chainOf(
         modelModule(parse(readResource(Program.class, "program.stork"))),
         module));

@@ -30,3 +30,7 @@
   opMoreThan(x)(y) {
     implementedByRuntime
   }
+
+  implementedByRuntime {
+    implementedByRuntime
+  }

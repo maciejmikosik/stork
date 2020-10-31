@@ -18,7 +18,9 @@ import com.mikosik.stork.tool.link.Linker;
 
 public class RunDemo {
   public static void main(String[] args) {
-    Linker linker = linker().unique();
+    Linker linker = linker()
+        .unique()
+        .coherent();
     Module module = linker.link(chainOf(
         modelModule(parse(readResource(RunDemo.class, "demo.stork"))),
         coreModule()));
