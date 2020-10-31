@@ -1,6 +1,9 @@
 package com.mikosik.stork.common;
 
 public class Ascii {
+  public static char SINGLE_QUOTE = '\'';
+  public static char DOUBLE_QUOTE = '\"';
+
   public static boolean isLetter(char character) {
     return 'a' <= character && character <= 'z'
         || 'A' <= character && character <= 'Z';
