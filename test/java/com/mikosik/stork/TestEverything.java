@@ -15,11 +15,11 @@ public class TestEverything {
         .add(testComputer())
         .add(testProgram())
         .add(suite("modules")
+            .add(testModule("literals.test.stork"))
             .add(testModule("function.test.stork"))
             .add(testModule("boolean.test.stork"))
             .add(testModule("optional.test.stork"))
-            .add(testModule("integer.test.stork"))
-            .add(testModule("stream.test.stork"))));
+            .add(testModule("integer.test.stork"))));
   }
 
   private static Test testComputer() {
