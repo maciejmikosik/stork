@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.tool.link.Linker.link;
 import static com.mikosik.stork.tool.link.Repository.repository;
+import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
@@ -17,6 +17,7 @@ public class CoreModule {
         "optional.stork",
         "function.stork");
     Repository repository = repository();
-    return link(moduleNames.map(repository::module));
+    Linker linker = linker().unique();
+    return linker.link(moduleNames.map(repository::module));
   }
 }

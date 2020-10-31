@@ -8,16 +8,18 @@ import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
 import static com.mikosik.stork.tool.link.CoreModule.coreModule;
-import static com.mikosik.stork.tool.link.Linker.link;
+import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import java.io.InputStream;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.main.Program;
+import com.mikosik.stork.tool.link.Linker;
 
 public class RunDemo {
   public static void main(String[] args) {
-    Module module = link(chainOf(
+    Linker linker = linker().unique();
+    Module module = linker.link(chainOf(
         modelModule(parse(readResource(RunDemo.class, "demo.stork"))),
         coreModule()));
     Program program = program(variable("main"), module);
