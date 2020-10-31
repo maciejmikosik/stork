@@ -50,6 +50,10 @@ public class WirableComputer implements Computer {
     return wire(HumaneComputer::humane);
   }
 
+  public WirableComputer progressing() {
+    return wire(ProgressingComputer::progressing);
+  }
+
   public WirableComputer looping() {
     return wire(LoopingComputer::looping);
   }

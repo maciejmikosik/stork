@@ -49,6 +49,7 @@ public class Program {
         .substituting()
         .stacking()
         .interruptible()
+        .progressing()
         .wire(Program::writingBytes);
 
     return new InputStream() {
