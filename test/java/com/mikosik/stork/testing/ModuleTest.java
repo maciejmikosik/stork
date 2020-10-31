@@ -1,6 +1,7 @@
 package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
@@ -20,6 +21,7 @@ import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
@@ -49,7 +51,7 @@ public class ModuleTest {
 
   private static Test buildTest(Expression expression) {
     Invocation invocation = asInvocation(expression);
-    if (invocation.function.name.equals("case")) {
+    if (invocation.function.name.startsWith("case")) {
       return buildCase(invocation);
     } else if (invocation.function.name.equals("suite")) {
       return buildSuite(invocation);
@@ -68,22 +70,24 @@ public class ModuleTest {
   }
 
   private static Test buildCase(Invocation invocation) {
-    Iterator<Expression> iterator = invocation.arguments.iterator();
-    Expression first = iterator.next();
-    Expression second = iterator.next();
-    if (!iterator.hasNext()) {
-      return buildCase(first, second);
-    }
-    Expression third = iterator.next();
-    check(!iterator.hasNext());
-    return rename(asJavaString(first), buildCase(second, third));
+    return invocation.function.name.equals("case")
+        ? buildCase(invocation.arguments)
+        : invocation.function.name.equals("caseNamed")
+            ? rename(
+                asJavaString(invocation.arguments.head()),
+                buildCase(invocation.arguments.tail()))
+            : fail("");
   }
 
   private static Test rename(String name, Test test) {
     return traverseNames(test, oldName -> name);
   }
 
-  private static Test buildCase(Expression question, Expression answer) {
+  private static Test buildCase(Chain<Expression> arguments) {
+    check(arguments.tail().tail().isEmpty());
+    Expression question = arguments.head();
+    Expression answer = arguments.tail().head();
+
     String questionCode = decompiler.decompile(question);
     String answerCode = decompiler.decompile(answer);
     return newCase(format("%s = %s", questionCode, answerCode), () -> {
