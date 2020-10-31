@@ -1,11 +1,12 @@
 package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.testing.MockingDecompiler.mockingDecompiler;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
+import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.Linker.coreModule;
 import static com.mikosik.stork.tool.link.Repository.repository;
@@ -20,7 +21,7 @@ import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.data.model.Definition;
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
@@ -35,27 +36,22 @@ public class ModuleTest {
       .substituting()
       .stacking()
       .interruptible()
-      .wire(MockingComputer::mocking)
       .humane()
       .looping();
-  private static final Decompiler decompiler = mockingDecompiler();
+  private static final Decompiler decompiler = decompiler();
   private static final Repository repository = repository();
 
-  public static Test testModule(String fileName, String functionName) {
-    return buildTest(repository.module(fileName), functionName);
-  }
-
-  private static Test buildTest(Module module, String functionName) {
-    Definition testDefinition = module.definitions.stream()
-        .filter(definition -> definition.variable.name.equals(functionName))
-        .findFirst()
-        .get();
-    return buildTest(testDefinition.expression);
+  public static Test testModule(String fileName) {
+    Module module = repository.module(fileName);
+    return suite(fileName)
+        .addAll(module.definitions
+            .map(definition -> definition.expression)
+            .map(ModuleTest::buildTest));
   }
 
   private static Test buildTest(Expression expression) {
     Invocation invocation = asInvocation(expression);
-    if (invocation.function.name.equals("case")) {
+    if (invocation.function.name.startsWith("case")) {
       return buildCase(invocation);
     } else if (invocation.function.name.equals("suite")) {
       return buildSuite(invocation);
@@ -74,22 +70,24 @@ public class ModuleTest {
   }
 
   private static Test buildCase(Invocation invocation) {
-    Iterator<Expression> iterator = invocation.arguments.iterator();
-    Expression first = iterator.next();
-    Expression second = iterator.next();
-    if (!iterator.hasNext()) {
-      return buildCase(first, second);
-    }
-    Expression third = iterator.next();
-    check(!iterator.hasNext());
-    return rename(asJavaString(first), buildCase(second, third));
+    return invocation.function.name.equals("case")
+        ? buildCase(invocation.arguments)
+        : invocation.function.name.equals("caseNamed")
+            ? rename(
+                asJavaString(invocation.arguments.head()),
+                buildCase(invocation.arguments.tail()))
+            : fail("");
   }
 
   private static Test rename(String name, Test test) {
     return traverseNames(test, oldName -> name);
   }
 
-  private static Test buildCase(Expression question, Expression answer) {
+  private static Test buildCase(Chain<Expression> arguments) {
+    check(arguments.tail().tail().isEmpty());
+    Expression question = arguments.head();
+    Expression answer = arguments.tail().head();
+
     String questionCode = decompiler.decompile(question);
     String answerCode = decompiler.decompile(answer);
     return newCase(format("%s = %s", questionCode, answerCode), () -> {

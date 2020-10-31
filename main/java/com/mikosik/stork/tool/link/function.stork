@@ -10,32 +10,3 @@
   flip(f)(x)(y) {
     f(y)(x)
   }
-
-
-  testFunction {
-    suite("function")
-      (suite("self")
-        (case
-          (self(x))
-          (x)))
-      (suite("compose")
-        (case
-          (compose(f)(g)(x))
-          (f(g(x))))
-        (case
-          (compose(f)(compose(g)(h))(x))
-          (f(g(h(x)))))
-        (case
-          (compose(compose(f)(g))(h)(x))
-          (f(g(h(x)))))
-        (case
-          (compose(compose(f)(g))(compose(h)(i))(x))
-          (f(g(h(i(x)))))))
-      (suite("flip")
-        (case
-          (flip(f)(x)(y))
-          (f(y)(x)))
-        (case
-          (flip(f)(x)(y)(z))
-          (f(y)(x)(z))))
-  }

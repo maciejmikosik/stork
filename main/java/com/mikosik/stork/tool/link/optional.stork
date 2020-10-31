@@ -14,14 +14,3 @@
       (self)
       (default)
   }
-
-
-  testOptional {
-    suite("optional")
-      (suite("present/absent")
-        (case(present(x)(f)(g))(f(x)))
-        (case(absent(f)(g))(g)))
-      (suite("else")
-        (case(else(y)(present(x)))(x))
-        (case(else(y)(absent))(y)))
-  }
