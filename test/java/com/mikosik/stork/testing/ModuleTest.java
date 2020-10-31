@@ -20,7 +20,6 @@ import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
@@ -40,16 +39,12 @@ public class ModuleTest {
   private static final Decompiler decompiler = decompiler();
   private static final Repository repository = repository();
 
-  public static Test testModule(String fileName, String functionName) {
-    return buildTest(repository.module(fileName), functionName);
-  }
-
-  private static Test buildTest(Module module, String functionName) {
-    Definition testDefinition = module.definitions.stream()
-        .filter(definition -> definition.variable.name.equals(functionName))
-        .findFirst()
-        .get();
-    return buildTest(testDefinition.expression);
+  public static Test testModule(String fileName) {
+    Module module = repository.module(fileName);
+    return suite(fileName)
+        .addAll(module.definitions
+            .map(definition -> definition.expression)
+            .map(ModuleTest::buildTest));
   }
 
   private static Test buildTest(Expression expression) {

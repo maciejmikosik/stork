@@ -15,11 +15,11 @@ public class TestEverything {
         .add(testComputer())
         .add(testProgram())
         .add(suite("modules")
-            .add(testModule("function.stork", "testFunction"))
-            .add(testModule("boolean.stork", "testBoolean"))
-            .add(testModule("optional.stork", "testOptional"))
-            .add(testModule("integer.stork", "testInteger"))
-            .add(testModule("stream.stork", "testStream"))));
+            .add(testModule("function.test.stork"))
+            .add(testModule("boolean.test.stork"))
+            .add(testModule("optional.test.stork"))
+            .add(testModule("integer.test.stork"))
+            .add(testModule("stream.test.stork"))));
   }
 
   private static Test testComputer() {
