@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.core;
 
 import static com.mikosik.stork.common.InputOutput.readResource;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;

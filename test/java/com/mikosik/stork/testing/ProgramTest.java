@@ -4,12 +4,12 @@ import static com.mikosik.stork.common.Ascii.DOUBLE_QUOTE;
 import static com.mikosik.stork.common.Ascii.SINGLE_QUOTE;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
+import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
-import static com.mikosik.stork.tool.link.Linker.coreModule;
-import static com.mikosik.stork.tool.link.Linker.link;
+import static com.mikosik.stork.tool.link.WirableLinker.linker;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.deepEquals;
@@ -20,6 +20,7 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.main.Program;
+import com.mikosik.stork.tool.link.WirableLinker;
 
 public class ProgramTest {
   public static Test programTest(
@@ -32,7 +33,10 @@ public class ProgramTest {
   }
 
   private static void run(String mainModuleCode, String expectedOutput) {
-    Module module = link(chainOf(
+    WirableLinker linker = linker()
+        .unique()
+        .coherent();
+    Module module = linker.link(chainOf(
         coreModule(),
         modelModule(parse(mainModuleCode))));
     Program program = program(variable("main"), module);

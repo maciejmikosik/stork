@@ -10,7 +10,7 @@ import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.Linker.link;
+import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import java.io.InputStream;
 
@@ -20,6 +20,7 @@ import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Argument;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.tool.compute.Computer;
+import com.mikosik.stork.tool.link.Linker;
 
 public class Program {
   private final Expression main;
@@ -35,7 +36,10 @@ public class Program {
   }
 
   public InputStream run() {
-    Module programModule = link(chainOf(
+    Linker linker = linker()
+        .unique()
+        .coherent();
+    Module programModule = linker.link(chainOf(
         modelModule(parse(readResource(Program.class, "program.stork"))),
         module));
 
@@ -45,6 +49,7 @@ public class Program {
         .substituting()
         .stacking()
         .interruptible()
+        .progressing()
         .wire(Program::writingBytes);
 
     return new InputStream() {

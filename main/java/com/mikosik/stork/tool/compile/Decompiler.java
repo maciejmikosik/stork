@@ -17,6 +17,7 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Integer;
 import com.mikosik.stork.data.model.Lambda;
 import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.data.model.Opcode;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
@@ -55,6 +56,8 @@ public class Decompiler {
       print((Integer) expression, output);
     } else if (expression instanceof Variable) {
       print((Variable) expression, output);
+    } else if (expression instanceof Opcode) {
+      print((Opcode) expression, output);
     } else if (expression instanceof Parameter) {
       print((Parameter) expression, output);
     } else if (expression instanceof Application) {
@@ -72,6 +75,10 @@ public class Decompiler {
 
   protected void print(Variable variable, PrintStream output) {
     output.print(variable.name);
+  }
+
+  protected void print(Opcode opcode, PrintStream output) {
+    output.print(opcode.toString());
   }
 
   protected void print(Parameter parameter, PrintStream output) {
