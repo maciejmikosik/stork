@@ -2,14 +2,14 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
+import static com.mikosik.stork.core.CoreModule.coreModule;
+import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.CoreModule.coreModule;
-import static com.mikosik.stork.tool.link.Repository.repository;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -22,12 +22,12 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
+import com.mikosik.stork.core.Repository;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
 import com.mikosik.stork.tool.compile.Decompiler;
 import com.mikosik.stork.tool.compute.Computer;
-import com.mikosik.stork.tool.link.Repository;
 
 public class ModuleTest {
   private static final Computer computer = computer()

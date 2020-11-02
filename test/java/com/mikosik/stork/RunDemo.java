@@ -3,11 +3,11 @@ package com.mikosik.stork;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.InputOutput.pump;
 import static com.mikosik.stork.common.InputOutput.readResource;
+import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
-import static com.mikosik.stork.tool.link.CoreModule.coreModule;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import java.io.InputStream;

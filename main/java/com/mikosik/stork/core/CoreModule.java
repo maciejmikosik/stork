@@ -1,12 +1,13 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.core;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.tool.link.OpcodeModule.opcodeModule;
-import static com.mikosik.stork.tool.link.Repository.repository;
+import static com.mikosik.stork.core.OpcodeModule.opcodeModule;
+import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.tool.link.Linker;
 
 public class CoreModule {
   public static Module coreModule() {

@@ -1,6 +1,7 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.core;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
+import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Module.module;
@@ -8,7 +9,6 @@ import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
 import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
 import static com.mikosik.stork.tool.compute.Operands.operands;
-import static com.mikosik.stork.tool.link.Repository.repository;
 import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
@@ -47,12 +47,24 @@ public class OpcodeModule {
 
   private static Map<String, Opcode> opcodes() {
     Map<String, Opcode> map = new HashMap<String, Opcode>();
-    map.put("opArg", OpcodeModule::handleArgument);
-    map.put("opNegate", OpcodeModule::handleNegate);
-    map.put("opAdd", OpcodeModule::handleAdd);
-    map.put("opEqual", OpcodeModule::handleEqual);
-    map.put("opMoreThan", OpcodeModule::handleMoreThan);
+    map.put("opArg", named("OP_ARG", OpcodeModule::handleArgument));
+    map.put("opNegate", named("OP_NEGATE", OpcodeModule::handleNegate));
+    map.put("opAdd", named("OP_ADD", OpcodeModule::handleAdd));
+    map.put("opEqual", named("OP_EQUAL", OpcodeModule::handleEqual));
+    map.put("opMoreThan", named("OP_MORE_THAN", OpcodeModule::handleMoreThan));
     return map;
+  }
+
+  private static Opcode named(String name, Opcode opcode) {
+    return new Opcode() {
+      public Computation compute(Stack stack) {
+        return opcode.compute(stack);
+      }
+
+      public String toString() {
+        return name;
+      }
+    };
   }
 
   private static Computation handleArgument(Stack stack) {
