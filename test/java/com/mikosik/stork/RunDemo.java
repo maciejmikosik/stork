@@ -19,6 +19,7 @@ import com.mikosik.stork.tool.link.Linker;
 public class RunDemo {
   public static void main(String[] args) {
     Linker linker = linker()
+        .building()
         .unique()
         .coherent();
     Module module = linker.link(chainOf(
