@@ -12,15 +12,19 @@ import java.util.Iterator;
 
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Integer;
+import com.mikosik.stork.data.model.Variable;
 
 public class Translate {
   public static Expression asStorkBoolean(boolean bool) {
-    return variable(Boolean.toString(bool));
+    return variable("stork.boolean." + Boolean.toString(bool));
   }
 
   public static Expression asStorkInteger(BigInteger value) {
     return integer(value);
   }
+
+  private static final Variable SOME = variable("stork.stream.some");
+  private static final Variable NONE = variable("stork.stream.none");
 
   /**
    * Builds expression which is stream of integers. Each integer is unicode codepoint of consecutive
@@ -28,11 +32,10 @@ public class Translate {
    * <code>"abc"</code>, returns expression <code>some(97)(some(98)(some(99)(none)))</code>
    */
   public static Expression asStorkStream(String ascii) {
-    Expression some = variable("some");
-    Expression stream = variable("none");
+    Expression stream = NONE;
     for (char asciiCharacter : reverse(ascii).toCharArray()) {
       Expression integer = integer(BigInteger.valueOf(asciiCharacter));
-      stream = application(application(some, integer), stream);
+      stream = application(application(SOME, integer), stream);
     }
     return stream;
   }
@@ -50,13 +53,13 @@ public class Translate {
 
   private static void writeTo(ByteArrayOutputStream buffer, Expression expression) {
     Invocation invocation = asInvocation(expression);
-    if (invocation.function.name.equals("some")) {
+    if (invocation.function.name.equals(SOME.name)) {
       Iterator<Expression> iterator = invocation.arguments.iterator();
       BigInteger oneByte = asJavaBigInteger(iterator.next());
       Expression tail = iterator.next();
       buffer.write(oneByte.intValueExact());
       writeTo(buffer, tail);
-    } else if (invocation.function.name.equals("none")) {
+    } else if (invocation.function.name.equals(NONE.name)) {
       return;
     } else {
       throw new RuntimeException();

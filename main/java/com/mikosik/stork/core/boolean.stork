@@ -1,4 +1,13 @@
 
+  build {
+    module
+      (exportAs("stork.boolean.true")("true"))
+      (exportAs("stork.boolean.false")("false"))
+      (exportAs("stork.boolean.not")("not"))
+      (exportAs("stork.boolean.and")("and"))
+      (exportAs("stork.boolean.or")("or"))
+  }
+
   true(then)(else) {
     then
   }

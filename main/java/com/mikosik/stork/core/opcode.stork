@@ -1,4 +1,16 @@
 
+  build {
+    module
+      (exportAs("stork.opcode.opArg")("opArg"))
+      (exportAs("stork.opcode.opArg2")("opArg2"))
+      (exportAs("stork.opcode.opNegate")("opNegate"))
+      (exportAs("stork.opcode.opAdd")("opAdd"))
+      (exportAs("stork.opcode.opEqual")("opEqual"))
+      (exportAs("stork.opcode.opMoreThan")("opMoreThan"))
+
+      (exportAs("private.stork.opcode.opReorder")("opReorder"))
+  }
+
   opArg(function)(argument) {
     implementedByRuntime
   }

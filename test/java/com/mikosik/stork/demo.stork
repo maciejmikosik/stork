@@ -1,4 +1,13 @@
 
+  build {
+    module
+      (importAs("single")("stork.stream.single"))
+      (importAs("array")("stork.stream.array"))
+      (importAs("append")("stork.stream.append"))
+      (importAs("each")("stork.stream.each"))
+      (importAs("flatten")("stork.stream.flatten"))
+  }
+
   unlines(lines) {
     flatten(
       each

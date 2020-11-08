@@ -1,4 +1,12 @@
 
+  build {
+    module
+      (importAs("self")("stork.function.self"))
+      (importAs("compose")("stork.function.compose"))
+      (importAs("flip")("stork.function.flip"))
+      (importAs("opArg")("stork.opcode.opArg"))
+  }
+
   test {
     suite("function")
       (suite("self")

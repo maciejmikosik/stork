@@ -1,4 +1,14 @@
 
+  build {
+    module
+      (importAs("add")("stork.integer.add"))
+      (importAs("negate")("stork.integer.negate"))
+      (importAs("equal")("stork.integer.equal"))
+      (importAs("moreThan")("stork.integer.moreThan"))
+      (importAs("true")("stork.boolean.true"))
+      (importAs("false")("stork.boolean.false"))
+  }
+
   test {
     suite("integer")
       (suite("add")
