@@ -21,12 +21,17 @@ import com.mikosik.stork.data.model.Opcode;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.tool.common.Scope;
 
 public class Decompiler {
-  private Decompiler() {}
+  private final Scope scope;
 
-  public static Decompiler decompiler() {
-    return new Decompiler();
+  private Decompiler(Scope scope) {
+    this.scope = scope;
+  }
+
+  public static Decompiler decompiler(Scope scope) {
+    return new Decompiler(scope);
   }
 
   public String decompile(Object code) {
@@ -69,30 +74,30 @@ public class Decompiler {
     }
   }
 
-  protected void print(Integer integer, PrintStream output) {
+  private void print(Integer integer, PrintStream output) {
     output.print(integer.value.toString());
   }
 
-  protected void print(Variable variable, PrintStream output) {
-    output.print(variable.name);
+  private void print(Variable variable, PrintStream output) {
+    output.print(scope.format(variable));
   }
 
-  protected void print(Opcode opcode, PrintStream output) {
+  private void print(Opcode opcode, PrintStream output) {
     output.print(opcode.toString());
   }
 
-  protected void print(Parameter parameter, PrintStream output) {
+  private void print(Parameter parameter, PrintStream output) {
     output.print(parameter.name);
   }
 
-  protected void print(Application application, PrintStream output) {
+  private void print(Application application, PrintStream output) {
     print(application.function, output);
     output.print('(');
     print(application.argument, output);
     output.print(')');
   }
 
-  protected void print(Lambda lambda, PrintStream output) {
+  private void print(Lambda lambda, PrintStream output) {
     boolean isBodyALambda = lambda.body instanceof Lambda;
     output.write('(');
     print(lambda.parameter, output);
@@ -106,7 +111,7 @@ public class Decompiler {
     }
   }
 
-  protected void print(Definition definition, PrintStream output) {
+  private void print(Definition definition, PrintStream output) {
     if (definition.expression instanceof Lambda) {
       print(definition.variable, output);
       print(definition.expression, output);
@@ -118,7 +123,7 @@ public class Decompiler {
     }
   }
 
-  protected void print(Module module, PrintStream output) {
+  private void print(Module module, PrintStream output) {
     for (Definition definition : module.definitions) {
       output.print('\n');
       print(definition, output);
@@ -126,7 +131,7 @@ public class Decompiler {
     }
   }
 
-  protected void print(Computation computation, PrintStream output) {
+  private void print(Computation computation, PrintStream output) {
     print(abort(mark(computation)), output);
   }
 

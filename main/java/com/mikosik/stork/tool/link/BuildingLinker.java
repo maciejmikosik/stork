@@ -8,6 +8,7 @@ import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.Switch.switchOn;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
+import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static java.util.stream.Collectors.toList;
 
@@ -87,12 +88,8 @@ public class BuildingLinker implements Linker {
   private static Module import_(Chain<Expression> arguments, Module module) {
     Iterator<Expression> iterator = arguments.iterator();
     Variable global = variable(asJavaString(iterator.next()));
-    Variable local = variable(localize(global.name));
+    Variable local = variable(LOCAL.format(global));
     return renameTo(global, local, module);
-  }
-
-  private static String localize(String string) {
-    return string.substring(string.lastIndexOf('.') + 1);
   }
 
   private static Module renameTo(Variable replacement, Variable original, Module module) {

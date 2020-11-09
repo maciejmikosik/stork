@@ -5,9 +5,10 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.core.Repository.repository;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.common.Computations.abort;
+import static com.mikosik.stork.testing.Assertions.areEqual;
+import static com.mikosik.stork.testing.Assertions.failEqual;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
+import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
@@ -21,7 +22,6 @@ import java.util.Iterator;
 
 import org.quackery.Suite;
 import org.quackery.Test;
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.core.Repository;
@@ -29,19 +29,19 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
 import com.mikosik.stork.tool.compile.Decompiler;
-import com.mikosik.stork.tool.compute.Computer;
+import com.mikosik.stork.tool.compute.CompleteComputer;
 import com.mikosik.stork.tool.link.Linker;
 
 public class ModuleTest {
-  private static final Computer computer = computer()
+  private static final CompleteComputer computer = computer()
       .moduling(coreModule())
       .opcoding()
       .substituting()
       .stacking()
       .interruptible()
       .humane()
-      .looping();
-  private static final Decompiler decompiler = decompiler();
+      .looping()
+      .complete();
   private static final Repository repository = repository();
 
   public static Test testModule(String fileName) {
@@ -93,31 +93,23 @@ public class ModuleTest {
     check(arguments.tail().tail().isEmpty());
     Expression question = arguments.head();
     Expression answer = arguments.tail().head();
-
-    String questionCode = decompiler.decompile(question);
-    String answerCode = decompiler.decompile(answer);
-    return newCase(format("%s = %s", questionCode, answerCode), () -> {
-      String questionComputed = compute(question);
-      String answerComputed = compute(answer);
-      if (!questionComputed.equals(answerComputed)) {
-        throw new AssertException(format(""
-            + "expected that expression\n"
-            + "  %s\n"
-            + "is equal to\n"
-            + "  %s\n"
-            + "which computes to\n"
-            + "  %s\n"
-            + "but expression computed to\n"
-            + "  %s\n",
-            questionCode,
-            answerCode,
-            answerComputed,
-            questionComputed));
-      }
-    });
+    return newCase(
+        formatName(question, answer),
+        () -> run(question, answer));
   }
 
-  private static String compute(Expression expression) {
-    return decompiler.decompile(abort(computer.compute(computation(expression))));
+  private static String formatName(Expression question, Expression answer) {
+    Decompiler decompiler = decompiler(LOCAL);
+    return format("%s = %s",
+        decompiler.decompile(question),
+        decompiler.decompile(answer));
+  }
+
+  private static void run(Expression question, Expression answer) {
+    Expression questionComputed = computer.compute(question);
+    Expression answerComputed = computer.compute(answer);
+    if (!areEqual(questionComputed, answerComputed)) {
+      throw failEqual(question, answer, questionComputed, answerComputed);
+    }
   }
 }
