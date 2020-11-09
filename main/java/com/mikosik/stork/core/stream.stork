@@ -28,15 +28,15 @@
       (exportAs("private.stork.stream.array2")("array2"))
       (exportAs("private.stork.stream.array3")("array3"))
 
-      (importAs("present")("stork.optional.present"))
-      (importAs("absent")("stork.optional.absent"))
-      (importAs("add")("stork.integer.add"))
-      (importAs("moreThan")("stork.integer.moreThan"))
-      (importAs("increment")("stork.integer.increment"))
-      (importAs("decrement")("stork.integer.decrement"))
-      (importAs("flip")("stork.function.flip"))
-      (importAs("false")("stork.boolean.false"))
-      (importAs("or")("stork.boolean.or"))
+      (import("stork.optional.present"))
+      (import("stork.optional.absent"))
+      (import("stork.integer.add"))
+      (import("stork.integer.moreThan"))
+      (import("stork.integer.increment"))
+      (import("stork.integer.decrement"))
+      (import("stork.function.flip"))
+      (import("stork.boolean.false"))
+      (import("stork.boolean.or"))
   }
 
   some(head)(tail)(vSome)(vNone) {

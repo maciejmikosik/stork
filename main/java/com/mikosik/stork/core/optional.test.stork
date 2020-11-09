@@ -1,9 +1,9 @@
 
   build {
     module
-      (importAs("present")("stork.optional.present"))
-      (importAs("absent")("stork.optional.absent"))
-      (importAs("else")("stork.optional.else"))
+      (import("stork.optional.present"))
+      (import("stork.optional.absent"))
+      (import("stork.optional.else"))
   }
 
   test {

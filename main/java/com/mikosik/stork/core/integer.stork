@@ -16,15 +16,15 @@
       (exportAs("stork.integer.floor")("floor"))
       (exportAs("stork.integer.clamp")("clamp"))
 
-      (importAs("opArg")("stork.opcode.opArg"))
-      (importAs("opArg2")("stork.opcode.opArg2"))
-      (importAs("opEqual")("stork.opcode.opEqual"))
-      (importAs("opMoreThan")("stork.opcode.opMoreThan"))
-      (importAs("opAdd")("stork.opcode.opAdd"))
-      (importAs("opNegate")("stork.opcode.opNegate"))
-      (importAs("flip")("stork.function.flip"))
-      (importAs("not")("stork.boolean.not"))
-      (importAs("and")("stork.boolean.and"))
+      (import("stork.opcode.opArg"))
+      (import("stork.opcode.opArg2"))
+      (import("stork.opcode.opEqual"))
+      (import("stork.opcode.opMoreThan"))
+      (import("stork.opcode.opAdd"))
+      (import("stork.opcode.opNegate"))
+      (import("stork.function.flip"))
+      (import("stork.boolean.not"))
+      (import("stork.boolean.and"))
   }
 
   equal {

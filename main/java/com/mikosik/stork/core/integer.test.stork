@@ -1,12 +1,12 @@
 
   build {
     module
-      (importAs("add")("stork.integer.add"))
-      (importAs("negate")("stork.integer.negate"))
-      (importAs("equal")("stork.integer.equal"))
-      (importAs("moreThan")("stork.integer.moreThan"))
-      (importAs("true")("stork.boolean.true"))
-      (importAs("false")("stork.boolean.false"))
+      (import("stork.integer.add"))
+      (import("stork.integer.negate"))
+      (import("stork.integer.equal"))
+      (import("stork.integer.moreThan"))
+      (import("stork.boolean.true"))
+      (import("stork.boolean.false"))
   }
 
   test {

@@ -5,7 +5,7 @@
       (exportAs("stork.optional.absent")("absent"))
       (exportAs("stork.optional.else")("else"))
 
-      (importAs("self")("stork.function.self"))
+      (import("stork.function.self"))
   }
 
   present(element)(vPresent)(vAbsent) {

@@ -1,7 +1,7 @@
 
   build {
     module
-      (importAs("opArg")("stork.opcode.opArg"))
+      (import("stork.opcode.opArg"))
   }
 
   writeStream(stream) {

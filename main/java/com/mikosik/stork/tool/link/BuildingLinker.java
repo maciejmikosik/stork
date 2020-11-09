@@ -63,6 +63,8 @@ public class BuildingLinker implements Linker {
         return exportAs(instruction.arguments, module);
       case "importAs":
         return importAs(instruction.arguments, module);
+      case "import":
+        return import_(instruction.arguments, module);
       default:
         throw new RuntimeException(instruction.function.name);
     }
@@ -80,6 +82,17 @@ public class BuildingLinker implements Linker {
     Variable local = variable(asJavaString(iterator.next()));
     Variable global = variable(asJavaString(iterator.next()));
     return renameTo(global, local, module);
+  }
+
+  private static Module import_(Chain<Expression> arguments, Module module) {
+    Iterator<Expression> iterator = arguments.iterator();
+    Variable global = variable(asJavaString(iterator.next()));
+    Variable local = variable(localize(global.name));
+    return renameTo(global, local, module);
+  }
+
+  private static String localize(String string) {
+    return string.substring(string.lastIndexOf('.') + 1);
   }
 
   private static Module renameTo(Variable replacement, Variable original, Module module) {

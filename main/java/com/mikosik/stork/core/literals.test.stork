@@ -1,8 +1,8 @@
 
   build {
     module
-      (importAs("some")("stork.stream.some"))
-      (importAs("none")("stork.stream.none"))
+      (import("stork.stream.some"))
+      (import("stork.stream.none"))
   }
 
   string {

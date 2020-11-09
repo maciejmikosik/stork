@@ -1,10 +1,10 @@
 
   build {
     module
-      (importAs("self")("stork.function.self"))
-      (importAs("compose")("stork.function.compose"))
-      (importAs("flip")("stork.function.flip"))
-      (importAs("opArg")("stork.opcode.opArg"))
+      (import("stork.function.self"))
+      (import("stork.function.compose"))
+      (import("stork.function.flip"))
+      (import("stork.opcode.opArg"))
   }
 
   test {
