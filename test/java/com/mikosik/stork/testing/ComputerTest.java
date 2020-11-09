@@ -1,6 +1,7 @@
 package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
@@ -28,7 +29,7 @@ public class ComputerTest {
           .interruptible()
           .looping()
           .complete();
-      Decompiler decompiler = decompiler();
+      Decompiler decompiler = decompiler(GLOBAL);
 
       Expression computedWhen = computer.compute(variable("when"));
       Expression computedThen = computer.compute(variable("then"));
@@ -62,7 +63,7 @@ public class ComputerTest {
   }
 
   private static boolean areEqual(Expression first, Expression second) {
-    Decompiler decompiler = decompiler();
+    Decompiler decompiler = decompiler(GLOBAL);
     return deepEquals(
         decompiler.decompile(first),
         decompiler.decompile(second));

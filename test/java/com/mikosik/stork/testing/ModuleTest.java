@@ -6,6 +6,8 @@ import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
+import static com.mikosik.stork.tool.common.Scope.GLOBAL;
+import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
@@ -40,7 +42,8 @@ public class ModuleTest {
       .humane()
       .looping()
       .complete();
-  private static final Decompiler decompiler = decompiler();
+  private static final Decompiler decompiler = decompiler(GLOBAL);
+  private static final Decompiler localDecompiler = decompiler(LOCAL);
   private static final Repository repository = repository();
 
   public static Test testModule(String fileName) {
@@ -93,9 +96,12 @@ public class ModuleTest {
     Expression question = arguments.head();
     Expression answer = arguments.tail().head();
 
-    String questionCode = decompiler.decompile(question);
-    String answerCode = decompiler.decompile(answer);
-    return newCase(format("%s = %s", questionCode, answerCode), () -> {
+    String name = format("%s = %s",
+        localDecompiler.decompile(question),
+        localDecompiler.decompile(answer));
+    return newCase(name, () -> {
+      String questionCode = decompiler.decompile(question);
+      String answerCode = decompiler.decompile(answer);
       String questionComputed = decompiler.decompile(computer.compute(question));
       String answerComputed = decompiler.decompile(computer.compute(answer));
       if (!questionComputed.equals(answerComputed)) {

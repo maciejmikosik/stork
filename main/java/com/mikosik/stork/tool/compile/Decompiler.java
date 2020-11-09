@@ -21,12 +21,17 @@ import com.mikosik.stork.data.model.Opcode;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.tool.common.Scope;
 
 public class Decompiler {
-  private Decompiler() {}
+  private final Scope scope;
 
-  public static Decompiler decompiler() {
-    return new Decompiler();
+  private Decompiler(Scope scope) {
+    this.scope = scope;
+  }
+
+  public static Decompiler decompiler(Scope scope) {
+    return new Decompiler(scope);
   }
 
   public String decompile(Object code) {
@@ -74,7 +79,7 @@ public class Decompiler {
   }
 
   protected void print(Variable variable, PrintStream output) {
-    output.print(variable.name);
+    output.print(scope.format(variable));
   }
 
   protected void print(Opcode opcode, PrintStream output) {
