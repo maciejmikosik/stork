@@ -1,4 +1,10 @@
 
+  build {
+    module
+      (import("stork.stream.some"))
+      (import("stork.stream.none"))
+  }
+
   string {
     suite("string")
       (caseNamed(" = none")

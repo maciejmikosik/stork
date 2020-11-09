@@ -37,6 +37,7 @@ public class Program {
 
   public InputStream run() {
     Linker linker = linker()
+        .building()
         .unique()
         .coherent();
     Module programModule = linker.link(chainOf(

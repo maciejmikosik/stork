@@ -63,14 +63,25 @@ public class TestEverything {
             + " }       ",
             "abc"))
         .add(programTest("uses core function", ""
-            + " main {                       "
-            + "   append('!')('Hello World') "
-            + " }                            ",
+            + " build {                                         "
+            + "   module                                        "
+            + "     (importAs('append')('stork.stream.append')) "
+            + " }                                               "
+            + "                                                 "
+            + " main {                                          "
+            + "   append('!')('Hello World')                    "
+            + " }                                               ",
             "Hello World!"))
         .add(programTest("handles character codes", ""
-            + " main {                              "
-            + "   append(single(33))('Hello World') "
-            + " }                                   ",
+            + " build {                                         "
+            + "   module                                        "
+            + "     (importAs('append')('stork.stream.append')) "
+            + "     (importAs('single')('stork.stream.single')) "
+            + " }                                               "
+            + "                                                 "
+            + " main {                                          "
+            + "   append(single(33))('Hello World')             "
+            + " }                                               ",
             "Hello World!"));
   }
 }

@@ -1,4 +1,11 @@
 
+  build {
+    module
+      (import("stork.optional.present"))
+      (import("stork.optional.absent"))
+      (import("stork.optional.else"))
+  }
+
   test {
     suite("optional")
       (suite("present/absent")

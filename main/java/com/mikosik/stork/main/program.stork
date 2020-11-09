@@ -1,4 +1,9 @@
 
+  build {
+    module
+      (import("stork.opcode.opArg"))
+  }
+
   writeStream(stream) {
     stream
       ((head)(tail) {

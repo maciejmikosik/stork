@@ -1,4 +1,13 @@
 
+  build {
+    module
+      (import("stork.boolean.true"))
+      (import("stork.boolean.false"))
+      (import("stork.boolean.not"))
+      (import("stork.boolean.and"))
+      (import("stork.boolean.or"))
+  }
+
   test {
     suite("boolean")
       (suite("true/false")

@@ -1,5 +1,6 @@
 package com.mikosik.stork.testing;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.core.CoreModule.coreModule;
@@ -10,6 +11,7 @@ import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
+import static com.mikosik.stork.tool.link.WirableLinker.linker;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -28,6 +30,7 @@ import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
 import com.mikosik.stork.tool.compile.Decompiler;
 import com.mikosik.stork.tool.compute.Computer;
+import com.mikosik.stork.tool.link.Linker;
 
 public class ModuleTest {
   private static final Computer computer = computer()
@@ -42,7 +45,10 @@ public class ModuleTest {
   private static final Repository repository = repository();
 
   public static Test testModule(String fileName) {
-    Module module = repository.module(fileName);
+    Linker linker = linker()
+        .building()
+        .unique();
+    Module module = linker.link(chainOf(repository.module(fileName)));
     return suite(fileName)
         .addAll(module.definitions
             .map(definition -> definition.expression)

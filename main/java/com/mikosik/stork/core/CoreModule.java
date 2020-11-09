@@ -19,6 +19,7 @@ public class CoreModule {
         "function.stork");
     Repository repository = repository();
     Linker linker = linker()
+        .building()
         .unique()
         .coherent();
     Chain<Module> modules = moduleNames.map(repository::module)

@@ -34,6 +34,7 @@ public class ProgramTest {
 
   private static void run(String mainModuleCode, String expectedOutput) {
     WirableLinker linker = linker()
+        .building()
         .unique()
         .coherent();
     Module module = linker.link(chainOf(

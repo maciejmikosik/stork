@@ -22,6 +22,10 @@ public class WirableLinker implements Linker {
     return new WirableLinker(wrapper.apply(linker));
   }
 
+  public WirableLinker building() {
+    return wire(BuildingLinker::building);
+  }
+
   public WirableLinker unique() {
     return wire(UniqueLinker::unique);
   }
