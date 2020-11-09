@@ -1,0 +1,185 @@
+package lang.func {
+
+  apply(x)(f) {
+    f(x)
+  }
+  compose(f)(g)(x) {
+    f(g(x))
+  }
+  always(constant)(whatever) {
+    constant
+  }
+}
+
+# optional
+
+  then(otherOptional)(optional) {
+    optional
+      (optional)
+      (otherOptional)
+  }
+
+
+package lang.stream {
+
+  length2 {
+    reduce
+      (0)
+      (always(inc))
+  }
+
+  last {
+    reduce
+      (absent)
+      ((next)(current){ present(next) })
+  }
+
+  last2 {
+    first(reverse(stream))
+  }
+
+  reduceSome(add)(stream) {
+    stream
+      ((head)(tail) {
+        reduce(head)(add)(tail)
+      })
+      (error)
+  }
+
+  reverse {
+    reverseTo(none)
+  }
+
+  reverseTo(target)(source) {
+    source
+      ((head)(tail) {
+        reverseTo
+          (some(head)(target))
+          (tail)
+      })
+      (target)
+  }
+}
+
+package lang.tree.binary {
+
+  [ root(left)(right) ][ leaf(content) ][ stub ]
+
+  ifStub(tree)(then)(else) {
+    tree
+      ((head)(tail){ else })
+      ((content){ else })
+      (then)
+  }
+
+  isStub(tree) {
+    ifStub(true)(false)
+  }
+
+  stream(tree) {
+    tree
+      ((left)(right) {
+        prepend(stream(left))(stream(right))
+      })
+      (single)
+      (none)
+  }
+
+  size(tree) {
+    length(stream(tree))
+  }
+
+  contains(condition)(tree) {
+    lang.stream.contains(condition)(stream(tree))
+  }
+
+  merge(left)(right) {
+    ifStub(left)
+      (right)
+      (ifStub(right)
+        (left)
+        (root(left)(right))
+      )
+  }
+
+  filter(condition)(tree) {
+    tree
+      ((head)(tail) {
+        merge
+          (filter(condition)(head))
+          (filter(condition)(tail))
+      })
+      ((content) {
+        condition(content)
+          (leaf(content))
+          (stub)
+      })
+      (stub)
+  }
+
+  mirror(tree) {
+    tree
+      (flip(root))
+      (leaf)
+      (none)
+  }
+
+  true { lang.bool.true }
+  false { lang.bool.false }
+
+  some { lang.stream.some }
+  none { lang.stream.none }
+  length { lang.stream.length }
+  single { lang.stream.single }
+}
+
+package lang.tree.generic {
+
+  [ root(content)(children) ][ stub ]
+
+  depthFirst(tree) {
+    tree
+      ((content)(children) {
+        some
+          (content)
+          (flatten(each(depthFirst)(children)))
+      })
+      (none)
+  }
+
+  size(tree) {
+    tree
+      ((content)(children) {
+        inc(sum(each(size)(children)))
+      })
+      (0)
+  }
+
+  sum {
+    reduce(0)(add)
+  }
+
+  some { lang.stream.some }
+  none { lang.stream.none }
+  flatten { lang.stream.flatten }
+  reduce { lang.stream.reduce }
+
+  add { lang.math.integer.add }
+  inc { lang.math.integer.increment }
+}
+
+package lang.incubator {
+
+  applyAll(arguments)(function) {
+    arguments
+      ((firstArgument)(restArguments) {
+        applyAll(restArguments)(function(firstArgument))
+      })
+      (function)
+  }
+}
+
+#######################################
+
+
+
