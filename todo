@@ -1,0 +1,57 @@
+
+# Packaging #
+
+ - how other languages do packaging
+ - julia: https://docs.julialang.org/en/v1/manual/modules/
+
+# Parsing #
+
+ - separate functions by `\n\n` and/or `;`
+ - syntax for data with single variant
+ - syntax for declaring variants
+ - make some definitions private (array function)
+ - comments
+
+# Compiling #
+
+ - error messages
+ - line numbers
+ - evaluate compile-time constant expressions
+ - replace lambdas with parameters by SKI basis function
+ - compile to binaries?
+
+# Linking #
+
+ - check if variable are bound to lambda parameters or library definitions
+
+# Running #
+
+ - catastrophic laziness, prevent duplicated substitution of lazy expressions (memoization)
+ - command-line launcher
+ - main, stdin->stdout
+ - main, second output stream (stderr)
+ - interactive console
+
+# Exceptions #
+
+ - some library functions should throw exceptions: `skip`
+ - create assert function: `assert(boolean)(ifTrue)`
+
+# Testing #
+
+ - launch tests at compile time
+
+# Documentation #
+
+ - generate html documentation with syntax coloring
+
+# Libraries #
+
+ - implement map
+ - big decimal literal
+ - float literal
+ - string literal
+ - byte literal
+ - should integer be applicable (Church encodings)
+ - varargs tuple: `varags(3)(x)(y)(z)(f) -> f(x)(y)(z)`
+ - verbs throwing exception: `some_function { throw("not implemented") }`
