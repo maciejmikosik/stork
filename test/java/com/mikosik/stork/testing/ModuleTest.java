@@ -5,8 +5,6 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.core.Repository.repository;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
@@ -29,18 +27,19 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
 import com.mikosik.stork.tool.compile.Decompiler;
-import com.mikosik.stork.tool.compute.Computer;
+import com.mikosik.stork.tool.compute.CompleteComputer;
 import com.mikosik.stork.tool.link.Linker;
 
 public class ModuleTest {
-  private static final Computer computer = computer()
+  private static final CompleteComputer computer = computer()
       .moduling(coreModule())
       .opcoding()
       .substituting()
       .stacking()
       .interruptible()
       .humane()
-      .looping();
+      .looping()
+      .complete();
   private static final Decompiler decompiler = decompiler();
   private static final Repository repository = repository();
 
@@ -97,8 +96,8 @@ public class ModuleTest {
     String questionCode = decompiler.decompile(question);
     String answerCode = decompiler.decompile(answer);
     return newCase(format("%s = %s", questionCode, answerCode), () -> {
-      String questionComputed = compute(question);
-      String answerComputed = compute(answer);
+      String questionComputed = decompiler.decompile(computer.compute(question));
+      String answerComputed = decompiler.decompile(computer.compute(answer));
       if (!questionComputed.equals(answerComputed)) {
         throw new AssertException(format(""
             + "expected that expression\n"
@@ -115,9 +114,5 @@ public class ModuleTest {
             questionComputed));
       }
     });
-  }
-
-  private static String compute(Expression expression) {
-    return decompiler.decompile(abort(computer.compute(computation(expression))));
   }
 }

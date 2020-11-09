@@ -1,8 +1,6 @@
 package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compile.Modeler.modelModule;
 import static com.mikosik.stork.tool.compile.Parser.parse;
@@ -17,22 +15,23 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.compile.Decompiler;
-import com.mikosik.stork.tool.compute.Computer;
+import com.mikosik.stork.tool.compute.CompleteComputer;
 
 public class ComputerTest {
   public static Test computerTest(String name, String code) {
     return newCase(name, () -> {
       Module module = modelModule(parse(code));
-      Computer computer = computer()
+      CompleteComputer computer = computer()
           .moduling(module)
           .substituting()
           .stacking()
           .interruptible()
-          .looping();
+          .looping()
+          .complete();
       Decompiler decompiler = decompiler();
 
-      Expression computedWhen = compute(computer, variable("when"));
-      Expression computedThen = compute(computer, variable("then"));
+      Expression computedWhen = computer.compute(variable("when"));
+      Expression computedThen = computer.compute(variable("then"));
 
       if (!areEqual(computedWhen, computedThen)) {
         Expression when = find("when", module);
@@ -52,10 +51,6 @@ public class ComputerTest {
             decompiler.decompile(computedWhen)));
       }
     });
-  }
-
-  private static Expression compute(Computer computer, Expression expression) {
-    return abort(computer.compute(computation(expression)));
   }
 
   private static Expression find(String variableName, Module module) {
