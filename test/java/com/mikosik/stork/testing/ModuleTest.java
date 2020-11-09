@@ -5,8 +5,9 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.core.Repository.repository;
+import static com.mikosik.stork.testing.Assertions.areEqual;
+import static com.mikosik.stork.testing.Assertions.failEqual;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
-import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
@@ -21,7 +22,6 @@ import java.util.Iterator;
 
 import org.quackery.Suite;
 import org.quackery.Test;
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.core.Repository;
@@ -42,8 +42,6 @@ public class ModuleTest {
       .humane()
       .looping()
       .complete();
-  private static final Decompiler decompiler = decompiler(GLOBAL);
-  private static final Decompiler localDecompiler = decompiler(LOCAL);
   private static final Repository repository = repository();
 
   public static Test testModule(String fileName) {
@@ -95,30 +93,23 @@ public class ModuleTest {
     check(arguments.tail().tail().isEmpty());
     Expression question = arguments.head();
     Expression answer = arguments.tail().head();
+    return newCase(
+        formatName(question, answer),
+        () -> run(question, answer));
+  }
 
-    String name = format("%s = %s",
-        localDecompiler.decompile(question),
-        localDecompiler.decompile(answer));
-    return newCase(name, () -> {
-      String questionCode = decompiler.decompile(question);
-      String answerCode = decompiler.decompile(answer);
-      String questionComputed = decompiler.decompile(computer.compute(question));
-      String answerComputed = decompiler.decompile(computer.compute(answer));
-      if (!questionComputed.equals(answerComputed)) {
-        throw new AssertException(format(""
-            + "expected that expression\n"
-            + "  %s\n"
-            + "is equal to\n"
-            + "  %s\n"
-            + "which computes to\n"
-            + "  %s\n"
-            + "but expression computed to\n"
-            + "  %s\n",
-            questionCode,
-            answerCode,
-            answerComputed,
-            questionComputed));
-      }
-    });
+  private static String formatName(Expression question, Expression answer) {
+    Decompiler decompiler = decompiler(LOCAL);
+    return format("%s = %s",
+        decompiler.decompile(question),
+        decompiler.decompile(answer));
+  }
+
+  private static void run(Expression question, Expression answer) {
+    Expression questionComputed = computer.compute(question);
+    Expression answerComputed = computer.compute(answer);
+    if (!areEqual(questionComputed, answerComputed)) {
+      throw failEqual(question, answer, questionComputed, answerComputed);
+    }
   }
 }
