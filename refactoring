@@ -1,0 +1,5 @@
+
+ - separate folder for stork libraries
+ - SubstitutingComputer: lazy implementations
+ - organize Throwables
+ - rename "ceiling"
