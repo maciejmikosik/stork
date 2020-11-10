@@ -1,13 +1,8 @@
 
-  build {
-    module
-      (import("stork.opcode.opArg"))
-  }
-
   writeStream(stream) {
     stream
       ((head)(tail) {
-        opArg(writeByte)(head)(writeStream(tail))
+        eager(writeByte)(head)(writeStream(tail))
       })
       (writeByte(-1))
   }

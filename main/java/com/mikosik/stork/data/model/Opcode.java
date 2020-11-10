@@ -1,8 +1,5 @@
 package com.mikosik.stork.data.model;
 
-import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.data.model.comp.Stack;
-
-public interface Opcode extends Expression {
-  Computation compute(Stack stack);
+public enum Opcode implements Expression {
+  ARG_1, ARG_2, NEGATE, ADD, EQUAL, MORE_THAN;
 }

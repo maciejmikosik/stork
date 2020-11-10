@@ -1,7 +1,6 @@
 package com.mikosik.stork.core;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.core.OpcodeModule.opcodeModule;
 import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
@@ -20,10 +19,10 @@ public class CoreModule {
     Repository repository = repository();
     Linker linker = linker()
         .building()
+        .opcoding()
         .unique()
         .coherent();
-    Chain<Module> modules = moduleNames.map(repository::module)
-        .add(opcodeModule());
+    Chain<Module> modules = moduleNames.map(repository::module);
     return linker.link(modules);
   }
 
