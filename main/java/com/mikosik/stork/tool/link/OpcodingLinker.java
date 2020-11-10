@@ -1,7 +1,6 @@
-package com.mikosik.stork.core;
+package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
-import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Module.module;
@@ -18,6 +17,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
@@ -26,11 +26,24 @@ import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.data.model.comp.Stack;
 import com.mikosik.stork.tool.compute.Operands;
 
-public class OpcodeModule {
-  public static Module opcodeModule() {
-    Module module = repository().module("opcode.stork");
+public class OpcodingLinker implements Linker {
+  private final Linker linker;
+
+  private OpcodingLinker(Linker linker) {
+    this.linker = linker;
+  }
+
+  public static Linker opcoding(Linker linker) {
+    return new OpcodingLinker(linker);
+  }
+
+  public Module link(Chain<Module> modules) {
+    return installOpcodes(linker.link(modules));
+  }
+
+  private static Module installOpcodes(Module module) {
     List<Definition> definitions = module.definitions.stream()
-        .map(OpcodeModule::replaceByOpcodeIfDefined)
+        .map(OpcodingLinker::replaceByOpcodeIfDefined)
         .collect(toList());
     return module(chainFrom(definitions));
   }
@@ -47,11 +60,11 @@ public class OpcodeModule {
 
   private static Map<String, Opcode> opcodes() {
     Map<String, Opcode> map = new HashMap<String, Opcode>();
-    map.put("opArg", named("OP_ARG", OpcodeModule::handleArgument));
-    map.put("opNegate", named("OP_NEGATE", OpcodeModule::handleNegate));
-    map.put("opAdd", named("OP_ADD", OpcodeModule::handleAdd));
-    map.put("opEqual", named("OP_EQUAL", OpcodeModule::handleEqual));
-    map.put("opMoreThan", named("OP_MORE_THAN", OpcodeModule::handleMoreThan));
+    map.put("stork.opcode.opArg", named("OP_ARG", OpcodingLinker::handleArgument));
+    map.put("stork.opcode.opNegate", named("OP_NEGATE", OpcodingLinker::handleNegate));
+    map.put("stork.opcode.opAdd", named("OP_ADD", OpcodingLinker::handleAdd));
+    map.put("stork.opcode.opEqual", named("OP_EQUAL", OpcodingLinker::handleEqual));
+    map.put("stork.opcode.opMoreThan", named("OP_MORE_THAN", OpcodingLinker::handleMoreThan));
     return map;
   }
 
