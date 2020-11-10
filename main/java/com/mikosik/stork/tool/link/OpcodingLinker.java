@@ -1,30 +1,25 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
+import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.data.model.comp.Function.function;
-import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
-import static com.mikosik.stork.tool.compute.Operands.operands;
+import static com.mikosik.stork.data.model.Opcode.ADD;
+import static com.mikosik.stork.data.model.Opcode.ARG_1;
+import static com.mikosik.stork.data.model.Opcode.ARG_2;
+import static com.mikosik.stork.data.model.Opcode.EQUAL;
+import static com.mikosik.stork.data.model.Opcode.MORE_THAN;
+import static com.mikosik.stork.data.model.Opcode.NEGATE;
 import static java.util.stream.Collectors.toList;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Opcode;
-import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.data.model.comp.Stack;
-import com.mikosik.stork.tool.compute.Operands;
 
 public class OpcodingLinker implements Linker {
   private final Linker linker;
@@ -48,7 +43,7 @@ public class OpcodingLinker implements Linker {
     return module(chainFrom(definitions));
   }
 
-  // replace implementedByRuntime by exception
+  // replace native by exception
   private static Definition replaceByOpcodeIfDefined(Definition definition) {
     String name = definition.variable.name;
     return opcodes.containsKey(name)
@@ -56,75 +51,23 @@ public class OpcodingLinker implements Linker {
         : definition;
   }
 
-  private static final Map<String, Opcode> opcodes = opcodes();
+  private static final Map<String, Expression> opcodes = opcodes();
 
-  private static Map<String, Opcode> opcodes() {
-    Map<String, Opcode> map = new HashMap<String, Opcode>();
-    map.put("stork.opcode.opArg", named("OP_ARG", OpcodingLinker::handleArgument));
-    map.put("stork.opcode.opNegate", named("OP_NEGATE", OpcodingLinker::handleNegate));
-    map.put("stork.opcode.opAdd", named("OP_ADD", OpcodingLinker::handleAdd));
-    map.put("stork.opcode.opEqual", named("OP_EQUAL", OpcodingLinker::handleEqual));
-    map.put("stork.opcode.opMoreThan", named("OP_MORE_THAN", OpcodingLinker::handleMoreThan));
+  private static Map<String, Expression> opcodes() {
+    Map<String, Expression> map = new HashMap<>();
+    map.put("stork.opcode.opArg", ARG_1);
+    map.put("stork.integer.negate", eager(NEGATE));
+    map.put("stork.integer.add", eager2(ADD));
+    map.put("stork.integer.equal", eager2(EQUAL));
+    map.put("stork.integer.moreThan", eager2(MORE_THAN));
     return map;
   }
 
-  private static Opcode named(String name, Opcode opcode) {
-    return new Opcode() {
-      public Computation compute(Stack stack) {
-        return opcode.compute(stack);
-      }
-
-      public String toString() {
-        return name;
-      }
-    };
+  private static Expression eager(Expression script) {
+    return application(ARG_1, script);
   }
 
-  private static Computation handleArgument(Stack stack) {
-    Operands operands = operands(stack);
-    Expression function = operands.next();
-    Expression argument = operands.next();
-    Stack newStack = operands.stack();
-    return computation(
-        argument,
-        function(
-            function,
-            newStack));
-  }
-
-  private static Computation handleNegate(Stack stack) {
-    return handle(stack, x -> integer(x.negate()));
-  }
-
-  private static Computation handleAdd(Stack stack) {
-    return handle(stack, (x, y) -> integer(x.add(y)));
-  }
-
-  private static Computation handleEqual(Stack stack) {
-    return handle(stack, (x, y) -> asStorkBoolean(x.equals(y)));
-  }
-
-  private static Computation handleMoreThan(Stack stack) {
-    return handle(stack, (x, y) -> asStorkBoolean(y.compareTo(x) > 0));
-  }
-
-  private static Computation handle(
-      Stack stack,
-      Function<BigInteger, Expression> logic) {
-    Operands operands = operands(stack);
-    return computation(
-        logic.apply(operands.nextJavaBigInteger()),
-        operands.stack());
-  }
-
-  private static Computation handle(
-      Stack stack,
-      BiFunction<BigInteger, BigInteger, Expression> logic) {
-    Operands operands = operands(stack);
-    return computation(
-        logic.apply(
-            operands.nextJavaBigInteger(),
-            operands.nextJavaBigInteger()),
-        operands.stack());
+  private static Expression eager2(Expression script) {
+    return application(ARG_1, application(ARG_2, script));
   }
 }
