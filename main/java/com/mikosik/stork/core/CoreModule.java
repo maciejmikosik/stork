@@ -11,7 +11,6 @@ import com.mikosik.stork.tool.link.Linker;
 public class CoreModule {
   public static Module coreModule() {
     Chain<String> moduleNames = chainOf(
-        "opcode.stork",
         "boolean.stork",
         "integer.stork",
         "stream.stork",

@@ -1,9 +1,0 @@
-
-  build {
-    module
-      (exportAs("stork.opcode.opArg")("opArg"))
-  }
-
-  opArg(function)(argument) {
-    implementedByRuntime
-  }

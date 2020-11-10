@@ -55,7 +55,6 @@ public class OpcodingLinker implements Linker {
 
   private static Map<String, Expression> opcodes() {
     Map<String, Expression> map = new HashMap<>();
-    map.put("stork.opcode.opArg", ARG_1);
     map.put("stork.integer.negate", eager(NEGATE));
     map.put("stork.integer.add", eager2(ADD));
     map.put("stork.integer.equal", eager2(EQUAL));

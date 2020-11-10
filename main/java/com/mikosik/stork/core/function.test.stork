@@ -16,16 +16,7 @@
       (suite("compose")
         (case
           (compose(f)(g)(x))
-          (f(g(x))))
-        (case
-          (compose(opArg(f))(compose(g)(h))(x))
-          (f(g(h(x)))))
-        (case
-          (compose(compose(f)(g))(h)(x))
-          (f(g(h(x)))))
-        (case
-          (compose(compose(opArg(f))(opArg(g)))(compose(h)(i))(x))
-          (f(g(h(i(x)))))))
+          (f(g(x)))))
       (suite("flip")
         (case
           (flip(f)(x)(y))
