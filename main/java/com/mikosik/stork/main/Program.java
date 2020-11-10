@@ -4,6 +4,9 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.InputOutput.readResource;
 import static com.mikosik.stork.data.model.Application.application;
+import static com.mikosik.stork.data.model.Definition.definition;
+import static com.mikosik.stork.data.model.Module.module;
+import static com.mikosik.stork.data.model.Opcode.ARG_1;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
@@ -37,11 +40,11 @@ public class Program {
 
   public InputStream run() {
     Linker linker = linker()
-        .building()
         .unique()
         .coherent();
     Module programModule = linker.link(chainOf(
         modelModule(parse(readResource(Program.class, "program.stork"))),
+        module(chainOf(definition(variable("eager"), ARG_1))),
         module));
 
     Computer computer = computer()
