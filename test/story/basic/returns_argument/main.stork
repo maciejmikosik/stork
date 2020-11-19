@@ -1,0 +1,8 @@
+
+  identity(x) {
+    x
+  }
+
+  main {
+    identity("y")
+  }

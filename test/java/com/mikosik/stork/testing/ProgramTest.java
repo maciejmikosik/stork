@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
+import static com.mikosik.stork.common.InputOutput.tryReadAllBytes;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
@@ -64,7 +65,7 @@ public class ProgramTest {
 
     Program program = program(variable("main"), module);
     byte[] actualBytes = readAllBytes(program.run());
-    byte[] expectedBytes = readAllBytes(directory.resolve("main.out"));
+    byte[] expectedBytes = tryReadAllBytes(directory.resolve("main.out"));
     if (!Arrays.equals(actualBytes, expectedBytes)) {
       throw new AssertException(format(""
           + "expected output\n"

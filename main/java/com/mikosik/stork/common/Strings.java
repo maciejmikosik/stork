@@ -23,8 +23,4 @@ public class Strings {
         .reverse()
         .toString();
   }
-
-  public static String line(String string) {
-    return string + "\n";
-  }
 }

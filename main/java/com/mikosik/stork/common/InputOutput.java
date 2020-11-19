@@ -1,5 +1,7 @@
 package com.mikosik.stork.common;
 
+import static java.nio.file.Files.exists;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,6 +39,12 @@ public class InputOutput {
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+  }
+
+  public static byte[] tryReadAllBytes(Path file) {
+    return exists(file)
+        ? readAllBytes(file)
+        : new byte[0];
   }
 
   public static Stream<Path> list(Path directory) {
