@@ -3,18 +3,19 @@ package com.mikosik.stork;
 import static com.mikosik.stork.common.Strings.line;
 import static com.mikosik.stork.testing.ComputerTest.computerTest;
 import static com.mikosik.stork.testing.ModuleTest.testModule;
-import static com.mikosik.stork.testing.ProgramTest.programTest;
+import static com.mikosik.stork.testing.ProgramTest.testProgramsIn;
 import static org.quackery.Suite.suite;
 import static org.quackery.run.Runners.timeout;
 
-import org.quackery.Suite;
+import java.nio.file.Paths;
+
 import org.quackery.Test;
 
 public class TestEverything {
   public static Test testEverything() {
     return timeout(0.1, suite("test everything")
+        .add(testProgramsIn(Paths.get("test/story")))
         .add(testComputer())
-        .add(testProgram())
         .add(suite("modules")
             .add(testModule("literals.test.stork"))
             .add(testModule("function.test.stork"))
@@ -54,35 +55,5 @@ public class TestEverything {
             + line(" tuple(x)(y)(f) { f(x)(y) } ")
             + line(" when { tuple(y)(z)(f) }    ")
             + line(" then { f(y)(z) }           ")));
-  }
-
-  private static Suite testProgram() {
-    return suite("program")
-        .add(programTest("uses string literal", ""
-            + line(" main {  ")
-            + line("   'abc' ")
-            + line(" }       "),
-            "abc"))
-        .add(programTest("uses core function", ""
-            + line(" build {                                         ")
-            + line("   module                                        ")
-            + line("     (importAs('append')('stork.stream.append')) ")
-            + line(" }                                               ")
-            + line("                                                 ")
-            + line(" main {                                          ")
-            + line("   append('!')('Hello World')                    ")
-            + line(" }                                               "),
-            "Hello World!"))
-        .add(programTest("handles character codes", ""
-            + line(" build {                                         ")
-            + line("   module                                        ")
-            + line("     (importAs('append')('stork.stream.append')) ")
-            + line("     (importAs('single')('stork.stream.single')) ")
-            + line(" }                                               ")
-            + line("                                                 ")
-            + line(" main {                                          ")
-            + line("   append(single(33))('Hello World')             ")
-            + line(" }                                               "),
-            "Hello World!"));
   }
 }

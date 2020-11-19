@@ -9,6 +9,9 @@ import java.io.PrintStream;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class InputOutput {
   public static void pump(InputStream input, OutputStream output) {
@@ -26,6 +29,22 @@ public class InputOutput {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     pump(input, buffer);
     return buffer.toByteArray();
+  }
+
+  public static byte[] readAllBytes(Path file) {
+    try {
+      return Files.readAllBytes(file);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  public static Stream<Path> list(Path directory) {
+    try {
+      return Files.list(directory);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   public static PrintStream printStream(OutputStream output, Charset charset) {
