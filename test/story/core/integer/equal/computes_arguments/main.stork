@@ -1,0 +1,15 @@
+
+  build {
+    module
+      (import("stork.integer.equal"))
+  }
+
+  lazy(number) {
+    number
+  }
+
+  main {
+    equal(lazy(2))(lazy(3))
+      ("true")
+      ("false")
+  }

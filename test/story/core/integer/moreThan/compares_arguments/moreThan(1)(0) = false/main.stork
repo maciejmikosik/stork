@@ -1,0 +1,11 @@
+
+  build {
+    module
+      (import("stork.integer.moreThan"))
+  }
+
+  main {
+    moreThan(1)(0)
+      ("true")
+      ("false")
+  }

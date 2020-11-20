@@ -1,0 +1,12 @@
+
+  build {
+    module
+      (import("stork.integer.equal"))
+      (import("stork.integer.add"))
+  }
+
+  main {
+    equal(add(-10)(-5))(-15)
+      ("true")
+      ("false")
+  }

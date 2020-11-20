@@ -1,0 +1,16 @@
+
+  build {
+    module
+      (import("stork.integer.equal"))
+      (import("stork.integer.add"))
+  }
+
+  lazy(number) {
+    number
+  }
+
+  main {
+    equal(add(lazy(2))(lazy(3)))(5)
+      ("true")
+      ("false")
+  }

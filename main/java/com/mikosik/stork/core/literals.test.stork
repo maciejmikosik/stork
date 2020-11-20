@@ -17,22 +17,3 @@
         ("012")
         (some(48)(some(49)(some(50)(none)))))
   }
-
-  integer {
-    suite("integer")
-      (suite("canonical")
-        (case(0)(0))
-        (case(1)(1))
-        (case(-1)(-1))
-        (case(100000000000000000000)(100000000000000000000))
-        (case(-100000000000000000000)(-100000000000000000000)))
-      (suite("noncanonical")
-        (caseNamed("-0 = 0")(-0)(0))
-        (caseNamed("+0 = 0")(+0)(0))
-        (caseNamed("00 = 0")(00)(0))
-        (caseNamed("-00 = 0")(-00)(0))
-        (caseNamed("+00 = 0")(+00)(0))
-        (caseNamed("01 = 0")(01)(1))
-        (caseNamed("-01 = 0")(-01)(-1))
-        (caseNamed("+01 = 0")(+01)(1)))
-  }
