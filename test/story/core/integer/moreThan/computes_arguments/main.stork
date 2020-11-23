@@ -1,0 +1,15 @@
+
+  build {
+    module
+      (import("stork.integer.moreThan"))
+  }
+
+  lazy(number) {
+    number
+  }
+
+  main {
+    moreThan(lazy(2))(lazy(3))
+      ("true")
+      ("false")
+  }

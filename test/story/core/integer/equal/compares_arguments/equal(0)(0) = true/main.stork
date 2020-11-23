@@ -1,0 +1,11 @@
+
+  build {
+    module
+      (import("stork.integer.equal"))
+  }
+
+  main {
+    equal(0)(0)
+      ("true")
+      ("false")
+  }

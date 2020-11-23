@@ -1,0 +1,22 @@
+
+  build {
+    module
+      (import("stork.stream.some"))
+  }
+
+  join(first)(second) {
+    first
+      ((head)(tail){ some(head)(join(tail)(second)) })
+      (second)
+  }
+
+  y { "y" }
+  z { "z" }
+
+  tuple(x)(y)(f) {
+    f(x)(y)
+  }
+
+  main {
+    tuple(y)(z)(join)
+  }

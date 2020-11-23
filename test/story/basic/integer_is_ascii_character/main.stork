@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (importAs("append")("stork.stream.append"))
+      (importAs("single")("stork.stream.single"))
+  }
+
+  main {
+    append(single(33))("Hello World")
+  }

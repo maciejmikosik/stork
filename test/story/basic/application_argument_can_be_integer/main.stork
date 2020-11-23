@@ -1,0 +1,8 @@
+
+  function(x) {
+    "x"
+  }
+
+  main {
+    function(2)
+  }
