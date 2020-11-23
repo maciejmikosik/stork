@@ -15,6 +15,13 @@ public class Application implements Expression {
     return new Application(function, argument);
   }
 
+  public static Expression application(Expression function, Expression... arguments) {
+    for (Expression argument : arguments) {
+      function = application(function, argument);
+    }
+    return function;
+  }
+
   public String toString() {
     return format("%s(%s)", function, argument);
   }
