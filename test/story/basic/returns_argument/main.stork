@@ -3,6 +3,6 @@
     x
   }
 
-  main {
+  main(stdin) {
     identity("y")
   }

@@ -7,6 +7,6 @@
     identity(x)
   }
 
-  main {
+  main(stdin) {
     function("y")
   }

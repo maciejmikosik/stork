@@ -4,7 +4,7 @@
       (import("stork.integer.equal"))
   }
 
-  main {
+  main(stdin) {
     equal(+00)(0)
       ("true")
       ("false")

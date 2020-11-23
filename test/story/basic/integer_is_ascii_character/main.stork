@@ -5,6 +5,6 @@
       (importAs("single")("stork.stream.single"))
   }
 
-  main {
+  main(stdin) {
     append(single(33))("Hello World")
   }

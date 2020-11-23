@@ -9,7 +9,7 @@
     number
   }
 
-  main {
+  main(stdin) {
     equal(negate(lazy(2)))(lazy(-2))
       ("true")
       ("false")

@@ -3,6 +3,7 @@ package com.mikosik.stork.main;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
+import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.main.StdoutModule.closeStream;
 import static com.mikosik.stork.main.StdoutModule.stdoutModule;
@@ -56,7 +57,7 @@ public class Program {
       Computation computation = computation(
           application(
               writeStream,
-              main));
+              application(main, variable("stork.stream.none"))));
 
       public int read() {
         if (closed) {

@@ -5,7 +5,7 @@
       (import("stork.integer.add"))
   }
 
-  main {
+  main(stdin) {
     equal(add(-10)(-5))(-15)
       ("true")
       ("false")

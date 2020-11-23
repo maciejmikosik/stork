@@ -17,6 +17,6 @@
     f(x)(y)
   }
 
-  main {
+  main(stdin) {
     tuple(y)(z)(join)
   }
