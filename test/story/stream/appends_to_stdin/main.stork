@@ -1,0 +1,9 @@
+
+  build {
+    module
+      (import("stork.stream.append"))
+  }
+
+  main(stdin) {
+    append("!")(stdin)
+  }

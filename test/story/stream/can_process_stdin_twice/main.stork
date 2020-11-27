@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (import("stork.stream.append"))
+      (import("stork.stream.reverse"))
+  }
+
+  main(stdin) {
+    append(stdin)(reverse(stdin))
+  }
