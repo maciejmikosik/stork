@@ -3,8 +3,8 @@ package com.mikosik.stork.main;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.main.Stdin.stdin;
 import static com.mikosik.stork.main.StdoutModule.closeStream;
 import static com.mikosik.stork.main.StdoutModule.stdoutModule;
 import static com.mikosik.stork.main.StdoutModule.writeByte;
@@ -34,7 +34,7 @@ public class Program {
     return new Program(main, module);
   }
 
-  public InputStream run() {
+  public InputStream run(InputStream stdinInput) {
     Linker linker = linker()
         .unique()
         .coherent();
@@ -48,6 +48,7 @@ public class Program {
         .opcoding()
         .substituting()
         .stacking()
+        .wire(StdinComputer::stdin)
         .interruptible()
         .progressing()
         .wire(StdoutComputer::stdout);
@@ -57,7 +58,7 @@ public class Program {
       Computation computation = computation(
           application(
               writeStream,
-              application(main, variable("stork.stream.none"))));
+              application(main, stdin(stdinInput))));
 
       public int read() {
         if (closed) {

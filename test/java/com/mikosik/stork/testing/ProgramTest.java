@@ -17,6 +17,8 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -64,7 +66,8 @@ public class ProgramTest {
     Module module = linker.link(chainFrom(modules).add(coreModule()));
 
     Program program = program(variable("main"), module);
-    byte[] actualBytes = readAllBytes(program.run());
+    InputStream stdin = new ByteArrayInputStream(new byte[0]);
+    byte[] actualBytes = readAllBytes(program.run(stdin));
     byte[] expectedBytes = tryReadAllBytes(directory.resolve("main.out"));
     if (!Arrays.equals(actualBytes, expectedBytes)) {
       throw new AssertException(format(""

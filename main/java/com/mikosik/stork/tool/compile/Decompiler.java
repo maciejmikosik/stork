@@ -70,7 +70,7 @@ public class Decompiler {
     } else if (expression instanceof Lambda) {
       print((Lambda) expression, output);
     } else {
-      throw new RuntimeException();
+      output.print(expression.toString());
     }
   }
 
