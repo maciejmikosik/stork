@@ -3,6 +3,6 @@
     "constant"
   }
 
-  main {
+  main(stdin) {
     constant
   }

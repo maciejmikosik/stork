@@ -2,6 +2,7 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.InputOutput.input;
 import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
 import static com.mikosik.stork.common.InputOutput.tryReadAllBytes;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -64,16 +66,17 @@ public class ProgramTest {
     Module module = linker.link(chainFrom(modules).add(coreModule()));
 
     Program program = program(variable("main"), module);
-    byte[] actualBytes = readAllBytes(program.run());
-    byte[] expectedBytes = tryReadAllBytes(directory.resolve("main.out"));
-    if (!Arrays.equals(actualBytes, expectedBytes)) {
+    InputStream stdin = input(tryReadAllBytes(directory.resolve("main.in")));
+    byte[] actualStdout = readAllBytes(program.run(stdin));
+    byte[] expectedStdout = tryReadAllBytes(directory.resolve("main.out"));
+    if (!Arrays.equals(actualStdout, expectedStdout)) {
       throw new AssertException(format(""
           + "expected output\n"
           + "  %s\n"
           + "but was\n"
           + "  %s\n",
-          new String(expectedBytes, UTF_8),
-          new String(actualBytes, UTF_8)));
+          new String(expectedStdout, UTF_8),
+          new String(actualStdout, UTF_8)));
     }
   }
 

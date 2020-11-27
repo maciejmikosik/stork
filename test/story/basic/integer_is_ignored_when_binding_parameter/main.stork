@@ -3,6 +3,6 @@
     f(2)
   }
 
-  main {
+  main(stdin) {
     ""
   }

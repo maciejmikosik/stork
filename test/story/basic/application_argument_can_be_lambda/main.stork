@@ -3,6 +3,6 @@
     f(x)
   }
 
-  main {
+  main(stdin) {
     apply((x){x})("")
   }

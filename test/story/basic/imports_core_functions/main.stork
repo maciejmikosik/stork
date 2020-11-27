@@ -4,6 +4,6 @@
       (import("stork.stream.append"))
   }
 
-  main {
+  main(stdin) {
     append("!")("Hello World")
   }

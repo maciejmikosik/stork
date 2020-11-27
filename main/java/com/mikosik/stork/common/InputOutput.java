@@ -3,6 +3,7 @@ package com.mikosik.stork.common;
 import static java.nio.file.Files.exists;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,10 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public class InputOutput {
+  public static InputStream input(byte[] bytes) {
+    return new ByteArrayInputStream(bytes);
+  }
+
   public static void pump(InputStream input, OutputStream output) {
     try {
       int oneByte;

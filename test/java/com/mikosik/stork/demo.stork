@@ -23,6 +23,6 @@
       ("Hello world!")
   }
 
-  main {
+  main(stdin) {
     unlines(text)
   }
