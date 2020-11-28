@@ -10,8 +10,4 @@ public class Parameter implements Expression {
   public static Parameter parameter(String name) {
     return new Parameter(name);
   }
-
-  public String toString() {
-    return name;
-  }
 }

@@ -1,7 +1,5 @@
 package com.mikosik.stork.data.model;
 
-import static java.lang.String.format;
-
 public class Application implements Expression {
   public final Expression function;
   public final Expression argument;
@@ -20,9 +18,5 @@ public class Application implements Expression {
       function = application(function, argument);
     }
     return function;
-  }
-
-  public String toString() {
-    return format("%s(%s)", function, argument);
   }
 }

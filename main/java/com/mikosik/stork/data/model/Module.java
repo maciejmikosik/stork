@@ -12,12 +12,4 @@ public class Module {
   public static Module module(Chain<Definition> definitions) {
     return new Module(definitions);
   }
-
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    for (Definition definition : definitions) {
-      builder.append(definition).append("\n\n");
-    }
-    return builder.toString();
-  }
 }
