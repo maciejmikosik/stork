@@ -1,8 +1,11 @@
 package com.mikosik.stork.core;
 
-import static com.mikosik.stork.common.InputOutput.readResource;
-import static com.mikosik.stork.tool.compile.Modeler.modelModule;
-import static com.mikosik.stork.tool.compile.Parser.parse;
+import static com.mikosik.stork.common.InputOutput.buffered;
+import static com.mikosik.stork.tool.compile.Compiler.compiler;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 
 import com.mikosik.stork.data.model.Module;
 
@@ -14,10 +17,14 @@ public class Repository {
   }
 
   public Module module(String fileName) {
-    return modelModule(parse(code(fileName)));
+    try (InputStream input = buffered(resource(fileName))) {
+      return compiler().compile(input);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
-  private static String code(String fileName) {
-    return readResource(Repository.class, fileName);
+  private static InputStream resource(String fileName) {
+    return Repository.class.getResourceAsStream(fileName);
   }
 }

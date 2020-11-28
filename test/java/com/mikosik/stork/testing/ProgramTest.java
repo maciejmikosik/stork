@@ -2,6 +2,7 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.InputOutput.buffered;
 import static com.mikosik.stork.common.InputOutput.input;
 import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.common.InputOutput.readAllBytes;
@@ -9,16 +10,18 @@ import static com.mikosik.stork.common.InputOutput.tryReadAllBytes;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
-import static com.mikosik.stork.tool.compile.Modeler.modelModule;
-import static com.mikosik.stork.tool.compile.Parser.parse;
+import static com.mikosik.stork.tool.compile.Compiler.compiler;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.newInputStream;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -85,8 +88,11 @@ public class ProgramTest {
   }
 
   private static Module compileModule(Path file) {
-    // TODO create byte-oriented compiler
-    return modelModule(parse(new String(readAllBytes(file))));
+    try (InputStream input = buffered(newInputStream(file))) {
+      return compiler().compile(input);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   private static String nameOf(Path directory) {
