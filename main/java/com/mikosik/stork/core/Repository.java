@@ -1,12 +1,9 @@
 package com.mikosik.stork.core;
 
-import static com.mikosik.stork.common.InputOutput.buffered;
+import static com.mikosik.stork.common.Input.resource;
 import static com.mikosik.stork.tool.compile.Compiler.compiler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Module;
 
 public class Repository {
@@ -17,14 +14,8 @@ public class Repository {
   }
 
   public Module module(String fileName) {
-    try (InputStream input = buffered(resource(fileName))) {
+    try (Input input = resource(Repository.class, fileName).buffered()) {
       return compiler().compile(input);
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
     }
-  }
-
-  private static InputStream resource(String fileName) {
-    return Repository.class.getResourceAsStream(fileName);
   }
 }

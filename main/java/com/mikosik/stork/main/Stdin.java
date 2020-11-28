@@ -2,18 +2,17 @@ package com.mikosik.stork.main;
 
 import static java.lang.String.format;
 
-import java.io.InputStream;
-
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Expression;
 
 public class Stdin implements Expression {
-  public final InputStream input;
+  public final Input input;
 
-  private Stdin(InputStream input) {
+  private Stdin(Input input) {
     this.input = input;
   }
 
-  public static Expression stdin(InputStream input) {
+  public static Expression stdin(Input input) {
     return new Stdin(input);
   }
 

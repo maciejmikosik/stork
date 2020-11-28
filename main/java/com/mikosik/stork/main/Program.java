@@ -2,6 +2,7 @@ package com.mikosik.stork.main;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.main.Stdin.stdin;
@@ -15,6 +16,7 @@ import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import java.io.InputStream;
 
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Computation;
@@ -34,7 +36,7 @@ public class Program {
     return new Program(main, module);
   }
 
-  public InputStream run(InputStream stdinInput) {
+  public Input run(Input stdinInput) {
     Linker linker = linker()
         .unique()
         .coherent();
@@ -53,7 +55,7 @@ public class Program {
         .progressing()
         .wire(StdoutComputer::stdout);
 
-    return new InputStream() {
+    return input(new InputStream() {
       boolean closed = false;
       Computation computation = computation(
           application(
@@ -82,6 +84,6 @@ public class Program {
       public void close() {
         closed = true;
       }
-    };
+    });
   }
 }

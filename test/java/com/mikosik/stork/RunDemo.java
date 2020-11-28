@@ -1,14 +1,14 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.common.InputOutput.pump;
+import static com.mikosik.stork.common.Input.input;
+import static com.mikosik.stork.common.Input.resource;
+import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
 import static com.mikosik.stork.tool.compile.Compiler.compiler;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
-
-import java.io.InputStream;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.main.Program;
@@ -23,14 +23,10 @@ public class RunDemo {
         .unique()
         .coherent();
     Module module = linker.link(chainOf(
-        compiler.compile(resource("demo.stork")),
+        compiler.compile(resource(RunDemo.class, "demo.stork")),
         coreModule()));
     Program program = program(variable("main"), module);
-    pump(program.run(System.in), System.out);
-    System.out.flush();
-  }
-
-  private static InputStream resource(String name) {
-    return RunDemo.class.getResourceAsStream(name);
+    program.run(input(System.in))
+        .pumpToAndFlush(output(System.out));
   }
 }
