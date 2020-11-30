@@ -1,9 +1,9 @@
 package com.mikosik.stork.core;
 
-import static com.mikosik.stork.common.InputOutput.readResource;
-import static com.mikosik.stork.tool.compile.Modeler.modelModule;
-import static com.mikosik.stork.tool.compile.Parser.parse;
+import static com.mikosik.stork.common.Input.resource;
+import static com.mikosik.stork.tool.compile.Compiler.compiler;
 
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Module;
 
 public class Repository {
@@ -14,10 +14,8 @@ public class Repository {
   }
 
   public Module module(String fileName) {
-    return modelModule(parse(code(fileName)));
-  }
-
-  private static String code(String fileName) {
-    return readResource(Repository.class, fileName);
+    try (Input input = resource(Repository.class, fileName).buffered()) {
+      return compiler().compile(input);
+    }
   }
 }

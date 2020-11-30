@@ -2,15 +2,13 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.InputOutput.input;
+import static com.mikosik.stork.common.Input.input;
+import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
-import static com.mikosik.stork.common.InputOutput.readAllBytes;
-import static com.mikosik.stork.common.InputOutput.tryReadAllBytes;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
-import static com.mikosik.stork.tool.compile.Modeler.modelModule;
-import static com.mikosik.stork.tool.compile.Parser.parse;
+import static com.mikosik.stork.tool.compile.Compiler.compiler;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -18,7 +16,6 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -27,6 +24,7 @@ import java.util.List;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.main.Program;
 import com.mikosik.stork.tool.link.WirableLinker;
@@ -66,9 +64,9 @@ public class ProgramTest {
     Module module = linker.link(chainFrom(modules).add(coreModule()));
 
     Program program = program(variable("main"), module);
-    InputStream stdin = input(tryReadAllBytes(directory.resolve("main.in")));
-    byte[] actualStdout = readAllBytes(program.run(stdin));
-    byte[] expectedStdout = tryReadAllBytes(directory.resolve("main.out"));
+    Input stdin = tryInput(directory.resolve("main.in"));
+    byte[] actualStdout = program.run(stdin).readAllBytes();
+    byte[] expectedStdout = tryInput(directory.resolve("main.out")).readAllBytes();
     if (!Arrays.equals(actualStdout, expectedStdout)) {
       throw new AssertException(format(""
           + "expected output\n"
@@ -85,8 +83,9 @@ public class ProgramTest {
   }
 
   private static Module compileModule(Path file) {
-    // TODO create byte-oriented compiler
-    return modelModule(parse(new String(readAllBytes(file))));
+    try (Input input = input(file).buffered()) {
+      return compiler().compile(input);
+    }
   }
 
   private static String nameOf(Path directory) {

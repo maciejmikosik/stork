@@ -5,8 +5,6 @@ import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -45,16 +43,12 @@ public class StdinComputer implements Computer {
   }
 
   private Expression compute(Stdin stdin) {
-    try {
-      int oneByte = stdin.input.read();
-      return oneByte == -1
-          ? none
-          : application(
-              some,
-              integer(BigInteger.valueOf(oneByte)),
-              Stdin.stdin(stdin.input));
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    int oneByte = stdin.input.read();
+    return oneByte == -1
+        ? none
+        : application(
+            some,
+            integer(BigInteger.valueOf(oneByte)),
+            Stdin.stdin(stdin.input));
   }
 }
