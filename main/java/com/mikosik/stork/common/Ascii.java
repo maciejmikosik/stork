@@ -13,10 +13,6 @@ public class Ascii {
     return '0' <= character && character <= '9';
   }
 
-  public static boolean isLetterOrDigit(int character) {
-    return isLetter(character) || isDigit(character);
-  }
-
   public static boolean isSign(int character) {
     return character == '+'
         || character == '-';
