@@ -22,10 +22,14 @@ public class Ascii {
         || character == '-';
   }
 
+  public static boolean isNumeric(int character) {
+    return isDigit(character)
+        || isSign(character);
+  }
+
   public static boolean isAlphanumeric(int character) {
     return isLetter(character)
-        || isDigit(character)
-        || isSign(character);
+        || isNumeric(character);
   }
 
   public static boolean isDoubleQuote(int character) {
