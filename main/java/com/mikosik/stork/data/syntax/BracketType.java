@@ -20,17 +20,17 @@ public enum BracketType {
     return closing;
   }
 
-  public static boolean isOpeningBracket(char character) {
+  public static boolean isOpeningBracket(int character) {
     return stream(BracketType.values())
         .anyMatch(value -> value.opening == character);
   }
 
-  public static boolean isClosingBracket(char character) {
+  public static boolean isClosingBracket(int character) {
     return stream(BracketType.values())
         .anyMatch(value -> value.closing == character);
   }
 
-  public static BracketType bracketByCharacter(char character) {
+  public static BracketType bracketByCharacter(int character) {
     return stream(BracketType.values())
         .filter(type -> type.opening == character || type.closing == character)
         .findFirst()
