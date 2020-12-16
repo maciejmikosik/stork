@@ -1,14 +1,14 @@
 package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
-import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static java.util.Objects.deepEquals;
 
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.tool.compile.Decompiler;
+import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class Assertions {
   public static boolean areEqual(Expression first, Expression second) {

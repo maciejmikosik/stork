@@ -15,7 +15,7 @@ import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
-import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -28,7 +28,7 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.comp.Empty;
-import com.mikosik.stork.tool.compile.Decompiler;
+import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
   public static Test testDecompiler() {
