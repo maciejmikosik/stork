@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.compile;
 
-import com.mikosik.stork.common.PeekingInput;
+import com.mikosik.stork.common.Input;
 
 public interface Compiler<T> {
-  T compile(PeekingInput input);
+  T compile(Input input);
 }

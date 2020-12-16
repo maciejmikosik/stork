@@ -1,7 +1,6 @@
 package com.mikosik.stork.core;
 
 import static com.mikosik.stork.common.Input.resource;
-import static com.mikosik.stork.common.PeekingInput.peeking;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 
 import com.mikosik.stork.common.Input;
@@ -16,7 +15,7 @@ public class Repository {
 
   public Module module(String fileName) {
     try (Input input = resource(Repository.class, fileName).buffered()) {
-      return defaultCompiler().compile(peeking(input));
+      return defaultCompiler().compile(input);
     }
   }
 }

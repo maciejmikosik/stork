@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.Input.resource;
 import static com.mikosik.stork.common.Output.output;
-import static com.mikosik.stork.common.PeekingInput.peeking;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
@@ -24,7 +23,7 @@ public class RunDemo {
         .unique()
         .coherent();
     Module module = linker.link(chainOf(
-        compiler.compile(peeking(resource(RunDemo.class, "demo.stork"))),
+        compiler.compile(resource(RunDemo.class, "demo.stork").buffered()),
         coreModule()));
     Program program = program(variable("main"), module);
     program.run(input(System.in))

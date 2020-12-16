@@ -7,15 +7,15 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.ByteArrayOutputStream;
 
-import com.mikosik.stork.common.PeekingInput;
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Expression;
 
 public class QuoteCompiler implements Compiler<Expression> {
-  public Expression compile(PeekingInput input) {
+  public Expression compile(Input input) {
     return asStorkStream(string(parseQuote(input)));
   }
 
-  private byte[] parseQuote(PeekingInput input) {
+  private byte[] parseQuote(Input input) {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     check(input.read() == DOUBLE_QUOTE);
     while (input.peek() != -1 && input.peek() != DOUBLE_QUOTE) {

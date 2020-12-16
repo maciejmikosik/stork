@@ -6,16 +6,16 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.ByteArrayOutputStream;
 
-import com.mikosik.stork.common.PeekingInput;
+import com.mikosik.stork.common.Input;
 
 public class AlphanumericCompiler implements Compiler<String> {
-  public String compile(PeekingInput input) {
+  public String compile(Input input) {
     return isAlphanumeric(input.peek())
         ? string(parseAlphanumeric(input))
         : fail("expected alphanumeric but was %c", input.peek());
   }
 
-  private byte[] parseAlphanumeric(PeekingInput input) {
+  private byte[] parseAlphanumeric(Input input) {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     while (isAlphanumeric(input.peek())) {
       buffer.write(input.read());

@@ -3,7 +3,7 @@ package com.mikosik.stork.tool.compile;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.data.model.Application.application;
 
-import com.mikosik.stork.common.PeekingInput;
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Variable;
 
@@ -12,7 +12,7 @@ public class InvocationCompiler implements Compiler<Expression> {
   public Compiler<Variable> variable;
   public Compiler<Expression> expression;
 
-  public Expression compile(PeekingInput input) {
+  public Expression compile(Input input) {
     Expression result = variable.compile(input);
     whitespace.compile(input);
     while (input.peek() == '(') {

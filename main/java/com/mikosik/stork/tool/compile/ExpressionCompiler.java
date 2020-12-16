@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.Ascii.isLetter;
 import static com.mikosik.stork.common.Ascii.isNumeric;
 import static com.mikosik.stork.common.Throwables.fail;
 
-import com.mikosik.stork.common.PeekingInput;
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Lambda;
 
@@ -15,7 +15,7 @@ public class ExpressionCompiler implements Compiler<Expression> {
   public Compiler<Expression> quote;
   public Compiler<Expression> invocation;
 
-  public Expression compile(PeekingInput input) {
+  public Expression compile(Input input) {
     int character = input.peek();
     if (isNumeric(character)) {
       return integer.compile(input);

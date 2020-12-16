@@ -136,4 +136,11 @@ public class Input implements AutoCloseable {
     output.flush();
     return this;
   }
+
+  public int peek() {
+    mark(1);
+    int oneByte = read();
+    reset();
+    return oneByte;
+  }
 }

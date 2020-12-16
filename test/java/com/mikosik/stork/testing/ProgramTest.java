@@ -5,7 +5,6 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
-import static com.mikosik.stork.common.PeekingInput.peeking;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
@@ -85,7 +84,7 @@ public class ProgramTest {
 
   private static Module compileModule(Path file) {
     try (Input input = input(file).buffered()) {
-      return defaultCompiler().compile(peeking(input));
+      return defaultCompiler().compile(input);
     }
   }
 
