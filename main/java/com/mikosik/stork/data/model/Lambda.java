@@ -9,7 +9,7 @@ public class Lambda implements Expression {
     this.body = body;
   }
 
-  public static Expression lambda(Parameter parameter, Expression body) {
+  public static Lambda lambda(Parameter parameter, Expression body) {
     return new Lambda(parameter, body);
   }
 }

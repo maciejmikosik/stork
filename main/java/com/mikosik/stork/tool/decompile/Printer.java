@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.compile;
+package com.mikosik.stork.tool.decompile;
 
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.data.model.Application.application;

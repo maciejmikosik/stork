@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.tool.compile.Decompiler;
+import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class WirableComputer implements Computer {
   private final Computer delegate;

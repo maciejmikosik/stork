@@ -10,8 +10,8 @@ import static com.mikosik.stork.testing.Assertions.failEqual;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
-import static com.mikosik.stork.tool.compile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
+import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -28,8 +28,8 @@ import com.mikosik.stork.core.Repository;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.tool.common.Invocation;
-import com.mikosik.stork.tool.compile.Decompiler;
 import com.mikosik.stork.tool.compute.CompleteComputer;
+import com.mikosik.stork.tool.decompile.Decompiler;
 import com.mikosik.stork.tool.link.Linker;
 
 public class ModuleTest {

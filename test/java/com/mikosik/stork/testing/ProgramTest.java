@@ -8,7 +8,7 @@ import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.core.CoreModule.coreModule;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
-import static com.mikosik.stork.tool.compile.Compiler.compiler;
+import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -84,7 +84,7 @@ public class ProgramTest {
 
   private static Module compileModule(Path file) {
     try (Input input = input(file).buffered()) {
-      return compiler().compile(input);
+      return defaultCompiler().compile(input);
     }
   }
 

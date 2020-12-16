@@ -1,7 +1,7 @@
-package com.mikosik.stork.tool.compile;
+package com.mikosik.stork.tool.decompile;
 
 import static com.mikosik.stork.common.Output.output;
-import static com.mikosik.stork.tool.compile.Printer.printer;
+import static com.mikosik.stork.tool.decompile.Printer.printer;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.ByteArrayOutputStream;
