@@ -1,0 +1,9 @@
+
+  build {
+    module
+      (import("stork.stream.none"))
+  }
+
+  main(stdin) {
+    none
+  }

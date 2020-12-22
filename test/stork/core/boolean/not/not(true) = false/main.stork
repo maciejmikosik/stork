@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (import("stork.boolean.true"))
+      (import("stork.boolean.not"))
+  }
+
+  main(stdin) {
+    not(true)("x")("y")
+  }

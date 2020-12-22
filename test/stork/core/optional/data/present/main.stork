@@ -1,0 +1,11 @@
+
+  build {
+    module
+      (import("stork.optional.present"))
+  }
+
+  main(stdin) {
+    present("element")
+      ((x){ x })
+      ("empty")
+  }

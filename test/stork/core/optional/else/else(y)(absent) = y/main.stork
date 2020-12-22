@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (import("stork.optional.absent"))
+      (import("stork.optional.else"))
+  }
+
+  main(stdin) {
+    else("y")(absent)
+  }

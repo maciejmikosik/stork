@@ -1,0 +1,11 @@
+
+  build {
+    module
+      (import("stork.optional.absent"))
+  }
+
+  main(stdin) {
+    absent
+      ((x){ x })
+      ("empty")
+  }
