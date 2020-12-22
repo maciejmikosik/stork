@@ -16,7 +16,6 @@ public class TestEverything {
         .add(testProgramsIn(Paths.get("test/stork")))
         .add(testDecompiler())
         .add(suite("modules")
-            .add(testModule("literals.test.stork"))
-            .add(testModule("function.test.stork"))));
+            .add(testModule("literals.test.stork"))));
   }
 }

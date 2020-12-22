@@ -1,0 +1,18 @@
+
+  build {
+    module
+      (import("stork.stream.some"))
+      (import("stork.stream.none"))
+      (import("stork.function.flip"))
+  }
+
+  main(stdin) {
+    flip(join)(x)(y)
+  }
+
+  join(a)(b) {
+    some(a)(some(b)(none))
+  }
+
+  x { 120 }
+  y { 121 }
