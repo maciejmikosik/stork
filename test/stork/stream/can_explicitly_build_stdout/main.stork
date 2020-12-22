@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (import("stork.stream.some"))
+      (import("stork.stream.none"))
+  }
+
+  main(stdin) {
+    some(120)(some(121)(some(122)(none)))
+  }
