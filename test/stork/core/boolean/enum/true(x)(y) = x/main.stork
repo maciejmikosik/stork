@@ -1,0 +1,9 @@
+
+  build {
+    module
+      (import("stork.boolean.true"))
+  }
+
+  main(stdin) {
+    true("x")("y")
+  }

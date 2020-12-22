@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (import("stork.boolean.true"))
+      (import("stork.boolean.or"))
+  }
+
+  main(stdin) {
+    or(true)(true)("x")("y")
+  }

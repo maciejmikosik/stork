@@ -18,7 +18,6 @@ public class TestEverything {
         .add(suite("modules")
             .add(testModule("literals.test.stork"))
             .add(testModule("function.test.stork"))
-            .add(testModule("boolean.test.stork"))
             .add(testModule("optional.test.stork"))));
   }
 }

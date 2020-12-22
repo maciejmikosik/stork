@@ -1,0 +1,11 @@
+
+  build {
+    module
+      (import("stork.boolean.true"))
+      (import("stork.boolean.false"))
+      (import("stork.boolean.and"))
+  }
+
+  main(stdin) {
+    and(false)(true)("x")("y")
+  }
