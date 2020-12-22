@@ -1,0 +1,10 @@
+
+  build {
+    module
+      (import("stork.optional.present"))
+      (import("stork.optional.else"))
+  }
+
+  main(stdin) {
+    else("y")(present("x"))
+  }

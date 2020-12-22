@@ -17,7 +17,6 @@ public class TestEverything {
         .add(testDecompiler())
         .add(suite("modules")
             .add(testModule("literals.test.stork"))
-            .add(testModule("function.test.stork"))
-            .add(testModule("optional.test.stork"))));
+            .add(testModule("function.test.stork"))));
   }
 }
