@@ -8,7 +8,6 @@ import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Aliens.computeArguments;
 import static com.mikosik.stork.tool.common.Aliens.rename;
-import static com.mikosik.stork.tool.common.Operands.operands;
 import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
 
 import java.math.BigInteger;
@@ -21,7 +20,6 @@ import com.mikosik.stork.data.model.Alien;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.tool.common.Operands;
 
 public class JavaModule {
   public static Module javaModule() {
@@ -45,21 +43,19 @@ public class JavaModule {
 
   private static Alien alienize(Function<BigInteger, Expression> logic) {
     return stack -> {
-      Operands operands = operands(stack);
       return computation(
-          logic.apply(operands.nextJavaBigInteger()),
-          operands.stack());
+          logic.apply(stack.argumentIntegerJava()),
+          stack.pop());
     };
   }
 
   private static Alien alienize(BiFunction<BigInteger, BigInteger, Expression> logic) {
     return stack -> {
-      Operands operands = operands(stack);
       return computation(
           logic.apply(
-              operands.nextJavaBigInteger(),
-              operands.nextJavaBigInteger()),
-          operands.stack());
+              stack.argumentIntegerJava(),
+              stack.pop().argumentIntegerJava()),
+          stack.pop().pop());
     };
   }
 }
