@@ -30,6 +30,10 @@ public class WirableComputer implements Computer {
     return wire(OpcodingComputer::opcoding);
   }
 
+  public WirableComputer aliening() {
+    return wire(AlieningComputer::aliening);
+  }
+
   public WirableComputer substituting() {
     return wire(SubstitutingComputer::substituting);
   }

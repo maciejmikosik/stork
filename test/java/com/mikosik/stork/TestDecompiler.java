@@ -26,8 +26,11 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
+import com.mikosik.stork.data.model.Alien;
 import com.mikosik.stork.data.model.Parameter;
+import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.data.model.comp.Empty;
+import com.mikosik.stork.data.model.comp.Stack;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -43,6 +46,8 @@ public class TestDecompiler {
             .add(suite("opcode")
                 .add(test("ADD", ADD))
                 .add(test("ARG_1", ARG_1)))
+            .add(suite("alien")
+                .add(test("alien_name", mockAlien("alien_name"))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -96,5 +101,17 @@ public class TestDecompiler {
           expected,
           actual));
     }
+  }
+
+  private static Alien mockAlien(String name) {
+    return new Alien() {
+      public Computation compute(Stack stack) {
+        return null;
+      }
+
+      public String toString() {
+        return name;
+      }
+    };
   }
 }
