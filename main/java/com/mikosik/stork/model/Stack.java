@@ -1,4 +1,4 @@
-package com.mikosik.stork.data.model.comp;
+package com.mikosik.stork.model;
 
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Check.check;
@@ -6,8 +6,6 @@ import static com.mikosik.stork.common.Check.check;
 import java.math.BigInteger;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Integer;
 
 public class Stack {
   private final Chain<Frame> frames;

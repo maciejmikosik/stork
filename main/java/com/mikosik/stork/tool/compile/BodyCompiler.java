@@ -3,8 +3,8 @@ package com.mikosik.stork.tool.compile;
 import static com.mikosik.stork.common.Throwables.fail;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Lambda;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Lambda;
 
 public class BodyCompiler implements Compiler<Expression> {
   public Compiler<Lambda> lambda;

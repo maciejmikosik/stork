@@ -2,7 +2,7 @@ package com.mikosik.stork.tool.compute;
 
 import static com.mikosik.stork.common.Check.check;
 
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Computation;
 
 public class ProgressingComputer implements Computer {
   private final Computer computer;

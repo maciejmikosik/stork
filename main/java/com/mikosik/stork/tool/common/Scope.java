@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.common;
 
-import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.model.Variable;
 
 public enum Scope {
   GLOBAL, LOCAL;

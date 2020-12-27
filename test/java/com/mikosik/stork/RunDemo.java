@@ -5,13 +5,13 @@ import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.Input.resource;
 import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.core.CoreModule.coreModule;
-import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.main.Program.program;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
-import com.mikosik.stork.data.model.Module;
 import com.mikosik.stork.main.Program;
+import com.mikosik.stork.model.Module;
 import com.mikosik.stork.tool.compile.Compiler;
 import com.mikosik.stork.tool.link.Linker;
 

@@ -1,10 +1,10 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.data.model.Module.module;
+import static com.mikosik.stork.model.Module.module;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Module;
 
 public class JoiningLinker implements Linker {
   private JoiningLinker() {}

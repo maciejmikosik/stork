@@ -1,18 +1,18 @@
 package com.mikosik.stork.main;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Parameter.parameter;
-import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Aliens.computeArguments;
 
-import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.Variable;
 
 public class StdoutModule {
   public static final Variable writeByte = variable("stork.stdout.writeByte");

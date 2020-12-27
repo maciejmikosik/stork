@@ -1,23 +1,23 @@
 package com.mikosik.stork.tool.decompile;
 
 import static com.mikosik.stork.common.Throwables.fail;
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Output;
-import com.mikosik.stork.data.model.Application;
-import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Integer;
-import com.mikosik.stork.data.model.Lambda;
-import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.model.Variable;
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Integer;
+import com.mikosik.stork.model.Lambda;
+import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Scope;
 
 public class Printer {

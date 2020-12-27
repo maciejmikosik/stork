@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Input.resource;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Module;
 
 public class Repository {
   private Repository() {}

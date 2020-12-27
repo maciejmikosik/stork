@@ -6,7 +6,7 @@ import static com.mikosik.stork.core.Repository.repository;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Module;
 import com.mikosik.stork.tool.link.Linker;
 
 public class CoreModule {

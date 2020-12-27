@@ -1,14 +1,14 @@
 package com.mikosik.stork.tool.compute;
 
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.model.Lambda.lambda;
 
-import com.mikosik.stork.data.model.Application;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Lambda;
-import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Lambda;
+import com.mikosik.stork.model.Parameter;
 
 public class SubstitutingComputer implements Computer {
   private final Computer computer;

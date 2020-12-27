@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.compute;
 
-import com.mikosik.stork.data.model.Alien;
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Alien;
+import com.mikosik.stork.model.Computation;
 
 public class AlieningComputer implements Computer {
   private final Computer computer;

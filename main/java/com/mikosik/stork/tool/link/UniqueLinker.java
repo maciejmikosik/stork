@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Module;
 
 public class UniqueLinker implements Linker {
   private final Linker linker;

@@ -1,12 +1,12 @@
 package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.data.model.Module.module;
+import static com.mikosik.stork.model.Module.module;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Module;
 
 public class ModuleCompiler implements Compiler<Module> {
   public Compiler<Definition> definition;

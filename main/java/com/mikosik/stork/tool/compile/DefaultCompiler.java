@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.compile;
 
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Module;
 
 public class DefaultCompiler {
   public static Compiler<Module> defaultCompiler() {

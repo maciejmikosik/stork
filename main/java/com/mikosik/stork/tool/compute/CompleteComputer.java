@@ -1,9 +1,9 @@
 package com.mikosik.stork.tool.compute;
 
-import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.common.Computations.abort;
 
-import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.model.Expression;
 
 public class CompleteComputer {
   private final Computer computer;

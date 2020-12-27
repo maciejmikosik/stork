@@ -3,9 +3,9 @@ package com.mikosik.stork.tool.common;
 import static com.mikosik.stork.common.Chain.empty;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Application;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Variable;
 
 public class Invocation {
   public Variable function;

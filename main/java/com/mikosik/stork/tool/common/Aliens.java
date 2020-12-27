@@ -1,13 +1,13 @@
 package com.mikosik.stork.tool.common;
 
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Computation.computation;
 import static java.lang.String.format;
 
-import com.mikosik.stork.data.model.Alien;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.data.model.comp.Stack;
+import com.mikosik.stork.model.Alien;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Stack;
 
 public class Aliens {
   public static Expression computeArguments(int number, Expression expression) {
