@@ -10,7 +10,7 @@ import static com.mikosik.stork.main.StdoutModule.closeStream;
 import static com.mikosik.stork.main.StdoutModule.stdoutModule;
 import static com.mikosik.stork.main.StdoutModule.writeByte;
 import static com.mikosik.stork.main.StdoutModule.writeStream;
-import static com.mikosik.stork.tool.compute.Operands.operands;
+import static com.mikosik.stork.tool.common.Operands.operands;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
@@ -47,7 +47,7 @@ public class Program {
 
     Computer computer = computer()
         .moduling(linkedModule)
-        .opcoding()
+        .aliening()
         .substituting()
         .stacking()
         .wire(StdinComputer::stdin)

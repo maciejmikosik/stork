@@ -1,15 +1,8 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
-import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Opcode.ADD;
-import static com.mikosik.stork.data.model.Opcode.ARG_1;
-import static com.mikosik.stork.data.model.Opcode.ARG_2;
-import static com.mikosik.stork.data.model.Opcode.EQUAL;
-import static com.mikosik.stork.data.model.Opcode.MORE_THAN;
-import static com.mikosik.stork.data.model.Opcode.NEGATE;
 import static java.util.stream.Collectors.toList;
 
 import java.util.HashMap;
@@ -55,18 +48,6 @@ public class OpcodingLinker implements Linker {
 
   private static Map<String, Expression> opcodes() {
     Map<String, Expression> map = new HashMap<>();
-    map.put("stork.integer.negate", eager(NEGATE));
-    map.put("stork.integer.add", eager2(ADD));
-    map.put("stork.integer.equal", eager2(EQUAL));
-    map.put("stork.integer.moreThan", eager2(MORE_THAN));
     return map;
-  }
-
-  private static Expression eager(Expression script) {
-    return application(ARG_1, script);
-  }
-
-  private static Expression eager2(Expression script) {
-    return application(ARG_1, application(ARG_2, script));
   }
 }

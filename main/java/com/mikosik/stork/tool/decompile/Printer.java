@@ -15,7 +15,6 @@ import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Integer;
 import com.mikosik.stork.data.model.Lambda;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Opcode;
 import com.mikosik.stork.data.model.Parameter;
 import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
@@ -51,15 +50,13 @@ public class Printer {
         ? print((Integer) expression)
         : expression instanceof Variable
             ? print((Variable) expression)
-            : expression instanceof Opcode
-                ? print((Opcode) expression)
-                : expression instanceof Parameter
-                    ? print((Parameter) expression)
-                    : expression instanceof Application
-                        ? print((Application) expression)
-                        : expression instanceof Lambda
-                            ? print((Lambda) expression)
-                            : print(expression.toString());
+            : expression instanceof Parameter
+                ? print((Parameter) expression)
+                : expression instanceof Application
+                    ? print((Application) expression)
+                    : expression instanceof Lambda
+                        ? print((Lambda) expression)
+                        : print(expression.toString());
   }
 
   private Printer print(Integer integer) {
@@ -68,10 +65,6 @@ public class Printer {
 
   private Printer print(Variable variable) {
     return print(scope.format(variable));
-  }
-
-  private Printer print(Opcode opcode) {
-    return print(opcode.toString());
   }
 
   private Printer print(Parameter parameter) {

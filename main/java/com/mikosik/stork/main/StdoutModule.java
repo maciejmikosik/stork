@@ -5,9 +5,9 @@ import static com.mikosik.stork.data.model.Application.application;
 import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Lambda.lambda;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Opcode.ARG_1;
 import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Aliens.computeArguments;
 
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Module;
@@ -56,8 +56,7 @@ public class StdoutModule {
             application(stream,
                 lambda(head, lambda(tail,
                     application(
-                        ARG_1,
-                        writeByte,
+                        computeArguments(1, writeByte),
                         head,
                         application(writeStream, tail)))),
                 closeStream)));
