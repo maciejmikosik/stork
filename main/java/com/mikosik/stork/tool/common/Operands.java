@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.compute;
+package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.tool.common.Translate.asJavaBigInteger;
 

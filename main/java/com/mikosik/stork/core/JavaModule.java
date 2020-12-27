@@ -8,8 +8,8 @@ import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.tool.common.Aliens.computeArguments;
 import static com.mikosik.stork.tool.common.Aliens.rename;
+import static com.mikosik.stork.tool.common.Operands.operands;
 import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
-import static com.mikosik.stork.tool.compute.Operands.operands;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -21,7 +21,7 @@ import com.mikosik.stork.data.model.Alien;
 import com.mikosik.stork.data.model.Definition;
 import com.mikosik.stork.data.model.Expression;
 import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.tool.compute.Operands;
+import com.mikosik.stork.tool.common.Operands;
 
 public class JavaModule {
   public static Module javaModule() {
