@@ -1,7 +1,7 @@
-package com.mikosik.stork.main;
+package com.mikosik.stork.front.program;
 
-import static com.mikosik.stork.main.StdoutModule.closeStream;
-import static com.mikosik.stork.main.StdoutModule.writeByte;
+import static com.mikosik.stork.front.program.StdoutModule.closeStream;
+import static com.mikosik.stork.front.program.StdoutModule.writeByte;
 
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;

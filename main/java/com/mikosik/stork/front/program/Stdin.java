@@ -1,4 +1,4 @@
-package com.mikosik.stork.main;
+package com.mikosik.stork.front.program;
 
 import static java.lang.String.format;
 
