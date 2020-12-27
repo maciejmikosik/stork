@@ -7,12 +7,12 @@ import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Lambda.lambda;
 import static com.mikosik.stork.data.model.Module.module;
 import static com.mikosik.stork.data.model.Opcode.ADD;
-import static com.mikosik.stork.data.model.Opcode.ARG_1;
 import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Argument.argument;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.data.model.comp.Function.function;
+import static com.mikosik.stork.tool.common.Aliens.computeArguments;
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
@@ -44,10 +44,11 @@ public class TestDecompiler {
                 .add(test("123", integer(BigInteger.valueOf(123))))
                 .add(test("-123", integer(BigInteger.valueOf(-123)))))
             .add(suite("opcode")
-                .add(test("ADD", ADD))
-                .add(test("ARG_1", ARG_1)))
+                .add(test("ADD", ADD)))
             .add(suite("alien")
-                .add(test("alien_name", mockAlien("alien_name"))))
+                .add(test("alien_name", mockAlien("alien_name")))
+                .add(test("ARG_1(function)", computeArguments(1, variable("function"))))
+                .add(test("ARG_1(ARG_2(function))", computeArguments(2, variable("function")))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")

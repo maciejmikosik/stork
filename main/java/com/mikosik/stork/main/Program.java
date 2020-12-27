@@ -48,6 +48,7 @@ public class Program {
     Computer computer = computer()
         .moduling(linkedModule)
         .opcoding()
+        .aliening()
         .substituting()
         .stacking()
         .wire(StdinComputer::stdin)
