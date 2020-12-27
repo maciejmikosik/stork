@@ -8,7 +8,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import java.io.ByteArrayOutputStream;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.model.Expression;
 
 public class QuoteCompiler implements Compiler<Expression> {
   public Expression compile(Input input) {

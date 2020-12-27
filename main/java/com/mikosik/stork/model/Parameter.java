@@ -1,4 +1,4 @@
-package com.mikosik.stork.data.model;
+package com.mikosik.stork.model;
 
 public class Parameter implements Expression {
   public final String name;

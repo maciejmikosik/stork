@@ -3,23 +3,22 @@ package com.mikosik.stork.main;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
 import static com.mikosik.stork.main.Stdin.stdin;
 import static com.mikosik.stork.main.StdoutModule.closeStream;
 import static com.mikosik.stork.main.StdoutModule.stdoutModule;
 import static com.mikosik.stork.main.StdoutModule.writeByte;
 import static com.mikosik.stork.main.StdoutModule.writeStream;
-import static com.mikosik.stork.tool.common.Operands.operands;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import java.io.InputStream;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Module;
 import com.mikosik.stork.tool.compute.Computer;
 import com.mikosik.stork.tool.link.Linker;
 
@@ -46,10 +45,10 @@ public class Program {
         module));
 
     Computer computer = computer()
+        .stacking()
         .moduling(linkedModule)
         .aliening()
         .substituting()
-        .stacking()
         .wire(StdinComputer::stdin)
         .interruptible()
         .progressing()
@@ -68,8 +67,8 @@ public class Program {
         }
         computation = computer.compute(computation);
         if (computation.expression == writeByte) {
-          int oneByte = operands(computation.stack)
-              .nextJavaBigInteger()
+          int oneByte = computation.stack
+              .argumentIntegerJava()
               .intValueExact();
           check(0 <= oneByte && oneByte <= 255);
           return oneByte;

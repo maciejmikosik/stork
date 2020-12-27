@@ -1,15 +1,14 @@
 package com.mikosik.stork.tool.compute;
 
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.model.Lambda.lambda;
 
-import com.mikosik.stork.data.model.Application;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Lambda;
-import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.model.comp.Argument;
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Lambda;
+import com.mikosik.stork.model.Parameter;
 
 public class SubstitutingComputer implements Computer {
   private final Computer computer;
@@ -24,17 +23,17 @@ public class SubstitutingComputer implements Computer {
 
   public Computation compute(Computation computation) {
     return computation.expression instanceof Lambda
-        && computation.stack instanceof Argument
-            ? compute(
-                (Lambda) computation.expression,
-                (Argument) computation.stack)
+        && computation.stack.hasArgument()
+            ? computation(
+                substitute(
+                    (Lambda) computation.expression,
+                    computation.stack.argument()),
+                computation.stack.pop())
             : computer.compute(computation);
   }
 
-  private Computation compute(Lambda lambda, Argument argument) {
-    return computation(
-        substitute(lambda.body, lambda.parameter, argument.expression),
-        argument.stack);
+  private static Expression substitute(Lambda lambda, Expression argument) {
+    return substitute(lambda.body, lambda.parameter, argument);
   }
 
   private static Expression substitute(

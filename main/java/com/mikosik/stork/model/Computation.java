@@ -1,8 +1,6 @@
-package com.mikosik.stork.data.model.comp;
+package com.mikosik.stork.model;
 
-import static com.mikosik.stork.data.model.comp.Empty.empty;
-
-import com.mikosik.stork.data.model.Expression;
+import static com.mikosik.stork.model.Stack.stack;
 
 public class Computation {
   public final Expression expression;
@@ -18,6 +16,6 @@ public class Computation {
   }
 
   public static Computation computation(Expression expression) {
-    return new Computation(expression, empty());
+    return new Computation(expression, stack());
   }
 }

@@ -1,11 +1,11 @@
 package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.data.model.Application.application;
+import static com.mikosik.stork.model.Application.application;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Variable;
 
 public class InvocationCompiler implements Compiler<Expression> {
   public Compiler<Void> whitespace;

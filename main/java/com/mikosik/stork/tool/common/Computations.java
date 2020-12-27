@@ -1,33 +1,28 @@
 package com.mikosik.stork.tool.common;
 
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.data.model.comp.Switch.switchOn;
+import static com.mikosik.stork.model.Application.application;
 
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.data.model.comp.Empty;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Stack;
 
 public class Computations {
   /**
    * @return current state of {@code computation} by moving up stack
    */
   public static Expression abort(Computation computation) {
-    Computation aborting = computation;
-    while (!(aborting.stack instanceof Empty)) {
-      aborting = moveUpStack(aborting);
+    Expression expression = computation.expression;
+    Stack stack = computation.stack;
+    while (true) {
+      if (stack.hasArgument()) {
+        expression = application(expression, stack.argument());
+      } else if (stack.hasFunction()) {
+        expression = application(stack.function(), expression);
+      } else {
+        break;
+      }
+      stack = stack.pop();
     }
-    return aborting.expression;
-  }
-
-  private static Computation moveUpStack(Computation computation) {
-    return switchOn(computation.stack)
-        .ifArgument(argument -> computation(
-            application(computation.expression, argument.expression),
-            argument.stack))
-        .ifFunction(function -> computation(
-            application(function.expression, computation.expression),
-            function.stack))
-        .elseFail();
+    return expression;
   }
 }

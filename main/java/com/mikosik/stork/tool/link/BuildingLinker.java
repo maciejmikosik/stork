@@ -1,12 +1,12 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Switch.switchOn;
-import static com.mikosik.stork.data.model.Variable.variable;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Switch.switchOn;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.common.Translate.asJavaString;
@@ -16,10 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Definition;
-import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Module;
-import com.mikosik.stork.data.model.Variable;
+import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Invocation;
 
 public class BuildingLinker implements Linker {

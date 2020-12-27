@@ -3,7 +3,7 @@ package com.mikosik.stork.tool.compute;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import com.mikosik.stork.data.model.comp.Computation;
+import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class LoggingComputer implements Computer {

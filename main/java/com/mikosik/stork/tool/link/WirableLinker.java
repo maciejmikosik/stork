@@ -5,7 +5,7 @@ import static com.mikosik.stork.tool.link.JoiningLinker.joiningLinker;
 import java.util.function.Function;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Module;
+import com.mikosik.stork.model.Module;
 
 public class WirableLinker implements Linker {
   private final Linker linker;

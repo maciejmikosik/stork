@@ -3,7 +3,7 @@ package com.mikosik.stork.main;
 import static java.lang.String.format;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.data.model.Expression;
+import com.mikosik.stork.model.Expression;
 
 public class Stdin implements Expression {
   public final Input input;

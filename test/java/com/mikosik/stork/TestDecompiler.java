@@ -1,16 +1,15 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.data.model.Application.application;
-import static com.mikosik.stork.data.model.Definition.definition;
-import static com.mikosik.stork.data.model.Integer.integer;
-import static com.mikosik.stork.data.model.Lambda.lambda;
-import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Parameter.parameter;
-import static com.mikosik.stork.data.model.Variable.variable;
-import static com.mikosik.stork.data.model.comp.Argument.argument;
-import static com.mikosik.stork.data.model.comp.Computation.computation;
-import static com.mikosik.stork.data.model.comp.Function.function;
+import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Integer.integer;
+import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.model.Stack.stack;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Aliens.computeArguments;
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
@@ -25,11 +24,10 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.data.model.Alien;
-import com.mikosik.stork.data.model.Parameter;
-import com.mikosik.stork.data.model.comp.Computation;
-import com.mikosik.stork.data.model.comp.Empty;
-import com.mikosik.stork.data.model.comp.Stack;
+import com.mikosik.stork.model.Alien;
+import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -70,12 +68,12 @@ public class TestDecompiler {
         .add(suite("computation")
             .add(test("@(f)", computation(
                 variable("f"),
-                Empty.empty())))
+                stack())))
             .add(test("f(@(g(y)))(y)", computation(
                 application(variable("g"), variable("y")),
-                function(variable("f"),
-                    argument(variable("y"),
-                        Empty.empty()))))))
+                stack()
+                    .pushArgument(variable("y"))
+                    .pushFunction(variable("f"))))))
         .add(suite("local")
             .add(testLocal("true", variable("stork.boolean.true"))));
   }
