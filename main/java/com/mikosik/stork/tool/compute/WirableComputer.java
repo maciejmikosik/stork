@@ -26,10 +26,6 @@ public class WirableComputer implements Computer {
     return wire(computer -> ModulingComputer.moduling(module, computer));
   }
 
-  public WirableComputer opcoding() {
-    return wire(OpcodingComputer::opcoding);
-  }
-
   public WirableComputer aliening() {
     return wire(AlieningComputer::aliening);
   }

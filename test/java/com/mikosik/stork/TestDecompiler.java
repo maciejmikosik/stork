@@ -6,7 +6,6 @@ import static com.mikosik.stork.data.model.Definition.definition;
 import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Lambda.lambda;
 import static com.mikosik.stork.data.model.Module.module;
-import static com.mikosik.stork.data.model.Opcode.ADD;
 import static com.mikosik.stork.data.model.Parameter.parameter;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Argument.argument;
@@ -43,8 +42,6 @@ public class TestDecompiler {
                 .add(test("0", integer(BigInteger.ZERO)))
                 .add(test("123", integer(BigInteger.valueOf(123))))
                 .add(test("-123", integer(BigInteger.valueOf(-123)))))
-            .add(suite("opcode")
-                .add(test("ADD", ADD)))
             .add(suite("alien")
                 .add(test("alien_name", mockAlien("alien_name")))
                 .add(test("ARG_1(function)", computeArguments(1, variable("function"))))
