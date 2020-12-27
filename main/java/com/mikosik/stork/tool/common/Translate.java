@@ -19,10 +19,6 @@ public class Translate {
     return variable("stork.boolean." + Boolean.toString(bool));
   }
 
-  public static Expression asStorkInteger(BigInteger value) {
-    return integer(value);
-  }
-
   private static final Variable SOME = variable("stork.stream.some");
   private static final Variable NONE = variable("stork.stream.none");
 
@@ -34,7 +30,7 @@ public class Translate {
   public static Expression asStorkStream(String ascii) {
     Expression stream = NONE;
     for (char asciiCharacter : reverse(ascii).toCharArray()) {
-      Expression integer = integer(BigInteger.valueOf(asciiCharacter));
+      Expression integer = integer(asciiCharacter);
       stream = application(application(SOME, integer), stream);
     }
     return stream;

@@ -5,7 +5,6 @@ import static com.mikosik.stork.data.model.Integer.integer;
 import static com.mikosik.stork.data.model.Variable.variable;
 import static com.mikosik.stork.data.model.comp.Computation.computation;
 
-import java.math.BigInteger;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -48,7 +47,7 @@ public class StdinComputer implements Computer {
         ? none
         : application(
             some,
-            integer(BigInteger.valueOf(oneByte)),
+            integer(oneByte),
             Stdin.stdin(stdin.input));
   }
 }

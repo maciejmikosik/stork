@@ -12,4 +12,8 @@ public class Integer implements Expression {
   public static Expression integer(BigInteger value) {
     return new Integer(value);
   }
+
+  public static Expression integer(int value) {
+    return new Integer(BigInteger.valueOf(value));
+  }
 }

@@ -33,7 +33,7 @@ public class JavaModule {
     definitions.add(define("stork.java.math.BigInteger.equals", 2,
         alienize((arg, thiz) -> asStorkBoolean(thiz.equals(arg)))));
     definitions.add(define("stork.java.math.BigInteger.compareTo", 2,
-        alienize((arg, thiz) -> integer(BigInteger.valueOf(thiz.compareTo(arg))))));
+        alienize((arg, thiz) -> integer(thiz.compareTo(arg)))));
     return module(chainFrom(definitions));
   }
 
