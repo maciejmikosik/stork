@@ -5,7 +5,6 @@ import static com.mikosik.stork.data.model.comp.Computation.computation;
 
 import com.mikosik.stork.data.model.Application;
 import com.mikosik.stork.data.model.Expression;
-import com.mikosik.stork.data.model.Variable;
 import com.mikosik.stork.data.model.comp.Computation;
 import com.mikosik.stork.data.model.comp.Stack;
 
@@ -25,8 +24,6 @@ public class StackingComputer implements Computer {
     Stack stack = computation.stack;
     if (expression instanceof Application) {
       return compute((Application) expression, stack);
-    } else if (expression instanceof Variable) {
-      return computer.compute(computation);
     } else if (stack.hasFunction()) {
       return computation(
           application(stack.function(), expression),

@@ -45,10 +45,10 @@ public class Program {
         module));
 
     Computer computer = computer()
+        .stacking()
         .moduling(linkedModule)
         .aliening()
         .substituting()
-        .stacking()
         .wire(StdinComputer::stdin)
         .interruptible()
         .progressing()
