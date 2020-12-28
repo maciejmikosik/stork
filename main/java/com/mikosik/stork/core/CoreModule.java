@@ -20,7 +20,6 @@ public class CoreModule {
     Repository repository = repository();
     Linker linker = linker()
         .building()
-        .opcoding()
         .unique()
         .coherent();
     Chain<Module> modules = moduleNames.map(repository::module)
