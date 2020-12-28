@@ -37,6 +37,7 @@ public class Program {
 
   public Input run(Input stdinInput) {
     Linker linker = linker()
+        .quoting()
         .unique()
         .coherent();
 

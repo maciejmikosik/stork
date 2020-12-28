@@ -9,7 +9,6 @@ import static com.mikosik.stork.model.Switch.switchOn;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
-import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Iterator;
@@ -19,6 +18,7 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Invocation;
 
@@ -124,5 +124,9 @@ public class BuildingLinker implements Linker {
             renameTo(replacement, original, application.argument)))
         .ifParameter(parameter -> parameter)
         .elseReturn(() -> expression);
+  }
+
+  public static String asJavaString(Expression expression) {
+    return ((Quote) expression).string;
   }
 }

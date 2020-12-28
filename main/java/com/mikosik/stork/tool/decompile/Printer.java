@@ -16,6 +16,7 @@ import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Scope;
@@ -48,19 +49,28 @@ public class Printer {
   private Printer print(Expression expression) {
     return expression instanceof Integer
         ? print((Integer) expression)
-        : expression instanceof Variable
-            ? print((Variable) expression)
-            : expression instanceof Parameter
-                ? print((Parameter) expression)
-                : expression instanceof Application
-                    ? print((Application) expression)
-                    : expression instanceof Lambda
-                        ? print((Lambda) expression)
-                        : print(expression.toString());
+        : expression instanceof Quote
+            ? print((Quote) expression)
+            : expression instanceof Variable
+                ? print((Variable) expression)
+                : expression instanceof Parameter
+                    ? print((Parameter) expression)
+                    : expression instanceof Application
+                        ? print((Application) expression)
+                        : expression instanceof Lambda
+                            ? print((Lambda) expression)
+                            : print(expression.toString());
   }
 
   private Printer print(Integer integer) {
     return print(integer.value.toString());
+  }
+
+  private Printer print(Quote quote) {
+    return this
+        .print('\"')
+        .print(quote.string)
+        .print('\"');
   }
 
   private Printer print(Variable variable) {
