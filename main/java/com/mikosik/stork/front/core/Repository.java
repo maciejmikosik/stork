@@ -1,4 +1,4 @@
-package com.mikosik.stork.core;
+package com.mikosik.stork.front.core;
 
 import static com.mikosik.stork.common.Input.resource;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;

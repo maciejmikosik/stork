@@ -26,10 +26,6 @@ public class WirableLinker implements Linker {
     return wire(BuildingLinker::building);
   }
 
-  public WirableLinker opcoding() {
-    return wire(OpcodingLinker::opcoding);
-  }
-
   public WirableLinker unique() {
     return wire(UniqueLinker::unique);
   }

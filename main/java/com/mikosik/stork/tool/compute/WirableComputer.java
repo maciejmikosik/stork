@@ -46,20 +46,8 @@ public class WirableComputer implements Computer {
     return wire(computer -> LoggingComputer.logging(stream, decompiler, computer));
   }
 
-  public WirableComputer humane() {
-    return wire(HumaneComputer::humane);
-  }
-
   public WirableComputer progressing() {
     return wire(ProgressingComputer::progressing);
-  }
-
-  public WirableComputer looping() {
-    return wire(LoopingComputer::looping);
-  }
-
-  public CompleteComputer complete() {
-    return CompleteComputer.complete(delegate);
   }
 
   public Computation compute(Computation computation) {

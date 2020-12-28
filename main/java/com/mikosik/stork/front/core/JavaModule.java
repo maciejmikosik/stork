@@ -1,4 +1,4 @@
-package com.mikosik.stork.core;
+package com.mikosik.stork.front.core;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.model.Computation.computation;

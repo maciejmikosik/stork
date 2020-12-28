@@ -1,13 +1,13 @@
-package com.mikosik.stork.main;
+package com.mikosik.stork.front.program;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.main.Stdin.stdin;
-import static com.mikosik.stork.main.StdoutModule.closeStream;
-import static com.mikosik.stork.main.StdoutModule.stdoutModule;
-import static com.mikosik.stork.main.StdoutModule.writeByte;
-import static com.mikosik.stork.main.StdoutModule.writeStream;
+import static com.mikosik.stork.front.program.Stdin.stdin;
+import static com.mikosik.stork.front.program.StdoutModule.closeStream;
+import static com.mikosik.stork.front.program.StdoutModule.stdoutModule;
+import static com.mikosik.stork.front.program.StdoutModule.writeByte;
+import static com.mikosik.stork.front.program.StdoutModule.writeStream;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;

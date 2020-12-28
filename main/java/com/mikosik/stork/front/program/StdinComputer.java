@@ -1,4 +1,4 @@
-package com.mikosik.stork.main;
+package com.mikosik.stork.front.program;
 
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;

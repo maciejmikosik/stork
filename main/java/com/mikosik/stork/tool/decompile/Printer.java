@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Computations.abort;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.Chain;
@@ -17,6 +16,7 @@ import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Scope;
 
@@ -136,5 +136,21 @@ public class Printer {
     return computation(
         application(variable("@"), computation.expression),
         computation.stack);
+  }
+
+  private static Expression abort(Computation computation) {
+    Expression expression = computation.expression;
+    Stack stack = computation.stack;
+    while (true) {
+      if (stack.hasArgument()) {
+        expression = application(expression, stack.argument());
+      } else if (stack.hasFunction()) {
+        expression = application(stack.function(), expression);
+      } else {
+        break;
+      }
+      stack = stack.pop();
+    }
+    return expression;
   }
 }

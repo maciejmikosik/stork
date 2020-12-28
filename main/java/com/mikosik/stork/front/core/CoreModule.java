@@ -1,8 +1,8 @@
-package com.mikosik.stork.core;
+package com.mikosik.stork.front.core;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.core.JavaModule.javaModule;
-import static com.mikosik.stork.core.Repository.repository;
+import static com.mikosik.stork.front.core.JavaModule.javaModule;
+import static com.mikosik.stork.front.core.Repository.repository;
 import static com.mikosik.stork.tool.link.WirableLinker.linker;
 
 import com.mikosik.stork.common.Chain;
@@ -20,7 +20,6 @@ public class CoreModule {
     Repository repository = repository();
     Linker linker = linker()
         .building()
-        .opcoding()
         .unique()
         .coherent();
     Chain<Module> modules = moduleNames.map(repository::module)
