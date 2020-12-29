@@ -19,22 +19,14 @@ import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Invocation;
 import com.mikosik.stork.tool.common.Traverser;
 
-public class BuildingLinker implements Linker {
-  private final Linker linker;
+public class Builder implements Weaver {
+  private Builder() {}
 
-  private BuildingLinker(Linker linker) {
-    this.linker = linker;
+  public static Weaver builder() {
+    return new Builder();
   }
 
-  public static Linker building(Linker linker) {
-    return new BuildingLinker(linker);
-  }
-
-  public Module link(Chain<Module> modules) {
-    return linker.link(modules.map(BuildingLinker::build));
-  }
-
-  private static Module build(Module module) {
+  public Module weave(Module module) {
     List<Definition> buildDefinitions = module.definitions.stream()
         .filter(definition -> definition.variable.name.equals("build"))
         .collect(toList());

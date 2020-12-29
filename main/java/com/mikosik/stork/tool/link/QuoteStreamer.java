@@ -5,29 +5,20 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Variable.variable;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
-public class QuotingLinker implements Linker {
-  private final Linker linker;
+public class QuoteStreamer implements Weaver {
+  private QuoteStreamer() {}
 
-  private QuotingLinker(Linker linker) {
-    this.linker = linker;
+  public static QuoteStreamer quoteStreamer() {
+    return new QuoteStreamer();
   }
 
-  public static Linker quoting(Linker linker) {
-    return new QuotingLinker(linker);
-  }
-
-  public Module link(Chain<Module> modules) {
-    return replaceQuotes(linker.link(modules));
-  }
-
-  private Module replaceQuotes(Module module) {
+  public Module weave(Module module) {
     return new Traverser() {
       protected Expression traverse(Quote quote) {
         return asStorkStream(quote);

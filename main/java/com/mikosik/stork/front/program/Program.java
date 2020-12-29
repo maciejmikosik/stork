@@ -11,7 +11,7 @@ import static com.mikosik.stork.front.program.StdoutModule.writeStream;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.WirableLinker.linker;
+import static com.mikosik.stork.tool.link.Linkers.defaultLinker;
 
 import java.io.InputStream;
 
@@ -36,10 +36,7 @@ public class Program {
   }
 
   public Input run(Input stdinInput) {
-    Linker linker = linker()
-        .quoting()
-        .unique()
-        .coherent();
+    Linker linker = defaultLinker();
 
     Module linkedModule = linker.link(chainOf(
         stdoutModule(),
