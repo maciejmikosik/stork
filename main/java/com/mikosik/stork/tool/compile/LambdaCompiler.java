@@ -1,16 +1,15 @@
 package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.tool.common.Traverser;
 
 public class LambdaCompiler implements Compiler<Lambda> {
   public Compiler<Void> whitespace;
@@ -28,35 +27,18 @@ public class LambdaCompiler implements Compiler<Lambda> {
   }
 
   private static Expression bind(Parameter parameter, Expression expression) {
-    if (expression instanceof Variable) {
-      return bind(parameter, (Variable) expression);
-    } else if (expression instanceof Application) {
-      return bind(parameter, (Application) expression);
-    } else if (expression instanceof Lambda) {
-      return bind(parameter, (Lambda) expression);
-    } else {
-      return expression;
-    }
-  }
+    return new Traverser() {
+      protected Expression traverse(Variable variable) {
+        return variable.name.equals(parameter.name)
+            ? parameter
+            : variable;
+      }
 
-  private static Expression bind(Parameter parameter, Variable variable) {
-    return variable.name.equals(parameter.name)
-        ? parameter
-        : variable;
-  }
-
-  private static Expression bind(Parameter parameter, Application application) {
-    return application(
-        bind(parameter, application.function),
-        bind(parameter, application.argument));
-  }
-
-  // TODO test shadowing
-  private static Expression bind(Parameter parameter, Lambda lambda) {
-    return lambda.parameter.name.equals(parameter.name)
-        ? lambda
-        : lambda(
-            lambda.parameter,
-            bind(parameter, lambda.body));
+      protected Expression traverse(Lambda lambda) {
+        return lambda.parameter.name.equals(parameter.name)
+            ? lambda // TODO test shadowing
+            : super.traverse(lambda);
+      }
+    }.traverse(expression);
   }
 }
