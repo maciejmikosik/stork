@@ -8,6 +8,7 @@ import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Stack.stack;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Aliens.computeArguments;
@@ -40,6 +41,9 @@ public class TestDecompiler {
                 .add(test("0", integer(BigInteger.ZERO)))
                 .add(test("123", integer(123)))
                 .add(test("-123", integer(-123))))
+            .add(suite("quote")
+                .add(test("\"example quote\"", quote("example quote")))
+                .add(test("\"\"", quote(""))))
             .add(suite("alien")
                 .add(test("alien_name", mockAlien("alien_name")))
                 .add(test("ARG_1(function)", computeArguments(1, variable("function"))))

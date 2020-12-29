@@ -2,7 +2,7 @@ package com.mikosik.stork.tool.compile;
 
 import static com.mikosik.stork.common.Ascii.DOUBLE_QUOTE;
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.tool.common.Translate.asStorkStream;
+import static com.mikosik.stork.model.Quote.quote;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.ByteArrayOutputStream;
@@ -12,7 +12,7 @@ import com.mikosik.stork.model.Expression;
 
 public class QuoteCompiler implements Compiler<Expression> {
   public Expression compile(Input input) {
-    return asStorkStream(string(parseQuote(input)));
+    return quote(string(parseQuote(input)));
   }
 
   private byte[] parseQuote(Input input) {

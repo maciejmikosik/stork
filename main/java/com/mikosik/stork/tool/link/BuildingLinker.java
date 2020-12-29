@@ -1,15 +1,10 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.Switch.switchOn;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Invocation.asInvocation;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
-import static com.mikosik.stork.tool.common.Translate.asJavaString;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Iterator;
@@ -19,8 +14,10 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Invocation;
+import com.mikosik.stork.tool.common.Traverser;
 
 public class BuildingLinker implements Linker {
   private final Linker linker;
@@ -92,37 +89,24 @@ public class BuildingLinker implements Linker {
     return renameTo(global, local, module);
   }
 
-  private static Module renameTo(Variable replacement, Variable original, Module module) {
-    List<Definition> definitions = module.definitions.stream()
-        .map(definition -> renameTo(replacement, original, definition))
-        .collect(toList());
-    return module(chainFrom(definitions));
-  }
-
-  private static Definition renameTo(
+  private static Module renameTo(
       Variable replacement,
       Variable original,
-      Definition definition) {
-    return definition(
-        (Variable) renameTo(replacement, original, definition.variable),
-        renameTo(replacement, original, definition.expression));
-  }
-
-  private static Expression renameTo(
-      Variable replacement,
-      Variable original,
-      Expression expression) {
-    return switchOn(expression)
-        .ifVariable(variable -> variable.name.equals(original.name)
+      Module module) {
+    return new Traverser() {
+      protected Variable traverse(Variable variable) {
+        return variable.name.equals(original.name)
             ? replacement
-            : variable)
-        .ifLambda(lambda -> lambda(
-            lambda.parameter,
-            renameTo(replacement, original, lambda.body)))
-        .ifApplication(application -> application(
-            renameTo(replacement, original, application.function),
-            renameTo(replacement, original, application.argument)))
-        .ifParameter(parameter -> parameter)
-        .elseReturn(() -> expression);
+            : variable;
+      }
+
+      protected Variable traverseDefinitionName(Variable variable) {
+        return traverse(variable);
+      }
+    }.traverse(module);
+  }
+
+  public static String asJavaString(Expression expression) {
+    return ((Quote) expression).string;
   }
 }
