@@ -5,11 +5,9 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
-import static com.mikosik.stork.front.core.CoreModule.coreModule;
 import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
-import static com.mikosik.stork.tool.link.Linkers.defaultLinker;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -27,7 +25,6 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.Input;
 import com.mikosik.stork.front.program.Program;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.tool.link.Linker;
 
 public class ProgramTest {
   public static Test testProgramsIn(Path directory) {
@@ -52,15 +49,13 @@ public class ProgramTest {
   }
 
   private static void run(Path directory) {
-    Linker linker = defaultLinker();
     List<Module> modules = list(directory)
         .filter(Files::isRegularFile)
         .filter(ProgramTest::isStorkFile)
         .map(ProgramTest::compileModule)
         .collect(toList());
-    Module module = linker.link(chainFrom(modules).add(coreModule()));
 
-    Program program = program(variable("main"), module);
+    Program program = program(variable("main"), chainFrom(modules));
     Input stdin = tryInput(directory.resolve("main.in"));
     byte[] actualStdout = program.run(stdin).readAllBytes();
     byte[] expectedStdout = tryInput(directory.resolve("main.out")).readAllBytes();

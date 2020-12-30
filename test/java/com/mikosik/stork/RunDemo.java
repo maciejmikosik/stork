@@ -4,26 +4,25 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.Input.resource;
 import static com.mikosik.stork.common.Output.output;
-import static com.mikosik.stork.front.core.CoreModule.coreModule;
 import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
-import static com.mikosik.stork.tool.link.Linkers.defaultLinker;
 
+import com.mikosik.stork.common.Input;
 import com.mikosik.stork.front.program.Program;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.tool.compile.Compiler;
-import com.mikosik.stork.tool.link.Linker;
 
 public class RunDemo {
   public static void main(String[] args) {
     Compiler<Module> compiler = defaultCompiler();
-    Linker linker = defaultLinker();
-    Module module = linker.link(chainOf(
-        compiler.compile(resource(RunDemo.class, "demo.stork").buffered()),
-        coreModule()));
-    Program program = program(variable("main"), module);
+    Module module = compiler.compile(file("demo.stork").buffered());
+    Program program = program(variable("main"), chainOf(module));
     program.run(input(System.in))
         .pumpToAndFlush(output(System.out));
+  }
+
+  private static Input file(String name) {
+    return resource(RunDemo.class, name);
   }
 }

@@ -1,26 +1,13 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.tool.link.Builder.builder;
-import static com.mikosik.stork.tool.link.NameCollisionDetector.nameCollisionDetector;
-import static com.mikosik.stork.tool.link.QuoteStreamer.quoteStreamer;
-import static com.mikosik.stork.tool.link.UndefinedVariablesDetector.undefinedVariablesDetector;
 import static java.util.Arrays.stream;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Module;
 
 public class Linkers {
-  public static Linker defaultLinker() {
-    return linker(
-        builder(),
-        compose(
-            quoteStreamer(),
-            nameCollisionDetector(),
-            undefinedVariablesDetector()));
-  }
-
-  private static Linker linker(Weaver preWeaver, Weaver postWeaver) {
+  public static Linker linker(Weaver preWeaver, Weaver postWeaver) {
     return modules -> postWeaver.weave(join(modules.map(preWeaver::weave)));
   }
 
@@ -28,7 +15,7 @@ public class Linkers {
     return module(modules.flatMap(module -> module.definitions));
   }
 
-  private static Weaver compose(Weaver weaver, Weaver... weavers) {
+  public static Weaver compose(Weaver weaver, Weaver... weavers) {
     return stream(weavers).reduce(weaver, Linkers::compose);
   }
 
