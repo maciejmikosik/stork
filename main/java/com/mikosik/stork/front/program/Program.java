@@ -44,7 +44,9 @@ public class Program {
 
   public Input run(Input stdinInput) {
     Linker linker = linker(
-        builder(),
+        compose(
+            nameCollisionDetector(),
+            builder()),
         compose(
             quoteStreamer(),
             nameCollisionDetector(),
