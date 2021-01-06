@@ -5,26 +5,17 @@ import static com.mikosik.stork.common.Check.check;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Module;
 
-public class UniqueLinker implements Linker {
-  private final Linker linker;
+public class NameCollisionDetector implements Weaver {
+  private NameCollisionDetector() {}
 
-  private UniqueLinker(Linker linker) {
-    this.linker = linker;
-  }
-
-  public static Linker unique(Linker linker) {
-    return new UniqueLinker(linker);
-  }
-
-  public Module link(Chain<Module> modules) {
-    return checkUnique(linker.link(modules));
+  public static NameCollisionDetector nameCollisionDetector() {
+    return new NameCollisionDetector();
   }
 
   // TODO test collisions handling
-  private static Module checkUnique(Module module) {
+  public Module weave(Module module) {
     Set<String> keys = new HashSet<>();
     // TODO throw dedicated exception
     module.definitions.stream()
