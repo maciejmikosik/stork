@@ -26,8 +26,8 @@ public class WirableComputer implements Computer {
     return wire(computer -> ModulingComputer.moduling(module, computer));
   }
 
-  public WirableComputer aliening() {
-    return wire(AlieningComputer::aliening);
+  public WirableComputer innate() {
+    return wire(InnateComputer::innate);
   }
 
   public WirableComputer substituting() {

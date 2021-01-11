@@ -7,7 +7,7 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Aliens.computeArguments;
+import static com.mikosik.stork.tool.common.Innates.computeArguments;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Module;

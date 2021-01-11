@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Stack.stack;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Aliens.computeArguments;
+import static com.mikosik.stork.tool.common.Innates.computeArguments;
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
@@ -25,8 +25,8 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.model.Alien;
 import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.tool.decompile.Decompiler;
@@ -44,8 +44,8 @@ public class TestDecompiler {
             .add(suite("quote")
                 .add(test("\"example quote\"", quote("example quote")))
                 .add(test("\"\"", quote(""))))
-            .add(suite("alien")
-                .add(test("alien_name", mockAlien("alien_name")))
+            .add(suite("innate")
+                .add(test("innate_name", mockInnate("innate_name")))
                 .add(test("ARG_1(function)", computeArguments(1, variable("function"))))
                 .add(test("ARG_1(ARG_2(function))", computeArguments(2, variable("function")))))
             .add(suite("variable")
@@ -103,8 +103,8 @@ public class TestDecompiler {
     }
   }
 
-  private static Alien mockAlien(String name) {
-    return new Alien() {
+  private static Innate mockInnate(String name) {
+    return new Innate() {
       public Computation compute(Stack stack) {
         return null;
       }

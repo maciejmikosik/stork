@@ -60,7 +60,7 @@ public class Program {
     Computer computer = computer()
         .stacking()
         .moduling(module)
-        .aliening()
+        .innate()
         .substituting()
         .wire(StdinComputer::stdin)
         .interruptible()

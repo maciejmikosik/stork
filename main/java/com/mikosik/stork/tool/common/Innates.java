@@ -4,12 +4,12 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static java.lang.String.format;
 
-import com.mikosik.stork.model.Alien;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Stack;
 
-public class Aliens {
+public class Innates {
   public static Expression computeArguments(int number, Expression expression) {
     for (int i = number; i >= 1; i--) {
       expression = application(computeArgumentAt(i), expression);
@@ -23,7 +23,7 @@ public class Aliens {
         unnamedComputeArgumentAt(index));
   }
 
-  private static Alien unnamedComputeArgumentAt(int index) {
+  private static Innate unnamedComputeArgumentAt(int index) {
     return stack -> {
       Expression function = stack.argument();
       stack = stack.pop();
@@ -37,8 +37,8 @@ public class Aliens {
     };
   }
 
-  public static Alien rename(String name, Alien expression) {
-    return new Alien() {
+  public static Innate rename(String name, Innate expression) {
+    return new Innate() {
       public Computation compute(Stack stack) {
         return expression.compute(stack);
       }
