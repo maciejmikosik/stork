@@ -10,11 +10,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.model.Alien;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
@@ -83,8 +83,8 @@ public class Decompiler {
         return null;
       }
 
-      protected Expression traverse(Alien alien) {
-        output.print(alien.toString());
+      protected Expression traverse(Innate innate) {
+        output.print(innate.toString());
         return null;
       }
 

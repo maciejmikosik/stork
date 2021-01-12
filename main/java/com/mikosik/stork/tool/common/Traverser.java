@@ -5,10 +5,10 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 
-import com.mikosik.stork.model.Alien;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
@@ -46,8 +46,8 @@ public class Traverser {
       return traverse((Parameter) expression);
     } else if (expression instanceof Quote) {
       return traverse((Quote) expression);
-    } else if (expression instanceof Alien) {
-      return traverse((Alien) expression);
+    } else if (expression instanceof Innate) {
+      return traverse((Innate) expression);
     } else {
       return expression;
     }
@@ -79,7 +79,7 @@ public class Traverser {
     return quote;
   }
 
-  protected Expression traverse(Alien alien) {
-    return alien;
+  protected Expression traverse(Innate innate) {
+    return innate;
   }
 }

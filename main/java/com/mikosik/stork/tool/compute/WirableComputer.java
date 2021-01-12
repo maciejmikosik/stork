@@ -26,16 +26,16 @@ public class WirableComputer implements Computer {
     return wire(computer -> ModulingComputer.moduling(module, computer));
   }
 
-  public WirableComputer aliening() {
-    return wire(AlieningComputer::aliening);
-  }
-
-  public WirableComputer substituting() {
-    return wire(SubstitutingComputer::substituting);
+  public WirableComputer innate() {
+    return wire(InnateComputer::innate);
   }
 
   public WirableComputer stacking() {
     return wire(StackingComputer::stacking);
+  }
+
+  public WirableComputer caching() {
+    return wire(CachingComputer::caching);
   }
 
   public WirableComputer interruptible() {
