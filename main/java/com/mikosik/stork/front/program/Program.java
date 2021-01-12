@@ -64,6 +64,7 @@ public class Program {
         .moduling(module)
         .innate()
         .wire(StdinComputer::stdin)
+        .caching()
         .interruptible()
         .progressing()
         .wire(StdoutComputer::stdout);

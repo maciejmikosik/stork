@@ -72,6 +72,10 @@ public class Stack {
     return new Stack(frames.tail());
   }
 
+  public Object id() {
+    return frames;
+  }
+
   private static enum Type {
     ARGUMENT, FUNCTION
   }

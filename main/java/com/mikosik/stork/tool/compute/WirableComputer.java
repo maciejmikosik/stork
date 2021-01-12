@@ -38,6 +38,10 @@ public class WirableComputer implements Computer {
     return wire(StackingComputer::stacking);
   }
 
+  public WirableComputer caching() {
+    return wire(CachingComputer::caching);
+  }
+
   public WirableComputer interruptible() {
     return wire(InterruptibleComputer::interruptible);
   }
