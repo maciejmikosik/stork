@@ -13,6 +13,7 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.Builder.builder;
+import static com.mikosik.stork.tool.link.LambdaRemover.lambdaRemover;
 import static com.mikosik.stork.tool.link.Linkers.compose;
 import static com.mikosik.stork.tool.link.Linkers.linker;
 import static com.mikosik.stork.tool.link.NameCollisionDetector.nameCollisionDetector;
@@ -48,6 +49,7 @@ public class Program {
             nameCollisionDetector(),
             builder()),
         compose(
+            lambdaRemover(),
             quoteStreamer(),
             nameCollisionDetector(),
             undefinedVariablesDetector()));
@@ -61,7 +63,6 @@ public class Program {
         .stacking()
         .moduling(module)
         .innate()
-        .substituting()
         .wire(StdinComputer::stdin)
         .interruptible()
         .progressing()
