@@ -30,9 +30,10 @@ public class Combinators {
     stack = stack.pop();
     Expression z = stack.argument();
     stack = stack.pop();
-    return computation(
-        application(application(x, z), application(y, z)),
-        stack);
+    stack = stack
+        .pushArgument(application(y, z))
+        .pushArgument(z);
+    return computation(x, stack);
   });
 
   /** C(x)(y)(z) = x(z)(y) */
@@ -43,9 +44,10 @@ public class Combinators {
     stack = stack.pop();
     Expression z = stack.argument();
     stack = stack.pop();
-    return computation(
-        application(application(x, z), y),
-        stack);
+    stack = stack
+        .pushArgument(y)
+        .pushArgument(z);
+    return computation(x, stack);
   });
 
   /** B(x)(y)(z) = x(y(z)) */
@@ -56,9 +58,8 @@ public class Combinators {
     stack = stack.pop();
     Expression z = stack.argument();
     stack = stack.pop();
-    return computation(
-        application(x, application(y, z)),
-        stack);
+    stack = stack.pushArgument(application(y, z));
+    return computation(x, stack);
   });
 
   private static Innate name(String localName, Innate innate) {
