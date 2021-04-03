@@ -7,9 +7,10 @@ import java.util.WeakHashMap;
 
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Stack;
 
 public class CachingComputer implements Computer {
-  private final Map<Object, Expression> initial = new WeakHashMap<>();
+  private final Map<Stack, Expression> initial = new WeakHashMap<>();
   private final Map<Expression, Expression> cached = new WeakHashMap<>();
 
   private final Computer computer;
@@ -29,12 +30,12 @@ public class CachingComputer implements Computer {
   }
 
   private Computation computeAndCache(Computation computation) {
-    if (initial.containsKey(computation.stack.id())) {
+    if (initial.containsKey(computation.stack)) {
       cached.put(
-          initial.get(computation.stack.id()),
+          initial.get(computation.stack),
           computation.expression);
     } else {
-      initial.put(computation.stack.id(), computation.expression);
+      initial.put(computation.stack, computation.expression);
     }
     return computer.compute(computation);
   }
