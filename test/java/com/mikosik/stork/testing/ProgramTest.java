@@ -8,6 +8,8 @@ import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
+import static com.mikosik.stork.tool.link.Link.link;
+import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -16,6 +18,7 @@ import static org.quackery.Suite.suite;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +28,7 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.Input;
 import com.mikosik.stork.front.program.Program;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.tool.link.Build;
 
 public class ProgramTest {
   public static Test testProgramsIn(Path directory) {
@@ -53,9 +57,12 @@ public class ProgramTest {
         .filter(Files::isRegularFile)
         .filter(ProgramTest::isStorkFile)
         .map(ProgramTest::compileModule)
+        .map(Build::build)
         .collect(toList());
 
-    Program program = program(variable("main"), chainFrom(modules));
+    Module module = link(chainFrom(modules)
+        .add(moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
+    Program program = program(variable("main"), module);
     Input stdin = tryInput(directory.resolve("main.in"));
     byte[] actualStdout = program.run(stdin).readAllBytes();
     byte[] expectedStdout = tryInput(directory.resolve("main.out")).readAllBytes();

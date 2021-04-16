@@ -1,8 +1,8 @@
 package com.mikosik.stork.front.program;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.front.core.CoreModules.coreModules;
 import static com.mikosik.stork.front.core.JavaModule.javaModule;
 import static com.mikosik.stork.front.program.Stdin.stdin;
 import static com.mikosik.stork.front.program.StdoutModule.closeStream;
@@ -12,56 +12,47 @@ import static com.mikosik.stork.front.program.StdoutModule.writeStream;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.Builder.builder;
-import static com.mikosik.stork.tool.link.LambdaRemover.lambdaRemover;
-import static com.mikosik.stork.tool.link.Linkers.compose;
-import static com.mikosik.stork.tool.link.Linkers.linker;
-import static com.mikosik.stork.tool.link.NameCollisionDetector.nameCollisionDetector;
-import static com.mikosik.stork.tool.link.QuoteStreamer.quoteStreamer;
-import static com.mikosik.stork.tool.link.UndefinedVariablesDetector.undefinedVariablesDetector;
+import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
+import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
+import static com.mikosik.stork.tool.link.Link.link;
+import static com.mikosik.stork.tool.link.Unlambda.unlambda;
+import static com.mikosik.stork.tool.link.Unquote.unquote;
 
 import java.io.InputStream;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Input;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.compute.Computer;
-import com.mikosik.stork.tool.link.Linker;
 
 public class Program {
   private final Expression main;
-  private final Chain<Module> modules;
+  private final Module module;
 
-  private Program(Expression main, Chain<Module> modules) {
+  private Program(Expression main, Module module) {
     this.main = main;
-    this.modules = modules;
+    this.module = module;
   }
 
-  public static Program program(Expression main, Chain<Module> modules) {
-    return new Program(main, modules);
+  public static Program program(Variable main, Module module) {
+    return new Program(main, module);
   }
 
   public Input run(Input stdinInput) {
-    Linker linker = linker(
-        compose(
-            nameCollisionDetector(),
-            builder()),
-        compose(
-            lambdaRemover(),
-            quoteStreamer(),
-            nameCollisionDetector(),
-            undefinedVariablesDetector()));
-
-    Module module = linker.link(modules
-        .addAll(coreModules())
+    Module linkedModule = link(chainOf(module)
         .add(javaModule())
         .add(stdoutModule()));
 
+    checkCollisions(linkedModule);
+    checkUndefined(linkedModule);
+
+    linkedModule = unquote(unlambda(linkedModule));
+
     Computer computer = computer()
         .stacking()
-        .moduling(module)
+        .moduling(linkedModule)
         .innate()
         .wire(StdinComputer::stdin)
         .caching()

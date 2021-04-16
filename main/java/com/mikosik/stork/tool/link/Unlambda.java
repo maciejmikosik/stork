@@ -20,14 +20,8 @@ import com.mikosik.stork.tool.common.Traverser;
  *
  * https://en.wikipedia.org/wiki/Combinatory_logic#Completeness_of_the_S-K_basis
  */
-public class LambdaRemover implements Weaver {
-  private LambdaRemover() {}
-
-  public static LambdaRemover lambdaRemover() {
-    return new LambdaRemover();
-  }
-
-  public Module weave(Module module) {
+public class Unlambda {
+  public static Module unlambda(Module module) {
     return new Traverser() {
       protected Expression traverse(Application application) {
         // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
