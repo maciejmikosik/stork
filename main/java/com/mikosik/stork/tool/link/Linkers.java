@@ -11,7 +11,7 @@ public class Linkers {
     return modules -> postWeaver.weave(join(modules.map(preWeaver::weave)));
   }
 
-  private static Module join(Chain<Module> modules) {
+  public static Module join(Chain<Module> modules) {
     return module(modules.flatMap(module -> module.definitions));
   }
 

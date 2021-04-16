@@ -2,7 +2,6 @@ package com.mikosik.stork.front.program;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.front.core.CoreModules.coreModules;
 import static com.mikosik.stork.front.core.JavaModule.javaModule;
 import static com.mikosik.stork.front.program.Stdin.stdin;
 import static com.mikosik.stork.front.program.StdoutModule.closeStream;
@@ -18,9 +17,11 @@ import static com.mikosik.stork.tool.link.Linkers.compose;
 import static com.mikosik.stork.tool.link.Linkers.linker;
 import static com.mikosik.stork.tool.link.NameCollisionDetector.nameCollisionDetector;
 import static com.mikosik.stork.tool.link.QuoteStreamer.quoteStreamer;
+import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static com.mikosik.stork.tool.link.UndefinedVariablesDetector.undefinedVariablesDetector;
 
 import java.io.InputStream;
+import java.nio.file.Paths;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Input;
@@ -55,7 +56,7 @@ public class Program {
             undefinedVariablesDetector()));
 
     Module module = linker.link(modules
-        .addAll(coreModules())
+        .add(moduleFromDirectory(Paths.get("main/stork/com/mikosik")))
         .add(javaModule())
         .add(stdoutModule()));
 
