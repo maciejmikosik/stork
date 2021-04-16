@@ -7,15 +7,9 @@ import java.util.Set;
 
 import com.mikosik.stork.model.Module;
 
-public class NameCollisionDetector implements Weaver {
-  private NameCollisionDetector() {}
-
-  public static NameCollisionDetector nameCollisionDetector() {
-    return new NameCollisionDetector();
-  }
-
+public class CheckCollisions {
   // TODO test collisions handling
-  public Module weave(Module module) {
+  public static void checkCollisions(Module module) {
     Set<String> keys = new HashSet<>();
     // TODO throw dedicated exception
     module.definitions.stream()
@@ -23,6 +17,5 @@ public class NameCollisionDetector implements Weaver {
           check(!keys.contains(definition.variable.name));
           keys.add(definition.variable.name);
         });
-    return module;
   }
 }

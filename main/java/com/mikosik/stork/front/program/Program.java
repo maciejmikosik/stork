@@ -12,12 +12,11 @@ import static com.mikosik.stork.front.program.StdoutModule.writeStream;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
-import static com.mikosik.stork.tool.link.LambdaRemover.lambdaRemover;
-import static com.mikosik.stork.tool.link.Linkers.compose;
-import static com.mikosik.stork.tool.link.Linkers.linker;
-import static com.mikosik.stork.tool.link.NameCollisionDetector.nameCollisionDetector;
-import static com.mikosik.stork.tool.link.QuoteStreamer.quoteStreamer;
-import static com.mikosik.stork.tool.link.UndefinedVariablesDetector.undefinedVariablesDetector;
+import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
+import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
+import static com.mikosik.stork.tool.link.Link.link;
+import static com.mikosik.stork.tool.link.Unlambda.unlambda;
+import static com.mikosik.stork.tool.link.Unquote.unquote;
 
 import java.io.InputStream;
 
@@ -27,7 +26,6 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.compute.Computer;
-import com.mikosik.stork.tool.link.Linker;
 
 public class Program {
   private final Expression main;
@@ -43,17 +41,14 @@ public class Program {
   }
 
   public Input run(Input stdinInput) {
-    Linker linker = linker(
-        x -> x,
-        compose(
-            lambdaRemover(),
-            quoteStreamer(),
-            nameCollisionDetector(),
-            undefinedVariablesDetector()));
-
-    Module linkedModule = linker.link(chainOf(module)
+    Module linkedModule = link(chainOf(module)
         .add(javaModule())
         .add(stdoutModule()));
+
+    checkCollisions(linkedModule);
+    checkUndefined(linkedModule);
+
+    linkedModule = unquote(unlambda(linkedModule));
 
     Computer computer = computer()
         .stacking()

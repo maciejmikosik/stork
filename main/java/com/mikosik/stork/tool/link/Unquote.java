@@ -11,14 +11,8 @@ import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
-public class QuoteStreamer implements Weaver {
-  private QuoteStreamer() {}
-
-  public static QuoteStreamer quoteStreamer() {
-    return new QuoteStreamer();
-  }
-
-  public Module weave(Module module) {
+public class Unquote {
+  public static Module unquote(Module module) {
     return new Traverser() {
       protected Expression traverse(Quote quote) {
         return asStorkStream(quote);

@@ -19,14 +19,8 @@ import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Invocation;
 import com.mikosik.stork.tool.common.Traverser;
 
-public class Builder implements Weaver {
-  private Builder() {}
-
-  public static Weaver builder() {
-    return new Builder();
-  }
-
-  public Module weave(Module module) {
+public class Build {
+  public static Module build(Module module) {
     List<Definition> buildDefinitions = module.definitions.stream()
         .filter(definition -> definition.variable.name.equals("build"))
         .collect(toList());

@@ -3,8 +3,8 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
-import static com.mikosik.stork.tool.link.Builder.builder;
-import static com.mikosik.stork.tool.link.Linkers.join;
+import static com.mikosik.stork.tool.link.Build.build;
+import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.file.Files.walk;
 import static java.util.stream.Collectors.toList;
 
@@ -26,17 +26,16 @@ public class Stars {
           .filter(file -> file.getFileName().toString().equals("stork"))
           .map(Stars::moduleFromFile)
           .collect(toList());
-      return join(chainFrom(modules));
+      return link(chainFrom(modules));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
   }
 
   private static Module moduleFromFile(Path file) {
-    Weaver builder = builder();
     Compiler<Module> compiler = defaultCompiler();
     try (Input input = input(file).buffered()) {
-      return builder.weave(compiler.compile(input));
+      return build(compiler.compile(input));
     }
   }
 }

@@ -7,8 +7,8 @@ import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
-import static com.mikosik.stork.tool.link.Builder.builder;
-import static com.mikosik.stork.tool.link.Linkers.join;
+import static com.mikosik.stork.tool.link.Build.build;
+import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 
 import java.nio.file.Paths;
@@ -19,8 +19,8 @@ import com.mikosik.stork.model.Module;
 
 public class RunDemo {
   public static void main(String[] args) {
-    Module module = join(chainOf(
-        builder().weave(defaultCompiler().compile(file("demo.stork").buffered())),
+    Module module = link(chainOf(
+        build(defaultCompiler().compile(file("demo.stork").buffered())),
         moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
 
     Program program = program(variable("main"), module);

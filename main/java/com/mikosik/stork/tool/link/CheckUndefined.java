@@ -10,15 +10,9 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
-public class UndefinedVariablesDetector implements Weaver {
-  private UndefinedVariablesDetector() {}
-
-  public static Weaver undefinedVariablesDetector() {
-    return new UndefinedVariablesDetector();
-  }
-
+public class CheckUndefined {
   // TODO test coherence
-  public Module weave(Module module) {
+  public static void checkUndefined(Module module) {
     Set<String> defined = module.definitions.stream()
         .map(definition -> definition.variable.name)
         .collect(toCollection(HashSet::new));
@@ -31,6 +25,5 @@ public class UndefinedVariablesDetector implements Weaver {
         return super.traverse(variable);
       }
     }.traverse(module);
-    return module;
   }
 }
