@@ -1,44 +1,4 @@
 
-  build {
-    module
-      (exportAs("stork.stream.some")("some"))
-      (exportAs("stork.stream.none")("none"))
-      (exportAs("stork.stream.reduce")("reduce"))
-      (exportAs("stork.stream.tryAt")("tryAt"))
-      (exportAs("stork.stream.length")("length"))
-      (exportAs("stork.stream.single")("single"))
-      (exportAs("stork.stream.repeat")("repeat"))
-      (exportAs("stork.stream.tryFirst")("tryFirst"))
-      (exportAs("stork.stream.skip")("skip"))
-      (exportAs("stork.stream.filter")("filter"))
-      (exportAs("stork.stream.while")("while"))
-      (exportAs("stork.stream.contains")("contains"))
-      (exportAs("stork.stream.tryFind")("tryFind"))
-      (exportAs("stork.stream.each")("each"))
-      (exportAs("stork.stream.reverse")("reverse"))
-      (exportAs("stork.stream.append")("append"))
-      (exportAs("stork.stream.prepend")("prepend"))
-      (exportAs("stork.stream.flatten")("flatten"))
-      (exportAs("stork.stream.array")("array"))
-      (exportAs("stork.stream.generate")("generate"))
-      (exportAs("stork.stream.for")("for"))
-      (exportAs("stork.stream.count")("count"))
-      (exportAs("stork.stream.countFrom")("countFrom"))
-
-      (exportAs("private.stork.stream.array2")("array2"))
-      (exportAs("private.stork.stream.array3")("array3"))
-
-      (import("stork.optional.present"))
-      (import("stork.optional.absent"))
-      (import("stork.integer.add"))
-      (import("stork.integer.moreThan"))
-      (import("stork.integer.increment"))
-      (import("stork.integer.decrement"))
-      (import("stork.function.flip"))
-      (import("stork.boolean.false"))
-      (import("stork.boolean.or"))
-  }
-
   some(head)(tail)(vSome)(vNone) {
     vSome(head)(tail)
   }

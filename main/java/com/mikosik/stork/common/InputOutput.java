@@ -19,7 +19,15 @@ public class InputOutput {
     try {
       return Files.list(directory);
     } catch (IOException e) {
-      throw new UncheckedIOException(e);
+      throw unchecked(e);
+    }
+  }
+
+  public static Stream<Path> walk(Path directory) {
+    try {
+      return Files.walk(directory);
+    } catch (IOException e) {
+      throw unchecked(e);
     }
   }
 

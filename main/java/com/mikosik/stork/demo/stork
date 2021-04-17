@@ -1,0 +1,19 @@
+
+  unlines(lines) {
+    flatten(
+      each
+        (append(single(13)))
+        (lines)
+    )
+  }
+
+  text {
+    array(3)
+      ("Demo program")
+      ("")
+      ("Hello world!")
+  }
+
+  main(stdin) {
+    unlines(text)
+  }

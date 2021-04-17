@@ -1,0 +1,10 @@
+
+  lazy(number) {
+    number
+  }
+
+  main(stdin) {
+    equal(add(lazy(2))(lazy(3)))(5)
+      ("true")
+      ("false")
+  }

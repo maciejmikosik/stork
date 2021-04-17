@@ -2,12 +2,10 @@ package com.mikosik.stork.testing;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static java.lang.String.format;
@@ -28,7 +26,7 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.Input;
 import com.mikosik.stork.front.program.Program;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.tool.link.Build;
+import com.mikosik.stork.tool.link.Stars;
 
 public class ProgramTest {
   public static Test testProgramsIn(Path directory) {
@@ -56,16 +54,15 @@ public class ProgramTest {
     List<Module> modules = list(directory)
         .filter(Files::isRegularFile)
         .filter(ProgramTest::isStorkFile)
-        .map(ProgramTest::compileModule)
-        .map(Build::build)
+        .map(file -> Stars.moduleFromDirectory(file.getParent()))
         .collect(toList());
 
     Module module = link(chainFrom(modules)
         .add(moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
     Program program = program(variable("main"), module);
-    Input stdin = tryInput(directory.resolve("main.in"));
+    Input stdin = tryInput(directory.resolve("stdin"));
     byte[] actualStdout = program.run(stdin).readAllBytes();
-    byte[] expectedStdout = tryInput(directory.resolve("main.out")).readAllBytes();
+    byte[] expectedStdout = tryInput(directory.resolve("stdout")).readAllBytes();
     if (!Arrays.equals(actualStdout, expectedStdout)) {
       throw new AssertException(format(""
           + "expected output\n"
@@ -78,13 +75,7 @@ public class ProgramTest {
   }
 
   private static boolean isStorkFile(Path file) {
-    return file.getFileName().toString().endsWith(".stork");
-  }
-
-  private static Module compileModule(Path file) {
-    try (Input input = input(file).buffered()) {
-      return defaultCompiler().compile(input);
-    }
+    return file.getFileName().toString().equals("stork");
   }
 
   private static String nameOf(Path directory) {

@@ -1,9 +1,0 @@
-
-  build {
-    module
-      (import("stork.function.self"))
-  }
-
-  main(stdin) {
-    self("x")
-  }

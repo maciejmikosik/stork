@@ -1,9 +1,0 @@
-
-  build {
-    module
-      (import("stork.stream.prepend"))
-  }
-
-  main(stdin) {
-    prepend("!")(stdin)
-  }

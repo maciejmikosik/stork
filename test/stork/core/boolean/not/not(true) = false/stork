@@ -1,0 +1,4 @@
+
+  main(stdin) {
+    not(true)("x")("y")
+  }
