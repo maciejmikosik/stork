@@ -3,17 +3,15 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Input.input;
+import static com.mikosik.stork.common.InputOutput.walk;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 import static com.mikosik.stork.tool.link.Link.link;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.isRegularFile;
-import static java.nio.file.Files.newInputStream;
-import static java.nio.file.Files.walk;
 import static java.util.stream.Collectors.toList;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -29,16 +27,12 @@ import com.mikosik.stork.tool.compile.Compiler;
 
 public class Stars {
   public static Module moduleFromDirectory(Path directory) {
-    try {
-      List<Module> modules = walk(directory)
-          .filter(Files::isRegularFile)
-          .filter(file -> file.getFileName().toString().equals("stork"))
-          .map(file -> moduleFromFile(directory, file))
-          .collect(toList());
-      return link(chainFrom(modules));
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    List<Module> modules = walk(directory)
+        .filter(Files::isRegularFile)
+        .filter(file -> file.getFileName().toString().equals("stork"))
+        .map(file -> moduleFromFile(directory, file))
+        .collect(toList());
+    return link(chainFrom(modules));
   }
 
   private static Module moduleFromFile(Path directory, Path file) {
@@ -54,12 +48,10 @@ public class Stars {
     Path importFile = file.getParent().resolve("import");
     Chain<String> result = empty();
     if (isRegularFile(importFile)) {
-      try (Scanner scanner = new Scanner(newInputStream(importFile));) {
+      try (Scanner scanner = input(importFile).buffered().scan(UTF_8)) {
         while (scanner.hasNext()) {
           result = result.add(scanner.nextLine());
         }
-      } catch (IOException e) {
-        throw new UncheckedIOException(e);
       }
     }
     return result;
