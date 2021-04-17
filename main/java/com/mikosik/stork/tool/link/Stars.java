@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
-import static com.mikosik.stork.tool.link.Build.renameTo;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.file.Files.isRegularFile;
 import static java.nio.file.Files.newInputStream;
@@ -25,6 +24,7 @@ import com.mikosik.stork.common.Input;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.tool.common.Traverser;
 import com.mikosik.stork.tool.compile.Compiler;
 
 public class Stars {
@@ -91,5 +91,22 @@ public class Stars {
 
     }
     return module;
+  }
+
+  private static Module renameTo(
+      Variable replacement,
+      Variable original,
+      Module module) {
+    return new Traverser() {
+      protected Variable traverse(Variable variable) {
+        return variable.name.equals(original.name)
+            ? replacement
+            : variable;
+      }
+
+      protected Variable traverseDefinitionName(Variable variable) {
+        return traverse(variable);
+      }
+    }.traverse(module);
   }
 }
