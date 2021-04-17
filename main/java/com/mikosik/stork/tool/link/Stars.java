@@ -1,12 +1,15 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
+import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
-import static com.mikosik.stork.tool.link.Build.build;
 import static com.mikosik.stork.tool.link.Build.renameTo;
 import static com.mikosik.stork.tool.link.Link.link;
+import static java.nio.file.Files.isRegularFile;
+import static java.nio.file.Files.newInputStream;
 import static java.nio.file.Files.walk;
 import static java.util.stream.Collectors.toList;
 
@@ -15,6 +18,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Scanner;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Input;
@@ -39,10 +43,26 @@ public class Stars {
 
   private static Module moduleFromFile(Path directory, Path file) {
     String packagePrefix = packagePrefix(directory, file);
+    Chain<String> imports = importsFor(file);
     Compiler<Module> compiler = defaultCompiler();
     try (Input input = input(file).buffered()) {
-      return export(packagePrefix, build(compiler.compile(input)));
+      return import_(imports, export(packagePrefix, compiler.compile(input)));
     }
+  }
+
+  private static Chain<String> importsFor(Path file) {
+    Path importFile = file.getParent().resolve("import");
+    Chain<String> result = empty();
+    if (isRegularFile(importFile)) {
+      try (Scanner scanner = new Scanner(newInputStream(importFile));) {
+        while (scanner.hasNext()) {
+          result = result.add(scanner.nextLine());
+        }
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    }
+    return result;
   }
 
   private static String packagePrefix(Path directory, Path file) {
@@ -56,6 +76,16 @@ public class Stars {
       Variable original = definition.variable;
       Variable replacement = variable(packagePrefix + original.name);
       module = renameTo(replacement, original, module);
+    }
+    return module;
+  }
+
+  private static Module import_(Chain<String> imports, Module module) {
+    for (String import_ : imports) {
+      Variable global = variable(import_);
+      Variable local = variable(LOCAL.format(global));
+      module = renameTo(global, local, module);
+
     }
     return module;
   }

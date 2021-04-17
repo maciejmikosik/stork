@@ -24,13 +24,13 @@ import com.mikosik.stork.model.Module;
 public class JavaModule {
   public static Module javaModule() {
     List<Definition> definitions = new LinkedList<Definition>();
-    definitions.add(define("stork.java.math.BigInteger.negate", 1,
+    definitions.add(define("stork.java.math.BigInteger.javaNegate", 1,
         implement(thiz -> integer(thiz.negate()))));
-    definitions.add(define("stork.java.math.BigInteger.add", 2,
+    definitions.add(define("stork.java.math.BigInteger.javaAdd", 2,
         implement((arg, thiz) -> integer(thiz.add(arg)))));
-    definitions.add(define("stork.java.math.BigInteger.equals", 2,
+    definitions.add(define("stork.java.math.BigInteger.javaEquals", 2,
         implement((arg, thiz) -> asStorkBoolean(thiz.equals(arg)))));
-    definitions.add(define("stork.java.math.BigInteger.compareTo", 2,
+    definitions.add(define("stork.java.math.BigInteger.javaCompareTo", 2,
         implement((arg, thiz) -> integer(thiz.compareTo(arg)))));
     return module(chainFrom(definitions));
   }

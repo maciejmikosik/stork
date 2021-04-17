@@ -1,16 +1,4 @@
 
-  build {
-    module
-      (import("stork.function.flip"))
-      (import("stork.boolean.not"))
-      (import("stork.boolean.and"))
-
-      (importAs("javaNegate")("stork.java.math.BigInteger.negate"))
-      (importAs("javaAdd")("stork.java.math.BigInteger.add"))
-      (importAs("javaEquals")("stork.java.math.BigInteger.equals"))
-      (importAs("javaCompareTo")("stork.java.math.BigInteger.compareTo"))
-  }
-
   equal {
     javaEquals
   }

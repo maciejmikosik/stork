@@ -1,9 +1,4 @@
 
-  build {
-    module
-      (import("stork.function.self"))
-  }
-
   present(element)(vPresent)(vAbsent) {
     vPresent(element)
   }
