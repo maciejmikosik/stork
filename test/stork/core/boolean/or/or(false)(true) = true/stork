@@ -1,0 +1,4 @@
+
+  main(stdin) {
+    or(false)(true)("x")("y")
+  }

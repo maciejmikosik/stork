@@ -1,0 +1,4 @@
+
+  main(stdin) {
+    else("y")(present("x"))
+  }

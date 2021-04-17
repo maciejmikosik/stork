@@ -1,0 +1,6 @@
+
+  main(stdin) {
+    absent
+      ((x){ x })
+      ("empty")
+  }

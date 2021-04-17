@@ -1,0 +1,17 @@
+
+  join(first)(second) {
+    first
+      ((head)(tail){ some(head)(join(tail)(second)) })
+      (second)
+  }
+
+  y { "y" }
+  z { "z" }
+
+  tuple(x)(y)(f) {
+    f(x)(y)
+  }
+
+  main(stdin) {
+    tuple(y)(z)(join)
+  }
