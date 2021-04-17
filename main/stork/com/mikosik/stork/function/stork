@@ -1,11 +1,4 @@
 
-  build {
-    module
-      (exportAs("stork.function.self")("self"))
-      (exportAs("stork.function.compose")("compose"))
-      (exportAs("stork.function.flip")("flip"))
-  }
-
   self(x) {
     x
   }

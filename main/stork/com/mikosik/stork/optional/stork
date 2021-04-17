@@ -1,10 +1,6 @@
 
   build {
     module
-      (exportAs("stork.optional.present")("present"))
-      (exportAs("stork.optional.absent")("absent"))
-      (exportAs("stork.optional.else")("else"))
-
       (import("stork.function.self"))
   }
 

@@ -75,7 +75,7 @@ public class Build {
     return renameTo(global, local, module);
   }
 
-  private static Module renameTo(
+  public static Module renameTo(
       Variable replacement,
       Variable original,
       Module module) {

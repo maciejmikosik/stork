@@ -1,21 +1,6 @@
 
   build {
     module
-      (exportAs("stork.integer.equal")("equal"))
-      (exportAs("stork.integer.moreThan")("moreThan"))
-      (exportAs("stork.integer.lessThan")("lessThan"))
-      (exportAs("stork.integer.atLeast")("atLeast"))
-      (exportAs("stork.integer.atMost")("atMost"))
-      (exportAs("stork.integer.within")("within"))
-      (exportAs("stork.integer.add")("add"))
-      (exportAs("stork.integer.negate")("negate"))
-      (exportAs("stork.integer.subtract")("subtract"))
-      (exportAs("stork.integer.increment")("increment"))
-      (exportAs("stork.integer.decrement")("decrement"))
-      (exportAs("stork.integer.ceiling")("ceiling"))
-      (exportAs("stork.integer.floor")("floor"))
-      (exportAs("stork.integer.clamp")("clamp"))
-
       (import("stork.function.flip"))
       (import("stork.boolean.not"))
       (import("stork.boolean.and"))
