@@ -67,7 +67,10 @@ public class Stars {
 
   private static String packagePrefix(Path directory, Path file) {
     Path path = directory.relativize(file.getParent());
-    return path.toString().replace('/', '.') + '.';
+    String packageName = path.toString().replace('/', '.');
+    return packageName.isEmpty()
+        ? packageName
+        : packageName + '.';
   }
 
   private static Module export(String packagePrefix, Module module) {

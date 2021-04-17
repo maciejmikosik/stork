@@ -1,0 +1,5 @@
+stork.stream.single
+stork.stream.array
+stork.stream.append
+stork.stream.each
+stork.stream.flatten
