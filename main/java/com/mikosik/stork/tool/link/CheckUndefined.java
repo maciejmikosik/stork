@@ -1,8 +1,5 @@
 package com.mikosik.stork.tool.link;
 
-import static java.util.stream.Collectors.toCollection;
-
-import java.util.HashSet;
 import java.util.Set;
 
 import com.mikosik.stork.model.Expression;
@@ -13,9 +10,9 @@ import com.mikosik.stork.tool.common.Traverser;
 public class CheckUndefined {
   // TODO test coherence
   public static void checkUndefined(Module module) {
-    Set<String> defined = module.definitions.stream()
+    Set<String> defined = module.definitions
         .map(definition -> definition.variable.name)
-        .collect(toCollection(HashSet::new));
+        .toHashSet();
     new Traverser() {
       protected Expression traverse(Variable variable) {
         if (!defined.contains(variable.name)) {

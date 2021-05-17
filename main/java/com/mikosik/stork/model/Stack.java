@@ -1,37 +1,26 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Check.check;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.common.Chain;
-
 public class Stack {
-  private final Chain<Frame> frames;
+  private final Type type;
+  private final Expression expression;
+  private final Stack previous;
 
-  protected Stack(Chain<Frame> frames) {
-    this.frames = frames;
+  private Stack(Type type, Expression expression, Stack previous) {
+    this.type = type;
+    this.expression = expression;
+    this.previous = previous;
   }
 
   public static Stack stack() {
-    return new Stack(empty());
-  }
-
-  private boolean hasFrames() {
-    return !frames.isEmpty();
-  }
-
-  private Frame lastFrame() {
-    return frames.head();
+    return new Stack(Type.EMPTY, null, null);
   }
 
   private boolean has(Type type) {
-    return hasFrames() && lastFrame().type == type;
-  }
-
-  private Stack push(Frame frame) {
-    return new Stack(frames.add(frame));
+    return this.type == type;
   }
 
   public boolean hasArgument() {
@@ -39,8 +28,8 @@ public class Stack {
   }
 
   public Expression argument() {
-    check(hasArgument());
-    return lastFrame().expression;
+    check(has(Type.ARGUMENT));
+    return expression;
   }
 
   public Integer argumentInteger() {
@@ -52,7 +41,7 @@ public class Stack {
   }
 
   public Stack pushArgument(Expression argument) {
-    return push(new Frame(Type.ARGUMENT, argument));
+    return new Stack(Type.ARGUMENT, argument, this);
   }
 
   public boolean hasFunction() {
@@ -60,33 +49,19 @@ public class Stack {
   }
 
   public Expression function() {
-    check(hasFunction());
-    return lastFrame().expression;
+    check(has(Type.FUNCTION));
+    return expression;
   }
 
   public Stack pushFunction(Expression function) {
-    return push(new Frame(Type.FUNCTION, function));
+    return new Stack(Type.FUNCTION, function, this);
   }
 
   public Stack pop() {
-    return new Stack(frames.tail());
-  }
-
-  public Object id() {
-    return frames;
+    return previous;
   }
 
   private static enum Type {
-    ARGUMENT, FUNCTION
-  }
-
-  private static class Frame {
-    public final Type type;
-    public final Expression expression;
-
-    public Frame(Type type, Expression expression) {
-      this.type = type;
-      this.expression = expression;
-    }
+    EMPTY, ARGUMENT, FUNCTION
   }
 }

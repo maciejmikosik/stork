@@ -12,7 +12,7 @@ public class CheckCollisions {
   public static void checkCollisions(Module module) {
     Set<String> keys = new HashSet<>();
     // TODO throw dedicated exception
-    module.definitions.stream()
+    module.definitions
         .forEach(definition -> {
           check(!keys.contains(definition.variable.name));
           keys.add(definition.variable.name);
