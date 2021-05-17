@@ -1,5 +1,8 @@
 package com.mikosik.stork.common;
 
+import static java.util.stream.Collectors.toCollection;
+
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
@@ -159,5 +162,9 @@ public class Chain<E> implements Iterable<E> {
         return next;
       }
     };
+  }
+
+  public HashSet<E> toHashSet() {
+    return stream().collect(toCollection(HashSet::new));
   }
 }
