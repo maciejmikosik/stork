@@ -3,7 +3,7 @@ package com.mikosik.stork.front.program;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.front.core.JavaModule.javaModule;
+import static com.mikosik.stork.front.program.InnateMathModule.innateMathModule;
 import static com.mikosik.stork.front.program.Stdin.stdin;
 import static com.mikosik.stork.front.program.StdoutModule.closeStream;
 import static com.mikosik.stork.front.program.StdoutModule.stdoutModule;
@@ -42,7 +42,7 @@ public class Program {
 
   public Input run(Input stdinInput) {
     Module linkedModule = link(chainOf(module)
-        .add(javaModule())
+        .add(innateMathModule())
         .add(stdoutModule()));
 
     checkCollisions(linkedModule);

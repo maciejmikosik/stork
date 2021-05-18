@@ -1,10 +1,10 @@
 
   equal {
-    javaEquals
+    innateEqual
   }
 
-  moreThan(x)(y) {
-    equal(1)(javaCompareTo(x)(y))
+  moreThan {
+    innateMoreThan
   }
 
   lessThan {
@@ -26,11 +26,11 @@
   }
 
   add {
-    javaAdd
+    innateAdd
   }
 
   negate {
-    javaNegate
+    innateNegate
   }
 
   subtract(x) {

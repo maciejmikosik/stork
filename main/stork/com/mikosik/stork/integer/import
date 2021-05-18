@@ -1,7 +1,7 @@
 stork.function.flip
 stork.boolean.not
 stork.boolean.and
-stork.java.math.BigInteger.javaNegate
-stork.java.math.BigInteger.javaAdd
-stork.java.math.BigInteger.javaEquals
-stork.java.math.BigInteger.javaCompareTo
+stork.innate.innateNegate
+stork.innate.innateAdd
+stork.innate.innateEqual
+stork.innate.innateMoreThan
