@@ -6,17 +6,18 @@ import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Constants.FALSE;
 import static com.mikosik.stork.tool.common.Constants.TRUE;
-import static com.mikosik.stork.tool.common.Innates.computeArguments;
-import static com.mikosik.stork.tool.common.Innates.rename;
+import static com.mikosik.stork.tool.common.Eager.eager;
 import static java.util.Objects.requireNonNull;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Innate;
+import com.mikosik.stork.model.Stack;
 
 public class InnateBuilder {
   private String name;
@@ -80,7 +81,19 @@ public class InnateBuilder {
   public Expression build() {
     requireNonNull(name);
     requireNonNull(logic);
-    return computeArguments(arguments, rename(name, logic));
+    return eager(arguments, innate(name, logic));
+  }
+
+  private static Innate innate(String name, Innate logic) {
+    return new Innate() {
+      public Computation compute(Stack stack) {
+        return logic.compute(stack);
+      }
+
+      public String toString() {
+        return name;
+      }
+    };
   }
 
   public Definition defineAs(String globalName) {

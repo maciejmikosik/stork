@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Stack.stack;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Innates.computeArguments;
+import static com.mikosik.stork.tool.common.Eager.eager;
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
@@ -46,8 +46,8 @@ public class TestDecompiler {
                 .add(test("\"\"", quote(""))))
             .add(suite("innate")
                 .add(test("innate_name", mockInnate("innate_name")))
-                .add(test("ARG_1(function)", computeArguments(1, variable("function"))))
-                .add(test("ARG_1(ARG_2(function))", computeArguments(2, variable("function")))))
+                .add(test("$EAGER_1(function)", eager(1, variable("function"))))
+                .add(test("$EAGER_1($EAGER_2(function))", eager(2, variable("function")))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
