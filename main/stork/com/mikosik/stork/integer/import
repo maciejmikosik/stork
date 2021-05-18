@@ -1,7 +1,3 @@
 stork.function.flip
 stork.boolean.not
 stork.boolean.and
-stork.innate.innateNegate
-stork.innate.innateAdd
-stork.innate.innateEqual
-stork.innate.innateMoreThan

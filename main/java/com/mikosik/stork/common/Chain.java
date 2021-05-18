@@ -2,6 +2,7 @@ package com.mikosik.stork.common;
 
 import static java.util.stream.Collectors.toCollection;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -166,5 +167,15 @@ public class Chain<E> implements Iterable<E> {
 
   public HashSet<E> toHashSet() {
     return stream().collect(toCollection(HashSet::new));
+  }
+
+  public <K, V> HashMap<K, V> toHashMap(
+      Function<E, K> keyExtractor,
+      Function<E, V> valueExtractor) {
+    HashMap<K, V> hashMap = new HashMap<K, V>();
+    forEach(element -> hashMap.put(
+        keyExtractor.apply(element),
+        valueExtractor.apply(element)));
+    return hashMap;
   }
 }

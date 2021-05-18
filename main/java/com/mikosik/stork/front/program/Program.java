@@ -3,7 +3,7 @@ package com.mikosik.stork.front.program;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.front.program.InnateMathModule.innateMathModule;
+import static com.mikosik.stork.front.program.InnateMath.innateMath;
 import static com.mikosik.stork.front.program.Stdin.stdin;
 import static com.mikosik.stork.front.program.StdoutModule.closeStream;
 import static com.mikosik.stork.front.program.StdoutModule.stdoutModule;
@@ -15,6 +15,7 @@ import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.tool.link.Link.link;
+import static com.mikosik.stork.tool.link.Redefine.redefine;
 import static com.mikosik.stork.tool.link.Unlambda.unlambda;
 import static com.mikosik.stork.tool.link.Unquote.unquote;
 
@@ -41,9 +42,9 @@ public class Program {
   }
 
   public Input run(Input stdinInput) {
-    Module linkedModule = link(chainOf(module)
-        .add(innateMathModule())
-        .add(stdoutModule()));
+    Module linkedModule = link(chainOf(
+        redefine(innateMath(), module),
+        stdoutModule()));
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);

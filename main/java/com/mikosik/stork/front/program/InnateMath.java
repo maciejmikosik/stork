@@ -8,24 +8,24 @@ import java.math.BigInteger;
 
 import com.mikosik.stork.model.Module;
 
-public class InnateMathModule {
-  public static Module innateMathModule() {
+public class InnateMath {
+  public static Module innateMath() {
     return module(chainOf(
         innate()
             .name("$NEGATE")
             .logicIntInt(BigInteger::negate)
-            .defineAs("stork.innate.innateNegate"),
+            .defineAs("stork.integer.negate"),
         innate()
             .name("$ADD")
             .logicIntIntInt(BigInteger::add)
-            .defineAs("stork.innate.innateAdd"),
+            .defineAs("stork.integer.add"),
         innate()
             .name("$EQUAL")
             .logicIntIntBool(BigInteger::equals)
-            .defineAs("stork.innate.innateEqual"),
+            .defineAs("stork.integer.equal"),
         innate()
             .name("$MORE_THAN")
             .logicIntIntBool((x, y) -> x.compareTo(y) < 0)
-            .defineAs("stork.innate.innateMoreThan")));
+            .defineAs("stork.integer.moreThan")));
   }
 }

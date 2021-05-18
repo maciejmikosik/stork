@@ -1,10 +1,10 @@
 
   equal {
-    innateEqual
+    undefined
   }
 
   moreThan {
-    innateMoreThan
+    undefined
   }
 
   lessThan {
@@ -26,11 +26,11 @@
   }
 
   add {
-    innateAdd
+    undefined
   }
 
   negate {
-    innateNegate
+    undefined
   }
 
   subtract(x) {
