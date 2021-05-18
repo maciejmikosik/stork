@@ -3,12 +3,12 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Strings.reverse;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Constants.NONE;
+import static com.mikosik.stork.tool.common.Constants.SOME;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
 public class Unquote {
@@ -27,7 +27,4 @@ public class Unquote {
     }
     return stream;
   }
-
-  private static final Variable SOME = variable("stork.stream.some");
-  private static final Variable NONE = variable("stork.stream.none");
 }

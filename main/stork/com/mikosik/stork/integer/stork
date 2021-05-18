@@ -1,10 +1,10 @@
 
   equal {
-    javaEquals
+    undefined
   }
 
-  moreThan(x)(y) {
-    equal(1)(javaCompareTo(x)(y))
+  moreThan {
+    undefined
   }
 
   lessThan {
@@ -26,11 +26,11 @@
   }
 
   add {
-    javaAdd
+    undefined
   }
 
   negate {
-    javaNegate
+    undefined
   }
 
   subtract(x) {

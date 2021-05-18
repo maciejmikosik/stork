@@ -7,7 +7,7 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Innates.computeArguments;
+import static com.mikosik.stork.tool.common.Eager.eager;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Module;
@@ -56,7 +56,7 @@ public class StdoutModule {
             application(stream,
                 lambda(head, lambda(tail,
                     application(
-                        computeArguments(1, writeByte),
+                        eager(1, writeByte),
                         head,
                         application(writeStream, tail)))),
                 closeStream)));

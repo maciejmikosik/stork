@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Stack.stack;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Innates.computeArguments;
+import static com.mikosik.stork.tool.common.Eager.eager;
 import static com.mikosik.stork.tool.common.Scope.GLOBAL;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
@@ -29,6 +29,7 @@ import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
+import com.mikosik.stork.tool.common.Combinators;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -46,8 +47,15 @@ public class TestDecompiler {
                 .add(test("\"\"", quote(""))))
             .add(suite("innate")
                 .add(test("innate_name", mockInnate("innate_name")))
-                .add(test("ARG_1(function)", computeArguments(1, variable("function"))))
-                .add(test("ARG_1(ARG_2(function))", computeArguments(2, variable("function")))))
+                .add(suite("eager")
+                    .add(test("$EAGER_1(function)", eager(1, variable("function"))))
+                    .add(test("$EAGER_1($EAGER_2(function))", eager(2, variable("function")))))
+                .add(suite("combinator")
+                    .add(test("$I", Combinators.I))
+                    .add(test("$K", Combinators.K))
+                    .add(test("$S", Combinators.S))
+                    .add(test("$C", Combinators.C))
+                    .add(test("$B", Combinators.B))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
