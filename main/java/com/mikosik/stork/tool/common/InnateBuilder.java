@@ -4,9 +4,10 @@ import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Constants.FALSE;
+import static com.mikosik.stork.tool.common.Constants.TRUE;
 import static com.mikosik.stork.tool.common.Innates.computeArguments;
 import static com.mikosik.stork.tool.common.Innates.rename;
-import static com.mikosik.stork.tool.common.Translate.asStorkBoolean;
 import static java.util.Objects.requireNonNull;
 
 import java.math.BigInteger;
@@ -70,7 +71,7 @@ public class InnateBuilder {
       BigInteger argumentB = stack.argumentIntegerJava();
       stack = stack.pop();
       return computation(
-          asStorkBoolean(logic.apply(argumentA, argumentB)),
+          logic.apply(argumentA, argumentB) ? TRUE : FALSE,
           stack);
     });
     return arguments(2);
