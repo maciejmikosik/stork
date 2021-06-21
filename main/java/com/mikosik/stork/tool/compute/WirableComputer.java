@@ -53,4 +53,8 @@ public class WirableComputer implements Computer {
   public Computation compute(Computation computation) {
     return delegate.compute(computation);
   }
+
+  public Computer looping() {
+    return wire(LoopingComputer::looping);
+  }
 }
