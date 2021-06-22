@@ -9,6 +9,7 @@ import static com.mikosik.stork.tool.common.Combinators.K;
 import static com.mikosik.stork.tool.common.Combinators.S;
 
 import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
@@ -22,6 +23,18 @@ import com.mikosik.stork.tool.common.Traverser;
  */
 public class Unlambda {
   public static Module unlambda(Module module) {
+    return traverser().traverse(module);
+  }
+
+  public static Definition unlambda(Definition definition) {
+    return traverser().traverse(definition);
+  }
+
+  public static Expression unlambda(Expression expression) {
+    return traverser().traverse(expression);
+  }
+
+  private static Traverser traverser() {
     return new Traverser() {
       protected Expression traverse(Application application) {
         // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
@@ -79,7 +92,7 @@ public class Unlambda {
         }
         throw new RuntimeException();
       }
-    }.traverse(module);
+    };
   }
 
   private static boolean occurs(Parameter parameter, Expression expression) {
