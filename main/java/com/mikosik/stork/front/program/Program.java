@@ -1,27 +1,19 @@
 package com.mikosik.stork.front.program;
 
-import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.front.program.InnateMath.innateMath;
 import static com.mikosik.stork.front.program.Stdin.stdin;
-import static com.mikosik.stork.front.program.StdoutModule.closeStream;
-import static com.mikosik.stork.front.program.StdoutModule.stdoutModule;
-import static com.mikosik.stork.front.program.StdoutModule.writeByte;
-import static com.mikosik.stork.front.program.StdoutModule.writeStream;
+import static com.mikosik.stork.front.program.Stdout.writeStream;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
-import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Redefine.redefine;
 import static com.mikosik.stork.tool.link.Unlambda.unlambda;
 import static com.mikosik.stork.tool.link.Unquote.unquote;
 
-import java.io.InputStream;
-
 import com.mikosik.stork.common.Input;
+import com.mikosik.stork.common.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
@@ -41,10 +33,8 @@ public class Program {
     return new Program(main, module);
   }
 
-  public Input run(Input stdinInput) {
-    Module linkedModule = link(chainOf(
-        redefine(innateMath(), module),
-        stdoutModule()));
+  public void run(Input stdinInput, Output stdout) {
+    Module linkedModule = redefine(innateMath(), module);
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);
@@ -58,38 +48,13 @@ public class Program {
         .wire(StdinComputer::stdin)
         .caching()
         .interruptible()
-        .progressing()
-        .wire(StdoutComputer::stdout);
+        .looping();
 
-    return input(new InputStream() {
-      boolean closed = false;
-      Computation computation = computation(
-          application(
-              writeStream,
-              application(main, stdin(stdinInput))));
+    Computation computation = computation(
+        application(
+            unlambda(writeStream(stdout)),
+            application(main, stdin(stdinInput))));
 
-      public int read() {
-        if (closed) {
-          return -1;
-        }
-        computation = computer.compute(computation);
-        if (computation.expression == writeByte) {
-          int oneByte = computation.stack
-              .argumentIntegerJava()
-              .intValueExact();
-          check(0 <= oneByte && oneByte <= 255);
-          return oneByte;
-        } else if (computation.expression == closeStream) {
-          closed = true;
-          return -1;
-        } else {
-          throw new RuntimeException();
-        }
-      }
-
-      public void close() {
-        closed = true;
-      }
-    });
+    computer.compute(computation);
   }
 }

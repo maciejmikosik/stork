@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
+import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.link.Link.link;
@@ -14,6 +15,7 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,8 +63,10 @@ public class ProgramTest {
         .add(moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
     Program program = program(variable("main"), module);
     Input stdin = tryInput(directory.resolve("stdin"));
-    byte[] actualStdout = program.run(stdin).readAllBytes();
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    program.run(stdin, output(buffer));
     byte[] expectedStdout = tryInput(directory.resolve("stdout")).readAllBytes();
+    byte[] actualStdout = buffer.toByteArray();
     if (!Arrays.equals(actualStdout, expectedStdout)) {
       throw new AssertException(format(""
           + "expected output\n"
