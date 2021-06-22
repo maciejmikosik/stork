@@ -45,6 +45,7 @@ public class Program {
         .stacking()
         .moduling(linkedModule)
         .innate()
+        .combinatorial()
         .wire(StdinComputer::stdin)
         .caching()
         .interruptible()

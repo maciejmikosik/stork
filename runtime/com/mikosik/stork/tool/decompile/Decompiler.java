@@ -11,6 +11,7 @@ import java.io.PrintStream;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -85,6 +86,11 @@ public class Decompiler {
 
       protected Expression traverse(Innate innate) {
         output.print(innate.toString());
+        return null;
+      }
+
+      protected Expression traverse(Combinator combinator) {
+        output.print("$" + combinator.toString());
         return null;
       }
 
