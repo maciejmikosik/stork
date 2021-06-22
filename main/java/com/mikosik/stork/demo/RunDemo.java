@@ -20,7 +20,6 @@ public class RunDemo {
         moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
 
     Program program = program(variable("main"), module);
-    program.run(input(System.in))
-        .pumpToAndFlush(output(System.out));
+    program.run(input(System.in), output(System.out));
   }
 }

@@ -4,7 +4,10 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.tool.common.InnateBuilder.innate;
 
+import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Innate;
+import com.mikosik.stork.model.Stack;
 
 public class Combinators {
   /** I(x) = x */
@@ -69,6 +72,19 @@ public class Combinators {
         stack = stack.pop();
         stack = stack.pushArgument(application(y, z));
         return computation(x, stack);
+      })
+      .build();
+
+  /** Y(f) = f(Y(f)) */
+  public static final Expression Y = innate()
+      .name("$Y")
+      .logic(new Innate() {
+        public Computation compute(Stack stack) {
+          Expression f = stack.argument();
+          stack = stack.pop();
+          stack = stack.pushArgument(application(Y, f));
+          return computation(f, stack);
+        }
       })
       .build();
 }
