@@ -16,7 +16,7 @@ import com.mikosik.stork.model.Module;
 public class RunDemo {
   public static void main(String[] args) {
     Module module = link(chainOf(
-        moduleFromDirectory(Paths.get("main/java/com/mikosik/stork/demo")),
+        moduleFromDirectory(Paths.get("demo/com/mikosik/stork/demo")),
         moduleFromDirectory(Paths.get("core_star"))));
 
     Program program = program(variable("main"), module);
