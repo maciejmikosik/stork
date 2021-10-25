@@ -1,4 +1,4 @@
-package com.mikosik.stork.front.program;
+package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.Module.module;

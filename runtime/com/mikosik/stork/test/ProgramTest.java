@@ -1,12 +1,12 @@
-package com.mikosik.stork.testing;
+package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.common.Output.output;
-import static com.mikosik.stork.front.program.Program.program;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static java.lang.String.format;
@@ -26,8 +26,8 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Input;
-import com.mikosik.stork.front.program.Program;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.program.Program;
 import com.mikosik.stork.tool.link.Stars;
 
 public class ProgramTest {
@@ -60,7 +60,7 @@ public class ProgramTest {
         .collect(toList());
 
     Module module = link(chainFrom(modules)
-        .add(moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
+        .add(moduleFromDirectory(Paths.get("core_star"))));
     Program program = program(variable("main"), module);
     Input stdin = tryInput(directory.resolve("stdin"));
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();

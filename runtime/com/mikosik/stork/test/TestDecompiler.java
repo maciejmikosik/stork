@@ -1,4 +1,4 @@
-package com.mikosik.stork;
+package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.Application.application;

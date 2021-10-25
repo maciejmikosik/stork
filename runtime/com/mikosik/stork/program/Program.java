@@ -1,10 +1,10 @@
-package com.mikosik.stork.front.program;
+package com.mikosik.stork.program;
 
-import static com.mikosik.stork.front.program.InnateMath.innateMath;
-import static com.mikosik.stork.front.program.Stdin.stdin;
-import static com.mikosik.stork.front.program.Stdout.writeStream;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.program.InnateMath.innateMath;
+import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.program.Stdout.writeStream;
 import static com.mikosik.stork.tool.compute.WirableComputer.computer;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
