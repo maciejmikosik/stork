@@ -60,7 +60,7 @@ public class ProgramTest {
         .collect(toList());
 
     Module module = link(chainFrom(modules)
-        .add(moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
+        .add(moduleFromDirectory(Paths.get("core_star"))));
     Program program = program(variable("main"), module);
     Input stdin = tryInput(directory.resolve("stdin"));
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();

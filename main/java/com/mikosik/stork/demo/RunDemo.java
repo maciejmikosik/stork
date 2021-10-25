@@ -17,7 +17,7 @@ public class RunDemo {
   public static void main(String[] args) {
     Module module = link(chainOf(
         moduleFromDirectory(Paths.get("main/java/com/mikosik/stork/demo")),
-        moduleFromDirectory(Paths.get("main/stork/com/mikosik"))));
+        moduleFromDirectory(Paths.get("core_star"))));
 
     Program program = program(variable("main"), module);
     program.run(input(System.in), output(System.out));
