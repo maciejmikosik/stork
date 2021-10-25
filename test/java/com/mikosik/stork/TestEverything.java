@@ -12,7 +12,7 @@ import org.quackery.Test;
 public class TestEverything {
   public static Test testEverything() {
     return timeout(0.1, suite("test everything")
-        .add(testProgramsIn(Paths.get("test/stork")))
+        .add(testProgramsIn(Paths.get("program_test")))
         .add(testProgramsIn(Paths.get("core_star_test")))
         .add(testDecompiler()));
   }
