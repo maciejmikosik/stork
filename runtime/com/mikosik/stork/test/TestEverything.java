@@ -1,7 +1,7 @@
-package com.mikosik.stork;
+package com.mikosik.stork.test;
 
-import static com.mikosik.stork.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.testing.ProgramTest.testProgramsIn;
+import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
+import static com.mikosik.stork.test.TestDecompiler.testDecompiler;
 import static org.quackery.Suite.suite;
 import static org.quackery.run.Runners.timeout;
 

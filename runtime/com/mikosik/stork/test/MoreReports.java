@@ -1,4 +1,4 @@
-package com.mikosik.stork.testing;
+package com.mikosik.stork.test;
 
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Suite.suite;

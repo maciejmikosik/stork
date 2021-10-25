@@ -1,8 +1,8 @@
-package com.mikosik.stork;
+package com.mikosik.stork.test;
 
-import static com.mikosik.stork.TestEverything.testEverything;
-import static com.mikosik.stork.testing.MoreReports.filter;
-import static com.mikosik.stork.testing.MoreReports.formatExceptions;
+import static com.mikosik.stork.test.MoreReports.filter;
+import static com.mikosik.stork.test.MoreReports.formatExceptions;
+import static com.mikosik.stork.test.TestEverything.testEverything;
 import static java.lang.String.format;
 import static org.quackery.report.Reports.count;
 import static org.quackery.report.Reports.format;
