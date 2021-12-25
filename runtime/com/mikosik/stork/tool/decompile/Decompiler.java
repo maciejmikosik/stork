@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.decompile;
 
-import static com.mikosik.stork.common.InputOutput.printStream;
+import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Variable.variable;
@@ -38,7 +38,7 @@ public class Decompiler {
 
   public String decompile(Object code) {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    Traverser printer = printer(printStream(US_ASCII, buffer));
+    Traverser printer = printer(output(buffer).asPrintStream(US_ASCII));
     if (code instanceof Expression) {
       printer.traverse((Expression) code);
     } else if (code instanceof Definition) {
