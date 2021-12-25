@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.compute;
 
-import java.io.OutputStream;
 import java.util.function.Function;
 
+import com.mikosik.stork.common.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.tool.decompile.Decompiler;
@@ -42,7 +42,7 @@ public class WirableComputer implements Computer {
     return wire(InterruptibleComputer::interruptible);
   }
 
-  public WirableComputer logging(OutputStream stream, Decompiler decompiler) {
+  public WirableComputer logging(Output stream, Decompiler decompiler) {
     return wire(computer -> LoggingComputer.logging(stream, decompiler, computer));
   }
 

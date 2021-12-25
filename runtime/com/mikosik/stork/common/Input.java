@@ -122,13 +122,9 @@ public class Input implements AutoCloseable {
   }
 
   public Input pumpTo(Output output) {
-    try {
-      int oneByte;
-      while ((oneByte = input.read()) != -1) {
-        output.write(oneByte);
-      }
-    } catch (IOException e) {
-      throw unchecked(e);
+    int oneByte;
+    while ((oneByte = read()) != -1) {
+      output.write(oneByte);
     }
     return this;
   }

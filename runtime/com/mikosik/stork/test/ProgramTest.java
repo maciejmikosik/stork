@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
+import static com.mikosik.stork.common.InputOutput.path;
 import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
@@ -18,7 +19,6 @@ import static org.quackery.Suite.suite;
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class ProgramTest {
         .collect(toList());
 
     Module module = link(chainFrom(modules)
-        .add(moduleFromDirectory(Paths.get("core_star"))));
+        .add(moduleFromDirectory(path("core_star"))));
     Program program = program(variable("main"), module);
     Input stdin = tryInput(directory.resolve("stdin"));
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
