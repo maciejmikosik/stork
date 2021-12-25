@@ -1,8 +1,10 @@
 package com.mikosik.stork.tool.compute;
 
-import java.io.OutputStream;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.PrintStream;
 
+import com.mikosik.stork.common.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
@@ -18,11 +20,11 @@ public class LoggingComputer implements Computer {
   }
 
   public static Computer logging(
-      OutputStream output,
+      Output output,
       Decompiler decompiler,
       Computer computer) {
     return new LoggingComputer(
-        new PrintStream(output),
+        output.asPrintStream(UTF_8),
         decompiler,
         computer);
   }
