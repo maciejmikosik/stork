@@ -30,6 +30,7 @@ import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
+import com.mikosik.stork.tool.common.Scope;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -88,15 +89,17 @@ public class TestDecompiler {
                     .pushArgument(variable("y"))
                     .pushFunction(variable("f"))))))
         .add(suite("local")
-            .add(testLocal("true", variable("stork.boolean.true"))));
+            .add(test(LOCAL, "function", variable("package.package.function"))));
   }
 
   private static Test test(String expected, Object code) {
-    return newCase(expected, () -> run(decompiler(GLOBAL), code, expected));
+    return test(GLOBAL, expected, code);
   }
 
-  private static Test testLocal(String expected, Object code) {
-    return newCase(expected, () -> run(decompiler(LOCAL), code, expected));
+  private static Test test(Scope scope, String expected, Object code) {
+    return newCase(expected, () -> {
+      run(decompiler(scope), code, expected);
+    });
   }
 
   private static void run(Decompiler decompiler, Object code, String expected) {

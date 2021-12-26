@@ -61,7 +61,6 @@ public class Output implements AutoCloseable {
 
   public PrintStream asPrintStream(Charset charset) {
     try {
-      new PrintStream(output);
       return new PrintStream(output, false, charset.name());
     } catch (UnsupportedEncodingException e) {
       throw unchecked(e);

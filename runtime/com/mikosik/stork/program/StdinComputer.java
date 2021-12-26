@@ -3,18 +3,15 @@ package com.mikosik.stork.program;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Constants.NONE;
+import static com.mikosik.stork.tool.common.Constants.SOME;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.compute.Computer;
 
 public class StdinComputer implements Computer {
-  private final Variable some = variable("stork.stream.some");
-  private final Variable none = variable("stork.stream.none");
-
   private final Computer computer;
 
   private StdinComputer(Computer computer) {
@@ -34,9 +31,9 @@ public class StdinComputer implements Computer {
   private Expression compute(Stdin stdin) {
     int oneByte = stdin.input.read();
     return oneByte == -1
-        ? none
+        ? NONE
         : application(
-            some,
+            SOME,
             integer(oneByte),
             Stdin.stdin(stdin.input));
   }
