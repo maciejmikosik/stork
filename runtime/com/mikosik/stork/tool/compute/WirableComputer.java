@@ -30,6 +30,10 @@ public class WirableComputer implements Computer {
     return wire(InnateComputer::innate);
   }
 
+  public WirableComputer combinatorial() {
+    return wire(CombinatorialComputer::combinatorial);
+  }
+
   public WirableComputer stacking() {
     return wire(StackingComputer::stacking);
   }

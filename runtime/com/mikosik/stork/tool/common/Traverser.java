@@ -6,6 +6,7 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 
 import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Innate;
@@ -48,6 +49,8 @@ public class Traverser {
       return traverse((Quote) expression);
     } else if (expression instanceof Innate) {
       return traverse((Innate) expression);
+    } else if (expression instanceof Combinator) {
+      return traverse((Combinator) expression);
     } else {
       return expression;
     }
@@ -81,5 +84,9 @@ public class Traverser {
 
   protected Expression traverse(Innate innate) {
     return innate;
+  }
+
+  protected Expression traverse(Combinator combinator) {
+    return combinator;
   }
 }

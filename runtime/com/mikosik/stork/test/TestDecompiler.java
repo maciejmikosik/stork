@@ -25,11 +25,11 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
+import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
-import com.mikosik.stork.tool.common.Combinators;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -51,12 +51,12 @@ public class TestDecompiler {
                     .add(test("$EAGER_1(function)", eager(1, variable("function"))))
                     .add(test("$EAGER_1($EAGER_2(function))", eager(2, variable("function")))))
                 .add(suite("combinator")
-                    .add(test("$I", Combinators.I))
-                    .add(test("$K", Combinators.K))
-                    .add(test("$S", Combinators.S))
-                    .add(test("$C", Combinators.C))
-                    .add(test("$B", Combinators.B))
-                    .add(test("$Y", Combinators.Y))))
+                    .add(test("$I", Combinator.I))
+                    .add(test("$K", Combinator.K))
+                    .add(test("$S", Combinator.S))
+                    .add(test("$C", Combinator.C))
+                    .add(test("$B", Combinator.B))
+                    .add(test("$Y", Combinator.Y))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")

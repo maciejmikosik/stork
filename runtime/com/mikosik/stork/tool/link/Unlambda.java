@@ -1,12 +1,12 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Combinator.B;
+import static com.mikosik.stork.model.Combinator.C;
+import static com.mikosik.stork.model.Combinator.I;
+import static com.mikosik.stork.model.Combinator.K;
+import static com.mikosik.stork.model.Combinator.S;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.tool.common.Combinators.B;
-import static com.mikosik.stork.tool.common.Combinators.C;
-import static com.mikosik.stork.tool.common.Combinators.I;
-import static com.mikosik.stork.tool.common.Combinators.K;
-import static com.mikosik.stork.tool.common.Combinators.S;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
