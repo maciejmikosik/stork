@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.decompile;
 
-import static com.mikosik.stork.common.Output.output;
+import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Variable.variable;

@@ -2,7 +2,7 @@ package com.mikosik.stork.tool.compute;
 
 import java.util.function.Function;
 
-import com.mikosik.stork.common.Output;
+import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.tool.decompile.Decompiler;

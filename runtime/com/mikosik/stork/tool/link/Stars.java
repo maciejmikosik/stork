@@ -2,8 +2,8 @@ package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.common.InputOutput.walk;
+import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.link.Link.link;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.common.Input;
+import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Variable;

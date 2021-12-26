@@ -1,13 +1,12 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.InputOutput.unchecked;
-import static com.mikosik.stork.common.Output.output;
+import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -40,45 +39,9 @@ public class Input implements AutoCloseable {
         : input(new ByteArrayInputStream(new byte[0]));
   }
 
-  public static Input resource(Class<?> clas, String name) {
-    return input(clas.getResourceAsStream(name));
-  }
-
   public int read() {
     try {
       return input.read();
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public int read(byte[] b) {
-    try {
-      return input.read(b);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public int read(byte[] b, int off, int len) {
-    try {
-      return input.read(b, off, len);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public long skip(long n) {
-    try {
-      return input.skip(n);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public int available() {
-    try {
-      return input.available();
     } catch (IOException e) {
       throw unchecked(e);
     }
@@ -92,43 +55,24 @@ public class Input implements AutoCloseable {
     }
   }
 
-  public void mark(int readlimit) {
-    input.mark(readlimit);
-  }
-
-  public void reset() {
-    try {
-      input.reset();
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public boolean markSupported() {
-    return input.markSupported();
-  }
-
-  public InputStream raw() {
-    return input;
-  }
-
   public Input buffered() {
     return input(new BufferedInputStream(input));
   }
 
-  public byte[] readAllBytes() {
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    pumpTo(output(buffer));
-    return buffer.toByteArray();
+  public Blob readAllBytes() {
+    Buffer buffer = newBuffer();
+    pumpTo(buffer.asOutput());
+    return buffer.toBlob();
   }
 
-  public byte[] readAllBytes(IntPredicate predicate) {
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+  public Blob readAllBytes(IntPredicate predicate) {
+    Buffer buffer = newBuffer();
+    Output output = buffer.asOutput();
     int oneByte;
     while ((oneByte = peek()) != -1 && predicate.test(oneByte)) {
-      buffer.write(read());
+      output.write(read());
     }
-    return buffer.toByteArray();
+    return buffer.toBlob();
   }
 
   public Input pumpTo(Output output) {
@@ -146,10 +90,14 @@ public class Input implements AutoCloseable {
   }
 
   public int peek() {
-    mark(1);
-    int oneByte = read();
-    reset();
-    return oneByte;
+    try {
+      input.mark(1);
+      int oneByte = read();
+      input.reset();
+      return oneByte;
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
   }
 
   public Scanner scan(Charset charset) {

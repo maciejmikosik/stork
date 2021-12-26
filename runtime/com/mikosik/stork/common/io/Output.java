@@ -1,6 +1,6 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.InputOutput.unchecked;
+import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,22 +22,6 @@ public class Output implements AutoCloseable {
   public void write(int b) {
     try {
       output.write(b);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public void write(byte[] b) {
-    try {
-      output.write(b);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public void write(byte[] b, int off, int len) {
-    try {
-      output.write(b, off, len);
     } catch (IOException e) {
       throw unchecked(e);
     }
@@ -65,9 +49,5 @@ public class Output implements AutoCloseable {
     } catch (UnsupportedEncodingException e) {
       throw unchecked(e);
     }
-  }
-
-  public OutputStream raw() {
-    return output;
   }
 }

@@ -12,8 +12,8 @@ import static com.mikosik.stork.tool.link.Redefine.redefine;
 import static com.mikosik.stork.tool.link.Unlambda.unlambda;
 import static com.mikosik.stork.tool.link.Unquote.unquote;
 
-import com.mikosik.stork.common.Input;
-import com.mikosik.stork.common.Output;
+import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
