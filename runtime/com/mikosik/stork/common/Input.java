@@ -39,45 +39,9 @@ public class Input implements AutoCloseable {
         : input(new ByteArrayInputStream(new byte[0]));
   }
 
-  public static Input resource(Class<?> clas, String name) {
-    return input(clas.getResourceAsStream(name));
-  }
-
   public int read() {
     try {
       return input.read();
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public int read(byte[] b) {
-    try {
-      return input.read(b);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public int read(byte[] b, int off, int len) {
-    try {
-      return input.read(b, off, len);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public long skip(long n) {
-    try {
-      return input.skip(n);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public int available() {
-    try {
-      return input.available();
     } catch (IOException e) {
       throw unchecked(e);
     }
@@ -89,26 +53,6 @@ public class Input implements AutoCloseable {
     } catch (IOException e) {
       throw unchecked(e);
     }
-  }
-
-  public void mark(int readlimit) {
-    input.mark(readlimit);
-  }
-
-  public void reset() {
-    try {
-      input.reset();
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public boolean markSupported() {
-    return input.markSupported();
-  }
-
-  public InputStream raw() {
-    return input;
   }
 
   public Input buffered() {
@@ -146,10 +90,14 @@ public class Input implements AutoCloseable {
   }
 
   public int peek() {
-    mark(1);
-    int oneByte = read();
-    reset();
-    return oneByte;
+    try {
+      input.mark(1);
+      int oneByte = read();
+      input.reset();
+      return oneByte;
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
   }
 
   public Scanner scan(Charset charset) {

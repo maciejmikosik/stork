@@ -27,22 +27,6 @@ public class Output implements AutoCloseable {
     }
   }
 
-  public void write(byte[] b) {
-    try {
-      output.write(b);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public void write(byte[] b, int off, int len) {
-    try {
-      output.write(b, off, len);
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
   public void flush() {
     try {
       output.flush();
@@ -65,9 +49,5 @@ public class Output implements AutoCloseable {
     } catch (UnsupportedEncodingException e) {
       throw unchecked(e);
     }
-  }
-
-  public OutputStream raw() {
-    return output;
   }
 }
