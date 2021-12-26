@@ -1,11 +1,11 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.Buffer.newBuffer;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Input.tryInput;
 import static com.mikosik.stork.common.InputOutput.list;
 import static com.mikosik.stork.common.InputOutput.path;
-import static com.mikosik.stork.common.Output.output;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.tool.link.Link.link;
@@ -16,15 +16,15 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
+import com.mikosik.stork.common.Blob;
+import com.mikosik.stork.common.Buffer;
 import com.mikosik.stork.common.Input;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.program.Program;
@@ -63,18 +63,18 @@ public class ProgramTest {
         .add(moduleFromDirectory(path("core_star"))));
     Program program = program(variable("main"), module);
     Input stdin = tryInput(directory.resolve("stdin"));
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    program.run(stdin, output(buffer));
-    byte[] expectedStdout = tryInput(directory.resolve("stdout")).readAllBytes();
-    byte[] actualStdout = buffer.toByteArray();
-    if (!Arrays.equals(actualStdout, expectedStdout)) {
+    Buffer buffer = newBuffer();
+    program.run(stdin, buffer.asOutput());
+    Blob expectedStdout = tryInput(directory.resolve("stdout")).readAllBytes();
+    Blob actualStdout = buffer.toBlob();
+    if (!actualStdout.equals(expectedStdout)) {
       throw new AssertException(format(""
           + "expected output\n"
           + "  %s\n"
           + "but was\n"
           + "  %s\n",
-          new String(expectedStdout, UTF_8),
-          new String(actualStdout, UTF_8)));
+          new String(expectedStdout.bytes, UTF_8),
+          new String(actualStdout.bytes, UTF_8)));
     }
   }
 

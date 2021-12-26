@@ -1,13 +1,12 @@
 package com.mikosik.stork.common;
 
+import static com.mikosik.stork.common.Buffer.newBuffer;
 import static com.mikosik.stork.common.InputOutput.unchecked;
-import static com.mikosik.stork.common.Output.output;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -116,19 +115,20 @@ public class Input implements AutoCloseable {
     return input(new BufferedInputStream(input));
   }
 
-  public byte[] readAllBytes() {
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    pumpTo(output(buffer));
-    return buffer.toByteArray();
+  public Blob readAllBytes() {
+    Buffer buffer = newBuffer();
+    pumpTo(buffer.asOutput());
+    return buffer.toBlob();
   }
 
-  public byte[] readAllBytes(IntPredicate predicate) {
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+  public Blob readAllBytes(IntPredicate predicate) {
+    Buffer buffer = newBuffer();
+    Output output = buffer.asOutput();
     int oneByte;
     while ((oneByte = peek()) != -1 && predicate.test(oneByte)) {
-      buffer.write(read());
+      output.write(read());
     }
-    return buffer.toByteArray();
+    return buffer.toBlob();
   }
 
   public Input pumpTo(Output output) {

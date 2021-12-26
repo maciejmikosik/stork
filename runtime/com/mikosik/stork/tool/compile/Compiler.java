@@ -21,6 +21,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import java.math.BigInteger;
 
 import com.mikosik.stork.common.Ascii;
+import com.mikosik.stork.common.Blob;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.Input;
 import com.mikosik.stork.model.Definition;
@@ -88,9 +89,9 @@ public class Compiler {
 
   protected Expression compileQuote(Input input) {
     check(isDoubleQuote(input.read()));
-    byte[] buffer = input.readAllBytes(not(Ascii::isDoubleQuote));
+    Blob blob = input.readAllBytes(not(Ascii::isDoubleQuote));
     check(isDoubleQuote(input.read()));
-    return quote(asciiString(buffer));
+    return quote(asciiString(blob));
   }
 
   protected Lambda compileLambda(Input input) {
@@ -149,7 +150,7 @@ public class Compiler {
     input.readAllBytes(Ascii::isWhitespace);
   }
 
-  private static String asciiString(byte[] bytes) {
-    return new String(bytes, US_ASCII);
+  private static String asciiString(Blob blob) {
+    return new String(blob.bytes, US_ASCII);
   }
 }
