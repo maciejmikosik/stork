@@ -4,7 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.PrintStream;
 
-import com.mikosik.stork.common.Output;
+import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.tool.decompile.Decompiler;
 

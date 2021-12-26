@@ -1,9 +1,9 @@
 package com.mikosik.stork.demo;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.common.Input.input;
-import static com.mikosik.stork.common.InputOutput.path;
-import static com.mikosik.stork.common.Output.output;
+import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.InputOutput.path;
+import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.tool.link.Link.link;

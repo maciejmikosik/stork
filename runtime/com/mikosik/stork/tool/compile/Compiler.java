@@ -1,13 +1,13 @@
 package com.mikosik.stork.tool.compile;
 
-import static com.mikosik.stork.common.Ascii.isAlphanumeric;
-import static com.mikosik.stork.common.Ascii.isDoubleQuote;
-import static com.mikosik.stork.common.Ascii.isLetter;
-import static com.mikosik.stork.common.Ascii.isNumeric;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;
 import static com.mikosik.stork.common.Throwables.fail;
+import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
+import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
+import static com.mikosik.stork.common.io.Ascii.isLetter;
+import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Integer.integer;
@@ -20,10 +20,10 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.common.Ascii;
-import com.mikosik.stork.common.Blob;
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.common.Input;
+import com.mikosik.stork.common.io.Ascii;
+import com.mikosik.stork.common.io.Blob;
+import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;

@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
 public class Ascii {
   public static char SINGLE_QUOTE = '\'';

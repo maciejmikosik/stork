@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

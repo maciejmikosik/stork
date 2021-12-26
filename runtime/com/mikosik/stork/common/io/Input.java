@@ -1,7 +1,7 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.Buffer.newBuffer;
-import static com.mikosik.stork.common.InputOutput.unchecked;
+import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
 

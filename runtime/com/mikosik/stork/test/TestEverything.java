@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.InputOutput.path;
+import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
 import static com.mikosik.stork.test.TestDecompiler.testDecompiler;
 import static org.quackery.Suite.suite;

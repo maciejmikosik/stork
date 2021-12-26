@@ -9,7 +9,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.InnateBuilder.innate;
 
-import com.mikosik.stork.common.Output;
+import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Parameter;
 

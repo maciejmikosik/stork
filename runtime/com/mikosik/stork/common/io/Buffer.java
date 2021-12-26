@@ -1,7 +1,7 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.Blob.blob;
-import static com.mikosik.stork.common.Output.output;
+import static com.mikosik.stork.common.io.Blob.blob;
+import static com.mikosik.stork.common.io.Output.output;
 
 import java.io.ByteArrayOutputStream;
 

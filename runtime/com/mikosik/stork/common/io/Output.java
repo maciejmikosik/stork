@@ -1,6 +1,6 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.InputOutput.unchecked;
+import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
 import java.io.IOException;
 import java.io.OutputStream;
