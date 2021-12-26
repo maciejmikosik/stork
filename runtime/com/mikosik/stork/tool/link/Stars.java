@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Input.input;
 import static com.mikosik.stork.common.InputOutput.walk;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
-import static com.mikosik.stork.tool.compile.DefaultCompiler.defaultCompiler;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.isRegularFile;
@@ -38,9 +37,9 @@ public class Stars {
   private static Module moduleFromFile(Path directory, Path file) {
     String packagePrefix = packagePrefix(directory, file);
     Chain<String> imports = importsFor(file);
-    Compiler<Module> compiler = defaultCompiler();
+    Compiler compiler = new Compiler();
     try (Input input = input(file).buffered()) {
-      return import_(imports, export(packagePrefix, compiler.compile(input)));
+      return import_(imports, export(packagePrefix, compiler.compileModule(input)));
     }
   }
 

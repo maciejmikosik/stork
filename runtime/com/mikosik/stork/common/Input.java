@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Scanner;
+import java.util.function.IntPredicate;
 
 public class Input implements AutoCloseable {
   private final InputStream input;
@@ -118,6 +119,15 @@ public class Input implements AutoCloseable {
   public byte[] readAllBytes() {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     pumpTo(output(buffer));
+    return buffer.toByteArray();
+  }
+
+  public byte[] readAllBytes(IntPredicate predicate) {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    int oneByte;
+    while ((oneByte = peek()) != -1 && predicate.test(oneByte)) {
+      buffer.write(read());
+    }
     return buffer.toByteArray();
   }
 
