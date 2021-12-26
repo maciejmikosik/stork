@@ -14,11 +14,11 @@ public class LoopingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    Computation computed = computation;
+    Computation previous = null;
     do {
-      computation = computed;
-      computed = computer.compute(computation);
-    } while (computed != computation);
-    return computed;
+      previous = computation;
+      computation = computer.compute(computation);
+    } while (computation != previous);
+    return computation;
   }
 }
