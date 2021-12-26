@@ -7,6 +7,7 @@ import static com.mikosik.stork.tool.common.Constants.NONE;
 import static com.mikosik.stork.tool.common.Constants.SOME;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 
+import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.tool.compute.Computer;
@@ -29,12 +30,12 @@ public class StdinComputer implements Computer {
   }
 
   private Expression compute(Stdin stdin) {
-    int oneByte = stdin.input.read();
-    return oneByte == -1
-        ? NONE
-        : application(
+    MaybeByte maybeByte = stdin.input.read();
+    return maybeByte.hasByte()
+        ? application(
             SOME,
-            integer(oneByte),
-            Stdin.stdin(stdin.input));
+            integer(maybeByte.getByte()),
+            Stdin.stdin(stdin.input))
+        : NONE;
   }
 }

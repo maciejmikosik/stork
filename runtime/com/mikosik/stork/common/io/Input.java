@@ -2,6 +2,7 @@ package com.mikosik.stork.common.io;
 
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
+import static com.mikosik.stork.common.io.MaybeByte.maybeByte;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
 
@@ -39,9 +40,9 @@ public class Input implements AutoCloseable {
         : input(new ByteArrayInputStream(new byte[0]));
   }
 
-  public int read() {
+  public MaybeByte read() {
     try {
-      return input.read();
+      return maybeByte(input.read());
     } catch (IOException e) {
       throw unchecked(e);
     }
@@ -68,17 +69,17 @@ public class Input implements AutoCloseable {
   public Blob readAllBytes(IntPredicate predicate) {
     Buffer buffer = newBuffer();
     Output output = buffer.asOutput();
-    int oneByte;
-    while ((oneByte = peek()) != -1 && predicate.test(oneByte)) {
-      output.write(read());
+    MaybeByte maybeByte;
+    while ((maybeByte = peek()).hasByte() && predicate.test(maybeByte.getByte())) {
+      output.write(read().getByte());
     }
     return buffer.toBlob();
   }
 
   public Input pumpTo(Output output) {
-    int oneByte;
-    while ((oneByte = read()) != -1) {
-      output.write(oneByte);
+    MaybeByte oneByte;
+    while ((oneByte = read()).hasByte()) {
+      output.write(oneByte.getByte());
     }
     return this;
   }
@@ -89,12 +90,12 @@ public class Input implements AutoCloseable {
     return this;
   }
 
-  public int peek() {
+  public MaybeByte peek() {
     try {
       input.mark(1);
-      int oneByte = read();
+      MaybeByte maybeByte = read();
       input.reset();
-      return oneByte;
+      return maybeByte;
     } catch (IOException e) {
       throw unchecked(e);
     }

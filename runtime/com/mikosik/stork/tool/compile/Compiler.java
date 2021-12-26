@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;
 import static com.mikosik.stork.common.Throwables.fail;
+import static com.mikosik.stork.common.io.Ascii.DOUBLE_QUOTE;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
@@ -24,6 +25,7 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Ascii;
 import com.mikosik.stork.common.io.Blob;
 import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
@@ -35,7 +37,7 @@ import com.mikosik.stork.tool.common.Traverser;
 public class Compiler {
   public Module compileModule(Input input) {
     Chain<Definition> definitions = empty();
-    while (input.peek() != -1) {
+    while (input.peek().hasByte()) {
       skipWhitespaces(input);
       definitions = definitions.add(compileDefinition(input));
       skipWhitespaces(input);
@@ -50,17 +52,19 @@ public class Compiler {
   }
 
   public Expression compileExpression(Input input) {
-    int character = input.peek();
-    if (isNumeric(character)) {
+    MaybeByte maybeByte = input.peek();
+    if (!maybeByte.hasByte()) {
+      return fail("unexpected end of stream", maybeByte);
+    } else if (isNumeric(maybeByte.getByte())) {
       return compileInteger(input);
-    } else if (isLetter(character)) {
+    } else if (isLetter(maybeByte.getByte())) {
       return compileInvocation(input);
-    } else if (isDoubleQuote(character)) {
+    } else if (isDoubleQuote(maybeByte.getByte())) {
       return compileQuote(input);
-    } else if (character == '(') {
+    } else if (maybeByte.getByte() == '(') {
       return compileLambda(input);
     } else {
-      return fail("unexpected character %c", character);
+      return fail("unexpected character %c", maybeByte);
     }
   }
 
@@ -71,12 +75,12 @@ public class Compiler {
   protected Expression compileInvocation(Input input) {
     Expression result = compileVariable(input);
     skipWhitespaces(input);
-    while (input.peek() == '(') {
+    while (input.peek().getByte() == '(') {
       input.read();
       skipWhitespaces(input);
       Expression argument = compileExpression(input);
       skipWhitespaces(input);
-      check(input.read() == ')');
+      check(input.read().getByte() == ')');
       result = application(result, argument);
       skipWhitespaces(input);
     }
@@ -88,18 +92,18 @@ public class Compiler {
   }
 
   protected Expression compileQuote(Input input) {
-    check(isDoubleQuote(input.read()));
+    check(input.read().getByte() == DOUBLE_QUOTE);
     Blob blob = input.readAllBytes(not(Ascii::isDoubleQuote));
-    check(isDoubleQuote(input.read()));
+    check(input.read().getByte() == DOUBLE_QUOTE);
     return quote(asciiString(blob));
   }
 
   protected Lambda compileLambda(Input input) {
-    check(input.read() == '(');
+    check(input.read().getByte() == '(');
     skipWhitespaces(input);
     Parameter parameter = parameter(compileAlphanumeric(input));
     skipWhitespaces(input);
-    check(input.read() == ')');
+    check(input.read().getByte() == ')');
     skipWhitespaces(input);
     return lambda(parameter, bind(parameter, compileBody(input)));
   }
@@ -121,27 +125,27 @@ public class Compiler {
   }
 
   protected Expression compileBody(Input input) {
-    int character = input.peek();
-    if (character == '(') {
+    MaybeByte maybeByte = input.peek();
+    if (maybeByte.getByte() == '(') {
       return compileLambda(input);
-    } else if (character == '{') {
+    } else if (maybeByte.getByte() == '{') {
       return compileScope(input);
     } else {
-      return fail("expected ( or { but was %c", character);
+      return fail("expected ( or { but was %c", maybeByte);
     }
   }
 
   protected Expression compileScope(Input input) {
-    check(input.read() == '{');
+    check(input.read().getByte() == '{');
     skipWhitespaces(input);
     Expression body = compileExpression(input);
     skipWhitespaces(input);
-    check(input.read() == '}');
+    check(input.read().getByte() == '}');
     return body;
   }
 
   protected String compileAlphanumeric(Input input) {
-    return isAlphanumeric(input.peek())
+    return isAlphanumeric(input.peek().getByte())
         ? asciiString(input.readAllBytes(Ascii::isAlphanumeric))
         : fail("expected alphanumeric but was %c", input.peek());
   }
