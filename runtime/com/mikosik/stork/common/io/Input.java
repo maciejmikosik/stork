@@ -3,15 +3,11 @@ package com.mikosik.stork.common.io;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static com.mikosik.stork.common.io.MaybeByte.maybeByte;
-import static java.nio.file.Files.exists;
-import static java.nio.file.Files.newInputStream;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.function.IntPredicate;
 
@@ -24,20 +20,6 @@ public class Input implements AutoCloseable {
 
   public static Input input(InputStream input) {
     return new Input(input);
-  }
-
-  public static Input input(Path file) {
-    try {
-      return input(newInputStream(file));
-    } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public static Input tryInput(Path file) {
-    return exists(file)
-        ? input(file)
-        : input(new ByteArrayInputStream(new byte[0]));
   }
 
   public MaybeByte read() {
