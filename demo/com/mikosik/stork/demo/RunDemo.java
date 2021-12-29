@@ -2,7 +2,7 @@ package com.mikosik.stork.demo;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.InputOutput.path;
+import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
@@ -15,8 +15,8 @@ import com.mikosik.stork.program.Program;
 public class RunDemo {
   public static void main(String[] args) {
     Module module = link(chainOf(
-        moduleFromDirectory(path("demo/com/mikosik/stork/demo")),
-        moduleFromDirectory(path("core_star"))));
+        moduleFromDirectory(node("demo/com/mikosik/stork/demo")),
+        moduleFromDirectory(node("core_star"))));
 
     Program program = program(variable("main"), module);
     program.run(input(System.in), output(System.out));

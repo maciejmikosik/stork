@@ -19,7 +19,7 @@ public class Output implements AutoCloseable {
     return new Output(output);
   }
 
-  public void write(int b) {
+  public void write(byte b) {
     try {
       output.write(b);
     } catch (IOException e) {

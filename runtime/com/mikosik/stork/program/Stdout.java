@@ -66,7 +66,7 @@ public class Stdout {
               .argumentIntegerJava()
               .intValueExact();
           check(0 <= oneByte && oneByte <= 255);
-          output.write(oneByte);
+          output.write((byte) oneByte);
           return computation(
               stack.pop().argument(),
               stack.pop().pop());

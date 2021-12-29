@@ -3,9 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
-import static com.mikosik.stork.common.io.Input.tryInput;
-import static com.mikosik.stork.common.io.InputOutput.list;
-import static com.mikosik.stork.common.io.InputOutput.path;
+import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.tool.link.Link.link;
@@ -16,8 +14,6 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 import org.quackery.Test;
@@ -26,46 +22,47 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.io.Blob;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.common.io.Node;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.program.Program;
 import com.mikosik.stork.tool.link.Stars;
 
 public class ProgramTest {
-  public static Test testProgramsIn(Path directory) {
-    boolean hasFiles = list(directory).anyMatch(Files::isRegularFile);
-    boolean hasDirectories = list(directory).anyMatch(Files::isDirectory);
+  public static Test testProgramsIn(Node directory) {
+    boolean hasFiles = directory.children().anyMatch(Node::isRegularFile);
+    boolean hasDirectories = directory.children().anyMatch(Node::isDirectory);
     check(hasFiles != hasDirectories);
     return hasDirectories
         ? buildSuite(directory)
         : buildCase(directory);
   }
 
-  private static Test buildSuite(Path directory) {
-    List<Test> suites = list(directory)
-        .filter(Files::isDirectory)
+  private static Test buildSuite(Node directory) {
+    List<Test> suites = directory.children()
+        .filter(Node::isDirectory)
         .map(ProgramTest::testProgramsIn)
         .collect(toList());
     return suite(nameOf(directory)).addAll(suites);
   }
 
-  private static Test buildCase(Path directory) {
+  private static Test buildCase(Node directory) {
     return newCase(nameOf(directory), () -> run(directory));
   }
 
-  private static void run(Path directory) {
-    List<Module> modules = list(directory)
-        .filter(Files::isRegularFile)
+  private static void run(Node directory) {
+    List<Module> modules = directory.children()
+        .filter(Node::isRegularFile)
         .filter(ProgramTest::isStorkFile)
-        .map(file -> Stars.moduleFromDirectory(file.getParent()))
+        .map(file -> Stars.moduleFromDirectory(file.parent()))
         .collect(toList());
 
     Module module = link(chainFrom(modules)
-        .add(moduleFromDirectory(path("core_star"))));
+        .add(moduleFromDirectory(node("core_star"))));
     Program program = program(variable("main"), module);
-    Input stdin = tryInput(directory.resolve("stdin"));
+    Input stdin = directory.child("stdin").tryInput();
     Buffer buffer = newBuffer();
     program.run(stdin, buffer.asOutput());
-    Blob expectedStdout = tryInput(directory.resolve("stdout")).readAllBytes();
+    Blob expectedStdout = directory.child("stdout").tryInput().readAllBytes();
     Blob actualStdout = buffer.toBlob();
     if (!actualStdout.equals(expectedStdout)) {
       throw new AssertException(format(""
@@ -78,12 +75,12 @@ public class ProgramTest {
     }
   }
 
-  private static boolean isStorkFile(Path file) {
-    return file.getFileName().toString().equals("stork");
+  private static boolean isStorkFile(Node file) {
+    return file.name().equals("stork");
   }
 
-  private static String nameOf(Path directory) {
-    return unsnake(directory.getFileName().toString());
+  private static String nameOf(Node directory) {
+    return unsnake(directory.name());
   }
 
   private static String unsnake(String string) {

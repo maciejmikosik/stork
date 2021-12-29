@@ -2,22 +2,20 @@ package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Chain.empty;
-import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.Files.isRegularFile;
 import static java.util.stream.Collectors.toList;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.common.io.Node;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Variable;
@@ -25,29 +23,30 @@ import com.mikosik.stork.tool.common.Traverser;
 import com.mikosik.stork.tool.compile.Compiler;
 
 public class Stars {
-  public static Module moduleFromDirectory(Path directory) {
-    List<Module> modules = walk(directory)
-        .filter(Files::isRegularFile)
-        .filter(file -> file.getFileName().toString().equals("stork"))
+  public static Module moduleFromDirectory(Node directory) {
+    Stream<Node> filter = directory.nested()
+        .filter(Node::isRegularFile)
+        .filter(file -> file.name().equals("stork"));
+    List<Module> modules = filter
         .map(file -> moduleFromFile(directory, file))
         .collect(toList());
     return link(chainFrom(modules));
   }
 
-  private static Module moduleFromFile(Path directory, Path file) {
+  private static Module moduleFromFile(Node directory, Node file) {
     String packagePrefix = packagePrefix(directory, file);
     Chain<String> imports = importsFor(file);
     Compiler compiler = new Compiler();
-    try (Input input = input(file).buffered()) {
+    try (Input input = file.input().buffered()) {
       return import_(imports, export(packagePrefix, compiler.compileModule(input)));
     }
   }
 
-  private static Chain<String> importsFor(Path file) {
-    Path importFile = file.getParent().resolve("import");
+  private static Chain<String> importsFor(Node file) {
+    Node importFile = file.parent().child("import");
     Chain<String> result = empty();
-    if (isRegularFile(importFile)) {
-      try (Scanner scanner = input(importFile).buffered().scan(UTF_8)) {
+    if (importFile.isRegularFile()) {
+      try (Scanner scanner = importFile.input().buffered().scan(UTF_8)) {
         while (scanner.hasNext()) {
           result = result.add(scanner.nextLine());
         }
@@ -56,8 +55,8 @@ public class Stars {
     return result;
   }
 
-  private static String packagePrefix(Path directory, Path file) {
-    Path path = directory.relativize(file.getParent());
+  private static String packagePrefix(Node directory, Node file) {
+    Path path = directory.relativeToNested(file.parent());
     String packageName = path.toString().replace('/', '.');
     return packageName.isEmpty()
         ? packageName
