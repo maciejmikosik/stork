@@ -23,18 +23,21 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.tool.common.Scope;
 import com.mikosik.stork.tool.common.Traverser;
 
 public class Decompiler {
-  private final Scope scope;
+  private boolean local = false;
 
-  private Decompiler(Scope scope) {
-    this.scope = scope;
+  private Decompiler(boolean local) {
+    this.local = local;
   }
 
-  public static Decompiler decompiler(Scope scope) {
-    return new Decompiler(scope);
+  public static Decompiler decompiler() {
+    return new Decompiler(false);
+  }
+
+  public Decompiler local() {
+    return new Decompiler(true);
   }
 
   public String decompile(Object code) {
@@ -95,7 +98,9 @@ public class Decompiler {
       }
 
       protected Variable traverse(Variable variable) {
-        output.print(scope.format(variable));
+        output.print(local
+            ? variable.toLocal().name
+            : variable.name);
         return null;
       }
 

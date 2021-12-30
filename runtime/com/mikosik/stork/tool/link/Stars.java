@@ -3,7 +3,6 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -76,7 +75,7 @@ public class Stars {
   private static Module import_(Chain<String> imports, Module module) {
     for (String import_ : imports) {
       Variable global = variable(import_);
-      Variable local = variable(LOCAL.format(global));
+      Variable local = global.toLocal();
       module = renameTo(global, local, module);
 
     }

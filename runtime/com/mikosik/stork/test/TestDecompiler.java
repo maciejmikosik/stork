@@ -12,8 +12,6 @@ import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Stack.stack;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Eager.eager;
-import static com.mikosik.stork.tool.common.Scope.GLOBAL;
-import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -30,7 +28,6 @@ import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
-import com.mikosik.stork.tool.common.Scope;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -89,16 +86,16 @@ public class TestDecompiler {
                     .pushArgument(variable("y"))
                     .pushFunction(variable("f"))))))
         .add(suite("local")
-            .add(test(LOCAL, "function", variable("package.package.function"))));
+            .add(test(decompiler().local(), "function", variable("package.package.function"))));
   }
 
   private static Test test(String expected, Object code) {
-    return test(GLOBAL, expected, code);
+    return test(decompiler(), expected, code);
   }
 
-  private static Test test(Scope scope, String expected, Object code) {
+  private static Test test(Decompiler decompiler, String expected, Object code) {
     return newCase(expected, () -> {
-      run(decompiler(scope), code, expected);
+      run(decompiler, code, expected);
     });
   }
 
