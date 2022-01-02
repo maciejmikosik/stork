@@ -11,6 +11,7 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
@@ -28,11 +29,11 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.tool.common.Traverser;
 
 public class Compiler {
   public Module compileModule(Input input) {
@@ -46,9 +47,10 @@ public class Compiler {
   }
 
   public Definition compileDefinition(Input input) {
-    Variable name = compileVariable(input);
+    Identifier identifier = identifier(compileAlphanumeric(input));
     skipWhitespaces(input);
-    return definition(name, compileBody(input));
+    Expression body = compileBody(input);
+    return definition(identifier, body);
   }
 
   public Expression compileExpression(Input input) {
@@ -105,23 +107,7 @@ public class Compiler {
     skipWhitespaces(input);
     check(input.read().getByte() == ')');
     skipWhitespaces(input);
-    return lambda(parameter, bind(parameter, compileBody(input)));
-  }
-
-  protected Expression bind(Parameter parameter, Expression expression) {
-    return new Traverser() {
-      protected Expression traverse(Variable variable) {
-        return variable.name.equals(parameter.name)
-            ? parameter
-            : variable;
-      }
-
-      protected Expression traverse(Lambda lambda) {
-        return lambda.parameter.name.equals(parameter.name)
-            ? lambda // TODO test shadowing
-            : super.traverse(lambda);
-      }
-    }.traverse(expression);
+    return lambda(parameter, compileBody(input));
   }
 
   protected Expression compileBody(Input input) {

@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
@@ -12,8 +13,6 @@ import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Stack.stack;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Eager.eager;
-import static com.mikosik.stork.tool.common.Scope.GLOBAL;
-import static com.mikosik.stork.tool.common.Scope.LOCAL;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -30,7 +29,6 @@ import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
-import com.mikosik.stork.tool.common.Scope;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -69,16 +67,16 @@ public class TestDecompiler {
                 .add(test("f(x)", application(variable("f"), variable("x"))))
                 .add(test("f(x)(y)", application(variable("f"), variable("x"), variable("y"))))))
         .add(suite("definition")
-            .add(test("f(x){x}", definition(variable("f"), lambda(x, x))))
-            .add(test("f(x)(y){x}", definition(variable("f"), lambda(x, lambda(y, x)))))
-            .add(test("f{g}", definition(variable("f"), variable("g")))))
+            .add(test("f(x){x}", definition(identifier("f"), lambda(x, x))))
+            .add(test("f(x)(y){x}", definition(identifier("f"), lambda(x, lambda(y, x)))))
+            .add(test("f{g}", definition(identifier("f"), variable("g")))))
         .add(suite("module")
             .add(test("", module(Chain.empty())))
             .add(test("f{x}", module(chainOf(
-                definition(variable("f"), variable("x"))))))
+                definition(identifier("f"), variable("x"))))))
             .add(test("f{x} g{y}", module(chainOf(
-                definition(variable("f"), variable("x")),
-                definition(variable("g"), variable("y")))))))
+                definition(identifier("f"), variable("x")),
+                definition(identifier("g"), variable("y")))))))
         .add(suite("computation")
             .add(test("@(f)", computation(
                 variable("f"),
@@ -89,16 +87,17 @@ public class TestDecompiler {
                     .pushArgument(variable("y"))
                     .pushFunction(variable("f"))))))
         .add(suite("local")
-            .add(test(LOCAL, "function", variable("package.package.function"))));
+            .add(test(decompiler().local(), "function", identifier("package.package.function")))
+            .add(test(decompiler().local(), "function", identifier("function"))));
   }
 
   private static Test test(String expected, Object code) {
-    return test(GLOBAL, expected, code);
+    return test(decompiler(), expected, code);
   }
 
-  private static Test test(Scope scope, String expected, Object code) {
+  private static Test test(Decompiler decompiler, String expected, Object code) {
     return newCase(expected, () -> {
-      run(decompiler(scope), code, expected);
+      run(decompiler, code, expected);
     });
   }
 

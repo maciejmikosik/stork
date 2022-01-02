@@ -15,6 +15,7 @@ import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
@@ -23,18 +24,21 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.tool.common.Scope;
 import com.mikosik.stork.tool.common.Traverser;
 
 public class Decompiler {
-  private final Scope scope;
+  private boolean local = false;
 
-  private Decompiler(Scope scope) {
-    this.scope = scope;
+  private Decompiler(boolean local) {
+    this.local = local;
   }
 
-  public static Decompiler decompiler(Scope scope) {
-    return new Decompiler(scope);
+  public static Decompiler decompiler() {
+    return new Decompiler(false);
+  }
+
+  public Decompiler local() {
+    return new Decompiler(true);
   }
 
   public String decompile(Object code) {
@@ -67,8 +71,15 @@ public class Decompiler {
       }
 
       public Definition traverse(Definition definition) {
-        traverse(definition.variable);
-        traverseBody(definition.expression);
+        traverse(definition.identifier);
+        traverseBody(definition.body);
+        return null;
+      }
+
+      protected Identifier traverse(Identifier identifier) {
+        output.print(local
+            ? identifier.toVariable().name
+            : identifier.name);
         return null;
       }
 
@@ -95,12 +106,8 @@ public class Decompiler {
       }
 
       protected Variable traverse(Variable variable) {
-        output.print(scope.format(variable));
+        output.print(variable.name);
         return null;
-      }
-
-      protected Variable traverseDefinitionName(Variable variable) {
-        return traverse(variable);
       }
 
       protected Expression traverse(Parameter parameter) {

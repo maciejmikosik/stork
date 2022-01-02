@@ -1,15 +1,15 @@
 package com.mikosik.stork.model;
 
 public class Definition {
-  public final Variable variable;
-  public final Expression expression;
+  public final Identifier identifier;
+  public final Expression body;
 
-  private Definition(Variable variable, Expression expression) {
-    this.variable = variable;
-    this.expression = expression;
+  private Definition(Identifier identifier, Expression body) {
+    this.identifier = identifier;
+    this.body = body;
   }
 
-  public static Definition definition(Variable variable, Expression expression) {
-    return new Definition(variable, expression);
+  public static Definition definition(Identifier identifier, Expression body) {
+    return new Definition(identifier, body);
   }
 }
