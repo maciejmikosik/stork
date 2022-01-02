@@ -37,18 +37,18 @@ import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
 public class Compiler {
-  public Module compileModule(String namespace, Input input) {
+  public Module compileModule(Input input) {
     Chain<Definition> definitions = empty();
     while (input.peek().hasByte()) {
       skipWhitespaces(input);
-      definitions = definitions.add(compileDefinition(namespace, input));
+      definitions = definitions.add(compileDefinition(input));
       skipWhitespaces(input);
     }
     return module(definitions.reverse());
   }
 
-  public Definition compileDefinition(String namespace, Input input) {
-    Identifier identifier = identifier(namespace + compileVariable(input).name);
+  public Definition compileDefinition(Input input) {
+    Identifier identifier = identifier(compileAlphanumeric(input));
     skipWhitespaces(input);
     Expression body = compileBody(input);
     return definition(identifier, body);
