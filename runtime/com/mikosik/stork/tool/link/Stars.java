@@ -15,11 +15,8 @@ import java.util.stream.Stream;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
-import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.tool.common.Traverser;
 import com.mikosik.stork.tool.compile.Compiler;
 
 public class Stars {
@@ -39,7 +36,7 @@ public class Stars {
     Compiler compiler = new Compiler();
     try (Input input = file.input().buffered()) {
       Module module = compiler.compileModule(namespace, input);
-      return bindIdentifiers(imports, bindDefinitions(module));
+      return Bind.bindIdentifiers(imports, Bind.bindDefinitions(module));
     }
   }
 
@@ -62,29 +59,5 @@ public class Stars {
     return packageName.isEmpty()
         ? packageName
         : packageName + '.';
-  }
-
-  private static Module bindDefinitions(Module module) {
-    Chain<Identifier> identifiers = module.definitions
-        .map(definition -> definition.identifier);
-    return bindIdentifiers(identifiers, module);
-  }
-
-  private static Module bindIdentifiers(Chain<Identifier> identifiers, Module module) {
-    for (Identifier identifier : identifiers) {
-      module = bind(identifier, module);
-    }
-    return module;
-  }
-
-  private static Module bind(Identifier identifier, Module module) {
-    Variable variableToReplace = identifier.toVariable();
-    return new Traverser() {
-      protected Expression traverse(Variable variable) {
-        return variable.name.equals(variableToReplace.name)
-            ? identifier
-            : variable;
-      }
-    }.traverse(module);
   }
 }
