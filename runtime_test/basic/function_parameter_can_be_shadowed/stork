@@ -1,0 +1,8 @@
+
+  function(x)(x) {
+    x
+  }
+
+  main(stdin) {
+    function("a")("b")
+  }

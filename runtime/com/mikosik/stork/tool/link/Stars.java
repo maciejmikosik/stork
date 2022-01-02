@@ -6,6 +6,7 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.tool.link.Bind.bindDefinitions;
 import static com.mikosik.stork.tool.link.Bind.bindIdentifiers;
 import static com.mikosik.stork.tool.link.Bind.bindNamespace;
+import static com.mikosik.stork.tool.link.Bind.bindParameters;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -39,7 +40,8 @@ public class Stars {
     Compiler compiler = new Compiler();
     try (Input input = file.input().buffered()) {
       Module module = compiler.compileModule(input);
-      return bindIdentifiers(imports, bindDefinitions(bindNamespace(namespace, module)));
+      return bindIdentifiers(imports,
+          bindDefinitions(bindNamespace(namespace, bindParameters(module))));
     }
   }
 
