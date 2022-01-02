@@ -9,6 +9,7 @@ import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
@@ -26,12 +27,12 @@ public class Traverser {
 
   public Definition traverse(Definition definition) {
     return definition(
-        traverseDefinitionName(definition.variable),
-        traverse(definition.expression));
+        traverse(definition.identifier),
+        traverse(definition.body));
   }
 
-  protected Variable traverseDefinitionName(Variable variable) {
-    return variable;
+  protected Identifier traverse(Identifier identifier) {
+    return identifier;
   }
 
   public Expression traverse(Expression expression) {
@@ -43,6 +44,8 @@ public class Traverser {
       return traverse((Integer) expression);
     } else if (expression instanceof Variable) {
       return traverse((Variable) expression);
+    } else if (expression instanceof Identifier) {
+      return traverse((Identifier) expression);
     } else if (expression instanceof Parameter) {
       return traverse((Parameter) expression);
     } else if (expression instanceof Quote) {

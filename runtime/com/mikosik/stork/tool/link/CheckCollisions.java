@@ -14,8 +14,8 @@ public class CheckCollisions {
     // TODO throw dedicated exception
     module.definitions
         .forEach(definition -> {
-          check(!keys.contains(definition.variable.name));
-          keys.add(definition.variable.name);
+          check(!keys.contains(definition.identifier.name));
+          keys.add(definition.identifier.name);
         });
   }
 }

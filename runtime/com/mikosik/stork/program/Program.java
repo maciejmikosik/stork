@@ -16,8 +16,8 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.compute.Computer;
 
 public class Program {
@@ -29,7 +29,7 @@ public class Program {
     this.module = module;
   }
 
-  public static Program program(Variable main, Module module) {
+  public static Program program(Identifier main, Module module) {
     return new Program(main, module);
   }
 

@@ -15,6 +15,7 @@ import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
@@ -70,8 +71,15 @@ public class Decompiler {
       }
 
       public Definition traverse(Definition definition) {
-        traverse(definition.variable);
-        traverseBody(definition.expression);
+        traverse(definition.identifier);
+        traverseBody(definition.body);
+        return null;
+      }
+
+      protected Identifier traverse(Identifier identifier) {
+        output.print(local
+            ? identifier.toVariable().name
+            : identifier.name);
         return null;
       }
 
@@ -98,14 +106,8 @@ public class Decompiler {
       }
 
       protected Variable traverse(Variable variable) {
-        output.print(local
-            ? variable.toLocal().name
-            : variable.name);
+        output.print(variable.name);
         return null;
-      }
-
-      protected Variable traverseDefinitionName(Variable variable) {
-        return traverse(variable);
       }
 
       protected Expression traverse(Parameter parameter) {

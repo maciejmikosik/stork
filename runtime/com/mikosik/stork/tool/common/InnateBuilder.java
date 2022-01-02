@@ -2,8 +2,8 @@ package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.tool.common.Constants.FALSE;
 import static com.mikosik.stork.tool.common.Constants.TRUE;
 import static com.mikosik.stork.tool.common.Eager.eager;
@@ -96,7 +96,7 @@ public class InnateBuilder {
     };
   }
 
-  public Definition defineAs(String globalName) {
-    return definition(variable(globalName), build());
+  public Definition defineAs(String name) {
+    return definition(identifier(name), build());
   }
 }

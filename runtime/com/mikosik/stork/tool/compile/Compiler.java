@@ -11,6 +11,7 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
@@ -28,6 +29,7 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
@@ -35,20 +37,21 @@ import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
 public class Compiler {
-  public Module compileModule(Input input) {
+  public Module compileModule(String namespace, Input input) {
     Chain<Definition> definitions = empty();
     while (input.peek().hasByte()) {
       skipWhitespaces(input);
-      definitions = definitions.add(compileDefinition(input));
+      definitions = definitions.add(compileDefinition(namespace, input));
       skipWhitespaces(input);
     }
     return module(definitions.reverse());
   }
 
-  public Definition compileDefinition(Input input) {
-    Variable name = compileVariable(input);
+  public Definition compileDefinition(String namespace, Input input) {
+    Identifier identifier = identifier(namespace + compileVariable(input).name);
     skipWhitespaces(input);
-    return definition(name, compileBody(input));
+    Expression body = compileBody(input);
+    return definition(identifier, body);
   }
 
   public Expression compileExpression(Input input) {

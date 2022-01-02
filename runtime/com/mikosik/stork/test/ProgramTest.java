@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Node.node;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
@@ -58,7 +58,7 @@ public class ProgramTest {
 
     Module module = link(chainFrom(modules)
         .add(moduleFromDirectory(node("core_star"))));
-    Program program = program(variable("main"), module);
+    Program program = program(identifier("main"), module);
     Input stdin = directory.child("stdin").tryInput();
     Buffer buffer = newBuffer();
     program.run(stdin, buffer.asOutput());
