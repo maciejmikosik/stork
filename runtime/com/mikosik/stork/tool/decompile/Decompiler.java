@@ -1,9 +1,6 @@
 package com.mikosik.stork.tool.decompile;
 
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Computation.computation;
-import static com.mikosik.stork.model.Variable.variable;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.ByteArrayOutputStream;
@@ -12,17 +9,16 @@ import java.io.PrintStream;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Combinator;
-import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
+import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.tool.common.Traverser;
 
@@ -41,7 +37,7 @@ public class Decompiler {
     return new Decompiler(true);
   }
 
-  public String decompile(Object code) {
+  public String decompile(Model code) {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     Traverser printer = printer(output(buffer).asPrintStream(US_ASCII));
     if (code instanceof Expression) {
@@ -50,8 +46,6 @@ public class Decompiler {
       printer.traverse((Definition) code);
     } else if (code instanceof Module) {
       printer.traverse((Module) code);
-    } else if (code instanceof Computation) {
-      printer.traverse(abort(mark((Computation) code)));
     }
     return new String(buffer.toByteArray(), US_ASCII);
   }
@@ -139,27 +133,5 @@ public class Decompiler {
         return null;
       }
     };
-  }
-
-  private static Computation mark(Computation computation) {
-    return computation(
-        application(variable("@"), computation.expression),
-        computation.stack);
-  }
-
-  private static Expression abort(Computation computation) {
-    Expression expression = computation.expression;
-    Stack stack = computation.stack;
-    while (true) {
-      if (stack.hasArgument()) {
-        expression = application(expression, stack.argument());
-      } else if (stack.hasFunction()) {
-        expression = application(stack.function(), expression);
-      } else {
-        break;
-      }
-      stack = stack.pop();
-    }
-    return expression;
   }
 }
