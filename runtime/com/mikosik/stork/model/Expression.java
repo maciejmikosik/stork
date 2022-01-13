@@ -1,3 +1,3 @@
 package com.mikosik.stork.model;
 
-public interface Expression {}
+public interface Expression extends Model {}
