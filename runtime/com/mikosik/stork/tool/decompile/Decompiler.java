@@ -1,26 +1,7 @@
 package com.mikosik.stork.tool.decompile;
 
-import static com.mikosik.stork.common.io.Output.output;
-import static java.nio.charset.StandardCharsets.US_ASCII;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Combinator;
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Innate;
-import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Lambda;
+import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Model;
-import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.tool.common.Traverser;
 
 public class Decompiler {
   private boolean local = false;
@@ -37,101 +18,8 @@ public class Decompiler {
     return new Decompiler(true);
   }
 
-  public String decompile(Model code) {
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    Traverser printer = printer(output(buffer).asPrintStream(US_ASCII));
-    if (code instanceof Expression) {
-      printer.traverse((Expression) code);
-    } else if (code instanceof Definition) {
-      printer.traverse((Definition) code);
-    } else if (code instanceof Module) {
-      printer.traverse((Module) code);
-    }
-    return new String(buffer.toByteArray(), US_ASCII);
-  }
-
-  private Traverser printer(PrintStream output) {
-    return new Traverser() {
-      public Module traverse(Module module) {
-        Chain<Definition> definitions = module.definitions;
-        if (!definitions.isEmpty()) {
-          traverse(definitions.head());
-          for (Definition definition : definitions.tail()) {
-            output.print(' ');
-            traverse(definition);
-          }
-        }
-        return null;
-      }
-
-      public Definition traverse(Definition definition) {
-        traverse(definition.identifier);
-        traverseBody(definition.body);
-        return null;
-      }
-
-      protected Identifier traverse(Identifier identifier) {
-        output.print(local
-            ? identifier.toVariable().name
-            : identifier.name);
-        return null;
-      }
-
-      protected Expression traverse(Integer integer) {
-        output.print(integer.value.toString());
-        return null;
-      }
-
-      protected Expression traverse(Quote quote) {
-        output.print('\"');
-        output.print(quote.string);
-        output.print('\"');
-        return null;
-      }
-
-      protected Expression traverse(Innate innate) {
-        output.print(innate.toString());
-        return null;
-      }
-
-      protected Expression traverse(Combinator combinator) {
-        output.print("$" + combinator.toString());
-        return null;
-      }
-
-      protected Variable traverse(Variable variable) {
-        output.print(variable.name);
-        return null;
-      }
-
-      protected Expression traverse(Parameter parameter) {
-        output.print(parameter.name);
-        return null;
-      }
-
-      protected Expression traverse(Lambda lambda) {
-        output.print('(');
-        traverse(lambda.parameter);
-        output.print(')');
-        traverseBody(lambda.body);
-        return null;
-      }
-
-      protected Expression traverse(Application application) {
-        traverse(application.function);
-        output.print('(');
-        traverse(application.argument);
-        output.print(')');
-        return null;
-      }
-
-      protected Expression traverseBody(Expression body) {
-        boolean isLambda = body instanceof Lambda;
-        output.print(isLambda ? "" : "{");
-        traverse(body);
-        output.print(isLambda ? "" : "}");
-        return null;
-      }
-    };
+  public void decompile(Output output, Model model) {
+    new Decompilation(local, output)
+        .decompile(model);
   }
 }
