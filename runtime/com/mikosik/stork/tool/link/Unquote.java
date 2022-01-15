@@ -5,19 +5,15 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.tool.common.Constants.NONE;
 import static com.mikosik.stork.tool.common.Constants.SOME;
+import static com.mikosik.stork.tool.common.Morph.morphQuotes;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.tool.common.Traverser;
 
 public class Unquote {
   public static Module unquote(Module module) {
-    return new Traverser() {
-      protected Expression traverse(Quote quote) {
-        return asStorkStream(quote);
-      }
-    }.traverse(module);
+    return morphQuotes(Unquote::asStorkStream).in(module);
   }
 
   private static Expression asStorkStream(Quote quote) {

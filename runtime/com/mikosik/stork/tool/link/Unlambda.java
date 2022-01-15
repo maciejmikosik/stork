@@ -6,15 +6,14 @@ import static com.mikosik.stork.model.Combinator.C;
 import static com.mikosik.stork.model.Combinator.I;
 import static com.mikosik.stork.model.Combinator.K;
 import static com.mikosik.stork.model.Combinator.S;
-import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.tool.common.Morph.morphLambdas;
+import static com.mikosik.stork.tool.common.Morph.morphParameters;
 
 import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.tool.common.Traverser;
+import com.mikosik.stork.tool.common.Morph;
 
 /**
  * Transforms lambda abstractions into basis using SKI combinators.
@@ -23,88 +22,65 @@ import com.mikosik.stork.tool.common.Traverser;
  */
 public class Unlambda {
   public static Module unlambda(Module module) {
-    return traverser().traverse(module);
-  }
-
-  public static Definition unlambda(Definition definition) {
-    return traverser().traverse(definition);
+    return unlambda().in(module);
   }
 
   public static Expression unlambda(Expression expression) {
-    return traverser().traverse(expression);
+    return unlambda().in(expression);
   }
 
-  private static Traverser traverser() {
-    return new Traverser() {
-      protected Expression traverse(Application application) {
-        // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
-        return application(
-            traverse(application.function),
-            traverse(application.argument));
-      }
+  private static Morph unlambda() {
+    // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
+    // 5. T[λx.λy.E] => T[λx.T[λy.E]]
+    return morphLambdas(lambda -> transform(lambda.parameter, lambda.body));
+  }
 
-      protected Expression traverse(Lambda lambda) {
-        Parameter parameter = lambda.parameter;
-        Expression body = lambda.body;
-        if (!occurs(parameter, body)) {
-          // 3. T[λx.E] => (K T[E])
-          return application(K, traverse(body));
-        } else if (parameter == body) {
-          // 4. T[λx.x] => I
-          return I;
-        } else if (body instanceof Lambda) {
-          // 5. T[λx.λy.E] => T[λx.T[λy.E]]
-          return traverse(lambda(parameter, traverse(body)));
-        } else if (body instanceof Application) {
-          return traverseLambda(parameter, (Application) body);
-        } else {
-          throw new RuntimeException();
-        }
-      }
+  private static Expression transform(Parameter parameter, Expression body) {
+    if (!occurs(parameter, body)) {
+      // 3. T[λx.E] => (K T[E])
+      return application(K, body);
+    } else if (parameter == body) {
+      // 4. T[λx.x] => I
+      return I;
+    } else if (body instanceof Application) {
+      return transform(parameter, (Application) body);
+    } else {
+      throw new RuntimeException();
+    }
 
-      private Expression traverseLambda(Parameter parameter, Application body) {
-        boolean isInFunction = occurs(parameter, body.function);
-        boolean isInArgument = occurs(parameter, body.argument);
-        if (isInFunction && isInArgument) {
-          // 6. T[λx.(E₁ E₂)] => (S T[λx.E₁] T[λx.E₂])
-          return application(
-              S,
-              traverse(lambda(parameter, body.function)),
-              traverse(lambda(parameter, body.argument)));
-        }
-        if (isInFunction && !isInArgument) {
-          // 7. T[λx.(E₁ E₂)] ⇒ (C T[λx.E₁] T[E₂])
-          return application(
-              C,
-              traverse(lambda(parameter, body.function)),
-              traverse(body.argument));
-        }
-        if (!isInFunction && isInArgument) {
-          if (body.argument == parameter) {
-            // η-reduction [λx.(E x)] = T[E]
-            return traverse(body.function);
-          }
-          // 8. T[λx.(E₁ E₂)] ⇒ (B T[E₁] T[λx.E₂])
-          return application(
-              B,
-              traverse(body.function),
-              traverse(lambda(parameter, body.argument)));
-        }
-        throw new RuntimeException();
+  }
+
+  private static Expression transform(Parameter parameter, Application body) {
+    boolean isInFunction = occurs(parameter, body.function);
+    boolean isInArgument = occurs(parameter, body.argument);
+    if (isInFunction && isInArgument) {
+      // 6. T[λx.(E₁ E₂)] => (S T[λx.E₁] T[λx.E₂])
+      return application(S, transform(parameter, body.function),
+          transform(parameter, body.argument));
+    }
+    if (isInFunction && !isInArgument) {
+      // 7. T[λx.(E₁ E₂)] ⇒ (C T[λx.E₁] T[E₂])
+      return application(C, transform(parameter, body.function), body.argument);
+    }
+    if (!isInFunction && isInArgument) {
+      if (body.argument == parameter) {
+        // η-reduction [λx.(E x)] = T[E]
+        return body.function;
       }
-    };
+      // 8. T[λx.(E₁ E₂)] ⇒ (B T[E₁] T[λx.E₂])
+      return application(B, body.function, transform(parameter, body.argument));
+    }
+    throw new RuntimeException();
   }
 
   private static boolean occurs(Parameter parameter, Expression expression) {
     boolean[] result = new boolean[1];
-    new Traverser() {
-      protected Expression traverse(Parameter traversing) {
-        if (traversing == parameter) {
-          result[0] = true;
-        }
-        return traversing;
+    morphParameters(traversing -> {
+      if (traversing == parameter) {
+        result[0] = true;
       }
-    }.traverse(expression);
+      return traversing;
+    }).in(expression);
     return result[0];
   }
 }
