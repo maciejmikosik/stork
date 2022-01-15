@@ -1,6 +1,6 @@
 package com.mikosik.stork.model;
 
-public class Definition {
+public class Definition implements Model {
   public final Identifier identifier;
   public final Expression body;
 

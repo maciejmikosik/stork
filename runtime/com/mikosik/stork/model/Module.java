@@ -2,7 +2,7 @@ package com.mikosik.stork.model;
 
 import com.mikosik.stork.common.Chain;
 
-public class Module {
+public class Module implements Model {
   public final Chain<Definition> definitions;
 
   private Module(Chain<Definition> definitions) {
