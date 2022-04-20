@@ -30,12 +30,20 @@ public class StdinComputer implements Computer {
   }
 
   private Expression compute(Stdin stdin) {
-    MaybeByte maybeByte = stdin.input.read();
+    MaybeByte maybeByte = head(stdin);
     return maybeByte.hasByte()
         ? application(
             SOME,
             integer(maybeByte.getByte()),
-            Stdin.stdin(stdin.input))
+            tail(stdin))
         : NONE;
+  }
+
+  private static MaybeByte head(Stdin stdin) {
+    return stdin.input.read();
+  }
+
+  private static Expression tail(Stdin stdin) {
+    return Stdin.stdin(stdin.input, stdin.index + 1);
   }
 }
