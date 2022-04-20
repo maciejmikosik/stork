@@ -9,14 +9,10 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Stack;
 
 public class StackingComputer implements Computer {
-  private final Computer computer;
+  private StackingComputer() {}
 
-  private StackingComputer(Computer computer) {
-    this.computer = computer;
-  }
-
-  public static Computer stacking(Computer computer) {
-    return new StackingComputer(computer);
+  public static Computer stackingComputer() {
+    return new StackingComputer();
   }
 
   public Computation compute(Computation computation) {
@@ -29,7 +25,7 @@ public class StackingComputer implements Computer {
           application(stack.function(), expression),
           stack.pop());
     } else {
-      return computer.compute(computation);
+      return computation;
     }
   }
 

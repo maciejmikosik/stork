@@ -16,21 +16,18 @@ import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.tool.compute.Computer;
 
 public class StdinComputer implements Computer {
-  private final Computer computer;
   private final Map<Stdin, Expression> cache = new WeakHashMap<>();
 
-  private StdinComputer(Computer computer) {
-    this.computer = computer;
-  }
+  private StdinComputer() {}
 
-  public static Computer stdin(Computer computer) {
-    return new StdinComputer(computer);
+  public static Computer stdinComputer() {
+    return new StdinComputer();
   }
 
   public Computation compute(Computation computation) {
     return computation.expression instanceof Stdin
         ? compute((Stdin) computation.expression, computation.stack)
-        : computer.compute(computation);
+        : computation;
   }
 
   private Computation compute(Stdin stdin, Stack stack) {

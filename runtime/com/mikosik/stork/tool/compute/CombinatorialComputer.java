@@ -10,20 +10,16 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Stack;
 
 public class CombinatorialComputer implements Computer {
-  private final Computer computer;
+  private CombinatorialComputer() {}
 
-  private CombinatorialComputer(Computer computer) {
-    this.computer = computer;
-  }
-
-  public static Computer combinatorial(Computer computer) {
-    return new CombinatorialComputer(computer);
+  public static Computer combinatorialComputer() {
+    return new CombinatorialComputer();
   }
 
   public Computation compute(Computation computation) {
     return computation.expression instanceof Combinator
         ? compute((Combinator) computation.expression, computation.stack)
-        : computer.compute(computation);
+        : computation;
   }
 
   private Computation compute(Combinator combinator, Stack stack) {
