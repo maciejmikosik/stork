@@ -2,9 +2,9 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
+import static com.mikosik.stork.test.Runners.timeout;
 import static com.mikosik.stork.test.TestDecompiler.testDecompiler;
 import static org.quackery.Suite.suite;
-import static org.quackery.run.Runners.timeout;
 
 import org.quackery.Test;
 
