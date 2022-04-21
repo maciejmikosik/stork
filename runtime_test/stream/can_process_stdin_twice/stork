@@ -1,4 +1,4 @@
 
   main(stdin) {
-    append(stdin)(reverse(stdin))
+    append(stdin)(stdin)
   }

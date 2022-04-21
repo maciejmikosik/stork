@@ -27,6 +27,7 @@ public class LoggingComputer implements Computer {
 
   public Computation compute(Computation computation) {
     decompiler.decompile(output, abort(mark(computation)));
+    output.write((byte) '\n');
     return computer.compute(computation);
   }
 
