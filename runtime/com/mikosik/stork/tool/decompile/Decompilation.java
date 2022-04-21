@@ -18,6 +18,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.program.Stdin;
 
 public class Decompilation {
   private final boolean local;
@@ -73,6 +74,8 @@ public class Decompilation {
       decompile((Lambda) expression);
     } else if (expression instanceof Application) {
       decompile((Application) expression);
+    } else if (expression instanceof Stdin) {
+      decompile((Stdin) expression);
     }
   }
 
@@ -123,6 +126,14 @@ public class Decompilation {
 
   }
 
+  private void decompile(Stdin stdin) {
+    decompile("stdin");
+    decompile('(');
+    decompile(stdin.index);
+    decompile(')');
+
+  }
+
   private void decompileBody(Expression body) {
     boolean isLambda = body instanceof Lambda;
     if (!isLambda) {
@@ -140,5 +151,9 @@ public class Decompilation {
 
   private void decompile(char character) {
     output.write((byte) character);
+  }
+
+  private void decompile(int number) {
+    decompile("" + number);
   }
 }

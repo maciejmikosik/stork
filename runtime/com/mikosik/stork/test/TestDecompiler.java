@@ -2,6 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -11,6 +12,7 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.tool.common.Eager.eager;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
@@ -18,6 +20,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
 
 import org.quackery.Test;
@@ -25,6 +28,7 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Buffer;
+import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
@@ -57,7 +61,9 @@ public class TestDecompiler {
                     .add(test("$S", Combinator.S))
                     .add(test("$C", Combinator.C))
                     .add(test("$B", Combinator.B))
-                    .add(test("$Y", Combinator.Y))))
+                    .add(test("$Y", Combinator.Y)))
+                .add(test("stdin(7)", stdin(mockInput(), 7)))
+                .add(test("stdin(0)", stdin(mockInput()))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -119,5 +125,9 @@ public class TestDecompiler {
         return name;
       }
     };
+  }
+
+  private static Input mockInput() {
+    return input(new ByteArrayInputStream(new byte[0]));
   }
 }
