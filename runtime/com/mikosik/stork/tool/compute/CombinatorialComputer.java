@@ -23,67 +23,53 @@ public class CombinatorialComputer implements Computer {
   }
 
   private Computation compute(Combinator combinator, Stack stack) {
-    switch (combinator) {
+    int numberOfArguments = numberOfArguments(combinator);
+    Expression[] arguments = new Expression[MAX_ARGUMENTS];
+    for (int i = 0; i < numberOfArguments; i++) {
+      arguments[i] = stack.argument();
+      stack = stack.pop();
+    }
+    Expression x = arguments[0], y = arguments[1], z = arguments[2];
 
+    switch (combinator) {
       case I:
         /** I(x) = x */
-        return computation(
-            stack.argument(),
-            stack.pop());
-
+        return computation(x, stack);
+      case Y:
+        /** Y(x) = x(Y(x)) */
+        return computation(application(x, application(Y, x)), stack);
       case K:
         /** K(x)(y) = x */
-        return computation(
-            stack.argument(),
-            stack.pop().pop());
-
-      case S:
-      case C:
-      case B:
-        return computeSCB(combinator, stack);
-
-      case Y:
-        /** Y(f) = f(Y(f)) */
-        Expression f = stack.argument();
-        stack = stack.pop();
-        stack = stack.pushArgument(application(Y, f));
-        return computation(f, stack);
-
-      default:
-        throw new RuntimeException();
-    }
-  }
-
-  private static Computation computeSCB(Combinator combinator, Stack stack) {
-    Expression x = stack.argument();
-    stack = stack.pop();
-    Expression y = stack.argument();
-    stack = stack.pop();
-    Expression z = stack.argument();
-    stack = stack.pop();
-
-    switch (combinator) {
+        return computation(x, stack);
       case S:
         /** S(x)(y)(z) = x(z)(y(z)) */
-        stack = stack
-            .pushArgument(application(y, z))
-            .pushArgument(z);
-        return computation(x, stack);
-
+        return computation(application(application(x, z), application(y, z)), stack);
       case C:
         /** C(x)(y)(z) = x(z)(y) */
-        stack = stack
-            .pushArgument(y)
-            .pushArgument(z);
-        return computation(x, stack);
-
+        return computation(application(application(x, z), y), stack);
       case B:
         /** B(x)(y)(z) = x(y(z)) */
-        stack = stack.pushArgument(application(y, z));
-        return computation(x, stack);
-
+        return computation(application(x, application(y, z)), stack);
       default:
         throw new RuntimeException();
     }
   }
+
+  private static int numberOfArguments(Combinator combinator) {
+    switch (combinator) {
+      case I:
+      case Y:
+        return 1;
+      case K:
+        return 2;
+      case S:
+      case C:
+      case B:
+        return 3;
+      default:
+        throw new RuntimeException();
+    }
+  }
+
+  private static final int MAX_ARGUMENTS = 3;
 }
