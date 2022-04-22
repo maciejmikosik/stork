@@ -4,8 +4,17 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.program.InnateMath.innateMath;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.program.StdinComputer.stdinComputer;
 import static com.mikosik.stork.program.Stdout.writeStream;
-import static com.mikosik.stork.tool.compute.WirableComputer.computer;
+import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
+import static com.mikosik.stork.tool.compute.CachingComputer.caching;
+import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
+import static com.mikosik.stork.tool.compute.CombinatorialComputer.combinatorialComputer;
+import static com.mikosik.stork.tool.compute.InnateComputer.innateComputer;
+import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible;
+import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
+import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
+import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.tool.link.Redefine.redefine;
@@ -41,15 +50,14 @@ public class Program {
 
     linkedModule = unquote(unlambda(linkedModule));
 
-    Computer computer = computer()
-        .stacking()
-        .moduling(linkedModule)
-        .innate()
-        .combinatorial()
-        .wire(StdinComputer::stdin)
-        .caching()
-        .interruptible()
-        .looping();
+    Computer expressing = chained(
+        combinatorialComputer(),
+        modulingComputer(linkedModule),
+        innateComputer(),
+        applicationComputer(),
+        stdinComputer(),
+        returningComputer());
+    Computer computer = looping(interruptible(caching(expressing)));
 
     Computation computation = computation(
         application(

@@ -58,6 +58,7 @@ public class Stack {
   }
 
   public Stack pop() {
+    check(type != Type.EMPTY);
     return previous;
   }
 

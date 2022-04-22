@@ -4,19 +4,15 @@ import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 
 public class InnateComputer implements Computer {
-  private final Computer computer;
+  private InnateComputer() {}
 
-  private InnateComputer(Computer computer) {
-    this.computer = computer;
-  }
-
-  public static Computer innate(Computer computer) {
-    return new InnateComputer(computer);
+  public static Computer innateComputer() {
+    return new InnateComputer();
   }
 
   public Computation compute(Computation computation) {
     return computation.expression instanceof Innate
         ? ((Innate) computation.expression).compute(computation.stack)
-        : computer.compute(computation);
+        : computation;
   }
 }
