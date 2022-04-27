@@ -1,5 +1,6 @@
 package com.mikosik.stork.program;
 
+import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.program.Stdin.stdin;
@@ -64,8 +65,8 @@ public class Program {
             unlambda(writeStream(stdout)),
             application(main, stdin(stdinInput))));
 
-    computer.compute(computation);
-
+    Computation computed = computer.compute(computation);
     stdout.close();
+    check(computed.stack.isEmpty());
   }
 }
