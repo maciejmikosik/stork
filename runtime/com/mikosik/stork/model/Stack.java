@@ -23,6 +23,10 @@ public class Stack {
     return this.type == type;
   }
 
+  public boolean isEmpty() {
+    return has(Type.EMPTY);
+  }
+
   public boolean hasArgument() {
     return has(Type.ARGUMENT);
   }

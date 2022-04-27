@@ -62,10 +62,9 @@ public final class StorkTextRenderer extends TextRenderer {
   }
 
   private int computeDepthOf(Stack stack) {
-    // TODO stack.isEmpty()
-    return stack.hasArgument() || stack.hasFunction()
-        ? depthOf(stack.pop()) + 1
-        : 0;
+    return stack.isEmpty()
+        ? 0
+        : depthOf(stack.pop()) + 1;
   }
 
   private static Expression asExpression(Computation computation) {
