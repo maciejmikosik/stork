@@ -1,7 +1,6 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -16,7 +15,6 @@ import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.tool.common.Eager.eager;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
@@ -27,7 +25,6 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
@@ -101,9 +98,7 @@ public class TestDecompiler {
   }
 
   private static void run(Decompiler decompiler, Model model, String expected) {
-    Buffer buffer = newBuffer();
-    decompiler.decompile(buffer.asOutput(), model);
-    String actual = new String(buffer.toBlob().bytes, US_ASCII);
+    String actual = decompiler.decompile(model);
     if (!expected.equals(actual)) {
       throw new AssertException(format(""
           + "expected\n"

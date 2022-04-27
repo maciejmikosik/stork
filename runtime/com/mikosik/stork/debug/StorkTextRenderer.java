@@ -1,18 +1,15 @@
 package com.mikosik.stork.debug;
 
-import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.logbuddy.renderer.TextRenderer;
 
-import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Stack;
@@ -52,9 +49,7 @@ public final class StorkTextRenderer extends TextRenderer {
   }
 
   private String render(Expression expression) {
-    Buffer buffer = newBuffer();
-    decompiler.decompile(buffer.asOutput(), expression);
-    return new String(buffer.toBlob().bytes, UTF_8);
+    return decompiler.decompile(expression);
   }
 
   private String render(Stack stack) {

@@ -1,5 +1,9 @@
 package com.mikosik.stork.tool.decompile;
 
+import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static java.nio.charset.StandardCharsets.US_ASCII;
+
+import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Model;
 
@@ -18,8 +22,13 @@ public class Decompiler {
     return new Decompiler(true);
   }
 
-  public void decompile(Output output, Model model) {
-    new Decompilation(local, output)
-        .decompile(model);
+  public Decompilation to(Output output) {
+    return new Decompilation(local, output);
+  }
+
+  public String decompile(Model model) {
+    Buffer buffer = newBuffer();
+    to(buffer.asOutput()).decompile(model);
+    return new String(buffer.toBlob().bytes, US_ASCII);
   }
 }
