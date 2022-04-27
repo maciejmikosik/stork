@@ -10,8 +10,8 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Stack;
 
 public class CachingComputer implements Computer {
-  private final Map<Stack, Expression> original = new WeakHashMap<>();
-  private final Map<Expression, Expression> computed = new WeakHashMap<>();
+  private final Map<Stack, Result> original = new WeakHashMap<>();
+  private final Map<Expression, Result> computed = new WeakHashMap<>();
 
   private final Computer computer;
 
@@ -25,7 +25,7 @@ public class CachingComputer implements Computer {
 
   public Computation compute(Computation computation) {
     return computed.containsKey(computation.expression)
-        ? computation(computed.get(computation.expression), computation.stack)
+        ? computation(computed.get(computation.expression).get(), computation.stack)
         : cacheAndCompute(computation);
   }
 
@@ -36,9 +36,24 @@ public class CachingComputer implements Computer {
 
   private void cache(Expression expression, Stack stack) {
     if (original.containsKey(stack)) {
-      computed.put(original.get(stack), expression);
+      Result result = original.get(stack);
+      computed.put(result.get(), result);
+      result.set(expression);
     } else {
-      original.put(stack, expression);
+      original.put(stack, new Result().set(expression));
+    }
+  }
+
+  private static final class Result {
+    private Expression expression;
+
+    public Expression get() {
+      return expression;
+    }
+
+    public Result set(Expression expression) {
+      this.expression = expression;
+      return this;
     }
   }
 }

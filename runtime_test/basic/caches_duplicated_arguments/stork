@@ -1,0 +1,24 @@
+
+  main(stdin) {
+    equal(0)(longCalculation)
+      ("")
+      ("")
+  }
+
+  longCalculation {
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    double(double(double(double(double(
+    0))))))))))))))))))))))))))))))))))))))))))))))))))
+  }
+
+  double(x) {
+    add(x)(x)
+  }
