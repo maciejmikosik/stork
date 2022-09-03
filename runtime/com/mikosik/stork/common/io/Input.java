@@ -59,9 +59,9 @@ public class Input implements AutoCloseable {
   }
 
   public Input pumpTo(Output output) {
-    MaybeByte oneByte;
-    while ((oneByte = read()).hasByte()) {
-      output.write(oneByte.getByte());
+    MaybeByte maybeByte;
+    while ((maybeByte = read()).hasByte()) {
+      output.write(maybeByte.getByte());
     }
     return this;
   }

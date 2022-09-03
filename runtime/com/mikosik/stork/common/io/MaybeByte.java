@@ -3,7 +3,7 @@ package com.mikosik.stork.common.io;
 import static java.lang.String.format;
 
 public class MaybeByte {
-  private static final MaybeByte NO_BYTE = new MaybeByte((byte) 0);
+  public static final MaybeByte NO_BYTE = new MaybeByte((byte) 0);
   private static final MaybeByte[] BYTES = new MaybeByte[256];
 
   static {
@@ -20,10 +20,6 @@ public class MaybeByte {
 
   public static MaybeByte justByte(byte value) {
     return BYTES[unsigned(value)];
-  }
-
-  public static MaybeByte noByte(byte value) {
-    return NO_BYTE;
   }
 
   public static MaybeByte maybeByte(int code) {
