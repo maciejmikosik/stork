@@ -11,7 +11,6 @@ import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
-import static com.mikosik.stork.tool.compute.CombinatorialComputer.combinatorialComputer;
 import static com.mikosik.stork.tool.compute.InnateComputer.innateComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible;
@@ -57,7 +56,6 @@ public class Program {
     linkedModule = unquote(unlambda(linkedModule));
 
     Computer expressing = chained(
-        combinatorialComputer(),
         modulingComputer(linkedModule),
         innateComputer(),
         instructionComputer(),

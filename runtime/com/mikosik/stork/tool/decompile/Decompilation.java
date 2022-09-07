@@ -6,7 +6,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -67,8 +66,6 @@ public class Decompilation {
       decompile((Innate) expression);
     } else if (expression instanceof Instruction) {
       decompile((Instruction) expression);
-    } else if (expression instanceof Combinator) {
-      decompile((Combinator) expression);
     } else if (expression instanceof Variable) {
       decompile((Variable) expression);
     } else if (expression instanceof Parameter) {
@@ -104,10 +101,6 @@ public class Decompilation {
 
   private void decompile(Instruction instruction) {
     decompile("INSTRUCTION");
-  }
-
-  private void decompile(Combinator combinator) {
-    decompile("$" + combinator.toString());
   }
 
   private void decompile(Variable variable) {

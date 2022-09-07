@@ -26,7 +26,6 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Instruction;
@@ -54,13 +53,6 @@ public class TestDecompiler {
                 .add(suite("eager")
                     .add(test("$EAGER_1(function)", eager(1, variable("function"))))
                     .add(test("$EAGER_1($EAGER_2(function))", eager(2, variable("function")))))
-                .add(suite("combinator")
-                    .add(test("$I", Combinator.I))
-                    .add(test("$K", Combinator.K))
-                    .add(test("$S", Combinator.S))
-                    .add(test("$C", Combinator.C))
-                    .add(test("$B", Combinator.B))
-                    .add(test("$Y", Combinator.Y)))
                 .add(test("stdin(7)", stdin(mockInput(), 7)))
                 .add(test("stdin(0)", stdin(mockInput()))))
             .add(suite("instruction")
