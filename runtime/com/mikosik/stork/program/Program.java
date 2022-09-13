@@ -11,6 +11,7 @@ import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
 import static com.mikosik.stork.tool.compute.CombinatorialComputer.combinatorialComputer;
 import static com.mikosik.stork.tool.compute.InnateComputer.innateComputer;
+import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
 import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
@@ -54,6 +55,7 @@ public class Program {
         combinatorialComputer(),
         modulingComputer(linkedModule),
         innateComputer(),
+        instructionComputer(),
         applicationComputer(),
         stdinComputer(),
         returningComputer());

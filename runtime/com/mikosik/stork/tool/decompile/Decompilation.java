@@ -11,6 +11,7 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Innate;
+import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Model;
@@ -64,6 +65,8 @@ public class Decompilation {
       decompile((Quote) expression);
     } else if (expression instanceof Innate) {
       decompile((Innate) expression);
+    } else if (expression instanceof Instruction) {
+      decompile((Instruction) expression);
     } else if (expression instanceof Combinator) {
       decompile((Combinator) expression);
     } else if (expression instanceof Variable) {
@@ -97,6 +100,10 @@ public class Decompilation {
 
   private void decompile(Innate innate) {
     decompile(innate.toString());
+  }
+
+  private void decompile(Instruction instruction) {
+    decompile("INSTRUCTION");
   }
 
   private void decompile(Combinator combinator) {

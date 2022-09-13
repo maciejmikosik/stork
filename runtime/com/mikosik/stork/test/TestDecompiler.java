@@ -29,6 +29,7 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Innate;
+import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Stack;
@@ -36,6 +37,7 @@ import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
   public static Test testDecompiler() {
+    Instruction instruction = x -> (Instruction) y -> identifier("z");
     Parameter x = parameter("x");
     Parameter y = parameter("y");
     return suite("decompiler decompiles")
@@ -61,6 +63,9 @@ public class TestDecompiler {
                     .add(test("$Y", Combinator.Y)))
                 .add(test("stdin(7)", stdin(mockInput(), 7)))
                 .add(test("stdin(0)", stdin(mockInput()))))
+            .add(suite("instruction")
+                .add(test("INSTRUCTION", instruction))
+                .add(test("INSTRUCTION", instruction.apply(identifier("x")))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
