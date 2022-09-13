@@ -1,11 +1,13 @@
 package com.mikosik.stork.program;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.program.InnateMath.innateMath;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
 import static com.mikosik.stork.program.Stdout.writeStream;
+import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
@@ -18,6 +20,7 @@ import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
+import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Redefine.redefine;
 import static com.mikosik.stork.tool.link.Unlambda.unlambda;
 import static com.mikosik.stork.tool.link.Unquote.unquote;
@@ -44,7 +47,9 @@ public class Program {
   }
 
   public void run(Input stdinInput, Output stdout) {
-    Module linkedModule = redefine(innateMath(), module);
+    Module linkedModule = link(chainOf(
+        redefine(innateMath(), module),
+        combinatorModule()));
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);

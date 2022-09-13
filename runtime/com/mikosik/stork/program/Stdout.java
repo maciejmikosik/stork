@@ -2,11 +2,11 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Combinator.Y;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.tool.common.Constants.Y;
 import static com.mikosik.stork.tool.common.InnateBuilder.innate;
 
 import com.mikosik.stork.common.io.Output;
