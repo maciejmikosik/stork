@@ -1,22 +1,25 @@
 package com.mikosik.stork.program;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
-import static com.mikosik.stork.program.InnateMath.innateMath;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
 import static com.mikosik.stork.program.Stdout.writeStream;
+import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
+import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
-import static com.mikosik.stork.tool.compute.CombinatorialComputer.combinatorialComputer;
-import static com.mikosik.stork.tool.compute.InnateComputer.innateComputer;
+import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
+import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
 import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
+import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Redefine.redefine;
 import static com.mikosik.stork.tool.link.Unlambda.unlambda;
 import static com.mikosik.stork.tool.link.Unquote.unquote;
@@ -43,7 +46,9 @@ public class Program {
   }
 
   public void run(Input stdinInput, Output stdout) {
-    Module linkedModule = redefine(innateMath(), module);
+    Module linkedModule = link(chainOf(
+        redefine(mathModule(), module),
+        combinatorModule()));
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);
@@ -51,9 +56,9 @@ public class Program {
     linkedModule = unquote(unlambda(linkedModule));
 
     Computer expressing = chained(
-        combinatorialComputer(),
         modulingComputer(linkedModule),
-        innateComputer(),
+        eagerComputer(),
+        instructionComputer(),
         applicationComputer(),
         stdinComputer(),
         returningComputer());
@@ -65,5 +70,7 @@ public class Program {
             application(main, stdin(stdinInput))));
 
     computer.compute(computation);
+
+    stdout.close();
   }
 }

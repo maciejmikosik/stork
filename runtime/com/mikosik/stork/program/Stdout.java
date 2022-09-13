@@ -2,15 +2,19 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Combinator.Y;
-import static com.mikosik.stork.model.Computation.computation;
-import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Eager.eager;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
-import static com.mikosik.stork.tool.common.InnateBuilder.innate;
+import static com.mikosik.stork.tool.common.Constants.END_OF_STREAM;
+import static com.mikosik.stork.tool.common.Constants.I;
+import static com.mikosik.stork.tool.common.Constants.Y;
+import static com.mikosik.stork.tool.common.Instructions.instruction1;
+
+import java.math.BigInteger;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Parameter;
 
 public class Stdout {
@@ -31,7 +35,7 @@ public class Stdout {
    * writeStream = Y((self)(stream) {
    *   stream
    *     ((head)(tail){ writeByte(head)(self(tail)) })
-   *     (closeStream)
+   *     (END_OF_STREAM)
    * })
    * </pre>
    */
@@ -47,51 +51,39 @@ public class Stdout {
                     writeByte(output),
                     head,
                     application(self, tail)))),
-            closeStream(output)))));
+            END_OF_STREAM))));
   }
 
   /**
+   * classical version
+   *
    * <pre>
    * writeByte(byte)(continue) {
    *   # imperatively write byte to output
    *   continue
    * }
    * </pre>
-   */
-  private static Expression writeByte(Output output) {
-    return innate()
-        .name("$writeByte")
-        .logic(stack -> {
-          int oneByte = stack
-              .argumentIntegerJava()
-              .intValueExact();
-          check(0 <= oneByte && oneByte <= 255);
-          output.write((byte) oneByte);
-          return computation(
-              stack.pop().argument(),
-              stack.pop().pop());
-        })
-        // first argument is eager
-        // second argument is lazy
-        .arguments(1)
-        .build();
-  }
-
-  /**
+   *
+   * instruction version
+   *
    * <pre>
-   * closeStream {
-   *   # imperatively close output
-   *   streamClosed
+   * writeByte(byte) {
+   *   # imperatively write byte to output
+   *   I
    * }
    * </pre>
    */
-  private static Expression closeStream(Output output) {
-    return innate()
-        .name("$closeStream")
-        .logic(stack -> {
-          output.close();
-          return computation(identifier("$streamClosed"));
-        })
-        .build();
+  private static Expression writeByte(Output output) {
+    // TODO name writeByte
+    return eager(instruction1(argument -> {
+      int oneByte = toJavaInteger(argument).intValueExact();
+      check(0 <= oneByte && oneByte <= 255);
+      output.write((byte) oneByte);
+      return I;
+    }));
+  }
+
+  private static BigInteger toJavaInteger(Expression expression) {
+    return ((Integer) expression).value;
   }
 }

@@ -6,11 +6,11 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Combinator;
 import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Eager;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Innate;
+import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Model;
@@ -62,10 +62,10 @@ public class Decompilation {
       decompile((Integer) expression);
     } else if (expression instanceof Quote) {
       decompile((Quote) expression);
-    } else if (expression instanceof Innate) {
-      decompile((Innate) expression);
-    } else if (expression instanceof Combinator) {
-      decompile((Combinator) expression);
+    } else if (expression instanceof Eager) {
+      decompile((Eager) expression);
+    } else if (expression instanceof Instruction) {
+      decompile((Instruction) expression);
     } else if (expression instanceof Variable) {
       decompile((Variable) expression);
     } else if (expression instanceof Parameter) {
@@ -95,12 +95,14 @@ public class Decompilation {
     decompile('\"');
   }
 
-  private void decompile(Innate innate) {
-    decompile(innate.toString());
+  private void decompile(Eager eager) {
+    decompile("eager(");
+    decompile(eager.function);
+    decompile(")");
   }
 
-  private void decompile(Combinator combinator) {
-    decompile("$" + combinator.toString());
+  private void decompile(Instruction instruction) {
+    decompile("INSTRUCTION");
   }
 
   private void decompile(Variable variable) {

@@ -1,11 +1,11 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Combinator.B;
-import static com.mikosik.stork.model.Combinator.C;
-import static com.mikosik.stork.model.Combinator.I;
-import static com.mikosik.stork.model.Combinator.K;
-import static com.mikosik.stork.model.Combinator.S;
+import static com.mikosik.stork.tool.common.Constants.B;
+import static com.mikosik.stork.tool.common.Constants.C;
+import static com.mikosik.stork.tool.common.Constants.I;
+import static com.mikosik.stork.tool.common.Constants.K;
+import static com.mikosik.stork.tool.common.Constants.S;
 import static com.mikosik.stork.tool.common.Morph.morphLambdas;
 import static com.mikosik.stork.tool.common.Morph.morphParameters;
 
