@@ -10,7 +10,6 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Eager;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
@@ -63,8 +62,6 @@ public class Decompilation {
       decompile((Integer) expression);
     } else if (expression instanceof Quote) {
       decompile((Quote) expression);
-    } else if (expression instanceof Innate) {
-      decompile((Innate) expression);
     } else if (expression instanceof Eager) {
       decompile((Eager) expression);
     } else if (expression instanceof Instruction) {
@@ -96,10 +93,6 @@ public class Decompilation {
     decompile('\"');
     decompile(quote.string);
     decompile('\"');
-  }
-
-  private void decompile(Innate innate) {
-    decompile(innate.toString());
   }
 
   private void decompile(Eager eager) {

@@ -13,7 +13,6 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.tool.common.Eager.eager;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -27,12 +26,9 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.model.Computation;
-import com.mikosik.stork.model.Innate;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
@@ -49,11 +45,7 @@ public class TestDecompiler {
             .add(suite("quote")
                 .add(test("\"example quote\"", quote("example quote")))
                 .add(test("\"\"", quote(""))))
-            .add(suite("innate")
-                .add(test("innate_name", mockInnate("innate_name")))
-                .add(suite("eager")
-                    .add(test("$EAGER_1(function)", eager(1, variable("function"))))
-                    .add(test("$EAGER_1($EAGER_2(function))", eager(2, variable("function")))))
+            .add(suite("stdin")
                 .add(test("stdin(7)", stdin(mockInput(), 7)))
                 .add(test("stdin(0)", stdin(mockInput()))))
             .add(test("eager(function)", eager(identifier("function"))))
@@ -107,18 +99,6 @@ public class TestDecompiler {
           expected,
           actual));
     }
-  }
-
-  private static Innate mockInnate(String name) {
-    return new Innate() {
-      public Computation compute(Stack stack) {
-        return null;
-      }
-
-      public String toString() {
-        return name;
-      }
-    };
   }
 
   private static Input mockInput() {
