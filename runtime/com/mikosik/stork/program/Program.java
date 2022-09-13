@@ -72,5 +72,7 @@ public class Program {
             application(main, stdin(stdinInput))));
 
     computer.compute(computation);
+
+    stdout.close();
   }
 }
