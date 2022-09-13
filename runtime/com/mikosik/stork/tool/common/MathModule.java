@@ -7,7 +7,7 @@ import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.tool.common.Constants.FALSE;
 import static com.mikosik.stork.tool.common.Constants.TRUE;
-import static com.mikosik.stork.tool.common.Eager.eager;
+import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
 import static com.mikosik.stork.tool.common.Instructions.instruction1;
 import static com.mikosik.stork.tool.common.Instructions.instruction2;
 
@@ -24,14 +24,14 @@ import com.mikosik.stork.model.Module;
 public class MathModule {
   public static Module mathModule() {
     return module(chainOf(
-        define("stork.integer.negate", 1, instructionII(BigInteger::negate)),
-        define("stork.integer.add", 2, instructionIII(BigInteger::add)),
-        define("stork.integer.equal", 2, instructionIIB(BigInteger::equals)),
-        define("stork.integer.moreThan", 2, instructionIIB((x, y) -> x.compareTo(y) < 0))));
+        define("stork.integer.negate", instructionII(BigInteger::negate)),
+        define("stork.integer.add", instructionIII(BigInteger::add)),
+        define("stork.integer.equal", instructionIIB(BigInteger::equals)),
+        define("stork.integer.moreThan", instructionIIB((x, y) -> x.compareTo(y) < 0))));
   }
 
-  private static Definition define(String name, int parameters, Instruction instruction) {
-    return definition(identifier(name), eager(parameters, instruction));
+  private static Definition define(String name, Instruction instruction) {
+    return definition(identifier(name), eagerDeep(instruction));
   }
 
   private static Instruction instructionII(
