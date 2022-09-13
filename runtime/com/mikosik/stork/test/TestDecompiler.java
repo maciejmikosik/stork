@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Eager.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
@@ -55,6 +56,7 @@ public class TestDecompiler {
                     .add(test("$EAGER_1($EAGER_2(function))", eager(2, variable("function")))))
                 .add(test("stdin(7)", stdin(mockInput(), 7)))
                 .add(test("stdin(0)", stdin(mockInput()))))
+            .add(test("eager(function)", eager(identifier("function"))))
             .add(suite("instruction")
                 .add(test("INSTRUCTION", instruction))
                 .add(test("INSTRUCTION", instruction.apply(identifier("x")))))

@@ -7,6 +7,7 @@ import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Eager;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Innate;
@@ -64,6 +65,8 @@ public class Decompilation {
       decompile((Quote) expression);
     } else if (expression instanceof Innate) {
       decompile((Innate) expression);
+    } else if (expression instanceof Eager) {
+      decompile((Eager) expression);
     } else if (expression instanceof Instruction) {
       decompile((Instruction) expression);
     } else if (expression instanceof Variable) {
@@ -97,6 +100,12 @@ public class Decompilation {
 
   private void decompile(Innate innate) {
     decompile(innate.toString());
+  }
+
+  private void decompile(Eager eager) {
+    decompile("eager(");
+    decompile(eager.function);
+    decompile(")");
   }
 
   private void decompile(Instruction instruction) {
