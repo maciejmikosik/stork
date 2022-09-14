@@ -1,7 +1,11 @@
 package com.mikosik.stork.tool.decompile;
 
+import static com.mikosik.stork.common.Reflection.read;
+import static com.mikosik.stork.common.Reflection.signature;
 import static com.mikosik.stork.common.io.Blob.blob;
 import static java.nio.charset.StandardCharsets.US_ASCII;
+
+import java.util.Optional;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Output;
@@ -102,7 +106,12 @@ public class Decompilation {
   }
 
   private void decompile(Instruction instruction) {
-    decompile("INSTRUCTION");
+    Optional<Object> name = read(signature(Expression.class, "name"), instruction);
+    if (name.isPresent()) {
+      decompile((Expression) name.get());
+    } else {
+      decompile("INSTRUCTION");
+    }
   }
 
   private void decompile(Variable variable) {

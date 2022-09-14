@@ -13,6 +13,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.tool.common.Instructions.name;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -26,6 +27,7 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Parameter;
@@ -51,7 +53,18 @@ public class TestDecompiler {
             .add(test("eager(function)", eager(identifier("function"))))
             .add(suite("instruction")
                 .add(test("INSTRUCTION", instruction))
-                .add(test("INSTRUCTION", instruction.apply(identifier("x")))))
+                .add(test("INSTRUCTION", instruction.apply(identifier("x"))))
+                .add(test("z", apply(instruction,
+                    identifier("x"),
+                    identifier("y"))))
+                .add(test("f", name(identifier("f"), instruction)))
+                .add(test("f(x)", apply(
+                    name(identifier("f"), instruction),
+                    identifier("x"))))
+                .add(test("z", apply(
+                    name(identifier("f"), instruction),
+                    identifier("x"),
+                    identifier("y")))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -103,5 +116,13 @@ public class TestDecompiler {
 
   private static Input mockInput() {
     return input(new ByteArrayInputStream(new byte[0]));
+  }
+
+  private static Expression apply(Instruction instruction, Expression... arguments) {
+    Expression result = instruction;
+    for (Expression argument : arguments) {
+      result = ((Instruction) result).apply(argument);
+    }
+    return result;
   }
 }
