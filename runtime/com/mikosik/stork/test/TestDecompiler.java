@@ -13,6 +13,13 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
+import static com.mikosik.stork.tool.common.Constants.B;
+import static com.mikosik.stork.tool.common.Constants.C;
+import static com.mikosik.stork.tool.common.Constants.I;
+import static com.mikosik.stork.tool.common.Constants.K;
+import static com.mikosik.stork.tool.common.Constants.S;
+import static com.mikosik.stork.tool.common.Constants.Y;
 import static com.mikosik.stork.tool.common.Instructions.name;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
@@ -28,6 +35,7 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Parameter;
@@ -65,6 +73,37 @@ public class TestDecompiler {
                     name(identifier("f"), instruction),
                     identifier("x"),
                     identifier("y")))))
+            .add(suite("combinators")
+                .add(test("stork.inst.S", combinator(S)))
+                .add(test("stork.inst.S(x)", apply(
+                    combinator(S),
+                    identifier("x"))))
+                .add(test("stork.inst.S(x)(y)", apply(
+                    combinator(S),
+                    identifier("x"),
+                    identifier("y"))))
+                .add(test("stork.inst.K", combinator(K)))
+                .add(test("stork.inst.K(x)", apply(
+                    combinator(K),
+                    identifier("x"))))
+                .add(test("stork.inst.I", combinator(I)))
+                .add(test("stork.inst.C", combinator(C)))
+                .add(test("stork.inst.C(x)", apply(
+                    combinator(C),
+                    identifier("x"))))
+                .add(test("stork.inst.C(x)(y)", apply(
+                    combinator(C),
+                    identifier("x"),
+                    identifier("y"))))
+                .add(test("stork.inst.B", combinator(B)))
+                .add(test("stork.inst.B(x)", apply(
+                    combinator(B),
+                    identifier("x"))))
+                .add(test("stork.inst.B(x)(y)", apply(
+                    combinator(B),
+                    identifier("x"),
+                    identifier("y"))))
+                .add(test("stork.inst.Y", combinator(Y))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -124,5 +163,13 @@ public class TestDecompiler {
       result = ((Instruction) result).apply(argument);
     }
     return result;
+  }
+
+  private static Instruction combinator(Identifier identifier) {
+    return (Instruction) combinatorModule().definitions.stream()
+        .filter(definition -> definition.identifier.name.equals(identifier.name))
+        .map(definition -> definition.body)
+        .findFirst()
+        .get();
   }
 }
