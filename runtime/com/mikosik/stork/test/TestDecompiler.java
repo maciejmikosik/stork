@@ -13,6 +13,15 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
+import static com.mikosik.stork.tool.common.Constants.B;
+import static com.mikosik.stork.tool.common.Constants.C;
+import static com.mikosik.stork.tool.common.Constants.I;
+import static com.mikosik.stork.tool.common.Constants.K;
+import static com.mikosik.stork.tool.common.Constants.S;
+import static com.mikosik.stork.tool.common.Constants.Y;
+import static com.mikosik.stork.tool.common.Instructions.name;
+import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -26,6 +35,9 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.model.Eager;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Parameter;
@@ -50,8 +62,66 @@ public class TestDecompiler {
                 .add(test("stdin(0)", stdin(mockInput()))))
             .add(test("eager(function)", eager(identifier("function"))))
             .add(suite("instruction")
-                .add(test("INSTRUCTION", instruction))
-                .add(test("INSTRUCTION", instruction.apply(identifier("x")))))
+                .add(suite("raw")
+                    .add(test("INSTRUCTION", instruction))
+                    .add(test("INSTRUCTION", instruction.apply(identifier("x"))))
+                    .add(test("z", apply(instruction,
+                        identifier("x"),
+                        identifier("y")))))
+                .add(suite("named")
+                    .add(test("f", name(identifier("f"), instruction)))
+                    .add(test("f(x)", apply(
+                        name(identifier("f"), instruction),
+                        identifier("x"))))
+                    .add(test("z", apply(
+                        name(identifier("f"), instruction),
+                        identifier("x"),
+                        identifier("y")))))
+                .add(suite("nested")
+                    .add(test("f", nest(name(identifier("f"), instruction))))
+                    .add(test("f(x)", apply(
+                        nest(name(identifier("f"), instruction)),
+                        identifier("x"))))
+                    .add(test("z", apply(
+                        nest(name(identifier("f"), instruction)),
+                        identifier("x"),
+                        identifier("y")))))
+                .add(suite("combinators")
+                    .add(test("stork.inst.S", combinator(S)))
+                    .add(test("stork.inst.S(x)", apply(
+                        combinator(S),
+                        identifier("x"))))
+                    .add(test("stork.inst.S(x)(y)", apply(
+                        combinator(S),
+                        identifier("x"),
+                        identifier("y"))))
+                    .add(test("stork.inst.K", combinator(K)))
+                    .add(test("stork.inst.K(x)", apply(
+                        combinator(K),
+                        identifier("x"))))
+                    .add(test("stork.inst.I", combinator(I)))
+                    .add(test("stork.inst.C", combinator(C)))
+                    .add(test("stork.inst.C(x)", apply(
+                        combinator(C),
+                        identifier("x"))))
+                    .add(test("stork.inst.C(x)(y)", apply(
+                        combinator(C),
+                        identifier("x"),
+                        identifier("y"))))
+                    .add(test("stork.inst.B", combinator(B)))
+                    .add(test("stork.inst.B(x)", apply(
+                        combinator(B),
+                        identifier("x"))))
+                    .add(test("stork.inst.B(x)(y)", apply(
+                        combinator(B),
+                        identifier("x"),
+                        identifier("y"))))
+                    .add(test("stork.inst.Y", combinator(Y))))
+                .add(suite("math")
+                    .add(test("stork.integer.negate", math("negate")))
+                    .add(test("stork.integer.add", math("add")))
+                    .add(test("stork.integer.equal", math("equal")))
+                    .add(test("stork.integer.moreThan", math("moreThan")))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -103,5 +173,39 @@ public class TestDecompiler {
 
   private static Input mockInput() {
     return input(new ByteArrayInputStream(new byte[0]));
+  }
+
+  private static Expression apply(Instruction instruction, Expression... arguments) {
+    Expression result = instruction;
+    for (Expression argument : arguments) {
+      result = ((Instruction) result).apply(argument);
+    }
+    return result;
+  }
+
+  private static Instruction combinator(Identifier identifier) {
+    return (Instruction) combinatorModule().definitions.stream()
+        .filter(definition -> definition.identifier.name.equals(identifier.name))
+        .map(definition -> definition.body)
+        .findFirst()
+        .get();
+  }
+
+  private static Instruction nest(Instruction instruction) {
+    return argument -> {
+      Expression applied = instruction.apply(argument);
+      return applied instanceof Instruction
+          ? nest((Instruction) applied)
+          : applied;
+    };
+  }
+
+  private static Expression math(String name) {
+    Eager eager = (Eager) mathModule().definitions.stream()
+        .filter(definition -> definition.identifier.name.endsWith(name))
+        .map(definition -> definition.body)
+        .findFirst()
+        .get();
+    return eager.function;
   }
 }
