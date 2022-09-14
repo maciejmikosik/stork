@@ -72,7 +72,11 @@ public class TestDecompiler {
                 .add(test("z", apply(
                     name(identifier("f"), instruction),
                     identifier("x"),
-                    identifier("y")))))
+                    identifier("y"))))
+                .add(test("f", nest(name(identifier("f"), instruction))))
+                .add(test("f(x)", apply(
+                    nest(name(identifier("f"), instruction)),
+                    identifier("x")))))
             .add(suite("combinators")
                 .add(test("stork.inst.S", combinator(S)))
                 .add(test("stork.inst.S(x)", apply(
@@ -171,5 +175,14 @@ public class TestDecompiler {
         .map(definition -> definition.body)
         .findFirst()
         .get();
+  }
+
+  private static Instruction nest(Instruction instruction) {
+    return argument -> {
+      Expression applied = instruction.apply(argument);
+      return applied instanceof Instruction
+          ? nest((Instruction) applied)
+          : applied;
+    };
   }
 }

@@ -20,6 +20,10 @@ public class Reflection {
         && field.getName().equals(name);
   }
 
+  public static Predicate<Field> type(Class<?> type) {
+    return field -> field.getType() == type;
+  }
+
   private static Field accessible(Field field) {
     field.setAccessible(true);
     return field;
