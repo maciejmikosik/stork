@@ -21,6 +21,7 @@ import static com.mikosik.stork.tool.common.Constants.K;
 import static com.mikosik.stork.tool.common.Constants.S;
 import static com.mikosik.stork.tool.common.Constants.Y;
 import static com.mikosik.stork.tool.common.Instructions.name;
+import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -108,6 +109,11 @@ public class TestDecompiler {
                     identifier("x"),
                     identifier("y"))))
                 .add(test("stork.inst.Y", combinator(Y))))
+            .add(suite("math")
+                .add(test("eager(stork.integer.negate)", math("negate")))
+                .add(test("eager(stork.integer.add)", math("add")))
+                .add(test("eager(stork.integer.equal)", math("equal")))
+                .add(test("eager(stork.integer.moreThan)", math("moreThan"))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -184,5 +190,13 @@ public class TestDecompiler {
           ? nest((Instruction) applied)
           : applied;
     };
+  }
+
+  private static Expression math(String name) {
+    return mathModule().definitions.stream()
+        .filter(definition -> definition.identifier.name.endsWith(name))
+        .map(definition -> definition.body)
+        .findFirst()
+        .get();
   }
 }

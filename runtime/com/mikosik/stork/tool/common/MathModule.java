@@ -10,6 +10,7 @@ import static com.mikosik.stork.tool.common.Constants.TRUE;
 import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
 import static com.mikosik.stork.tool.common.Instructions.instruction1;
 import static com.mikosik.stork.tool.common.Instructions.instruction2;
+import static com.mikosik.stork.tool.common.Instructions.name;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
@@ -17,6 +18,7 @@ import java.util.function.Function;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
@@ -31,7 +33,8 @@ public class MathModule {
   }
 
   private static Definition define(String name, Instruction instruction) {
-    return definition(identifier(name), eagerDeep(instruction));
+    Identifier identifier = identifier(name);
+    return definition(identifier, eagerDeep(name(identifier, instruction)));
   }
 
   private static Instruction instructionII(
