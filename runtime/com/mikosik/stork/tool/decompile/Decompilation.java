@@ -1,8 +1,9 @@
 package com.mikosik.stork.tool.decompile;
 
-import static com.mikosik.stork.common.Reflection.read;
-import static com.mikosik.stork.common.Reflection.signature;
-import static com.mikosik.stork.common.Reflection.type;
+import static com.mikosik.stork.common.Optionals.maybeFirstPresent;
+import static com.mikosik.stork.common.Reflection.hasSignature;
+import static com.mikosik.stork.common.Reflection.maybeRead;
+import static com.mikosik.stork.common.Reflection.maybeReadOfType;
 import static com.mikosik.stork.common.io.Blob.blob;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -112,16 +113,19 @@ public class Decompilation {
   }
 
   private static Expression nameOf(Instruction instruction) {
-    Optional<Object> name = read(signature(Expression.class, "name"), instruction);
-    if (name.isPresent()) {
-      return (Expression) name.get();
-    }
-    Optional<Object> nestedInstruction = read(type(Instruction.class), instruction);
-    if (nestedInstruction.isPresent()) {
-      return nameOf((Instruction) nestedInstruction.get());
-    }
-    return identifier("INSTRUCTION");
+    return maybeFirstPresent(
+        () -> maybeFindName(instruction),
+        () -> maybeFindNestedInstruction(instruction))
+            .orElseGet(() -> identifier("INSTRUCTION"));
+  }
 
+  private static Optional<Expression> maybeFindName(Instruction instruction) {
+    return maybeRead(hasSignature(Expression.class, "name"), instruction);
+  }
+
+  private static Optional<Expression> maybeFindNestedInstruction(Instruction instruction) {
+    return maybeReadOfType(Instruction.class, instruction)
+        .map(Decompilation::nameOf);
   }
 
   private void decompile(Variable variable) {
