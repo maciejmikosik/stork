@@ -77,7 +77,8 @@ public class Compiler {
   protected Expression compileInvocation(Input input) {
     Expression result = compileVariable(input);
     skipWhitespaces(input);
-    while (input.peek().getByte() == '(') {
+    while (input.peek().hasByte()
+        && input.peek().getByte() == '(') {
       input.read();
       skipWhitespaces(input);
       Expression argument = compileExpression(input);
