@@ -3,17 +3,19 @@ package com.mikosik.stork.program;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Eager.eager;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.tool.common.Combinator.I;
 import static com.mikosik.stork.tool.common.Combinator.Y;
-import static com.mikosik.stork.tool.common.Constants.END_OF_STREAM;
 import static com.mikosik.stork.tool.common.Instructions.instruction;
+import static com.mikosik.stork.tool.common.Instructions.name;
 
 import java.math.BigInteger;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Parameter;
 
@@ -35,7 +37,7 @@ public class Stdout {
    * writeStream = Y((self)(stream) {
    *   stream
    *     ((head)(tail){ writeByte(head)(self(tail)) })
-   *     (END_OF_STREAM)
+   *     (closeStream)
    * })
    * </pre>
    */
@@ -51,8 +53,12 @@ public class Stdout {
                     writeByte(output),
                     head,
                     application(self, tail)))),
-            END_OF_STREAM))));
+            CLOSE_STREAM))));
   }
+
+  public static final Instruction CLOSE_STREAM = name(
+      identifier("closeStream"),
+      argument -> Stdout.CLOSE_STREAM);
 
   /**
    * classical version
@@ -73,14 +79,13 @@ public class Stdout {
    * }
    * </pre>
    */
-  private static Expression writeByte(Output output) {
-    // TODO name writeByte
-    return eager(instruction(argument -> {
+  public static Expression writeByte(Output output) {
+    return eager(name(identifier("writeByte"), instruction(argument -> {
       int oneByte = toJavaInteger(argument).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       output.write((byte) oneByte);
       return I;
-    }));
+    })));
   }
 
   private static BigInteger toJavaInteger(Expression expression) {
