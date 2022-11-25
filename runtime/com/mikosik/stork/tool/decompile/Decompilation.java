@@ -109,14 +109,16 @@ public class Decompilation {
   }
 
   private void decompile(Instruction instruction) {
+    decompile("<");
     decompile(nameOf(instruction));
+    decompile(">");
   }
 
   private static Expression nameOf(Instruction instruction) {
     return maybeFirstPresent(
         () -> maybeFindName(instruction),
         () -> maybeFindNestedInstruction(instruction))
-            .orElseGet(() -> identifier("INSTRUCTION"));
+            .orElseGet(() -> identifier(""));
   }
 
   private static Optional<Expression> maybeFindName(Instruction instruction) {
