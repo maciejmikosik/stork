@@ -13,13 +13,12 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
-import static com.mikosik.stork.tool.common.Constants.B;
-import static com.mikosik.stork.tool.common.Constants.C;
-import static com.mikosik.stork.tool.common.Constants.I;
-import static com.mikosik.stork.tool.common.Constants.K;
-import static com.mikosik.stork.tool.common.Constants.S;
-import static com.mikosik.stork.tool.common.Constants.Y;
+import static com.mikosik.stork.tool.common.Combinator.B;
+import static com.mikosik.stork.tool.common.Combinator.C;
+import static com.mikosik.stork.tool.common.Combinator.I;
+import static com.mikosik.stork.tool.common.Combinator.K;
+import static com.mikosik.stork.tool.common.Combinator.S;
+import static com.mikosik.stork.tool.common.Combinator.Y;
 import static com.mikosik.stork.tool.common.Instructions.name;
 import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
@@ -30,6 +29,7 @@ import static org.quackery.Suite.suite;
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
 
+import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
@@ -45,7 +45,6 @@ import com.mikosik.stork.tool.decompile.Decompiler;
 
 public class TestDecompiler {
   public static Test testDecompiler() {
-    Instruction instruction = x -> (Instruction) y -> identifier("z");
     Parameter x = parameter("x");
     Parameter y = parameter("y");
     return suite("decompiler decompiles")
@@ -61,67 +60,7 @@ public class TestDecompiler {
                 .add(test("stdin(7)", stdin(mockInput(), 7)))
                 .add(test("stdin(0)", stdin(mockInput()))))
             .add(test("eager(function)", eager(identifier("function"))))
-            .add(suite("instruction")
-                .add(suite("raw")
-                    .add(test("INSTRUCTION", instruction))
-                    .add(test("INSTRUCTION", instruction.apply(identifier("x"))))
-                    .add(test("z", apply(instruction,
-                        identifier("x"),
-                        identifier("y")))))
-                .add(suite("named")
-                    .add(test("f", name(identifier("f"), instruction)))
-                    .add(test("f(x)", apply(
-                        name(identifier("f"), instruction),
-                        identifier("x"))))
-                    .add(test("z", apply(
-                        name(identifier("f"), instruction),
-                        identifier("x"),
-                        identifier("y")))))
-                .add(suite("nested")
-                    .add(test("f", nest(name(identifier("f"), instruction))))
-                    .add(test("f(x)", apply(
-                        nest(name(identifier("f"), instruction)),
-                        identifier("x"))))
-                    .add(test("z", apply(
-                        nest(name(identifier("f"), instruction)),
-                        identifier("x"),
-                        identifier("y")))))
-                .add(suite("combinators")
-                    .add(test("stork.inst.S", combinator(S)))
-                    .add(test("stork.inst.S(x)", apply(
-                        combinator(S),
-                        identifier("x"))))
-                    .add(test("stork.inst.S(x)(y)", apply(
-                        combinator(S),
-                        identifier("x"),
-                        identifier("y"))))
-                    .add(test("stork.inst.K", combinator(K)))
-                    .add(test("stork.inst.K(x)", apply(
-                        combinator(K),
-                        identifier("x"))))
-                    .add(test("stork.inst.I", combinator(I)))
-                    .add(test("stork.inst.C", combinator(C)))
-                    .add(test("stork.inst.C(x)", apply(
-                        combinator(C),
-                        identifier("x"))))
-                    .add(test("stork.inst.C(x)(y)", apply(
-                        combinator(C),
-                        identifier("x"),
-                        identifier("y"))))
-                    .add(test("stork.inst.B", combinator(B)))
-                    .add(test("stork.inst.B(x)", apply(
-                        combinator(B),
-                        identifier("x"))))
-                    .add(test("stork.inst.B(x)(y)", apply(
-                        combinator(B),
-                        identifier("x"),
-                        identifier("y"))))
-                    .add(test("stork.inst.Y", combinator(Y))))
-                .add(suite("math")
-                    .add(test("stork.integer.negate", math("negate")))
-                    .add(test("stork.integer.add", math("add")))
-                    .add(test("stork.integer.equal", math("equal")))
-                    .add(test("stork.integer.moreThan", math("moreThan")))))
+            .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("parameter")
@@ -146,6 +85,51 @@ public class TestDecompiler {
         .add(suite("local")
             .add(test(decompiler().local(), "function", identifier("package.package.function")))
             .add(test(decompiler().local(), "function", identifier("function"))));
+  }
+
+  private static Suite testInstructions() {
+    Instruction instruction = x -> (Instruction) y -> identifier("z");
+    Instruction f = name(identifier("f"), instruction);
+
+    Identifier x = identifier("x");
+    Identifier y = identifier("y");
+
+    return suite("instruction")
+        .add(suite("raw")
+            .add(test("<>", instruction))
+            .add(test("<>", instruction.apply(x)))
+            .add(test("<>(x)", application(instruction, x)))
+            .add(test("z", apply(instruction, x, y))))
+        .add(suite("named")
+            .add(test("<f>", f))
+            .add(test("<f(x)>", apply(f, x)))
+            .add(test("<f(x)>(y)", application(apply(f, x), y)))
+            .add(test("z", apply(f, x, y))))
+        .add(suite("nested")
+            .add(test("<f>", nest(f)))
+            .add(test("<f(x)>", apply(nest(f), x)))
+            .add(test("<f(x)>(y)", application(apply(nest(f), x), y)))
+            .add(test("z", apply(nest(f), x, y))))
+        .add(suite("combinators")
+            .add(test("<S>", S))
+            .add(test("<S(x)>", apply(S, x)))
+            .add(test("<S(x)(y)>", apply(S, x, y)))
+            .add(test("<K>", K))
+            .add(test("<K(x)>", apply(K, x)))
+            .add(test("<I>", I))
+            .add(test("<C>", C))
+            .add(test("<C(x)>", apply(C, x)))
+            .add(test("<C(x)(y)>", apply(C, x, y)))
+            .add(test("<B>", B))
+            .add(test("<B(x)>", apply(B, x)))
+            .add(test("<B(x)(y)>", apply(B, x, y)))
+            .add(test("<Y>", Y))
+            .add(test("x(<Y>(x))", apply(Y, x))))
+        .add(suite("math")
+            .add(test("<stork.integer.negate>", math("negate")))
+            .add(test("<stork.integer.add>", math("add")))
+            .add(test("<stork.integer.equal>", math("equal")))
+            .add(test("<stork.integer.moreThan>", math("moreThan"))));
   }
 
   private static Test test(String expected, Model model) {
@@ -181,14 +165,6 @@ public class TestDecompiler {
       result = ((Instruction) result).apply(argument);
     }
     return result;
-  }
-
-  private static Instruction combinator(Identifier identifier) {
-    return (Instruction) combinatorModule().definitions.stream()
-        .filter(definition -> definition.identifier.name.equals(identifier.name))
-        .map(definition -> definition.body)
-        .findFirst()
-        .get();
   }
 
   private static Instruction nest(Instruction instruction) {
