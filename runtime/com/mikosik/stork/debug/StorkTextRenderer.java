@@ -3,6 +3,7 @@ package com.mikosik.stork.debug;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.tool.common.Computations.abort;
 import static java.lang.String.format;
 
 import java.util.Map;
@@ -75,21 +76,5 @@ public final class StorkTextRenderer extends TextRenderer {
     return computation(
         application(variable("@"), computation.expression),
         computation.stack);
-  }
-
-  private static Expression abort(Computation computation) {
-    Expression expression = computation.expression;
-    Stack stack = computation.stack;
-    while (true) {
-      if (stack.hasArgument()) {
-        expression = application(expression, stack.argument());
-      } else if (stack.hasFunction()) {
-        expression = application(stack.function(), expression);
-      } else {
-        break;
-      }
-      stack = stack.pop();
-    }
-    return expression;
   }
 }
