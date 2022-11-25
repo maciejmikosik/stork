@@ -8,8 +8,7 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.tool.common.Constants.FALSE;
 import static com.mikosik.stork.tool.common.Constants.TRUE;
 import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
-import static com.mikosik.stork.tool.common.Instructions.instruction1;
-import static com.mikosik.stork.tool.common.Instructions.instruction2;
+import static com.mikosik.stork.tool.common.Instructions.instruction;
 import static com.mikosik.stork.tool.common.Instructions.name;
 
 import java.math.BigInteger;
@@ -39,17 +38,17 @@ public class MathModule {
 
   private static Instruction instructionII(
       Function<BigInteger, BigInteger> function) {
-    return instruction1(x -> toStork(function.apply(toJavaInteger(x))));
+    return instruction(x -> toStork(function.apply(toJavaInteger(x))));
   }
 
   private static Instruction instructionIII(
       BiFunction<BigInteger, BigInteger, BigInteger> function) {
-    return instruction2(x -> y -> toStork(function.apply(toJavaInteger(x), toJavaInteger(y))));
+    return instruction((x, y) -> toStork(function.apply(toJavaInteger(x), toJavaInteger(y))));
   }
 
   private static Instruction instructionIIB(
       BiFunction<BigInteger, BigInteger, Boolean> function) {
-    return instruction2(x -> y -> toStork(function.apply(toJavaInteger(x), toJavaInteger(y))));
+    return instruction((x, y) -> toStork(function.apply(toJavaInteger(x), toJavaInteger(y))));
   }
 
   private static Expression toStork(Boolean value) {

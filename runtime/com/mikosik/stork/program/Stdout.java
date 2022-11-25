@@ -8,7 +8,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.tool.common.Combinator.I;
 import static com.mikosik.stork.tool.common.Combinator.Y;
 import static com.mikosik.stork.tool.common.Constants.END_OF_STREAM;
-import static com.mikosik.stork.tool.common.Instructions.instruction1;
+import static com.mikosik.stork.tool.common.Instructions.instruction;
 
 import java.math.BigInteger;
 
@@ -75,7 +75,7 @@ public class Stdout {
    */
   private static Expression writeByte(Output output) {
     // TODO name writeByte
-    return eager(instruction1(argument -> {
+    return eager(instruction(argument -> {
       int oneByte = toJavaInteger(argument).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       output.write((byte) oneByte);
