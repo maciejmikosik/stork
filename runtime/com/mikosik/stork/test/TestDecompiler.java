@@ -13,13 +13,12 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.tool.common.CombinatorModule.combinatorModule;
-import static com.mikosik.stork.tool.common.Constants.B;
-import static com.mikosik.stork.tool.common.Constants.C;
-import static com.mikosik.stork.tool.common.Constants.I;
-import static com.mikosik.stork.tool.common.Constants.K;
-import static com.mikosik.stork.tool.common.Constants.S;
-import static com.mikosik.stork.tool.common.Constants.Y;
+import static com.mikosik.stork.tool.common.Combinator.B;
+import static com.mikosik.stork.tool.common.Combinator.C;
+import static com.mikosik.stork.tool.common.Combinator.I;
+import static com.mikosik.stork.tool.common.Combinator.K;
+import static com.mikosik.stork.tool.common.Combinator.S;
+import static com.mikosik.stork.tool.common.Combinator.Y;
 import static com.mikosik.stork.tool.common.Instructions.name;
 import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
@@ -112,19 +111,20 @@ public class TestDecompiler {
             .add(test("<f(x)>(y)", application(apply(nest(f), x), y)))
             .add(test("z", apply(nest(f), x, y))))
         .add(suite("combinators")
-            .add(test("<stork.inst.S>", combinator(S)))
-            .add(test("<stork.inst.S(x)>", apply(combinator(S), x)))
-            .add(test("<stork.inst.S(x)(y)>", apply(combinator(S), x, y)))
-            .add(test("<stork.inst.K>", combinator(K)))
-            .add(test("<stork.inst.K(x)>", apply(combinator(K), x)))
-            .add(test("<stork.inst.I>", combinator(I)))
-            .add(test("<stork.inst.C>", combinator(C)))
-            .add(test("<stork.inst.C(x)>", apply(combinator(C), x)))
-            .add(test("<stork.inst.C(x)(y)>", apply(combinator(C), x, y)))
-            .add(test("<stork.inst.B>", combinator(B)))
-            .add(test("<stork.inst.B(x)>", apply(combinator(B), x)))
-            .add(test("<stork.inst.B(x)(y)>", apply(combinator(B), x, y)))
-            .add(test("<stork.inst.Y>", combinator(Y))))
+            .add(test("<S>", S))
+            .add(test("<S(x)>", apply(S, x)))
+            .add(test("<S(x)(y)>", apply(S, x, y)))
+            .add(test("<K>", K))
+            .add(test("<K(x)>", apply(K, x)))
+            .add(test("<I>", I))
+            .add(test("<C>", C))
+            .add(test("<C(x)>", apply(C, x)))
+            .add(test("<C(x)(y)>", apply(C, x, y)))
+            .add(test("<B>", B))
+            .add(test("<B(x)>", apply(B, x)))
+            .add(test("<B(x)(y)>", apply(B, x, y)))
+            .add(test("<Y>", Y))
+            .add(test("x(<Y>(x))", apply(Y, x))))
         .add(suite("math")
             .add(test("<stork.integer.negate>", math("negate")))
             .add(test("<stork.integer.add>", math("add")))
@@ -165,14 +165,6 @@ public class TestDecompiler {
       result = ((Instruction) result).apply(argument);
     }
     return result;
-  }
-
-  private static Instruction combinator(Identifier identifier) {
-    return (Instruction) combinatorModule().definitions.stream()
-        .filter(definition -> definition.identifier.name.equals(identifier.name))
-        .map(definition -> definition.body)
-        .findFirst()
-        .get();
   }
 
   private static Instruction nest(Instruction instruction) {

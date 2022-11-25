@@ -5,9 +5,9 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Eager.eager;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.tool.common.Combinator.I;
+import static com.mikosik.stork.tool.common.Combinator.Y;
 import static com.mikosik.stork.tool.common.Constants.END_OF_STREAM;
-import static com.mikosik.stork.tool.common.Constants.I;
-import static com.mikosik.stork.tool.common.Constants.Y;
 import static com.mikosik.stork.tool.common.Instructions.instruction1;
 
 import java.math.BigInteger;
