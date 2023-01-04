@@ -13,6 +13,8 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.program.Stdout.CLOSE_STREAM;
+import static com.mikosik.stork.program.Stdout.writeByte;
 import static com.mikosik.stork.tool.common.Combinator.B;
 import static com.mikosik.stork.tool.common.Combinator.C;
 import static com.mikosik.stork.tool.common.Combinator.I;
@@ -129,7 +131,10 @@ public class TestDecompiler {
             .add(test("<stork.integer.negate>", math("negate")))
             .add(test("<stork.integer.add>", math("add")))
             .add(test("<stork.integer.equal>", math("equal")))
-            .add(test("<stork.integer.moreThan>", math("moreThan"))));
+            .add(test("<stork.integer.moreThan>", math("moreThan"))))
+        .add(suite("stdout")
+            .add(test("eager(<writeByte>)", writeByte(null)))
+            .add(test("<closeStream>", CLOSE_STREAM)));
   }
 
   private static Test test(String expected, Model model) {
