@@ -21,8 +21,7 @@ public class HandlingChainDecorator implements Decorator {
   }
 
   public <T> T decorate(T decorable) {
-    if (decorable instanceof Chain) {
-      Chain<?> chain = (Chain<?>) decorable;
+    if (decorable instanceof Chain<?> chain) {
       List<?> decorated = chain.stream()
           .map(decorator::decorate)
           .collect(toList());

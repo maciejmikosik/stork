@@ -35,8 +35,8 @@ public class Instructions {
   }
 
   private static Expression eagerDeepIfInstruction(Expression function) {
-    return function instanceof Instruction
-        ? eagerDeep((Instruction) function)
+    return function instanceof Instruction instruction
+        ? eagerDeep(instruction)
         : function;
   }
 
@@ -46,8 +46,8 @@ public class Instructions {
 
       public Expression apply(Expression argument) {
         Expression applied = instruction.apply(argument);
-        return applied instanceof Instruction
-            ? name(application(name, argument), (Instruction) applied)
+        return applied instanceof Instruction appliedInstruction
+            ? name(application(name, argument), appliedInstruction)
             : applied;
       }
     };

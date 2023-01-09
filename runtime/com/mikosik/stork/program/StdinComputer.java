@@ -12,7 +12,6 @@ import java.util.WeakHashMap;
 import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Stack;
 import com.mikosik.stork.tool.compute.Computer;
 
 public class StdinComputer implements Computer {
@@ -25,15 +24,15 @@ public class StdinComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Stdin
-        ? compute((Stdin) computation.expression, computation.stack)
+    return computation.expression instanceof Stdin stdin
+        ? computation(
+            computeIfAbsent(stdin),
+            computation.stack)
         : computation;
   }
 
-  private Computation compute(Stdin stdin, Stack stack) {
-    return computation(
-        cache.computeIfAbsent(stdin, this::compute),
-        stack);
+  private Expression computeIfAbsent(Stdin stdin) {
+    return cache.computeIfAbsent(stdin, this::compute);
   }
 
   private Expression compute(Stdin stdin) {

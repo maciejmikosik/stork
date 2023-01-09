@@ -26,14 +26,14 @@ public final class StorkTextRenderer extends TextRenderer {
   }
 
   public String render(Object model) {
-    if (model instanceof Computer) {
-      return render((Computer) model);
-    } else if (model instanceof Computation) {
-      return render((Computation) model);
-    } else if (model instanceof Expression) {
-      return render((Expression) model);
-    } else if (model instanceof Stack) {
-      return render((Stack) model);
+    if (model instanceof Computer computer) {
+      return render(computer);
+    } else if (model instanceof Computation computation) {
+      return render(computation);
+    } else if (model instanceof Expression expression) {
+      return render(expression);
+    } else if (model instanceof Stack stack) {
+      return render(stack);
     } else if (model instanceof Map) {
       return "Map";
     } else {

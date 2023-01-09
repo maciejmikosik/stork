@@ -4,7 +4,6 @@ import static com.mikosik.stork.model.Computation.computation;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Computation;
-import com.mikosik.stork.model.Stack;
 
 public class ApplicationComputer implements Computer {
   private ApplicationComputer() {}
@@ -14,14 +13,10 @@ public class ApplicationComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Application
-        ? compute((Application) computation.expression, computation.stack)
+    return computation.expression instanceof Application application
+        ? computation(
+            application.function,
+            computation.stack.pushArgument(application.argument))
         : computation;
-  }
-
-  private static Computation compute(Application application, Stack stack) {
-    return computation(
-        application.function,
-        stack.pushArgument(application.argument));
   }
 }

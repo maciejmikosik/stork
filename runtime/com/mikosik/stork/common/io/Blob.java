@@ -14,8 +14,8 @@ public class Blob {
   }
 
   public boolean equals(Object object) {
-    return object instanceof Blob
-        && equals((Blob) object);
+    return object instanceof Blob blob
+        && equals(blob);
   }
 
   private boolean equals(Blob blob) {

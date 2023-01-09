@@ -175,8 +175,8 @@ public class TestDecompiler {
   private static Instruction nest(Instruction instruction) {
     return argument -> {
       Expression applied = instruction.apply(argument);
-      return applied instanceof Instruction
-          ? nest((Instruction) applied)
+      return applied instanceof Instruction appliedInstruction
+          ? nest(appliedInstruction)
           : applied;
     };
   }

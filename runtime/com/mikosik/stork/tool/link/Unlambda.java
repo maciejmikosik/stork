@@ -42,8 +42,8 @@ public class Unlambda {
     } else if (parameter == body) {
       // 4. T[λx.x] => I
       return I;
-    } else if (body instanceof Application) {
-      return transform(parameter, (Application) body);
+    } else if (body instanceof Application application) {
+      return transform(parameter, application);
     } else {
       throw new RuntimeException();
     }
