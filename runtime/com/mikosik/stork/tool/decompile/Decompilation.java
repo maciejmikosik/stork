@@ -37,12 +37,12 @@ public class Decompilation {
   }
 
   public void decompile(Model model) {
-    if (model instanceof Module) {
-      decompile((Module) model);
-    } else if (model instanceof Definition) {
-      decompile((Definition) model);
-    } else if (model instanceof Expression) {
-      decompile((Expression) model);
+    if (model instanceof Module module) {
+      decompile(module);
+    } else if (model instanceof Definition definition) {
+      decompile(definition);
+    } else if (model instanceof Expression expression) {
+      decompile(expression);
     }
   }
 
@@ -58,60 +58,52 @@ public class Decompilation {
   }
 
   private void decompile(Definition definition) {
-    decompile(definition.identifier);
+    Identifier identifier = definition.identifier;
+    decompile(local
+        ? identifier.toVariable().name
+        : identifier.name);
     decompileBody(definition.body);
   }
 
   private void decompile(Expression expression) {
-    if (expression instanceof Identifier) {
-      decompile((Identifier) expression);
-    } else if (expression instanceof Integer) {
-      decompile((Integer) expression);
-    } else if (expression instanceof Quote) {
-      decompile((Quote) expression);
-    } else if (expression instanceof Eager) {
-      decompile((Eager) expression);
-    } else if (expression instanceof Instruction) {
-      decompile((Instruction) expression);
-    } else if (expression instanceof Variable) {
-      decompile((Variable) expression);
-    } else if (expression instanceof Parameter) {
-      decompile((Parameter) expression);
-    } else if (expression instanceof Lambda) {
-      decompile((Lambda) expression);
-    } else if (expression instanceof Application) {
-      decompile((Application) expression);
-    } else if (expression instanceof Stdin) {
-      decompile((Stdin) expression);
+    if (expression instanceof Identifier identifier) {
+      decompile(local
+          ? identifier.toVariable().name
+          : identifier.name);
+    } else if (expression instanceof Integer integer) {
+      decompile(integer.value.toString());
+    } else if (expression instanceof Quote quote) {
+      decompile('\"');
+      decompile(quote.string);
+      decompile('\"');
+    } else if (expression instanceof Eager eager) {
+      decompile("eager(");
+      decompile(eager.function);
+      decompile(")");
+    } else if (expression instanceof Instruction instruction) {
+      decompile("<");
+      decompile(nameOf(instruction));
+      decompile(">");
+    } else if (expression instanceof Variable variable) {
+      decompile(variable.name);
+    } else if (expression instanceof Parameter parameter) {
+      decompile(parameter.name);
+    } else if (expression instanceof Lambda lambda) {
+      decompile('(');
+      decompile(lambda.parameter.name);
+      decompile(')');
+      decompileBody(lambda.body);
+    } else if (expression instanceof Application application) {
+      decompile(application.function);
+      decompile('(');
+      decompile(application.argument);
+      decompile(')');
+    } else if (expression instanceof Stdin stdin) {
+      decompile("stdin");
+      decompile('(');
+      decompile("" + stdin.index);
+      decompile(')');
     }
-  }
-
-  private void decompile(Identifier identifier) {
-    decompile(local
-        ? identifier.toVariable().name
-        : identifier.name);
-  }
-
-  private void decompile(Integer integer) {
-    decompile(integer.value.toString());
-  }
-
-  private void decompile(Quote quote) {
-    decompile('\"');
-    decompile(quote.string);
-    decompile('\"');
-  }
-
-  private void decompile(Eager eager) {
-    decompile("eager(");
-    decompile(eager.function);
-    decompile(")");
-  }
-
-  private void decompile(Instruction instruction) {
-    decompile("<");
-    decompile(nameOf(instruction));
-    decompile(">");
   }
 
   private static Expression nameOf(Instruction instruction) {
@@ -128,37 +120,6 @@ public class Decompilation {
   private static Optional<Expression> maybeFindNestedInstruction(Instruction instruction) {
     return maybeReadOfType(Instruction.class, instruction)
         .map(Decompilation::nameOf);
-  }
-
-  private void decompile(Variable variable) {
-    decompile(variable.name);
-  }
-
-  private void decompile(Parameter parameter) {
-    decompile(parameter.name);
-  }
-
-  private void decompile(Lambda lambda) {
-    decompile('(');
-    decompile(lambda.parameter);
-    decompile(')');
-    decompileBody(lambda.body);
-  }
-
-  private void decompile(Application application) {
-    decompile(application.function);
-    decompile('(');
-    decompile(application.argument);
-    decompile(')');
-
-  }
-
-  private void decompile(Stdin stdin) {
-    decompile("stdin");
-    decompile('(');
-    decompile(stdin.index);
-    decompile(')');
-
   }
 
   private void decompileBody(Expression body) {
@@ -178,9 +139,5 @@ public class Decompilation {
 
   private void decompile(char character) {
     output.write((byte) character);
-  }
-
-  private void decompile(int number) {
-    decompile("" + number);
   }
 }

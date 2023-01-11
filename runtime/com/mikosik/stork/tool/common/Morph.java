@@ -51,21 +51,17 @@ public class Morph {
   }
 
   public <M extends Model> M in(Model model) {
-    if (model instanceof Module) {
-      Module module = (Module) model;
+    if (model instanceof Module module) {
       model = module(module.definitions.map(this::in));
-    } else if (model instanceof Definition) {
-      Definition definition = (Definition) model;
+    } else if (model instanceof Definition definition) {
       model = definition(
           in(definition.identifier),
           in(definition.body));
-    } else if (model instanceof Lambda) {
-      Lambda lambda = (Lambda) model;
+    } else if (model instanceof Lambda lambda) {
       model = lambda(
           in(lambda.parameter),
           in(lambda.body));
-    } else if (model instanceof Application) {
-      Application application = (Application) model;
+    } else if (model instanceof Application application) {
       model = application(
           in(application.function),
           in(application.argument));
