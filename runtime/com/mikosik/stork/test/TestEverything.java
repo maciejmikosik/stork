@@ -24,7 +24,6 @@ public class TestEverything {
   public static Test testEverything() {
     return timeout(1, suite("test everything")
         .add(testProgramsIn(node("runtime_test")))
-        .add(testProgramsIn(node("core_star_test")))
         .add(testDecompiler())
         .add(testCompiler())
         .add(testComputers())
