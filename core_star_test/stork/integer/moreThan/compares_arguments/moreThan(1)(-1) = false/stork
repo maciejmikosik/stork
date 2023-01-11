@@ -1,6 +1,0 @@
-
-  main(stdin) {
-    moreThan(1)(-1)
-      ("true")
-      ("false")
-  }

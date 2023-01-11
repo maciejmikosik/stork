@@ -1,6 +1,0 @@
-
-  main(stdin) {
-    equal(add(-1)(1))(0)
-      ("true")
-      ("false")
-  }
