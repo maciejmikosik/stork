@@ -1,6 +1,0 @@
-
-  main(stdin) {
-    equal(negate(-3))(3)
-      ("true")
-      ("false")
-  }

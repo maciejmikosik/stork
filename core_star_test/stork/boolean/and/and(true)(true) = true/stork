@@ -1,4 +1,0 @@
-
-  main(stdin) {
-    and(true)(true)("x")("y")
-  }

@@ -54,6 +54,7 @@ public class Compiler {
   }
 
   public Expression compileExpression(Input input) {
+    skipWhitespaces(input);
     MaybeByte maybeByte = input.peek();
     if (!maybeByte.hasByte()) {
       return fail("unexpected end of stream", maybeByte);
@@ -66,7 +67,7 @@ public class Compiler {
     } else if (maybeByte.getByte() == '(') {
       return compileLambda(input);
     } else {
-      return fail("unexpected character %c", maybeByte);
+      return fail("unexpected character [%c]", maybeByte.getByte());
     }
   }
 

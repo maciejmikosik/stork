@@ -5,6 +5,8 @@ import static java.util.stream.Collectors.toCollection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -163,6 +165,10 @@ public class Chain<E> implements Iterable<E> {
         return next;
       }
     };
+  }
+
+  public List<E> toLinkedList() {
+    return stream().collect(toCollection(LinkedList::new));
   }
 
   public HashSet<E> toHashSet() {

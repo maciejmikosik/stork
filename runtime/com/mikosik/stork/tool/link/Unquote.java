@@ -16,6 +16,10 @@ public class Unquote {
     return morphQuotes(Unquote::asStorkStream).in(module);
   }
 
+  public static Expression unquote(Expression expression) {
+    return morphQuotes(Unquote::asStorkStream).in(expression);
+  }
+
   private static Expression asStorkStream(Quote quote) {
     Expression stream = NONE;
     for (char character : reverse(quote.string).toCharArray()) {
