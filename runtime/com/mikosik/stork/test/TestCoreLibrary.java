@@ -8,6 +8,7 @@ import org.quackery.Test;
 public class TestCoreLibrary {
   public static Test testCoreLibrary() {
     return suite("core library")
+        .add(testFunction())
         .add(suite("integer")
             .add(testIntegerCanonical())
             .add(testIntegerHuge())
@@ -17,6 +18,21 @@ public class TestCoreLibrary {
             .add(testIntegerMoreThan())
             .add(testIntegerEager()))
         .add(testOptional());
+  }
+
+  private static SnippetTest testFunction() {
+    return snippetTest("function")
+        .importing("stork.function.self")
+        .importing("stork.function.flip")
+        .importing("stork.function.compose")
+        .test("self(0)", "0")
+        .test("self(1)", "1")
+        .test("flip(      (x)(y){x}  )(1)(2)", "2")
+        .test("flip(flip( (x)(y){x} ))(1)(2)", "1")
+        .test("compose((x){x})((x){x})(0)", "0")
+        .test("compose((x){1})((x){x})(0)", "1")
+        .test("compose((x){x})((x){2})(0)", "2")
+        .test("compose((x){1})((x){2})(0)", "1");
   }
 
   private static SnippetTest testIntegerCanonical() {
