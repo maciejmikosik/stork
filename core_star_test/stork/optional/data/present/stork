@@ -1,6 +1,0 @@
-
-  main(stdin) {
-    present("element")
-      ((x){ x })
-      ("empty")
-  }
