@@ -1,4 +1,0 @@
-
-  main(stdin) {
-    not(false)("x")("y")
-  }

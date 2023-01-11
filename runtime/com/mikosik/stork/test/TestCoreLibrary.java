@@ -8,6 +8,7 @@ import org.quackery.Test;
 public class TestCoreLibrary {
   public static Test testCoreLibrary() {
     return suite("core library")
+        .add(testBoolean())
         .add(testFunction())
         .add(suite("integer")
             .add(testIntegerCanonical())
@@ -18,6 +19,27 @@ public class TestCoreLibrary {
             .add(testIntegerMoreThan())
             .add(testIntegerEager()))
         .add(testOptional());
+  }
+
+  private static SnippetTest testBoolean() {
+    return snippetTest("boolean")
+        .importing("stork.boolean.true")
+        .importing("stork.boolean.false")
+        .importing("stork.boolean.not")
+        .importing("stork.boolean.and")
+        .importing("stork.boolean.or")
+        .test("true (0)(1)", "0")
+        .test("false(0)(1)", "1")
+        .test("not(true)", "false")
+        .test("not(false)", "true")
+        .test("and(true) (true) ", "true")
+        .test("and(true) (false)", "false")
+        .test("and(false)(true) ", "false")
+        .test("and(false)(false)", "false")
+        .test("or(true) (true) ", "true")
+        .test("or(true) (false)", "true")
+        .test("or(false)(true) ", "true")
+        .test("or(false)(false)", "false");
   }
 
   private static SnippetTest testFunction() {

@@ -1,4 +1,0 @@
-
-  main(stdin) {
-    false("x")("y")
-  }
