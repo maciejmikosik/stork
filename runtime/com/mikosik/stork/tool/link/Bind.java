@@ -12,10 +12,19 @@ import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.tool.common.Morph;
 
 public class Bind {
   public static Module bindParameters(Module module) {
-    return morphLambdas(lambda -> bind(lambda.parameter, lambda)).in(module);
+    return bindParameters().in(module);
+  }
+
+  public static Expression bindParameters(Expression expression) {
+    return bindParameters().in(expression);
+  }
+
+  private static Morph bindParameters() {
+    return morphLambdas(lambda -> bind(lambda.parameter, lambda));
   }
 
   private static Expression bind(Parameter parameter, Expression expression) {
@@ -44,16 +53,22 @@ public class Bind {
 
   public static Module bindIdentifiers(Chain<Identifier> identifiers, Module module) {
     for (Identifier identifier : identifiers) {
-      module = bind(identifier, module);
+      module = bind(identifier).in(module);
     }
     return module;
   }
 
-  private static Module bind(Identifier identifier, Module module) {
+  public static Expression bindIdentifiers(Chain<Identifier> identifiers, Expression expression) {
+    for (Identifier identifier : identifiers) {
+      expression = bind(identifier).in(expression);
+    }
+    return expression;
+  }
+
+  private static Morph bind(Identifier identifier) {
     Variable variableToReplace = identifier.toVariable();
     return morphVariables(variable -> variable.name.equals(variableToReplace.name)
         ? identifier
-        : variable)
-            .in(module);
+        : variable);
   }
 }

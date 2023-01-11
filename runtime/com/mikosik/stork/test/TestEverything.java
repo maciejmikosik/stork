@@ -7,6 +7,7 @@ import static com.mikosik.stork.model.Eager.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
 import static com.mikosik.stork.test.Runners.timeout;
+import static com.mikosik.stork.test.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
@@ -26,7 +27,8 @@ public class TestEverything {
         .add(testProgramsIn(node("core_star_test")))
         .add(testDecompiler())
         .add(testCompiler())
-        .add(testComputers()));
+        .add(testComputers())
+        .add(testCoreLibrary()));
   }
 
   private static Test testCompiler() {
