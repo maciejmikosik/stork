@@ -18,8 +18,10 @@ import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
 import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
-import static com.mikosik.stork.tool.link.Bind.bindIdentifiers;
-import static com.mikosik.stork.tool.link.Bind.bindParameters;
+import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
+import static com.mikosik.stork.tool.link.Bind.globalizeIdentifier;
+import static com.mikosik.stork.tool.link.Changes.inExpression;
+import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.tool.link.Redefine.redefine;
@@ -96,7 +98,9 @@ public class SnippetTest implements Test {
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);
 
-    linkedModule = unquote(unlambda(linkedModule));
+    linkedModule = inModule(unlambda)
+        .andThen(inModule(unquote))
+        .apply(linkedModule);
 
     Computer expressing = chained(
         modulingComputer(linkedModule),
@@ -116,8 +120,11 @@ public class SnippetTest implements Test {
 
   private Expression prepareSnippet(String snippet) {
     Expression compiled = new Compiler().compileExpression(input(snippet));
-    Expression bound = bindIdentifiers(imports, bindParameters(compiled));
-    return unquote(unlambda(bound));
+    return inExpression(bindLambdaParameter)
+        .andThen(inExpression(globalizeIdentifier(imports)))
+        .andThen(inExpression(unlambda))
+        .andThen(inExpression(unquote))
+        .apply(compiled);
   }
 
   public <R> R visit(BiFunction<String, Body, R> caseHandler,

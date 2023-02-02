@@ -3,8 +3,9 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.tool.link.Bind.bindIdentifiers;
-import static com.mikosik.stork.tool.link.Bind.bindParameters;
+import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
+import static com.mikosik.stork.tool.link.Bind.globalizeIdentifier;
+import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -39,8 +40,10 @@ public class Stars {
     Chain<Identifier> selfImports = module.definitions
         .map(definition -> identifier(namespace + definition.identifier.name));
 
-    return bindIdentifiers(imports, bindIdentifiers(selfImports,
-        bindParameters(module)));
+    return inModule(bindLambdaParameter)
+        .andThen(inModule(globalizeIdentifier(selfImports)))
+        .andThen(inModule(globalizeIdentifier(imports)))
+        .apply(module);
   }
 
   private static Module compile(Node file) {
