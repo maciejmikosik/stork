@@ -1,8 +1,5 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.tool.link.Changes.changeIdentifier;
 import static com.mikosik.stork.tool.link.Changes.changeLambda;
 import static com.mikosik.stork.tool.link.Changes.inExpression;
@@ -31,19 +28,6 @@ public class Bind {
             ? lambda.parameter
             : identifier))
                 .apply(lambda);
-  }
-
-  public static Module bindNamespace(String namespace, Module module) {
-    return module(module.definitions
-        .map(definition -> definition(
-            identifier(namespace + definition.identifier.name),
-            definition.body)));
-  }
-
-  public static Module bindDefinitions(Module module) {
-    Chain<Identifier> identifiers = module.definitions
-        .map(definition -> definition.identifier);
-    return bindIdentifiers(identifiers, module);
   }
 
   public static Module bindIdentifiers(Chain<Identifier> identifiers, Module module) {

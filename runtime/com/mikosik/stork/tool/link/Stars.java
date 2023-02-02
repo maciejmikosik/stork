@@ -3,9 +3,7 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.tool.link.Bind.bindDefinitions;
 import static com.mikosik.stork.tool.link.Bind.bindIdentifiers;
-import static com.mikosik.stork.tool.link.Bind.bindNamespace;
 import static com.mikosik.stork.tool.link.Bind.bindParameters;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -35,13 +33,20 @@ public class Stars {
   }
 
   private static Module moduleFromFile(Node directory, Node file) {
+    Module module = compile(file);
     String namespace = namespace(directory, file);
     Chain<Identifier> imports = importsFor(file);
-    Compiler compiler = new Compiler();
+    Chain<Identifier> selfImports = module.definitions
+        .map(definition -> identifier(namespace + definition.identifier.name));
+
+    return bindIdentifiers(imports, bindIdentifiers(selfImports,
+        bindParameters(module)));
+  }
+
+  private static Module compile(Node file) {
     try (Input input = file.input().buffered()) {
-      Module module = compiler.compileModule(input);
-      return bindIdentifiers(imports,
-          bindDefinitions(bindNamespace(namespace, bindParameters(module))));
+      Compiler compiler = new Compiler();
+      return compiler.compileModule(input);
     }
   }
 
