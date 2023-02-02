@@ -11,7 +11,6 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
-import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.CLOSE_STREAM;
 import static com.mikosik.stork.program.Stdout.writeByte;
@@ -63,27 +62,26 @@ public class TestDecompiler {
                 .add(test("stdin(0)", stdin(mockInput()))))
             .add(test("eager(function)", eager(identifier("function"))))
             .add(testInstructions())
-            .add(suite("variable")
-                .add(test("var", variable("var"))))
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
             .add(suite("lambda")
                 .add(test("(x){x}", lambda(x, x)))
                 .add(test("(x)(y){x(y)}", lambda(x, lambda(y, application(x, y))))))
             .add(suite("application")
-                .add(test("f(x)", application(variable("f"), variable("x"))))
-                .add(test("f(x)(y)", application(variable("f"), variable("x"), variable("y"))))))
+                .add(test("f(x)", application(identifier("f"), identifier("x"))))
+                .add(test("f(x)(y)",
+                    application(identifier("f"), identifier("x"), identifier("y"))))))
         .add(suite("definition")
             .add(test("f(x){x}", definition(identifier("f"), lambda(x, x))))
             .add(test("f(x)(y){x}", definition(identifier("f"), lambda(x, lambda(y, x)))))
-            .add(test("f{g}", definition(identifier("f"), variable("g")))))
+            .add(test("f{g}", definition(identifier("f"), identifier("g")))))
         .add(suite("module")
             .add(test("", module(Chain.empty())))
             .add(test("f{x}", module(chainOf(
-                definition(identifier("f"), variable("x"))))))
+                definition(identifier("f"), identifier("x"))))))
             .add(test("f{x} g{y}", module(chainOf(
-                definition(identifier("f"), variable("x")),
-                definition(identifier("g"), variable("y")))))))
+                definition(identifier("f"), identifier("x")),
+                definition(identifier("g"), identifier("y")))))))
         .add(suite("local")
             .add(test(decompiler().local(), "function", identifier("package.package.function")))
             .add(test(decompiler().local(), "function", identifier("function"))));

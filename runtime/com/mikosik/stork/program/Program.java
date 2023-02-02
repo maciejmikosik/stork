@@ -16,6 +16,8 @@ import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible
 import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
 import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
+import static com.mikosik.stork.tool.link.Changes.inExpression;
+import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.tool.link.Redefine.redefine;
@@ -49,7 +51,9 @@ public class Program {
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);
 
-    linkedModule = unquote(unlambda(linkedModule));
+    linkedModule = inModule(unlambda)
+        .andThen(inModule(unquote))
+        .apply(linkedModule);
 
     Computer expressing = chained(
         modulingComputer(linkedModule),
@@ -62,7 +66,7 @@ public class Program {
 
     Computation computation = computation(
         application(
-            unlambda(writeStream(stdout)),
+            inExpression(unlambda).apply(writeStream(stdout)),
             application(main, stdin(stdinInput))));
 
     Computation computed = computer.compute(computation);

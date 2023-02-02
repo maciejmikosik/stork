@@ -1,7 +1,5 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.model.Variable.variable;
-
 public class Identifier implements Expression {
   public final String name;
 
@@ -13,7 +11,7 @@ public class Identifier implements Expression {
     return new Identifier(name);
   }
 
-  public Variable toVariable() {
-    return variable(name.substring(name.lastIndexOf('.') + 1));
+  public Identifier toLocal() {
+    return identifier(name.substring(name.lastIndexOf('.') + 1));
   }
 }

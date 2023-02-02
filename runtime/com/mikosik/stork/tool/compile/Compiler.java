@@ -17,7 +17,6 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
-import static com.mikosik.stork.model.Variable.variable;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.math.BigInteger;
@@ -33,7 +32,6 @@ import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Variable;
 
 public class Compiler {
   public Module compileModule(Input input) {
@@ -76,7 +74,7 @@ public class Compiler {
   }
 
   protected Expression compileInvocation(Input input) {
-    Expression result = compileVariable(input);
+    Expression result = compileIdentifier(input);
     skipWhitespaces(input);
     while (input.peek().hasByte()
         && input.peek().getByte() == '(') {
@@ -91,8 +89,8 @@ public class Compiler {
     return result;
   }
 
-  protected Variable compileVariable(Input input) {
-    return variable(compileAlphanumeric(input));
+  protected Identifier compileIdentifier(Input input) {
+    return identifier(compileAlphanumeric(input));
   }
 
   protected Expression compileQuote(Input input) {

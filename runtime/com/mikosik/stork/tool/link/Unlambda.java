@@ -6,14 +6,15 @@ import static com.mikosik.stork.tool.common.Combinator.C;
 import static com.mikosik.stork.tool.common.Combinator.I;
 import static com.mikosik.stork.tool.common.Combinator.K;
 import static com.mikosik.stork.tool.common.Combinator.S;
-import static com.mikosik.stork.tool.common.Morph.morphLambdas;
-import static com.mikosik.stork.tool.common.Morph.morphParameters;
+import static com.mikosik.stork.tool.link.Changes.changeLambda;
+import static com.mikosik.stork.tool.link.Changes.inExpression;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.tool.common.Morph;
 
 /**
  * Transforms lambda abstractions into basis using SKI combinators.
@@ -21,18 +22,12 @@ import com.mikosik.stork.tool.common.Morph;
  * https://en.wikipedia.org/wiki/Combinatory_logic#Completeness_of_the_S-K_basis
  */
 public class Unlambda {
-  public static Module unlambda(Module module) {
-    return unlambda().in(module);
-  }
+  // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
+  // 5. T[λx.λy.E] => T[λx.T[λy.E]]
+  public static final Change<Expression> unlambda = changeLambda(Unlambda::transform);
 
-  public static Expression unlambda(Expression expression) {
-    return unlambda().in(expression);
-  }
-
-  private static Morph unlambda() {
-    // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
-    // 5. T[λx.λy.E] => T[λx.T[λy.E]]
-    return morphLambdas(lambda -> transform(lambda.parameter, lambda.body));
+  private static Expression transform(Lambda lambda) {
+    return transform(lambda.parameter, lambda.body);
   }
 
   private static Expression transform(Parameter parameter, Expression body) {
@@ -47,7 +42,6 @@ public class Unlambda {
     } else {
       throw new RuntimeException();
     }
-
   }
 
   private static Expression transform(Parameter parameter, Application body) {
@@ -74,13 +68,13 @@ public class Unlambda {
   }
 
   private static boolean occurs(Parameter parameter, Expression expression) {
-    boolean[] result = new boolean[1];
-    morphParameters(traversing -> {
+    AtomicBoolean result = new AtomicBoolean(false);
+    inExpression(traversing -> {
       if (traversing == parameter) {
-        result[0] = true;
+        result.set(true);
       }
       return traversing;
-    }).in(expression);
-    return result[0];
+    }).apply(expression);
+    return result.get();
   }
 }
