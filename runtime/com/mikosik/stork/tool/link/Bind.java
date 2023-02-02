@@ -1,9 +1,10 @@
 package com.mikosik.stork.tool.link;
 
+import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.tool.link.Changes.changeIdentifier;
 import static com.mikosik.stork.tool.link.Changes.changeLambda;
-import static com.mikosik.stork.tool.link.Changes.changeVariable;
 import static com.mikosik.stork.tool.link.Changes.inExpression;
 import static com.mikosik.stork.tool.link.Changes.inModule;
 
@@ -25,17 +26,18 @@ public class Bind {
   }
 
   private static Expression bindParameterOf(Lambda lambda) {
-    return inExpression(changeVariable(
-        variable -> variable.name.equals(lambda.parameter.name)
+    return inExpression(changeIdentifier(
+        identifier -> identifier.name.equals(lambda.parameter.name)
             ? lambda.parameter
-            : variable))
+            : identifier))
                 .apply(lambda);
   }
 
   public static Module bindNamespace(String namespace, Module module) {
-    return inModule(changeIdentifier(
-        identifier -> identifier(namespace + identifier.name)))
-            .apply(module);
+    return module(module.definitions
+        .map(definition -> definition(
+            identifier(namespace + definition.identifier.name),
+            definition.body)));
   }
 
   public static Module bindDefinitions(Module module) {
@@ -53,11 +55,11 @@ public class Bind {
   }
 
   private static Change<Expression> changeVariablesTo(Chain<Identifier> identifiers) {
-    return inExpression(changeVariable(variable -> identifiers
+    return inExpression(changeIdentifier(identifier -> identifiers
         .stream()
-        .filter(identifier -> variable.name.equals(identifier.toVariable().name))
-        .map(identifier -> (Expression) identifier)
+        .filter(iIdentifier -> identifier.name.equals(iIdentifier.toLocal().name))
+        .map(iIdentifier -> (Expression) iIdentifier)
         .findFirst()
-        .orElse(variable)));
+        .orElse(identifier)));
   }
 }

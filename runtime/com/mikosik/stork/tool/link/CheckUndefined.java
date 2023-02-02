@@ -1,7 +1,6 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.tool.link.Changes.changeIdentifier;
-import static com.mikosik.stork.tool.link.Changes.changeVariable;
 import static com.mikosik.stork.tool.link.Changes.inModule;
 
 import java.util.Set;
@@ -14,9 +13,6 @@ public class CheckUndefined {
     Set<String> defined = module.definitions
         .map(definition -> definition.identifier.name)
         .toHashSet();
-    inModule(changeVariable(variable -> {
-      throw new RuntimeException(variable.name);
-    })).apply(module);
     inModule(changeIdentifier(identifier -> {
       if (!defined.contains(identifier.name)) {
         throw new RuntimeException(identifier.name);

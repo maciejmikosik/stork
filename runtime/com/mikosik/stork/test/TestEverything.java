@@ -33,7 +33,7 @@ public class TestEverything {
   private static Test testCompiler() {
     Compiler compiler = new Compiler();
     return suite("compiler can compile standalone")
-        .add(newCase("variable",
+        .add(newCase("identifier",
             () -> compiler.compileExpression(input("function"))))
         .add(newCase("application",
             () -> compiler.compileExpression(input("function(argument)"))))

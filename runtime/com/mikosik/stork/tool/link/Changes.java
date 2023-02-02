@@ -14,7 +14,6 @@ import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.model.Variable;
 
 public class Changes {
   public static Function<Module, Module> inModule(Change<Expression> change) {
@@ -38,12 +37,6 @@ public class Changes {
   public static Change<Expression> changeIdentifier(Change<Identifier> change) {
     return expression -> expression instanceof Identifier identifier
         ? change.apply(identifier)
-        : expression;
-  }
-
-  public static Change<Expression> changeVariable(Change<Variable> change) {
-    return expression -> expression instanceof Variable variable
-        ? change.apply(variable)
         : expression;
   }
 
