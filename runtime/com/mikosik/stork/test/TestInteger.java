@@ -20,8 +20,7 @@ public class TestInteger {
         .add(testIntegerModulo())
         .add(testIntegerSignum())
         .add(testIntegerAbsolute())
-        .add(testIntegerRelu())
-        .add(testIntegerEager());
+        .add(testIntegerRelu());
   }
 
   private static SnippetTest testIntegerCanonical() {
@@ -51,6 +50,7 @@ public class TestInteger {
         .importing("stork.boolean.true")
         .importing("stork.boolean.false")
         .importing("stork.integer.equal")
+        .importing("stork.integer.negate")
         .test("equal(-1)(-1)", "true")
         .test("equal(-1)( 0)", "false")
         .test("equal(-1)( 1)", "false")
@@ -59,7 +59,8 @@ public class TestInteger {
         .test("equal( 0)( 1)", "false")
         .test("equal( 1)(-1)", "false")
         .test("equal( 1)( 0)", "false")
-        .test("equal( 1)( 1)", "true");
+        .test("equal( 1)( 1)", "true")
+        .test("equal(negate(2))(negate(3))", "false");
   }
 
   private static Test testIntegerMoreThan() {
@@ -67,6 +68,7 @@ public class TestInteger {
         .importing("stork.boolean.true")
         .importing("stork.boolean.false")
         .importing("stork.integer.moreThan")
+        .importing("stork.integer.negate")
         .test("moreThan(-1)(-1)", "false")
         .test("moreThan(-1)( 0)", "true")
         .test("moreThan(-1)( 1)", "true")
@@ -75,7 +77,8 @@ public class TestInteger {
         .test("moreThan( 0)( 1)", "true")
         .test("moreThan( 1)(-1)", "false")
         .test("moreThan( 1)( 0)", "false")
-        .test("moreThan( 1)( 1)", "false");
+        .test("moreThan( 1)( 1)", "false")
+        .test("moreThan(negate(3))(negate(4))", "false");
   }
 
   private static Test testIntegerNegate() {
@@ -83,7 +86,8 @@ public class TestInteger {
         .importing("stork.integer.negate")
         .test("negate( 5)", "-5")
         .test("negate(-3)", " 3")
-        .test("negate( 0)", " 0");
+        .test("negate( 0)", " 0")
+        .test("negate(negate(3))", "3");
   }
 
   private static Test testIntegerAdd() {
@@ -91,7 +95,8 @@ public class TestInteger {
         .importing("stork.integer.add")
         .test("add(  2)( 3)", "  5")
         .test("add( -1)( 1)", "  0")
-        .test("add(-10)(-5)", "-15");
+        .test("add(-10)(-5)", "-15")
+        .test("add(add(1)(2))(add(3)(4))", "10");
   }
 
   private static Test testIntegerMultiply() {
@@ -216,19 +221,5 @@ public class TestInteger {
         .test("relu(  1)", " 1")
         .test("relu( 21)", "21")
         .test("relu(relu(21))", "21");
-  }
-
-  private static Test testIntegerEager() {
-    return snippetTest("eager")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.equal")
-        .importing("stork.integer.negate")
-        .importing("stork.integer.add")
-        .importing("stork.integer.moreThan")
-        .test("equal(negate(2))(negate(3))", "false")
-        .test("add(add(1)(2))(add(3)(4))", "10")
-        .test("moreThan(negate(3))(negate(4))", "false")
-        .test("negate(negate(3))", "3");
   }
 }
