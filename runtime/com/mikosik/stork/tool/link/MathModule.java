@@ -1,6 +1,7 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
@@ -31,6 +32,12 @@ public class MathModule {
         define(
             "stork.integer.native.ADD",
             instructionIII(BigInteger::add)),
+        define(
+            "stork.integer.native.MULTIPLY",
+            instructionIII(BigInteger::multiply)),
+        define(
+            "stork.integer.native.DIVIDEBY",
+            instructionIII(flip(BigInteger::divide))),
         define(
             "stork.integer.native.EQUAL",
             instructionIIB(BigInteger::equals)),

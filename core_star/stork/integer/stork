@@ -45,6 +45,20 @@
     subtract(1)
   }
 
+  multiply {
+    MULTIPLY
+  }
+
+  divideBy {
+    DIVIDEBY
+  }
+
+  modulo(divisor)(dividend) {
+    subtract
+      (multiply(divisor)(divideBy(divisor)(dividend)))
+      (dividend)
+  }
+
   ceiling(max)(number) {
     moreThan(max)(number)
       (max)
