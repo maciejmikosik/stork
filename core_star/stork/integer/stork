@@ -79,7 +79,7 @@
       (number)
   }
 
-  ceiling(max)(number) {
+  ceil(max)(number) {
     moreThan(max)(number)
       (max)
       (number)
@@ -92,6 +92,6 @@
   }
 
   clamp(min)(max)(number) {
-    ceiling(max)(floor(min)(number))
+    ceil(max)(floor(min)(number))
   }
 

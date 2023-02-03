@@ -13,14 +13,24 @@ public class TestInteger {
         .add(testIntegerHuge())
         .add(testIntegerEqual())
         .add(testIntegerMoreThan())
+        .add(testIntegerLessThan())
+        .add(testIntegerAtLeast())
+        .add(testIntegerAtMost())
+        .add(testIntegerWithin())
         .add(testIntegerNegate())
         .add(testIntegerAdd())
+        .add(testIntegerSubtract())
+        .add(testIntegerIncrement())
+        .add(testIntegerDecrement())
         .add(testIntegerMultiply())
         .add(testIntegerDivideBy())
         .add(testIntegerModulo())
         .add(testIntegerSignum())
         .add(testIntegerAbsolute())
-        .add(testIntegerRelu());
+        .add(testIntegerRelu())
+        .add(testIntegerCeil())
+        .add(testIntegerFloor())
+        .add(testIntegerClamp());
   }
 
   private static SnippetTest testIntegerCanonical() {
@@ -81,6 +91,74 @@ public class TestInteger {
         .test("moreThan(negate(3))(negate(4))", "false");
   }
 
+  private static Test testIntegerLessThan() {
+    return snippetTest("lessThan")
+        .importing("stork.boolean.true")
+        .importing("stork.boolean.false")
+        .importing("stork.integer.lessThan")
+        .importing("stork.integer.negate")
+        .test("lessThan(-1)(-1)", "false")
+        .test("lessThan(-1)( 0)", "false")
+        .test("lessThan(-1)( 1)", "false")
+        .test("lessThan( 0)(-1)", "true")
+        .test("lessThan( 0)( 0)", "false")
+        .test("lessThan( 0)( 1)", "false")
+        .test("lessThan( 1)(-1)", "true")
+        .test("lessThan( 1)( 0)", "true")
+        .test("lessThan( 1)( 1)", "false")
+        .test("lessThan(negate(3))(negate(4))", "true");
+  }
+
+  private static Test testIntegerAtLeast() {
+    return snippetTest("atLeast")
+        .importing("stork.boolean.true")
+        .importing("stork.boolean.false")
+        .importing("stork.integer.atLeast")
+        .importing("stork.integer.negate")
+        .test("atLeast(-1)(-1)", "true")
+        .test("atLeast(-1)( 0)", "true")
+        .test("atLeast(-1)( 1)", "true")
+        .test("atLeast( 0)(-1)", "false")
+        .test("atLeast( 0)( 0)", "true")
+        .test("atLeast( 0)( 1)", "true")
+        .test("atLeast( 1)(-1)", "false")
+        .test("atLeast( 1)( 0)", "false")
+        .test("atLeast( 1)( 1)", "true")
+        .test("atLeast(negate(3))(negate(4))", "false");
+  }
+
+  private static Test testIntegerAtMost() {
+    return snippetTest("atMost")
+        .importing("stork.boolean.true")
+        .importing("stork.boolean.false")
+        .importing("stork.integer.atMost")
+        .importing("stork.integer.negate")
+        .test("atMost(-1)(-1)", "true")
+        .test("atMost(-1)( 0)", "false")
+        .test("atMost(-1)( 1)", "false")
+        .test("atMost( 0)(-1)", "true")
+        .test("atMost( 0)( 0)", "true")
+        .test("atMost( 0)( 1)", "false")
+        .test("atMost( 1)(-1)", "true")
+        .test("atMost( 1)( 0)", "true")
+        .test("atMost( 1)( 1)", "true")
+        .test("atMost(negate(3))(negate(4))", "true");
+  }
+
+  private static Test testIntegerWithin() {
+    return snippetTest("within")
+        .importing("stork.boolean.true")
+        .importing("stork.boolean.false")
+        .importing("stork.integer.within")
+        .importing("stork.integer.negate")
+        .test("within(-1)(1)(-2)", "false")
+        .test("within(-1)(1)(-1)", "true")
+        .test("within(-1)(1)( 0)", "true")
+        .test("within(-1)(1)( 1)", "true")
+        .test("within(-1)(1)( 2)", "false")
+        .test("within(negate(1))(negate(-1))(negate(0))", "true");
+  }
+
   private static Test testIntegerNegate() {
     return snippetTest("negate")
         .importing("stork.integer.negate")
@@ -97,6 +175,33 @@ public class TestInteger {
         .test("add( -1)( 1)", "  0")
         .test("add(-10)(-5)", "-15")
         .test("add(add(1)(2))(add(3)(4))", "10");
+  }
+
+  private static Test testIntegerSubtract() {
+    return snippetTest("subtract")
+        .importing("stork.integer.subtract")
+        .test("subtract(  2)( 3)", "1")
+        .test("subtract( -1)( 1)", "2")
+        .test("subtract(-10)(-5)", "5")
+        .test("subtract(subtract(1)(2))(subtract(3)(4))", "0");
+  }
+
+  private static Test testIntegerIncrement() {
+    return snippetTest("increment")
+        .importing("stork.integer.increment")
+        .test("increment(-7)", "-6")
+        .test("increment( 0)", " 1")
+        .test("increment( 7)", " 8")
+        .test("increment(increment(0))", "2");
+  }
+
+  private static Test testIntegerDecrement() {
+    return snippetTest("decrement")
+        .importing("stork.integer.decrement")
+        .test("decrement(-7)", "-8")
+        .test("decrement( 0)", "-1")
+        .test("decrement( 7)", " 6")
+        .test("decrement(decrement(0))", "-2");
   }
 
   private static Test testIntegerMultiply() {
@@ -221,5 +326,34 @@ public class TestInteger {
         .test("relu(  1)", " 1")
         .test("relu( 21)", "21")
         .test("relu(relu(21))", "21");
+  }
+
+  private static Test testIntegerCeil() {
+    return snippetTest("ceil")
+        .importing("stork.integer.ceil")
+        .test("ceil(7)(5)", "5")
+        .test("ceil(7)(9)", "7")
+        .test("ceil(7)(7)", "7")
+        .test("ceil(5)(ceil(7)(9))", "5");
+  }
+
+  private static Test testIntegerFloor() {
+    return snippetTest("floor")
+        .importing("stork.integer.floor")
+        .test("floor(7)(5)", "7")
+        .test("floor(7)(9)", "9")
+        .test("floor(7)(7)", "7")
+        .test("floor(9)(floor(7)(5))", "9");
+  }
+
+  private static Test testIntegerClamp() {
+    return snippetTest("clamp")
+        .importing("stork.integer.clamp")
+        .test("clamp(5)(7)(4)", "5")
+        .test("clamp(5)(7)(5)", "5")
+        .test("clamp(5)(7)(6)", "6")
+        .test("clamp(5)(7)(7)", "7")
+        .test("clamp(5)(7)(8)", "7")
+        .test("clamp(1)(3)(clamp(5)(7)(8))", "3");
   }
 }
