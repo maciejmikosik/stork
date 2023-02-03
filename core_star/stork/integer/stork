@@ -25,12 +25,12 @@
       (atMost(max)(number))
   }
 
-  add {
-    ADD
-  }
-
   negate {
     NEGATE
+  }
+
+  add {
+    ADD
   }
 
   subtract(x) {
@@ -59,22 +59,6 @@
       (dividend)
   }
 
-  ceiling(max)(number) {
-    moreThan(max)(number)
-      (max)
-      (number)
-  }
-
-  floor(min)(number) {
-    lessThan(min)(number)
-      (min)
-      (number)
-  }
-
-  clamp(min)(max)(number) {
-    ceiling(max)(floor(min)(number))
-  }
-
   signum(number) {
     moreThan(0)(number)
       (1)
@@ -93,5 +77,21 @@
     lessThan(0)(number)
       (0)
       (number)
+  }
+
+  ceiling(max)(number) {
+    moreThan(max)(number)
+      (max)
+      (number)
+  }
+
+  floor(min)(number) {
+    lessThan(min)(number)
+      (min)
+      (number)
+  }
+
+  clamp(min)(max)(number) {
+    ceiling(max)(floor(min)(number))
   }
 

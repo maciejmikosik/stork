@@ -14,12 +14,12 @@ public class TestCoreLibrary {
             .add(testIntegerCanonical())
             .add(testIntegerHuge())
             .add(testIntegerEqual())
+            .add(testIntegerMoreThan())
             .add(testIntegerNegate())
             .add(testIntegerAdd())
             .add(testIntegerMultiply())
             .add(testIntegerDivideBy())
             .add(testIntegerModulo())
-            .add(testIntegerMoreThan())
             .add(testIntegerSignum())
             .add(testIntegerAbsolute())
             .add(testIntegerRelu())
@@ -99,6 +99,22 @@ public class TestCoreLibrary {
         .test("equal( 1)(-1)", "false")
         .test("equal( 1)( 0)", "false")
         .test("equal( 1)( 1)", "true");
+  }
+
+  private static Test testIntegerMoreThan() {
+    return snippetTest("moreThan")
+        .importing("stork.boolean.true")
+        .importing("stork.boolean.false")
+        .importing("stork.integer.moreThan")
+        .test("moreThan(-1)(-1)", "false")
+        .test("moreThan(-1)( 0)", "true")
+        .test("moreThan(-1)( 1)", "true")
+        .test("moreThan( 0)(-1)", "false")
+        .test("moreThan( 0)( 0)", "false")
+        .test("moreThan( 0)( 1)", "true")
+        .test("moreThan( 1)(-1)", "false")
+        .test("moreThan( 1)( 0)", "false")
+        .test("moreThan( 1)( 1)", "false");
   }
 
   private static Test testIntegerNegate() {
@@ -206,22 +222,6 @@ public class TestCoreLibrary {
         .test("modulo(-3)( 6)", " 0")
         .test("modulo(-3)( 7)", " 1")
         .test("modulo(modulo(5)(9))(modulo(10)(17))", "3");
-  }
-
-  private static Test testIntegerMoreThan() {
-    return snippetTest("moreThan")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.moreThan")
-        .test("moreThan(-1)(-1)", "false")
-        .test("moreThan(-1)( 0)", "true")
-        .test("moreThan(-1)( 1)", "true")
-        .test("moreThan( 0)(-1)", "false")
-        .test("moreThan( 0)( 0)", "false")
-        .test("moreThan( 0)( 1)", "true")
-        .test("moreThan( 1)(-1)", "false")
-        .test("moreThan( 1)( 0)", "false")
-        .test("moreThan( 1)( 1)", "false");
   }
 
   private static Test testIntegerSignum() {

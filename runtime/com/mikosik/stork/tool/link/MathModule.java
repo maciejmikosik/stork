@@ -27,6 +27,12 @@ public class MathModule {
   public static Module mathModule() {
     return module(chainOf(
         define(
+            "stork.integer.native.EQUAL",
+            instructionIIB(BigInteger::equals)),
+        define(
+            "stork.integer.native.MORETHAN",
+            instructionIIB((x, y) -> x.compareTo(y) < 0)),
+        define(
             "stork.integer.native.NEGATE",
             instructionII(BigInteger::negate)),
         define(
@@ -37,13 +43,7 @@ public class MathModule {
             instructionIII(BigInteger::multiply)),
         define(
             "stork.integer.native.DIVIDEBY",
-            instructionIII(flip(BigInteger::divide))),
-        define(
-            "stork.integer.native.EQUAL",
-            instructionIIB(BigInteger::equals)),
-        define(
-            "stork.integer.native.MORETHAN",
-            instructionIIB((x, y) -> x.compareTo(y) < 0))));
+            instructionIII(flip(BigInteger::divide)))));
   }
 
   private static Definition define(String name, Instruction instruction) {
