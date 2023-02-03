@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.common;
+package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.model.Definition.definition;
@@ -25,10 +25,18 @@ import com.mikosik.stork.model.Module;
 public class MathModule {
   public static Module mathModule() {
     return module(chainOf(
-        define("stork.integer.negate", instructionII(BigInteger::negate)),
-        define("stork.integer.add", instructionIII(BigInteger::add)),
-        define("stork.integer.equal", instructionIIB(BigInteger::equals)),
-        define("stork.integer.moreThan", instructionIIB((x, y) -> x.compareTo(y) < 0))));
+        define(
+            "stork.integer.native.NEGATE",
+            instructionII(BigInteger::negate)),
+        define(
+            "stork.integer.native.ADD",
+            instructionIII(BigInteger::add)),
+        define(
+            "stork.integer.native.EQUAL",
+            instructionIIB(BigInteger::equals)),
+        define(
+            "stork.integer.native.MORETHAN",
+            instructionIIB((x, y) -> x.compareTo(y) < 0))));
   }
 
   private static Definition define(String name, Instruction instruction) {
@@ -38,28 +46,28 @@ public class MathModule {
 
   private static Instruction instructionII(
       Function<BigInteger, BigInteger> function) {
-    return instruction(x -> toStork(function.apply(toJavaInteger(x))));
+    return instruction(x -> stork(function.apply(java(x))));
   }
 
   private static Instruction instructionIII(
       BiFunction<BigInteger, BigInteger, BigInteger> function) {
-    return instruction((x, y) -> toStork(function.apply(toJavaInteger(x), toJavaInteger(y))));
+    return instruction((x, y) -> stork(function.apply(java(x), java(y))));
   }
 
   private static Instruction instructionIIB(
       BiFunction<BigInteger, BigInteger, Boolean> function) {
-    return instruction((x, y) -> toStork(function.apply(toJavaInteger(x), toJavaInteger(y))));
+    return instruction((x, y) -> stork(function.apply(java(x), java(y))));
   }
 
-  private static Expression toStork(Boolean value) {
+  private static Expression stork(Boolean value) {
     return value ? TRUE : FALSE;
   }
 
-  private static Expression toStork(BigInteger value) {
+  private static Expression stork(BigInteger value) {
     return integer(value);
   }
 
-  private static BigInteger toJavaInteger(Expression expression) {
+  private static BigInteger java(Expression expression) {
     return ((Integer) expression).value;
   }
 }

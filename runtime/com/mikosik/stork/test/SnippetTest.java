@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Chain.empty;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
@@ -7,7 +8,6 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
-import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
@@ -24,7 +24,8 @@ import static com.mikosik.stork.tool.link.Changes.inExpression;
 import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
-import static com.mikosik.stork.tool.link.Redefine.redefine;
+import static com.mikosik.stork.tool.link.Link.link;
+import static com.mikosik.stork.tool.link.MathModule.mathModule;
 import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static com.mikosik.stork.tool.link.Unlambda.unlambda;
 import static com.mikosik.stork.tool.link.Unquote.unquote;
@@ -93,7 +94,7 @@ public class SnippetTest implements Test {
     Expression compiled = prepareSnippet(snippet);
 
     Module coreModule = moduleFromDirectory(node("core_star"));
-    Module linkedModule = redefine(mathModule(), coreModule);
+    Module linkedModule = link(chainOf(mathModule(), coreModule));
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);

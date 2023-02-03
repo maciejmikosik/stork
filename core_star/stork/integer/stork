@@ -1,10 +1,10 @@
 
   equal {
-    undefined
+    EQUAL
   }
 
   moreThan {
-    undefined
+    MORETHAN
   }
 
   lessThan {
@@ -26,11 +26,11 @@
   }
 
   add {
-    undefined
+    ADD
   }
 
   negate {
-    undefined
+    NEGATE
   }
 
   subtract(x) {

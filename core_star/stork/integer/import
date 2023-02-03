@@ -1,3 +1,7 @@
+stork.integer.native.EQUAL
+stork.integer.native.MORETHAN
+stork.integer.native.ADD
+stork.integer.native.NEGATE
 stork.function.flip
 stork.boolean.not
 stork.boolean.and

@@ -21,14 +21,15 @@ import static com.mikosik.stork.tool.common.Combinator.K;
 import static com.mikosik.stork.tool.common.Combinator.S;
 import static com.mikosik.stork.tool.common.Combinator.Y;
 import static com.mikosik.stork.tool.common.Instructions.name;
-import static com.mikosik.stork.tool.common.MathModule.mathModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.link.MathModule.mathModule;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.quackery.Suite;
 import org.quackery.Test;
@@ -126,10 +127,10 @@ public class TestDecompiler {
             .add(test("<Y>", Y))
             .add(test("x(<Y>(x))", apply(Y, x))))
         .add(suite("math")
-            .add(test("<stork.integer.negate>", math("negate")))
-            .add(test("<stork.integer.add>", math("add")))
-            .add(test("<stork.integer.equal>", math("equal")))
-            .add(test("<stork.integer.moreThan>", math("moreThan"))))
+            .add(test("<stork.integer.native.NEGATE>", math("NEGATE")))
+            .add(test("<stork.integer.native.ADD>", math("ADD")))
+            .add(test("<stork.integer.native.EQUAL>", math("EQUAL")))
+            .add(test("<stork.integer.native.MORETHAN>", math("MORETHAN"))))
         .add(suite("stdout")
             .add(test("eager(<writeByte>)", writeByte(null)))
             .add(test("<closeStream>", CLOSE_STREAM)));
@@ -180,11 +181,15 @@ public class TestDecompiler {
   }
 
   private static Expression math(String name) {
-    Eager eager = (Eager) mathModule().definitions.stream()
+    Optional<Expression> maybeFound = mathModule().definitions.stream()
         .filter(definition -> definition.identifier.name.endsWith(name))
         .map(definition -> definition.body)
-        .findFirst()
-        .get();
-    return eager.function;
+        .findFirst();
+    if (maybeFound.isPresent()) {
+      Eager eager = (Eager) maybeFound.get();
+      return eager.function;
+    } else {
+      return identifier("NOT FOUND");
+    }
   }
 }
