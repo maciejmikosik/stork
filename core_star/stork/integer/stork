@@ -95,3 +95,28 @@
     ceil(max)(floor(min)(number))
   }
 
+  format {
+    formatBase(10)
+  }
+
+  formatBase(base)(number) {
+    equal(0)(number)
+      ("0")
+      (prepend
+        (lessThan(0)(number)("-")(""))
+        (formatBasePositive(base)(absolute(number))))
+  }
+
+  formatBasePositive(base)(number) {
+    equal(0)(number)
+      ("")
+      (append
+        (single(formatDigit(modulo(base)(number))))
+        (formatBasePositive(base)(divideBy(base)(number))))
+  }
+
+  formatDigit(digit) {
+    lessThan(10)(digit)
+      (add(48)(digit))
+      (add(55)(digit))
+  }

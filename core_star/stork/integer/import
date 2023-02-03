@@ -7,3 +7,6 @@ stork.integer.native.DIVIDEBY
 stork.function.flip
 stork.boolean.not
 stork.boolean.and
+stork.stream.single
+stork.stream.prepend
+stork.stream.append

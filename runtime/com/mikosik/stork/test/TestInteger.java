@@ -31,6 +31,7 @@ public class TestInteger {
         .add(testIntegerCeil())
         .add(testIntegerFloor())
         .add(testIntegerClamp());
+    // TODO test formatting of integer using program test
   }
 
   private static SnippetTest testIntegerCanonical() {
