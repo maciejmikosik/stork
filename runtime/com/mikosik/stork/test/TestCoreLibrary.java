@@ -20,6 +20,9 @@ public class TestCoreLibrary {
             .add(testIntegerDivideBy())
             .add(testIntegerModulo())
             .add(testIntegerMoreThan())
+            .add(testIntegerSignum())
+            .add(testIntegerAbsolute())
+            .add(testIntegerRelu())
             .add(testIntegerEager()))
         .add(testOptional());
   }
@@ -219,6 +222,39 @@ public class TestCoreLibrary {
         .test("moreThan( 1)(-1)", "false")
         .test("moreThan( 1)( 0)", "false")
         .test("moreThan( 1)( 1)", "false");
+  }
+
+  private static Test testIntegerSignum() {
+    return snippetTest("signum")
+        .importing("stork.integer.signum")
+        .test("signum(-21)", "-1")
+        .test("signum( -1)", "-1")
+        .test("signum(  0)", " 0")
+        .test("signum(  1)", " 1")
+        .test("signum( 21)", " 1")
+        .test("signum(signum(21))", " 1");
+  }
+
+  private static Test testIntegerAbsolute() {
+    return snippetTest("absolute")
+        .importing("stork.integer.absolute")
+        .test("absolute(-21)", "21")
+        .test("absolute( -1)", " 1")
+        .test("absolute(  0)", " 0")
+        .test("absolute(  1)", " 1")
+        .test("absolute( 21)", "21")
+        .test("absolute(absolute(21))", "21");
+  }
+
+  private static Test testIntegerRelu() {
+    return snippetTest("relu")
+        .importing("stork.integer.relu")
+        .test("relu(-21)", " 0")
+        .test("relu( -1)", " 0")
+        .test("relu(  0)", " 0")
+        .test("relu(  1)", " 1")
+        .test("relu( 21)", "21")
+        .test("relu(relu(21))", "21");
   }
 
   private static Test testIntegerEager() {

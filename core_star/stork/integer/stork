@@ -74,3 +74,24 @@
   clamp(min)(max)(number) {
     ceiling(max)(floor(min)(number))
   }
+
+  signum(number) {
+    moreThan(0)(number)
+      (1)
+      (lessThan(0)(number)
+        (-1)
+        (0))
+  }
+
+  absolute(number) {
+    lessThan(0)(number)
+      (negate(number))
+      (number)
+  }
+
+  relu(number) {
+    lessThan(0)(number)
+      (0)
+      (number)
+  }
+
