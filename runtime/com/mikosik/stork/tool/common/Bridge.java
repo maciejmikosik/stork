@@ -19,9 +19,13 @@ public class Bridge {
   public static Expression stork(String string) {
     Expression stream = NONE;
     for (char character : reverse(string).toCharArray()) {
-      stream = application(SOME, integer(character), stream);
+      stream = some(integer(character), stream);
     }
     return stream;
+  }
+
+  public static Expression some(Expression head, Expression tail) {
+    return application(SOME, head, tail);
   }
 
   public static Expression stork(Boolean value) {
