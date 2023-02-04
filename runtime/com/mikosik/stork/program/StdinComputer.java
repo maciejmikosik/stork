@@ -1,10 +1,9 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.tool.common.Constants.NONE;
-import static com.mikosik.stork.tool.common.Constants.SOME;
+import static com.mikosik.stork.tool.common.Bridge.NONE;
+import static com.mikosik.stork.tool.common.Bridge.some;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -38,8 +37,7 @@ public class StdinComputer implements Computer {
   private Expression compute(Stdin stdin) {
     MaybeByte maybeByte = head(stdin);
     return maybeByte.hasByte()
-        ? application(
-            SOME,
+        ? some(
             integer(maybeByte.getByte()),
             tail(stdin))
         : NONE;

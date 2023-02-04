@@ -4,10 +4,8 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.tool.common.Constants.FALSE;
-import static com.mikosik.stork.tool.common.Constants.TRUE;
+import static com.mikosik.stork.tool.common.Bridge.stork;
 import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
 import static com.mikosik.stork.tool.common.Instructions.instruction;
 import static com.mikosik.stork.tool.common.Instructions.name;
@@ -64,14 +62,6 @@ public class MathModule {
   private static Instruction instructionIIB(
       BiFunction<BigInteger, BigInteger, Boolean> function) {
     return instruction((x, y) -> stork(function.apply(java(x), java(y))));
-  }
-
-  private static Expression stork(Boolean value) {
-    return value ? TRUE : FALSE;
-  }
-
-  private static Expression stork(BigInteger value) {
-    return integer(value);
   }
 
   private static BigInteger java(Expression expression) {
