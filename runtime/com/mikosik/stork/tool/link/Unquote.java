@@ -3,8 +3,8 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Strings.reverse;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.tool.common.Constants.NONE;
-import static com.mikosik.stork.tool.common.Constants.SOME;
+import static com.mikosik.stork.tool.common.Bridge.NONE;
+import static com.mikosik.stork.tool.common.Bridge.SOME;
 import static com.mikosik.stork.tool.link.Changes.changeQuote;
 
 import com.mikosik.stork.model.Expression;
