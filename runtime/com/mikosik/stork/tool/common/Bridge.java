@@ -5,6 +5,8 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 
+import java.math.BigInteger;
+
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 
@@ -20,5 +22,13 @@ public class Bridge {
       stream = application(SOME, integer(character), stream);
     }
     return stream;
+  }
+
+  public static Expression stork(Boolean value) {
+    return value ? TRUE : FALSE;
+  }
+
+  public static Expression stork(BigInteger value) {
+    return integer(value);
   }
 }
