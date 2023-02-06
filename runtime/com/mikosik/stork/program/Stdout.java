@@ -57,7 +57,9 @@ public class Stdout {
 
   public static final Instruction CLOSE_STREAM = name(
       "closeStream",
-      argument -> Stdout.CLOSE_STREAM);
+      argument -> {
+        throw new RuntimeException("not applicable");
+      });
 
   /**
    * classical version
