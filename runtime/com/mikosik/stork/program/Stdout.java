@@ -3,12 +3,12 @@ package com.mikosik.stork.program;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.EagerInstruction.eager;
+import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.tool.common.Combinator.I;
 import static com.mikosik.stork.tool.common.Combinator.Y;
-import static com.mikosik.stork.tool.common.Instructions.instruction;
 
 import java.math.BigInteger;
 

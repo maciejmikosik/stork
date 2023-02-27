@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.NamedInstruction.name;
-import static com.mikosik.stork.tool.common.Instructions.instruction;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Instruction;
