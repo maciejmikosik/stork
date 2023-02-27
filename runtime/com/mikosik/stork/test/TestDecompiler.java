@@ -100,7 +100,7 @@ public class TestDecompiler {
             .add(test("<>", instruction.apply(x)))
             .add(test("<>(x)", application(instruction, x)))
             .add(test("z", apply(instruction, x, y))))
-        .add(suite("wrapped")
+        .add(suite("nested")
             .add(test("<f>", f))
             .add(test("<f(x)>", apply(f, x)))
             .add(test("<f(x)>(y)", application(apply(f, x), y)))
@@ -109,11 +109,6 @@ public class TestDecompiler {
             .add(test("eager(<f>)", eager(f)))
             .add(test("eager(<f(x)>)", apply(eager(f), x)))
             .add(test("eagerVisited(<f>)", eager(f).visit())))
-        .add(suite("nested")
-            .add(test("<f>", nest(f)))
-            .add(test("<f(x)>", apply(nest(f), x)))
-            .add(test("<f(x)>(y)", application(apply(nest(f), x), y)))
-            .add(test("z", apply(nest(f), x, y))))
         .add(suite("combinators")
             .add(test("<S>", S))
             .add(test("<S(x)>", apply(S, x)))
@@ -172,15 +167,6 @@ public class TestDecompiler {
       result = ((Instruction) result).apply(argument);
     }
     return result;
-  }
-
-  private static Instruction nest(Instruction instruction) {
-    return argument -> {
-      Expression applied = instruction.apply(argument);
-      return applied instanceof Instruction appliedInstruction
-          ? nest(appliedInstruction)
-          : applied;
-    };
   }
 
   private static Expression math(String name) {
