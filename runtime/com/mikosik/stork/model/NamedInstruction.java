@@ -23,7 +23,9 @@ public class NamedInstruction implements Instruction {
   public Expression apply(Expression argument) {
     Expression applied = instruction.apply(argument);
     return applied instanceof Instruction appliedInstruction
-        ? name(application(name, argument), appliedInstruction)
-        : applied;
+        && !(applied instanceof NamedInstruction)
+            ? name(application(name, argument), appliedInstruction)
+            : applied;
   }
+
 }

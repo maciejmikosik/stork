@@ -93,7 +93,6 @@ public class TestDecompiler {
 
     Identifier x = identifier("x");
     Identifier y = identifier("y");
-
     return suite("instruction")
         .add(suite("raw")
             .add(test("<>", instruction))
@@ -108,7 +107,10 @@ public class TestDecompiler {
             .add(test("eager(<>)", eager(instruction)))
             .add(test("eager(<f>)", eager(f)))
             .add(test("eager(<f(x)>)", apply(eager(f), x)))
-            .add(test("eagerVisited(<f>)", eager(f).visit())))
+            .add(test("eagerVisited(<f>)", eager(f).visit()))
+            .add(suite("detects returning other named instruction")
+                .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
+                .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
         .add(suite("combinators")
             .add(test("<S>", S))
             .add(test("<S(x)>", apply(S, x)))
