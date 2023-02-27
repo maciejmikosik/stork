@@ -1,24 +1,38 @@
 package com.mikosik.stork.program;
 
+import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.tool.common.Bridge.javaInteger;
 import static com.mikosik.stork.tool.common.CombinatoryModule.I;
-import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
-
-import java.math.BigInteger;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
-import com.mikosik.stork.model.Integer;
+import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 
-public class Stdout {
+public class ProgramModule {
+  public static final Identifier WRITE_STREAM = identifier("stork.program.writeStream");
+  public static final Identifier WRITE_BYTE = identifier("stork.program.writeByte");
+  public static final Identifier CLOSE_STREAM = identifier("stork.program.closeStream");
+
+  public static Module programModule(Output stdout) {
+    return module(chainOf(
+        definition(WRITE_STREAM, writeStream(stdout)),
+        definition(WRITE_BYTE, writeByte(stdout)),
+        definition(CLOSE_STREAM, CLOSE_STREAM_BODY)));
+  }
+
   /**
    * classical version
    *
@@ -40,26 +54,18 @@ public class Stdout {
    * })
    * </pre>
    */
-  public static Expression writeStream(Output output) {
-    Parameter self = parameter("self");
+  private static Expression writeStream(Output output) {
     Parameter stream = parameter("stream");
     Parameter head = parameter("head");
     Parameter tail = parameter("tail");
-    return application(Y,
-        lambda(self, stream,
-            application(stream,
-                lambda(head, tail,
-                    application(writeByte(output),
-                        head,
-                        application(self, tail))),
-                CLOSE_STREAM)));
+    return lambda(stream,
+        application(stream,
+            lambda(head, tail,
+                application(WRITE_BYTE,
+                    head,
+                    application(WRITE_STREAM, tail))),
+            CLOSE_STREAM));
   }
-
-  public static final Instruction CLOSE_STREAM = name(
-      "closeStream",
-      argument -> {
-        throw new RuntimeException("not applicable");
-      });
 
   /**
    * classical version
@@ -80,16 +86,18 @@ public class Stdout {
    * }
    * </pre>
    */
-  public static Expression writeByte(Output output) {
-    return eager(name("writeByte", instruction(argument -> {
-      int oneByte = toJavaInteger(argument).intValueExact();
+  private static Expression writeByte(Output output) {
+    return eager(name(WRITE_BYTE, instruction(argument -> {
+      int oneByte = javaInteger(argument).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       output.write((byte) oneByte);
       return I;
     })));
   }
 
-  private static BigInteger toJavaInteger(Expression expression) {
-    return ((Integer) expression).value;
-  }
+  private static final Instruction CLOSE_STREAM_BODY = name(
+      CLOSE_STREAM,
+      argument -> {
+        throw new RuntimeException("not applicable");
+      });
 }

@@ -12,9 +12,10 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
+import static com.mikosik.stork.program.ProgramModule.CLOSE_STREAM;
+import static com.mikosik.stork.program.ProgramModule.WRITE_BYTE;
+import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.program.Stdout.CLOSE_STREAM;
-import static com.mikosik.stork.program.Stdout.writeByte;
 import static com.mikosik.stork.tool.common.CombinatoryModule.B;
 import static com.mikosik.stork.tool.common.CombinatoryModule.C;
 import static com.mikosik.stork.tool.common.CombinatoryModule.I;
@@ -132,9 +133,9 @@ public class TestDecompiler {
             .add(test("<stork.integer.native.ADD>", math("ADD")))
             .add(test("<stork.integer.native.EQUAL>", math("EQUAL")))
             .add(test("<stork.integer.native.MORETHAN>", math("MORETHAN"))))
-        .add(suite("stdout")
-            .add(test("eager(<writeByte>)", writeByte(null)))
-            .add(test("<closeStream>", CLOSE_STREAM)));
+        .add(suite("program")
+            .add(test("<stork.program.writeByte>", prog(WRITE_BYTE)))
+            .add(test("<stork.program.closeStream>", prog(CLOSE_STREAM))));
   }
 
   private static Test test(String expected, Model model) {
@@ -189,6 +190,18 @@ public class TestDecompiler {
     return combinatoryModule().definitions.stream()
         .filter(definition -> definition.identifier.name.equals(identifier.name))
         .map(definition -> definition.body)
+        .map(body -> (Instruction) body)
+        .findFirst()
+        .orElseThrow();
+  }
+
+  private static Instruction prog(Identifier identifier) {
+    return programModule(null).definitions.stream()
+        .filter(definition -> definition.identifier.name.equals(identifier.name))
+        .map(definition -> definition.body)
+        .map(body -> body instanceof EagerInstruction eager
+            ? eager.instruction
+            : body)
         .map(body -> (Instruction) body)
         .findFirst()
         .orElseThrow();
