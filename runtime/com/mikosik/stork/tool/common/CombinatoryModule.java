@@ -6,12 +6,9 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.NamedInstruction.name;
 
-import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Module;
 
 public class CombinatoryModule {
@@ -25,26 +22,22 @@ public class CombinatoryModule {
   public static Module combinatoryModule() {
     return module(chainOf(
         /** I(x) = x */
-        define(I, instruction(x -> x)),
+        definition(I, instruction(x -> x)),
 
         /** Y(x) = x(Y(x)) */
-        define(Y, instruction(x -> ap(x, ap(Y, x)))),
+        definition(Y, instruction(x -> ap(x, ap(Y, x)))),
 
         /** K(x)(y) = x */
-        define(K, instruction((x, y) -> x)),
+        definition(K, instruction((x, y) -> x)),
 
         /** S(x)(y)(z) = x(z)(y(z)) */
-        define(S, instruction((x, y, z) -> ap(ap(x, z), ap(y, z)))),
+        definition(S, instruction((x, y, z) -> ap(ap(x, z), ap(y, z)))),
 
         /** C(x)(y)(z) = x(z)(y) */
-        define(C, instruction((x, y, z) -> ap(ap(x, z), y))),
+        definition(C, instruction((x, y, z) -> ap(ap(x, z), y))),
 
         /** B(x)(y)(z) = x(y(z)) */
-        define(B, instruction((x, y, z) -> ap(x, ap(y, z))))));
-  }
-
-  private static Definition define(Identifier identifier, Instruction instruction) {
-    return definition(identifier.name, name(identifier.name, instruction));
+        definition(B, instruction((x, y, z) -> ap(x, ap(y, z))))));
   }
 
   private static Expression ap(Expression function, Expression argument) {

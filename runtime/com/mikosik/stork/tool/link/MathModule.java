@@ -7,7 +7,6 @@ import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.tool.common.Bridge.stork;
 
 import java.math.BigInteger;
@@ -40,7 +39,7 @@ public class MathModule {
   }
 
   private static Definition define(Identifier name, Instruction instruction) {
-    return definition(name, eager(name(name, instruction)));
+    return definition(name, eager(instruction));
   }
 
   private static Instruction instructionII(

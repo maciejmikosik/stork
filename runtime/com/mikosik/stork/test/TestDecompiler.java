@@ -24,6 +24,7 @@ import static com.mikosik.stork.tool.common.CombinatoryModule.S;
 import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
 import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.link.InjectNames.injectNames;
 import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.MathModule.ADD;
 import static com.mikosik.stork.tool.link.MathModule.DIVIDEBY;
@@ -194,8 +195,8 @@ public class TestDecompiler {
         .orElseThrow();
   }
 
-  private static final Module instructionsModule = link(chainOf(
+  private static final Module instructionsModule = injectNames(link(chainOf(
       mathModule(),
       combinatoryModule(),
-      programModule(null)));
+      programModule(null))));
 }

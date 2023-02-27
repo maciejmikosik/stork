@@ -9,7 +9,6 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.tool.common.Bridge.javaInteger;
 import static com.mikosik.stork.tool.common.CombinatoryModule.I;
@@ -87,17 +86,15 @@ public class ProgramModule {
    * </pre>
    */
   private static Expression writeByte(Output output) {
-    return eager(name(WRITE_BYTE, instruction(argument -> {
+    return eager(instruction(argument -> {
       int oneByte = javaInteger(argument).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       output.write((byte) oneByte);
       return I;
-    })));
+    }));
   }
 
-  private static final Instruction CLOSE_STREAM_BODY = name(
-      CLOSE_STREAM,
-      argument -> {
-        throw new RuntimeException("not applicable");
-      });
+  private static final Instruction CLOSE_STREAM_BODY = argument -> {
+    throw new RuntimeException("not applicable");
+  };
 }
