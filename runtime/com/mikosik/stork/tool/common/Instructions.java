@@ -1,6 +1,5 @@
 package com.mikosik.stork.tool.common;
 
-import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Eager.eager;
 
 import java.util.function.BiFunction;
@@ -38,18 +37,5 @@ public class Instructions {
     return function instanceof Instruction instruction
         ? eagerDeep(instruction)
         : function;
-  }
-
-  public static Instruction name(Expression instructionName, Instruction instruction) {
-    return new Instruction() {
-      public Expression name = instructionName;
-
-      public Expression apply(Expression argument) {
-        Expression applied = instruction.apply(argument);
-        return applied instanceof Instruction appliedInstruction
-            ? name(application(name, argument), appliedInstruction)
-            : applied;
-      }
-    };
   }
 }

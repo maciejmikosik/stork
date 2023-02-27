@@ -6,6 +6,7 @@ import static com.mikosik.stork.tool.common.Instructions.instruction;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Instruction;
+import com.mikosik.stork.model.NamedInstruction;
 
 public class Combinator {
   /** I(x) = x */
@@ -31,6 +32,6 @@ public class Combinator {
   }
 
   private static Instruction name(String name, Instruction instruction) {
-    return Instructions.name(identifier(name), instruction);
+    return NamedInstruction.name(identifier(name), instruction);
   }
 }

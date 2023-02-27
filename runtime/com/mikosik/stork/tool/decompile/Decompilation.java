@@ -22,6 +22,7 @@ import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.program.Stdin;
@@ -79,6 +80,10 @@ public class Decompilation {
       decompile("eager(");
       decompile(eager.instruction);
       decompile(")");
+    } else if (expression instanceof NamedInstruction instruction) {
+      decompile("<");
+      decompile(instruction.name);
+      decompile(">");
     } else if (expression instanceof Instruction instruction) {
       decompile("<");
       decompile(nameOf(instruction));

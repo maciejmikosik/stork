@@ -5,10 +5,10 @@ import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.tool.common.Bridge.stork;
 import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
 import static com.mikosik.stork.tool.common.Instructions.instruction;
-import static com.mikosik.stork.tool.common.Instructions.name;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
