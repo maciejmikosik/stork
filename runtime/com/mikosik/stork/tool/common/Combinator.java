@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.tool.common.Instructions.instruction;
+import static com.mikosik.stork.model.Instruction.instruction;
+import static com.mikosik.stork.model.NamedInstruction.name;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Instruction;
@@ -28,9 +28,5 @@ public class Combinator {
 
   private static Expression ap(Expression function, Expression argument) {
     return application(function, argument);
-  }
-
-  private static Instruction name(String name, Instruction instruction) {
-    return Instructions.name(identifier(name), instruction);
   }
 }

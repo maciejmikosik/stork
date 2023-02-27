@@ -3,13 +3,12 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Computation.computation;
-import static com.mikosik.stork.model.Eager.eager;
+import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
 import static com.mikosik.stork.test.Runners.timeout;
 import static com.mikosik.stork.test.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -46,8 +45,8 @@ public class TestEverything {
   private static Test testComputers() {
     return suite("computers can handle empty stack")
         .add(newCase("eager", () -> {
-          var computer = eagerComputer();
-          var computation = computation(eager(identifier("function")));
+          var computer = instructionComputer();
+          var computation = computation(eager(x -> identifier("y")));
           var computed = computer.compute(computation);
           assertTrue(computation == computed);
         }))

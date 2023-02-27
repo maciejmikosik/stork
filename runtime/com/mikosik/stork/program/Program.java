@@ -10,7 +10,6 @@ import static com.mikosik.stork.program.Stdout.writeStream;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
-import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
@@ -58,7 +57,6 @@ public class Program {
 
     Computer expressing = chained(
         modulingComputer(linkedModule),
-        eagerComputer(),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),

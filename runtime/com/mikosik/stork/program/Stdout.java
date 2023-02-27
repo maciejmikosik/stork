@@ -2,14 +2,13 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Eager.eager;
-import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.EagerInstruction.eager;
+import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.tool.common.Combinator.I;
 import static com.mikosik.stork.tool.common.Combinator.Y;
-import static com.mikosik.stork.tool.common.Instructions.instruction;
-import static com.mikosik.stork.tool.common.Instructions.name;
 
 import java.math.BigInteger;
 
@@ -57,8 +56,10 @@ public class Stdout {
   }
 
   public static final Instruction CLOSE_STREAM = name(
-      identifier("closeStream"),
-      argument -> Stdout.CLOSE_STREAM);
+      "closeStream",
+      argument -> {
+        throw new RuntimeException("not applicable");
+      });
 
   /**
    * classical version
@@ -80,7 +81,7 @@ public class Stdout {
    * </pre>
    */
   public static Expression writeByte(Output output) {
-    return eager(name(identifier("writeByte"), instruction(argument -> {
+    return eager(name("writeByte", instruction(argument -> {
       int oneByte = toJavaInteger(argument).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       output.write((byte) oneByte);

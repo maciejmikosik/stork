@@ -3,12 +3,11 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.EagerInstruction.eager;
+import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.tool.common.Bridge.stork;
-import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
-import static com.mikosik.stork.tool.common.Instructions.instruction;
-import static com.mikosik.stork.tool.common.Instructions.name;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
@@ -16,7 +15,6 @@ import java.util.function.Function;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
@@ -45,8 +43,7 @@ public class MathModule {
   }
 
   private static Definition define(String name, Instruction instruction) {
-    Identifier identifier = identifier(name);
-    return definition(identifier, eagerDeep(name(identifier, instruction)));
+    return definition(name, eager(name(name, instruction)));
   }
 
   private static Instruction instructionII(

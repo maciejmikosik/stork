@@ -11,7 +11,6 @@ import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
-import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
@@ -104,7 +103,6 @@ public class SnippetTest implements Test {
 
     Computer expressing = chained(
         modulingComputer(linkedModule),
-        eagerComputer(),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),
