@@ -14,9 +14,9 @@ public class InstructionComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Instruction
+    return computation.expression instanceof Instruction instruction
         && computation.stack.hasArgument()
-            ? compute((Instruction) computation.expression, computation.stack)
+            ? compute(instruction, computation.stack)
             : computation;
   }
 
