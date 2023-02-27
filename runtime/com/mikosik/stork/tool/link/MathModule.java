@@ -3,10 +3,10 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.tool.common.Bridge.stork;
-import static com.mikosik.stork.tool.common.Instructions.eagerDeep;
 import static com.mikosik.stork.tool.common.Instructions.instruction;
 
 import java.math.BigInteger;
@@ -43,7 +43,7 @@ public class MathModule {
   }
 
   private static Definition define(String name, Instruction instruction) {
-    return definition(name, eagerDeep(name(name, instruction)));
+    return definition(name, eager(name(name, instruction)));
   }
 
   private static Instruction instructionII(

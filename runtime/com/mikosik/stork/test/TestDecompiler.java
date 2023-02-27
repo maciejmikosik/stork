@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Eager.eager;
+import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
@@ -37,7 +37,7 @@ import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.model.Eager;
+import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
@@ -100,11 +100,15 @@ public class TestDecompiler {
             .add(test("<>", instruction.apply(x)))
             .add(test("<>(x)", application(instruction, x)))
             .add(test("z", apply(instruction, x, y))))
-        .add(suite("named")
+        .add(suite("wrapped")
             .add(test("<f>", f))
             .add(test("<f(x)>", apply(f, x)))
             .add(test("<f(x)>(y)", application(apply(f, x), y)))
-            .add(test("z", apply(f, x, y))))
+            .add(test("z", apply(f, x, y)))
+            .add(test("eager(<>)", eager(instruction)))
+            .add(test("eager(<f>)", eager(f)))
+            .add(test("eager(<f(x)>)", apply(eager(f), x)))
+            .add(test("eagerVisited(<f>)", eager(f).visit())))
         .add(suite("nested")
             .add(test("<f>", nest(f)))
             .add(test("<f(x)>", apply(nest(f), x)))
@@ -130,8 +134,6 @@ public class TestDecompiler {
             .add(test("<stork.integer.native.ADD>", math("ADD")))
             .add(test("<stork.integer.native.EQUAL>", math("EQUAL")))
             .add(test("<stork.integer.native.MORETHAN>", math("MORETHAN"))))
-        .add(suite("eager")
-            .add(test("eager(<>)", eager(instruction))))
         .add(suite("stdout")
             .add(test("eager(<writeByte>)", writeByte(null)))
             .add(test("<closeStream>", CLOSE_STREAM)));
@@ -187,7 +189,7 @@ public class TestDecompiler {
         .map(definition -> definition.body)
         .findFirst();
     if (maybeFound.isPresent()) {
-      Eager eager = (Eager) maybeFound.get();
+      EagerInstruction eager = (EagerInstruction) maybeFound.get();
       return eager.instruction;
     } else {
       return identifier("NOT FOUND");

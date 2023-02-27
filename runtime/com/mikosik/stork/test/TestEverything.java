@@ -3,7 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Computation.computation;
-import static com.mikosik.stork.model.Eager.eager;
+import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
 import static com.mikosik.stork.test.Runners.timeout;

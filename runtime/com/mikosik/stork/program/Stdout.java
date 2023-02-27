@@ -2,7 +2,7 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Eager.eager;
+import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
