@@ -12,4 +12,11 @@ public class Lambda implements Expression {
   public static Lambda lambda(Parameter parameter, Expression body) {
     return new Lambda(parameter, body);
   }
+
+  public static Lambda lambda(
+      Parameter parameterA,
+      Parameter parameterB,
+      Expression body) {
+    return lambda(parameterA, lambda(parameterB, body));
+  }
 }
