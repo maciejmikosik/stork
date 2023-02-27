@@ -61,7 +61,6 @@ public class TestDecompiler {
             .add(suite("stdin")
                 .add(test("stdin(7)", stdin(mockInput(), 7)))
                 .add(test("stdin(0)", stdin(mockInput()))))
-            .add(test("eager(function)", eager(identifier("function"))))
             .add(testInstructions())
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
@@ -131,6 +130,8 @@ public class TestDecompiler {
             .add(test("<stork.integer.native.ADD>", math("ADD")))
             .add(test("<stork.integer.native.EQUAL>", math("EQUAL")))
             .add(test("<stork.integer.native.MORETHAN>", math("MORETHAN"))))
+        .add(suite("eager")
+            .add(test("eager(<>)", eager(instruction))))
         .add(suite("stdout")
             .add(test("eager(<writeByte>)", writeByte(null)))
             .add(test("<closeStream>", CLOSE_STREAM)));
@@ -187,7 +188,7 @@ public class TestDecompiler {
         .findFirst();
     if (maybeFound.isPresent()) {
       Eager eager = (Eager) maybeFound.get();
-      return eager.function;
+      return eager.instruction;
     } else {
       return identifier("NOT FOUND");
     }

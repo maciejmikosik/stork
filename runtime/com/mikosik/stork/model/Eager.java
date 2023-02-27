@@ -1,13 +1,13 @@
 package com.mikosik.stork.model;
 
 public class Eager implements Expression {
-  public final Expression function;
+  public final Instruction instruction;
 
-  private Eager(Expression function) {
-    this.function = function;
+  private Eager(Instruction instruction) {
+    this.instruction = instruction;
   }
 
-  public static Expression eager(Expression function) {
-    return new Eager(function);
+  public static Expression eager(Instruction instruction) {
+    return new Eager(instruction);
   }
 }

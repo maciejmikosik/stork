@@ -23,6 +23,6 @@ public class EagerComputer implements Computer {
   private static Computation compute(Eager eager, Stack stack) {
     return computation(
         stack.argument(),
-        stack.pop().pushFunction(eager.function));
+        stack.pop().pushFunction(eager.instruction));
   }
 }

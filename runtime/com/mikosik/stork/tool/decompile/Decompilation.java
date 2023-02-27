@@ -77,7 +77,7 @@ public class Decompilation {
       decompile('\"');
     } else if (expression instanceof Eager eager) {
       decompile("eager(");
-      decompile(eager.function);
+      decompile(eager.instruction);
       decompile(")");
     } else if (expression instanceof Instruction instruction) {
       decompile("<");

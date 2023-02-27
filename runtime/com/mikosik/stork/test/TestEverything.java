@@ -47,7 +47,7 @@ public class TestEverything {
     return suite("computers can handle empty stack")
         .add(newCase("eager", () -> {
           var computer = eagerComputer();
-          var computation = computation(eager(identifier("function")));
+          var computation = computation(eager(x -> identifier("y")));
           var computed = computer.compute(computation);
           assertTrue(computation == computed);
         }))
