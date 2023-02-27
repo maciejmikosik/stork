@@ -13,12 +13,12 @@ import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
+import static org.quackery.report.AssertException.assertTrue;
 
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.tool.compile.Compiler;
-import com.mikosik.stork.tool.compute.Computer;
 
 public class TestEverything {
   public static Test testEverything() {
@@ -46,12 +46,16 @@ public class TestEverything {
   private static Test testComputers() {
     return suite("computers can handle empty stack")
         .add(newCase("eager", () -> {
-          Computer computer = eagerComputer();
-          computer.compute(computation(eager(identifier("function"))));
+          var computer = eagerComputer();
+          var computation = computation(eager(identifier("function")));
+          var computed = computer.compute(computation);
+          assertTrue(computation == computed);
         }))
         .add(newCase("instruction", () -> {
-          Computer computer = instructionComputer();
-          computer.compute(computation((Instruction) argument -> argument));
+          var computer = instructionComputer();
+          var computation = computation((Instruction) argument -> argument);
+          var computed = computer.compute(computation);
+          assertTrue(computation == computed);
         }));
   }
 }

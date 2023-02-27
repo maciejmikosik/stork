@@ -14,9 +14,9 @@ public class EagerComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Eager
+    return computation.expression instanceof Eager eager
         && computation.stack.hasArgument()
-            ? compute((Eager) computation.expression, computation.stack)
+            ? compute(eager, computation.stack)
             : computation;
   }
 

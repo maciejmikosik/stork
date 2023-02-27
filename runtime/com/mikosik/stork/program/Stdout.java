@@ -46,14 +46,14 @@ public class Stdout {
     Parameter stream = parameter("stream");
     Parameter head = parameter("head");
     Parameter tail = parameter("tail");
-    return application(Y, lambda(self, lambda(stream,
-        application(stream,
-            lambda(head, lambda(tail,
-                application(
-                    writeByte(output),
-                    head,
-                    application(self, tail)))),
-            CLOSE_STREAM))));
+    return application(Y,
+        lambda(self, stream,
+            application(stream,
+                lambda(head, tail,
+                    application(writeByte(output),
+                        head,
+                        application(self, tail))),
+                CLOSE_STREAM)));
   }
 
   public static final Instruction CLOSE_STREAM = name(
