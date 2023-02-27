@@ -9,7 +9,6 @@ import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
 import static com.mikosik.stork.test.Runners.timeout;
 import static com.mikosik.stork.test.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.tool.compute.EagerComputer.eagerComputer;
 import static com.mikosik.stork.tool.compute.InstructionComputer.instructionComputer;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -46,7 +45,7 @@ public class TestEverything {
   private static Test testComputers() {
     return suite("computers can handle empty stack")
         .add(newCase("eager", () -> {
-          var computer = eagerComputer();
+          var computer = instructionComputer();
           var computation = computation(eager(x -> identifier("y")));
           var computed = computer.compute(computation);
           assertTrue(computation == computed);
