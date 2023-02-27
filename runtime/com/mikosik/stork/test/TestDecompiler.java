@@ -72,16 +72,16 @@ public class TestDecompiler {
                 .add(test("f(x)(y)",
                     application(identifier("f"), identifier("x"), identifier("y"))))))
         .add(suite("definition")
-            .add(test("f(x){x}", definition(identifier("f"), lambda(x, x))))
-            .add(test("f(x)(y){x}", definition(identifier("f"), lambda(x, y, x))))
-            .add(test("f{g}", definition(identifier("f"), identifier("g")))))
+            .add(test("f(x){x}", definition("f", lambda(x, x))))
+            .add(test("f(x)(y){x}", definition("f", lambda(x, y, x))))
+            .add(test("f{g}", definition("f", identifier("g")))))
         .add(suite("module")
             .add(test("", module(Chain.empty())))
             .add(test("f{x}", module(chainOf(
-                definition(identifier("f"), identifier("x"))))))
+                definition("f", identifier("x"))))))
             .add(test("f{x} g{y}", module(chainOf(
-                definition(identifier("f"), identifier("x")),
-                definition(identifier("g"), identifier("y")))))))
+                definition("f", identifier("x")),
+                definition("g", identifier("y")))))))
         .add(suite("local")
             .add(test(decompiler().local(), "function", identifier("package.package.function")))
             .add(test(decompiler().local(), "function", identifier("function"))));
@@ -89,7 +89,7 @@ public class TestDecompiler {
 
   private static Suite testInstructions() {
     Instruction instruction = x -> (Instruction) y -> identifier("z");
-    Instruction f = name(identifier("f"), instruction);
+    Instruction f = name("f", instruction);
 
     Identifier x = identifier("x");
     Identifier y = identifier("y");

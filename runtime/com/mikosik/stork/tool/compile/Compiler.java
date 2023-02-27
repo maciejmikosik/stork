@@ -45,10 +45,10 @@ public class Compiler {
   }
 
   public Definition compileDefinition(Input input) {
-    Identifier identifier = identifier(compileAlphanumeric(input));
+    String name = compileAlphanumeric(input);
     skipWhitespaces(input);
     Expression body = compileBody(input);
-    return definition(identifier, body);
+    return definition(name, body);
   }
 
   public Expression compileExpression(Input input) {

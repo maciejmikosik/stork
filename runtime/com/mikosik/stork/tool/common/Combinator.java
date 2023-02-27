@@ -1,12 +1,11 @@
 package com.mikosik.stork.tool.common;
 
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.tool.common.Instructions.instruction;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Instruction;
-import com.mikosik.stork.model.NamedInstruction;
 
 public class Combinator {
   /** I(x) = x */
@@ -29,9 +28,5 @@ public class Combinator {
 
   private static Expression ap(Expression function, Expression argument) {
     return application(function, argument);
-  }
-
-  private static Instruction name(String name, Instruction instruction) {
-    return NamedInstruction.name(identifier(name), instruction);
   }
 }
