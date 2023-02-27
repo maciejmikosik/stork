@@ -24,6 +24,7 @@ import static com.mikosik.stork.tool.common.CombinatoryModule.S;
 import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
 import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.MathModule.ADD;
 import static com.mikosik.stork.tool.link.MathModule.DIVIDEBY;
 import static com.mikosik.stork.tool.link.MathModule.EQUAL;
@@ -37,7 +38,6 @@ import static org.quackery.Suite.suite;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
-import java.util.Optional;
 
 import org.quackery.Suite;
 import org.quackery.Test;
@@ -50,6 +50,7 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
+import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
@@ -120,30 +121,30 @@ public class TestDecompiler {
                 .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
                 .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
         .add(suite("combinators")
-            .add(test("<stork.function.native.S>", comb(S)))
-            .add(test("<stork.function.native.S(x)>", apply(comb(S), x)))
-            .add(test("<stork.function.native.S(x)(y)>", apply(comb(S), x, y)))
-            .add(test("<stork.function.native.K>", comb(K)))
-            .add(test("<stork.function.native.K(x)>", apply(comb(K), x)))
-            .add(test("<stork.function.native.I>", comb(I)))
-            .add(test("<stork.function.native.C>", comb(C)))
-            .add(test("<stork.function.native.C(x)>", apply(comb(C), x)))
-            .add(test("<stork.function.native.C(x)(y)>", apply(comb(C), x, y)))
-            .add(test("<stork.function.native.B>", comb(B)))
-            .add(test("<stork.function.native.B(x)>", apply(comb(B), x)))
-            .add(test("<stork.function.native.B(x)(y)>", apply(comb(B), x, y)))
-            .add(test("<stork.function.native.Y>", comb(Y)))
-            .add(test("x(stork.function.native.Y(x))", apply(comb(Y), x))))
+            .add(test("<stork.function.native.S>", inst(S)))
+            .add(test("<stork.function.native.S(x)>", apply(inst(S), x)))
+            .add(test("<stork.function.native.S(x)(y)>", apply(inst(S), x, y)))
+            .add(test("<stork.function.native.K>", inst(K)))
+            .add(test("<stork.function.native.K(x)>", apply(inst(K), x)))
+            .add(test("<stork.function.native.I>", inst(I)))
+            .add(test("<stork.function.native.C>", inst(C)))
+            .add(test("<stork.function.native.C(x)>", apply(inst(C), x)))
+            .add(test("<stork.function.native.C(x)(y)>", apply(inst(C), x, y)))
+            .add(test("<stork.function.native.B>", inst(B)))
+            .add(test("<stork.function.native.B(x)>", apply(inst(B), x)))
+            .add(test("<stork.function.native.B(x)(y)>", apply(inst(B), x, y)))
+            .add(test("<stork.function.native.Y>", inst(Y)))
+            .add(test("x(stork.function.native.Y(x))", apply(inst(Y), x))))
         .add(suite("math")
-            .add(test("<stork.integer.native.EQUAL>", math(EQUAL)))
-            .add(test("<stork.integer.native.MORETHAN>", math(MORETHAN)))
-            .add(test("<stork.integer.native.NEGATE>", math(NEGATE)))
-            .add(test("<stork.integer.native.ADD>", math(ADD)))
-            .add(test("<stork.integer.native.MULTIPLY>", math(MULTIPLY)))
-            .add(test("<stork.integer.native.DIVIDEBY>", math(DIVIDEBY))))
+            .add(test("<stork.integer.native.EQUAL>", inst(EQUAL)))
+            .add(test("<stork.integer.native.MORETHAN>", inst(MORETHAN)))
+            .add(test("<stork.integer.native.NEGATE>", inst(NEGATE)))
+            .add(test("<stork.integer.native.ADD>", inst(ADD)))
+            .add(test("<stork.integer.native.MULTIPLY>", inst(MULTIPLY)))
+            .add(test("<stork.integer.native.DIVIDEBY>", inst(DIVIDEBY))))
         .add(suite("program")
-            .add(test("<stork.program.writeByte>", prog(WRITE_BYTE)))
-            .add(test("<stork.program.closeStream>", prog(CLOSE_STREAM))));
+            .add(test("<stork.program.writeByte>", inst(WRITE_BYTE)))
+            .add(test("<stork.program.closeStream>", inst(CLOSE_STREAM))));
   }
 
   private static Test test(String expected, Model model) {
@@ -181,30 +182,8 @@ public class TestDecompiler {
     return result;
   }
 
-  private static Expression math(Identifier identifier) {
-    Optional<Expression> maybeFound = mathModule().definitions.stream()
-        .filter(definition -> definition.identifier.name.equals(identifier.name))
-        .map(definition -> definition.body)
-        .findFirst();
-    if (maybeFound.isPresent()) {
-      EagerInstruction eager = (EagerInstruction) maybeFound.get();
-      return eager.instruction;
-    } else {
-      return identifier("NOT FOUND");
-    }
-  }
-
-  private static Instruction comb(Identifier identifier) {
-    return combinatoryModule().definitions.stream()
-        .filter(definition -> definition.identifier.name.equals(identifier.name))
-        .map(definition -> definition.body)
-        .map(body -> (Instruction) body)
-        .findFirst()
-        .orElseThrow();
-  }
-
-  private static Instruction prog(Identifier identifier) {
-    return programModule(null).definitions.stream()
+  private static Instruction inst(Identifier identifier) {
+    return instructionsModule.definitions.stream()
         .filter(definition -> definition.identifier.name.equals(identifier.name))
         .map(definition -> definition.body)
         .map(body -> body instanceof EagerInstruction eager
@@ -214,4 +193,9 @@ public class TestDecompiler {
         .findFirst()
         .orElseThrow();
   }
+
+  private static final Module instructionsModule = link(chainOf(
+      mathModule(),
+      combinatoryModule(),
+      programModule(null)));
 }
