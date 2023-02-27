@@ -15,12 +15,13 @@ import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.CLOSE_STREAM;
 import static com.mikosik.stork.program.Stdout.writeByte;
-import static com.mikosik.stork.tool.common.Combinator.B;
-import static com.mikosik.stork.tool.common.Combinator.C;
-import static com.mikosik.stork.tool.common.Combinator.I;
-import static com.mikosik.stork.tool.common.Combinator.K;
-import static com.mikosik.stork.tool.common.Combinator.S;
-import static com.mikosik.stork.tool.common.Combinator.Y;
+import static com.mikosik.stork.tool.common.CombinatoryModule.B;
+import static com.mikosik.stork.tool.common.CombinatoryModule.C;
+import static com.mikosik.stork.tool.common.CombinatoryModule.I;
+import static com.mikosik.stork.tool.common.CombinatoryModule.K;
+import static com.mikosik.stork.tool.common.CombinatoryModule.S;
+import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
+import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.link.MathModule.mathModule;
 import static java.lang.String.format;
@@ -112,20 +113,20 @@ public class TestDecompiler {
                 .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
                 .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
         .add(suite("combinators")
-            .add(test("<S>", S))
-            .add(test("<S(x)>", apply(S, x)))
-            .add(test("<S(x)(y)>", apply(S, x, y)))
-            .add(test("<K>", K))
-            .add(test("<K(x)>", apply(K, x)))
-            .add(test("<I>", I))
-            .add(test("<C>", C))
-            .add(test("<C(x)>", apply(C, x)))
-            .add(test("<C(x)(y)>", apply(C, x, y)))
-            .add(test("<B>", B))
-            .add(test("<B(x)>", apply(B, x)))
-            .add(test("<B(x)(y)>", apply(B, x, y)))
-            .add(test("<Y>", Y))
-            .add(test("x(<Y>(x))", apply(Y, x))))
+            .add(test("<stork.function.native.S>", comb(S)))
+            .add(test("<stork.function.native.S(x)>", apply(comb(S), x)))
+            .add(test("<stork.function.native.S(x)(y)>", apply(comb(S), x, y)))
+            .add(test("<stork.function.native.K>", comb(K)))
+            .add(test("<stork.function.native.K(x)>", apply(comb(K), x)))
+            .add(test("<stork.function.native.I>", comb(I)))
+            .add(test("<stork.function.native.C>", comb(C)))
+            .add(test("<stork.function.native.C(x)>", apply(comb(C), x)))
+            .add(test("<stork.function.native.C(x)(y)>", apply(comb(C), x, y)))
+            .add(test("<stork.function.native.B>", comb(B)))
+            .add(test("<stork.function.native.B(x)>", apply(comb(B), x)))
+            .add(test("<stork.function.native.B(x)(y)>", apply(comb(B), x, y)))
+            .add(test("<stork.function.native.Y>", comb(Y)))
+            .add(test("x(stork.function.native.Y(x))", apply(comb(Y), x))))
         .add(suite("math")
             .add(test("<stork.integer.native.NEGATE>", math("NEGATE")))
             .add(test("<stork.integer.native.ADD>", math("ADD")))
@@ -182,5 +183,14 @@ public class TestDecompiler {
     } else {
       return identifier("NOT FOUND");
     }
+  }
+
+  private static Instruction comb(Identifier identifier) {
+    return combinatoryModule().definitions.stream()
+        .filter(definition -> definition.identifier.name.equals(identifier.name))
+        .map(definition -> definition.body)
+        .map(body -> (Instruction) body)
+        .findFirst()
+        .orElseThrow();
   }
 }

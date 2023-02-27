@@ -7,6 +7,7 @@ import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
 import static com.mikosik.stork.program.Stdout.writeStream;
+import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
 import static com.mikosik.stork.tool.compute.ChainedComputer.chained;
@@ -46,7 +47,10 @@ public class Program {
   }
 
   public void run(Input stdinInput, Output stdout) {
-    Module linkedModule = link(chainOf(mathModule(), module));
+    Module linkedModule = link(chainOf(
+        mathModule(),
+        combinatoryModule(),
+        module));
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);

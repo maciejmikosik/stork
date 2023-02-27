@@ -7,8 +7,8 @@ import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
-import static com.mikosik.stork.tool.common.Combinator.I;
-import static com.mikosik.stork.tool.common.Combinator.Y;
+import static com.mikosik.stork.tool.common.CombinatoryModule.I;
+import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
 
 import java.math.BigInteger;
 
