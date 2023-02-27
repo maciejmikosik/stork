@@ -24,6 +24,12 @@ import static com.mikosik.stork.tool.common.CombinatoryModule.S;
 import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
 import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.link.MathModule.ADD;
+import static com.mikosik.stork.tool.link.MathModule.DIVIDEBY;
+import static com.mikosik.stork.tool.link.MathModule.EQUAL;
+import static com.mikosik.stork.tool.link.MathModule.MORETHAN;
+import static com.mikosik.stork.tool.link.MathModule.MULTIPLY;
+import static com.mikosik.stork.tool.link.MathModule.NEGATE;
 import static com.mikosik.stork.tool.link.MathModule.mathModule;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -129,10 +135,12 @@ public class TestDecompiler {
             .add(test("<stork.function.native.Y>", comb(Y)))
             .add(test("x(stork.function.native.Y(x))", apply(comb(Y), x))))
         .add(suite("math")
-            .add(test("<stork.integer.native.NEGATE>", math("NEGATE")))
-            .add(test("<stork.integer.native.ADD>", math("ADD")))
-            .add(test("<stork.integer.native.EQUAL>", math("EQUAL")))
-            .add(test("<stork.integer.native.MORETHAN>", math("MORETHAN"))))
+            .add(test("<stork.integer.native.EQUAL>", math(EQUAL)))
+            .add(test("<stork.integer.native.MORETHAN>", math(MORETHAN)))
+            .add(test("<stork.integer.native.NEGATE>", math(NEGATE)))
+            .add(test("<stork.integer.native.ADD>", math(ADD)))
+            .add(test("<stork.integer.native.MULTIPLY>", math(MULTIPLY)))
+            .add(test("<stork.integer.native.DIVIDEBY>", math(DIVIDEBY))))
         .add(suite("program")
             .add(test("<stork.program.writeByte>", prog(WRITE_BYTE)))
             .add(test("<stork.program.closeStream>", prog(CLOSE_STREAM))));
@@ -173,9 +181,9 @@ public class TestDecompiler {
     return result;
   }
 
-  private static Expression math(String name) {
+  private static Expression math(Identifier identifier) {
     Optional<Expression> maybeFound = mathModule().definitions.stream()
-        .filter(definition -> definition.identifier.name.endsWith(name))
+        .filter(definition -> definition.identifier.name.equals(identifier.name))
         .map(definition -> definition.body)
         .findFirst();
     if (maybeFound.isPresent()) {

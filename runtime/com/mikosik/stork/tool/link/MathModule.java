@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chainOf;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
@@ -15,34 +16,30 @@ import java.util.function.Function;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
 
 public class MathModule {
+  public static final Identifier EQUAL = identifier("stork.integer.native.EQUAL");
+  public static final Identifier MORETHAN = identifier("stork.integer.native.MORETHAN");
+  public static final Identifier NEGATE = identifier("stork.integer.native.NEGATE");
+  public static final Identifier ADD = identifier("stork.integer.native.ADD");
+  public static final Identifier MULTIPLY = identifier("stork.integer.native.MULTIPLY");
+  public static final Identifier DIVIDEBY = identifier("stork.integer.native.DIVIDEBY");
+
   public static Module mathModule() {
     return module(chainOf(
-        define(
-            "stork.integer.native.EQUAL",
-            instructionIIB(BigInteger::equals)),
-        define(
-            "stork.integer.native.MORETHAN",
-            instructionIIB((x, y) -> x.compareTo(y) < 0)),
-        define(
-            "stork.integer.native.NEGATE",
-            instructionII(BigInteger::negate)),
-        define(
-            "stork.integer.native.ADD",
-            instructionIII(BigInteger::add)),
-        define(
-            "stork.integer.native.MULTIPLY",
-            instructionIII(BigInteger::multiply)),
-        define(
-            "stork.integer.native.DIVIDEBY",
-            instructionIII(flip(BigInteger::divide)))));
+        define(EQUAL, instructionIIB(BigInteger::equals)),
+        define(MORETHAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
+        define(NEGATE, instructionII(BigInteger::negate)),
+        define(ADD, instructionIII(BigInteger::add)),
+        define(MULTIPLY, instructionIII(BigInteger::multiply)),
+        define(DIVIDEBY, instructionIII(flip(BigInteger::divide)))));
   }
 
-  private static Definition define(String name, Instruction instruction) {
+  private static Definition define(Identifier name, Instruction instruction) {
     return definition(name, eager(name(name, instruction)));
   }
 
