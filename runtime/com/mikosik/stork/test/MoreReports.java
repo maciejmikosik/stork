@@ -1,12 +1,10 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.io.Output.output;
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static com.mikosik.stork.common.io.InputOutput.formatStackTrace;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Suite.suite;
 import static org.quackery.help.Helpers.thrownBy;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +40,7 @@ public class MoreReports {
       if (exception instanceof AssertException) {
         builder.append(exception.getMessage());
       } else {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        exception.printStackTrace(output(buffer).asPrintStream(UTF_8));
-        builder.append(buffer.toString());
+        builder.append(formatStackTrace(exception));
       }
       builder.append(SEPARATOR);
     }
