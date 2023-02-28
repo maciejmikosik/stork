@@ -29,6 +29,6 @@ public class Decompiler {
   public String decompile(Model model) {
     Buffer buffer = newBuffer();
     to(buffer.asOutput()).decompile(model);
-    return new String(buffer.toBlob().bytes, US_ASCII);
+    return new String(buffer.bytes(), US_ASCII);
   }
 }

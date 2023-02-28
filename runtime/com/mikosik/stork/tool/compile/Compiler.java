@@ -23,7 +23,6 @@ import java.math.BigInteger;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Ascii;
-import com.mikosik.stork.common.io.Blob;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
@@ -95,9 +94,9 @@ public class Compiler {
 
   protected Expression compileQuote(Input input) {
     check(input.read().getByte() == DOUBLE_QUOTE);
-    Blob blob = input.readAllBytes(not(Ascii::isDoubleQuote));
+    byte[] bytes = input.readAllBytes(not(Ascii::isDoubleQuote));
     check(input.read().getByte() == DOUBLE_QUOTE);
-    return quote(asciiString(blob));
+    return quote(asciiString(bytes));
   }
 
   protected Lambda compileLambda(Input input) {
@@ -140,7 +139,7 @@ public class Compiler {
     input.readAllBytes(Ascii::isWhitespace);
   }
 
-  private static String asciiString(Blob blob) {
-    return new String(blob.bytes, US_ASCII);
+  private static String asciiString(byte[] bytes) {
+    return new String(bytes, US_ASCII);
   }
 }

@@ -1,6 +1,5 @@
 package com.mikosik.stork.tool.decompile;
 
-import static com.mikosik.stork.common.io.Blob.blob;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.Chain;
@@ -113,7 +112,7 @@ public class Decompilation {
   }
 
   private void decompile(String string) {
-    output.write(blob(string.getBytes(US_ASCII)));
+    output.write(string.getBytes(US_ASCII));
   }
 
   private void decompile(char character) {

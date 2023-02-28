@@ -27,9 +27,9 @@ public class Output implements AutoCloseable {
     }
   }
 
-  public void write(Blob blob) {
+  public void write(byte[] bytes) {
     try {
-      output.write(blob.bytes);
+      output.write(bytes);
     } catch (IOException e) {
       throw unchecked(e);
     }

@@ -52,20 +52,20 @@ public class Input implements AutoCloseable {
     return input(new BufferedInputStream(input));
   }
 
-  public Blob readAllBytes() {
+  public byte[] readAllBytes() {
     Buffer buffer = newBuffer();
     pumpTo(buffer.asOutput());
-    return buffer.toBlob();
+    return buffer.bytes();
   }
 
-  public Blob readAllBytes(IntPredicate predicate) {
+  public byte[] readAllBytes(IntPredicate predicate) {
     Buffer buffer = newBuffer();
     Output output = buffer.asOutput();
     MaybeByte maybeByte;
     while ((maybeByte = peek()).hasByte() && predicate.test(maybeByte.getByte())) {
       output.write(read().getByte());
     }
-    return buffer.toBlob();
+    return buffer.bytes();
   }
 
   public Input pumpTo(Output output) {

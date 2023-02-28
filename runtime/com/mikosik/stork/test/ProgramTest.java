@@ -14,12 +14,12 @@ import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.io.Blob;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
@@ -62,16 +62,16 @@ public class ProgramTest {
     Input stdin = directory.child("stdin").tryInput();
     Buffer buffer = newBuffer();
     program.run(stdin, buffer.asOutput());
-    Blob expectedStdout = directory.child("stdout").tryInput().readAllBytes();
-    Blob actualStdout = buffer.toBlob();
-    if (!actualStdout.equals(expectedStdout)) {
+    byte[] expectedStdout = directory.child("stdout").tryInput().readAllBytes();
+    byte[] actualStdout = buffer.bytes();
+    if (!Arrays.equals(actualStdout, expectedStdout)) {
       throw new AssertException(format(""
           + "expected output\n"
           + "  %s\n"
           + "but was\n"
           + "  %s\n",
-          new String(expectedStdout.bytes, UTF_8),
-          new String(actualStdout.bytes, UTF_8)));
+          new String(expectedStdout, UTF_8),
+          new String(actualStdout, UTF_8)));
     }
   }
 
