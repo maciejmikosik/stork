@@ -37,7 +37,6 @@ import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
-import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
 
 import org.quackery.Suite;
@@ -45,7 +44,6 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -69,8 +67,8 @@ public class TestDecompiler {
                 .add(test("\"example quote\"", quote("example quote")))
                 .add(test("\"\"", quote(""))))
             .add(suite("stdin")
-                .add(test("stdin(7)", stdin(mockInput(), 7)))
-                .add(test("stdin(0)", stdin(mockInput()))))
+                .add(test("stdin(7)", stdin(input(new byte[0]), 7)))
+                .add(test("stdin(0)", stdin(input(new byte[0])))))
             .add(testInstructions())
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
@@ -169,10 +167,6 @@ public class TestDecompiler {
           expected,
           actual));
     }
-  }
-
-  private static Input mockInput() {
-    return input(new ByteArrayInputStream(new byte[0]));
   }
 
   private static Expression apply(Instruction instruction, Expression... arguments) {
