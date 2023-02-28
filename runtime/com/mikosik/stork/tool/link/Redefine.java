@@ -1,8 +1,6 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.common.Chain.chainFrom;
-import static com.mikosik.stork.model.Module.module;
-import static java.util.stream.Collectors.toList;
+import static com.mikosik.stork.tool.link.Modules.each;
 
 import java.util.Map;
 
@@ -15,8 +13,7 @@ public class Redefine {
         .toHashMap(
             definition -> definition.identifier.name,
             definition -> definition);
-    return module(chainFrom(original.definitions.stream()
-        .map(definition -> updates.getOrDefault(definition.identifier.name, definition))
-        .collect(toList())));
+    return each(definition -> updates.getOrDefault(definition.identifier.name, definition))
+        .apply(original);
   }
 }
