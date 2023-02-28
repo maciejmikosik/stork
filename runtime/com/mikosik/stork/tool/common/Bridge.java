@@ -9,6 +9,7 @@ import java.math.BigInteger;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.Integer;
 
 public class Bridge {
   public static final Identifier TRUE = identifier("stork.boolean.true");
@@ -34,5 +35,9 @@ public class Bridge {
 
   public static Expression stork(BigInteger value) {
     return integer(value);
+  }
+
+  public static BigInteger javaInteger(Expression expression) {
+    return ((Integer) expression).value;
   }
 }

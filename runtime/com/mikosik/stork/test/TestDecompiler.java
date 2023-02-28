@@ -12,16 +12,26 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
+import static com.mikosik.stork.program.ProgramModule.CLOSE_STREAM;
+import static com.mikosik.stork.program.ProgramModule.WRITE_BYTE;
+import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.program.Stdout.CLOSE_STREAM;
-import static com.mikosik.stork.program.Stdout.writeByte;
-import static com.mikosik.stork.tool.common.Combinator.B;
-import static com.mikosik.stork.tool.common.Combinator.C;
-import static com.mikosik.stork.tool.common.Combinator.I;
-import static com.mikosik.stork.tool.common.Combinator.K;
-import static com.mikosik.stork.tool.common.Combinator.S;
-import static com.mikosik.stork.tool.common.Combinator.Y;
+import static com.mikosik.stork.tool.common.CombinatoryModule.B;
+import static com.mikosik.stork.tool.common.CombinatoryModule.C;
+import static com.mikosik.stork.tool.common.CombinatoryModule.I;
+import static com.mikosik.stork.tool.common.CombinatoryModule.K;
+import static com.mikosik.stork.tool.common.CombinatoryModule.S;
+import static com.mikosik.stork.tool.common.CombinatoryModule.Y;
+import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
+import static com.mikosik.stork.tool.link.InjectNames.injectNames;
+import static com.mikosik.stork.tool.link.Link.link;
+import static com.mikosik.stork.tool.link.MathModule.ADD;
+import static com.mikosik.stork.tool.link.MathModule.DIVIDEBY;
+import static com.mikosik.stork.tool.link.MathModule.EQUAL;
+import static com.mikosik.stork.tool.link.MathModule.MORETHAN;
+import static com.mikosik.stork.tool.link.MathModule.MULTIPLY;
+import static com.mikosik.stork.tool.link.MathModule.NEGATE;
 import static com.mikosik.stork.tool.link.MathModule.mathModule;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
@@ -29,7 +39,6 @@ import static org.quackery.Suite.suite;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
-import java.util.Optional;
 
 import org.quackery.Suite;
 import org.quackery.Test;
@@ -42,6 +51,7 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Model;
+import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
@@ -112,28 +122,30 @@ public class TestDecompiler {
                 .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
                 .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
         .add(suite("combinators")
-            .add(test("<S>", S))
-            .add(test("<S(x)>", apply(S, x)))
-            .add(test("<S(x)(y)>", apply(S, x, y)))
-            .add(test("<K>", K))
-            .add(test("<K(x)>", apply(K, x)))
-            .add(test("<I>", I))
-            .add(test("<C>", C))
-            .add(test("<C(x)>", apply(C, x)))
-            .add(test("<C(x)(y)>", apply(C, x, y)))
-            .add(test("<B>", B))
-            .add(test("<B(x)>", apply(B, x)))
-            .add(test("<B(x)(y)>", apply(B, x, y)))
-            .add(test("<Y>", Y))
-            .add(test("x(<Y>(x))", apply(Y, x))))
+            .add(test("<stork.function.native.S>", inst(S)))
+            .add(test("<stork.function.native.S(x)>", apply(inst(S), x)))
+            .add(test("<stork.function.native.S(x)(y)>", apply(inst(S), x, y)))
+            .add(test("<stork.function.native.K>", inst(K)))
+            .add(test("<stork.function.native.K(x)>", apply(inst(K), x)))
+            .add(test("<stork.function.native.I>", inst(I)))
+            .add(test("<stork.function.native.C>", inst(C)))
+            .add(test("<stork.function.native.C(x)>", apply(inst(C), x)))
+            .add(test("<stork.function.native.C(x)(y)>", apply(inst(C), x, y)))
+            .add(test("<stork.function.native.B>", inst(B)))
+            .add(test("<stork.function.native.B(x)>", apply(inst(B), x)))
+            .add(test("<stork.function.native.B(x)(y)>", apply(inst(B), x, y)))
+            .add(test("<stork.function.native.Y>", inst(Y)))
+            .add(test("x(stork.function.native.Y(x))", apply(inst(Y), x))))
         .add(suite("math")
-            .add(test("<stork.integer.native.NEGATE>", math("NEGATE")))
-            .add(test("<stork.integer.native.ADD>", math("ADD")))
-            .add(test("<stork.integer.native.EQUAL>", math("EQUAL")))
-            .add(test("<stork.integer.native.MORETHAN>", math("MORETHAN"))))
-        .add(suite("stdout")
-            .add(test("eager(<writeByte>)", writeByte(null)))
-            .add(test("<closeStream>", CLOSE_STREAM)));
+            .add(test("<stork.integer.native.EQUAL>", inst(EQUAL)))
+            .add(test("<stork.integer.native.MORETHAN>", inst(MORETHAN)))
+            .add(test("<stork.integer.native.NEGATE>", inst(NEGATE)))
+            .add(test("<stork.integer.native.ADD>", inst(ADD)))
+            .add(test("<stork.integer.native.MULTIPLY>", inst(MULTIPLY)))
+            .add(test("<stork.integer.native.DIVIDEBY>", inst(DIVIDEBY))))
+        .add(suite("program")
+            .add(test("<stork.program.writeByte>", inst(WRITE_BYTE)))
+            .add(test("<stork.program.closeStream>", inst(CLOSE_STREAM))));
   }
 
   private static Test test(String expected, Model model) {
@@ -171,16 +183,20 @@ public class TestDecompiler {
     return result;
   }
 
-  private static Expression math(String name) {
-    Optional<Expression> maybeFound = mathModule().definitions.stream()
-        .filter(definition -> definition.identifier.name.endsWith(name))
+  private static Instruction inst(Identifier identifier) {
+    return instructionsModule.definitions.stream()
+        .filter(definition -> definition.identifier.name.equals(identifier.name))
         .map(definition -> definition.body)
-        .findFirst();
-    if (maybeFound.isPresent()) {
-      EagerInstruction eager = (EagerInstruction) maybeFound.get();
-      return eager.instruction;
-    } else {
-      return identifier("NOT FOUND");
-    }
+        .map(body -> body instanceof EagerInstruction eager
+            ? eager.instruction
+            : body)
+        .map(body -> (Instruction) body)
+        .findFirst()
+        .orElseThrow();
   }
+
+  private static final Module instructionsModule = injectNames(link(chainOf(
+      mathModule(),
+      combinatoryModule(),
+      programModule(null))));
 }

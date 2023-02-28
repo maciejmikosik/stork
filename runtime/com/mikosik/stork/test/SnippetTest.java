@@ -7,6 +7,7 @@ import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
+import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.common.Computations.abort;
 import static com.mikosik.stork.tool.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.tool.compute.CachingComputer.caching;
@@ -92,7 +93,10 @@ public class SnippetTest implements Test {
     Expression compiled = prepareSnippet(snippet);
 
     Module coreModule = moduleFromDirectory(node("core_star"));
-    Module linkedModule = link(chainOf(mathModule(), coreModule));
+    Module linkedModule = link(chainOf(
+        mathModule(),
+        combinatoryModule(),
+        coreModule));
 
     checkCollisions(linkedModule);
     checkUndefined(linkedModule);
