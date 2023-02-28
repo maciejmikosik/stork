@@ -2,6 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chainFrom;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -9,7 +10,6 @@ import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.tool.link.Link.link;
 import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -70,8 +70,8 @@ public class ProgramTest {
           + "  %s\n"
           + "but was\n"
           + "  %s\n",
-          new String(expectedStdout, UTF_8),
-          new String(actualStdout, UTF_8)));
+          ascii(expectedStdout),
+          ascii(actualStdout)));
     }
   }
 

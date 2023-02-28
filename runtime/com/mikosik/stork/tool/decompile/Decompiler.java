@@ -1,7 +1,7 @@
 package com.mikosik.stork.tool.decompile;
 
+import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
-import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Output;
@@ -29,6 +29,6 @@ public class Decompiler {
   public String decompile(Model model) {
     Buffer buffer = newBuffer();
     to(buffer.asOutput()).decompile(model);
-    return new String(buffer.bytes(), US_ASCII);
+    return ascii(buffer.bytes());
   }
 }
