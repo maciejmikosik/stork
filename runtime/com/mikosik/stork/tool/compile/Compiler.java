@@ -5,6 +5,7 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.common.io.Ascii.DOUBLE_QUOTE;
+import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
@@ -17,13 +18,11 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
-import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.math.BigInteger;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Ascii;
-import com.mikosik.stork.common.io.Blob;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
@@ -95,9 +94,9 @@ public class Compiler {
 
   protected Expression compileQuote(Input input) {
     check(input.read().getByte() == DOUBLE_QUOTE);
-    Blob blob = input.readAllBytes(not(Ascii::isDoubleQuote));
+    byte[] bytes = input.readAllBytes(not(Ascii::isDoubleQuote));
     check(input.read().getByte() == DOUBLE_QUOTE);
-    return quote(asciiString(blob));
+    return quote(ascii(bytes));
   }
 
   protected Lambda compileLambda(Input input) {
@@ -132,15 +131,11 @@ public class Compiler {
 
   protected String compileAlphanumeric(Input input) {
     return isAlphanumeric(input.peek().getByte())
-        ? asciiString(input.readAllBytes(Ascii::isAlphanumeric))
+        ? ascii(input.readAllBytes(Ascii::isAlphanumeric))
         : fail("expected alphanumeric but was %c", input.peek());
   }
 
   protected void skipWhitespaces(Input input) {
     input.readAllBytes(Ascii::isWhitespace);
-  }
-
-  private static String asciiString(Blob blob) {
-    return new String(blob.bytes, US_ASCII);
   }
 }

@@ -7,7 +7,7 @@ import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.tool.link.Bind.globalizeIdentifier;
 import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.Link.link;
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
@@ -57,7 +57,7 @@ public class Stars {
     Node importFile = file.parent().child("import");
     Chain<Identifier> result = empty();
     if (importFile.isRegularFile()) {
-      try (Scanner scanner = importFile.input().buffered().scan(UTF_8)) {
+      try (Scanner scanner = importFile.input().buffered().scan(US_ASCII)) {
         while (scanner.hasNext()) {
           result = result.add(identifier(scanner.nextLine()));
         }

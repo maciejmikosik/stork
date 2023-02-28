@@ -1,6 +1,5 @@
 package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.io.Blob.blob;
 import static com.mikosik.stork.common.io.Output.output;
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +15,7 @@ public class Buffer {
     return output(data);
   }
 
-  public Blob toBlob() {
-    return blob(data.toByteArray());
+  public byte[] bytes() {
+    return data.toByteArray();
   }
 }
