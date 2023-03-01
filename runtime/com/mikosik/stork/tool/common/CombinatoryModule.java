@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.common;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -20,7 +20,7 @@ public class CombinatoryModule {
   public static final Identifier B = identifier("stork.function.native.B");
 
   public static Module combinatoryModule() {
-    return module(chainOf(
+    return module(chain(
         /** I(x) = x */
         definition(I, instruction(x -> x)),
 

@@ -28,7 +28,7 @@ public class Chain<E> implements Iterable<E> {
     this.tail = tail;
   }
 
-  public static <E> Chain<E> empty() {
+  public static <E> Chain<E> chain() {
     return (Chain<E>) EMPTY;
   }
 
@@ -66,31 +66,31 @@ public class Chain<E> implements Iterable<E> {
     return addAll(Arrays.stream(elements));
   }
 
-  public static <E> Chain<E> chainOf(E element) {
-    return Chain.<E> empty()
+  public static <E> Chain<E> chain(E element) {
+    return Chain.<E> chain()
         .add(element);
   }
 
-  public static <E> Chain<E> chainOf(E... elements) {
-    return Chain.<E> empty()
+  public static <E> Chain<E> chain(E... elements) {
+    return Chain.<E> chain()
         .addAll(elements)
         .reverse();
   }
 
-  public static <E> Chain<E> chainFrom(Iterator<E> elements) {
-    return Chain.<E> empty()
+  public static <E> Chain<E> chain(Iterator<E> elements) {
+    return Chain.<E> chain()
         .addAll(elements)
         .reverse();
   }
 
-  public static <E> Chain<E> chainFrom(Stream<E> elements) {
-    return Chain.<E> empty()
+  public static <E> Chain<E> chain(Stream<E> elements) {
+    return Chain.<E> chain()
         .addAll(elements)
         .reverse();
   }
 
-  public static <E> Chain<E> chainFrom(Iterable<E> elements) {
-    return Chain.<E> empty()
+  public static <E> Chain<E> chain(Iterable<E> elements) {
+    return Chain.<E> chain()
         .addAll(elements)
         .reverse();
   }
@@ -106,17 +106,17 @@ public class Chain<E> implements Iterable<E> {
   }
 
   public Chain<E> reverse() {
-    Chain<E> chain = empty();
+    Chain<E> chain = chain();
     return chain.addAll(this);
   }
 
   public Chain<E> limit(int n) {
-    return chainFrom(stream().limit(n));
+    return chain(stream().limit(n));
   }
 
   public Chain<E> until(Predicate<E> separator) {
     Chain<E> chain = this;
-    Chain<E> taken = empty();
+    Chain<E> taken = chain();
     while (!chain.isEmpty()) {
       E head = chain.head();
       taken = taken.add(head);
@@ -150,7 +150,7 @@ public class Chain<E> implements Iterable<E> {
 
   public <X> Chain<X> map(Function<E, X> mapper) {
     Chain<E> original = this;
-    Chain<X> mapped = empty();
+    Chain<X> mapped = chain();
     while (!original.isEmpty()) {
       mapped = mapped.add(mapper.apply(original.head()));
       original = original.tail();
@@ -160,7 +160,7 @@ public class Chain<E> implements Iterable<E> {
 
   public <X> Chain<X> flatMap(Function<E, Chain<X>> mapper) {
     Chain<E> original = this;
-    Chain<X> mapped = empty();
+    Chain<X> mapped = chain();
     while (!original.isEmpty()) {
       mapped = mapped.addAll(mapper.apply(original.head()));
       original = original.tail();

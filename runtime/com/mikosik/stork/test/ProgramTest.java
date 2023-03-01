@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chainFrom;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
@@ -56,7 +56,7 @@ public class ProgramTest {
         .map(file -> Stars.moduleFromDirectory(file.parent()))
         .collect(toList());
 
-    Module module = link(chainFrom(modules)
+    Module module = link(chain(modules)
         .add(moduleFromDirectory(node("core_star"))));
     Program program = program(identifier("main"), module);
     Input stdin = directory.child("stdin").tryInput();

@@ -1,6 +1,6 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
@@ -47,7 +47,7 @@ public class Program {
   }
 
   public void run(Input stdinInput, Output stdout) {
-    Module linkedModule = link(chainOf(
+    Module linkedModule = link(chain(
         mathModule(),
         combinatoryModule(),
         programModule(stdout),
