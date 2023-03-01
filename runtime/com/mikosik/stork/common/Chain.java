@@ -2,12 +2,14 @@ package com.mikosik.stork.common;
 
 import static java.util.stream.Collectors.toCollection;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -40,26 +42,57 @@ public class Chain<E> implements Iterable<E> {
     }
   }
 
+  public Chain<E> add(E newHead) {
+    return new Chain<E>(newHead, this);
+  }
+
+  public Chain<E> addAll(Iterator<E> iterator) {
+    var result = this;
+    while (iterator.hasNext()) {
+      result = result.add(iterator.next());
+    }
+    return result;
+  }
+
+  public Chain<E> addAll(Stream<E> elements) {
+    return addAll(elements.iterator());
+  }
+
+  public Chain<E> addAll(Iterable<E> elements) {
+    return addAll(elements.iterator());
+  }
+
+  public Chain<E> addAll(E[] elements) {
+    return addAll(Arrays.stream(elements));
+  }
+
   public static <E> Chain<E> chainOf(E element) {
-    Chain<E> chain = empty();
-    return chain.add(element);
+    return Chain.<E> empty()
+        .add(element);
   }
 
   public static <E> Chain<E> chainOf(E... elements) {
-    Chain<E> chain = empty();
-    for (E element : elements) {
-      chain = chain.add(element);
-    }
-    return chain.reverse();
+    return Chain.<E> empty()
+        .addAll(elements)
+        .reverse();
   }
 
-  public static <E> Chain<E> chainFrom(Iterable<E> iterable) {
-    Iterator<E> iterator = iterable.iterator();
-    Chain<E> chain = empty();
-    while (iterator.hasNext()) {
-      chain = chain.add(iterator.next());
-    }
-    return chain.reverse();
+  public static <E> Chain<E> chainFrom(Iterator<E> elements) {
+    return Chain.<E> empty()
+        .addAll(elements)
+        .reverse();
+  }
+
+  public static <E> Chain<E> chainFrom(Stream<E> elements) {
+    return Chain.<E> empty()
+        .addAll(elements)
+        .reverse();
+  }
+
+  public static <E> Chain<E> chainFrom(Iterable<E> elements) {
+    return Chain.<E> empty()
+        .addAll(elements)
+        .reverse();
   }
 
   public E head() {
@@ -72,22 +105,13 @@ public class Chain<E> implements Iterable<E> {
     return tail;
   }
 
-  public Chain<E> add(E newHead) {
-    return new Chain<E>(newHead, this);
-  }
-
-  public Chain<E> addAll(Chain<E> chain) {
-    Chain<E> result = this;
-    while (!chain.isEmpty()) {
-      result = result.add(chain.head());
-      chain = chain.tail();
-    }
-    return result;
-  }
-
   public Chain<E> reverse() {
     Chain<E> chain = empty();
     return chain.addAll(this);
+  }
+
+  public Chain<E> limit(int n) {
+    return chainFrom(stream().limit(n));
   }
 
   public Chain<E> until(Predicate<E> separator) {
@@ -183,5 +207,30 @@ public class Chain<E> implements Iterable<E> {
         keyExtractor.apply(element),
         valueExtractor.apply(element)));
     return hashMap;
+  }
+
+  public boolean equals(Object obj) {
+    return obj instanceof Chain && equals((Chain<?>) obj);
+  }
+
+  public boolean equals(Chain<?> that) {
+    Chain<?> first = this;
+    Chain<?> second = that;
+    while (!first.isEmpty() && !second.isEmpty()) {
+      if (!Objects.equals(first.head, second.head)) {
+        return false;
+      }
+      first = first.tail;
+      second = second.tail;
+    }
+    return first == second;
+  }
+
+  public int hashCode() {
+    return Objects.hash(toLinkedList());
+  }
+
+  public String toString() {
+    return toLinkedList().toString();
   }
 }
