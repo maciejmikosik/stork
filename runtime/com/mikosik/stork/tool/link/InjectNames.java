@@ -2,8 +2,8 @@ package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
-import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
+import static com.mikosik.stork.tool.link.Modules.each;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.EagerInstruction;
@@ -13,8 +13,7 @@ import com.mikosik.stork.model.NamedInstruction;
 
 public class InjectNames {
   public static Module injectNames(Module module) {
-    return module(module.definitions
-        .map(InjectNames::intoInstruction));
+    return each(InjectNames::intoInstruction).apply(module);
   }
 
   private static Definition intoInstruction(Definition definition) {

@@ -1,7 +1,6 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.common.Chain.chainFrom;
-import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.tool.link.Bind.globalizeIdentifier;
@@ -30,7 +29,7 @@ public class Stars {
     List<Module> modules = filter
         .map(file -> moduleFromFile(directory, file))
         .collect(toList());
-    return link(chainFrom(modules));
+    return link(chain(modules));
   }
 
   private static Module moduleFromFile(Node directory, Node file) {
@@ -55,7 +54,7 @@ public class Stars {
 
   private static Chain<Identifier> importsFor(Node file) {
     Node importFile = file.parent().child("import");
-    Chain<Identifier> result = empty();
+    Chain<Identifier> result = chain();
     if (importFile.isRegularFile()) {
       try (Scanner scanner = importFile.input().buffered().scan(US_ASCII)) {
         while (scanner.hasNext()) {

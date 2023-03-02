@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.compile;
 
-import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;
 import static com.mikosik.stork.common.Throwables.fail;
@@ -34,7 +34,7 @@ import com.mikosik.stork.model.Parameter;
 
 public class Compiler {
   public Module compileModule(Input input) {
-    Chain<Definition> definitions = empty();
+    Chain<Definition> definitions = chain();
     while (input.peek().hasByte()) {
       skipWhitespaces(input);
       definitions = definitions.add(compileDefinition(input));

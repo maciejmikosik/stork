@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
@@ -29,7 +29,7 @@ public class MathModule {
   public static final Identifier DIVIDEBY = identifier("stork.integer.native.DIVIDEBY");
 
   public static Module mathModule() {
-    return module(chainOf(
+    return module(chain(
         define(EQUAL, instructionIIB(BigInteger::equals)),
         define(MORETHAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),

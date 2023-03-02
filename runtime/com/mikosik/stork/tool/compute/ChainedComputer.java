@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.compute;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.chain;
 
 import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Computation;
@@ -17,7 +17,7 @@ public class ChainedComputer implements Computer {
   }
 
   public static Computer chained(Computer... computers) {
-    return new ChainedComputer(chainOf(computers));
+    return new ChainedComputer(chain(computers));
   }
 
   public Computation compute(Computation computation) {

@@ -3,7 +3,7 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.tool.link.Modules.each;
 
 import java.util.function.Function;
 
@@ -17,9 +17,9 @@ import com.mikosik.stork.model.Quote;
 
 public class Changes {
   public static Function<Module, Module> inModule(Change<Expression> change) {
-    return module -> module(module.definitions.map(definition -> definition(
+    return each(definition -> definition(
         (Identifier) change.apply(definition.identifier),
-        inExpression(change).apply(definition.body))));
+        inExpression(change).apply(definition.body)));
   }
 
   public static Change<Expression> inExpression(Change<Expression> change) {

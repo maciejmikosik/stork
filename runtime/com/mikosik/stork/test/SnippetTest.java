@@ -1,7 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chainOf;
-import static com.mikosik.stork.common.Chain.empty;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Computation.computation;
@@ -49,8 +48,8 @@ import com.mikosik.stork.tool.compute.Computer;
 
 public class SnippetTest implements Test {
   private final String name;
-  private Chain<Identifier> imports = empty();
-  private Chain<Test> tests = empty();
+  private Chain<Identifier> imports = chain();
+  private Chain<Test> tests = chain();
 
   private SnippetTest(String name) {
     this.name = name;
@@ -93,7 +92,7 @@ public class SnippetTest implements Test {
     Expression compiled = prepareSnippet(snippet);
 
     Module coreModule = moduleFromDirectory(node("core_star"));
-    Module linkedModule = link(chainOf(
+    Module linkedModule = link(chain(
         mathModule(),
         combinatoryModule(),
         coreModule));

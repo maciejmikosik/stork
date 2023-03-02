@@ -1,6 +1,6 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -26,7 +26,7 @@ public class ProgramModule {
   public static final Identifier CLOSE_STREAM = identifier("stork.program.closeStream");
 
   public static Module programModule(Output stdout) {
-    return module(chainOf(
+    return module(chain(
         definition(WRITE_STREAM, writeStream(stdout)),
         definition(WRITE_BYTE, writeByte(stdout)),
         definition(CLOSE_STREAM, CLOSE_STREAM_BODY)));

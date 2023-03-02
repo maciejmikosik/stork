@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chainOf;
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -84,10 +84,10 @@ public class TestDecompiler {
             .add(test("f(x)(y){x}", definition("f", lambda(x, y, x))))
             .add(test("f{g}", definition("f", identifier("g")))))
         .add(suite("module")
-            .add(test("", module(Chain.empty())))
-            .add(test("f{x}", module(chainOf(
+            .add(test("", module(Chain.chain())))
+            .add(test("f{x}", module(chain(
                 definition("f", identifier("x"))))))
-            .add(test("f{x} g{y}", module(chainOf(
+            .add(test("f{x} g{y}", module(chain(
                 definition("f", identifier("x")),
                 definition("g", identifier("y")))))))
         .add(suite("local")
@@ -189,7 +189,7 @@ public class TestDecompiler {
         .orElseThrow();
   }
 
-  private static final Module instructionsModule = injectNames(link(chainOf(
+  private static final Module instructionsModule = injectNames(link(chain(
       mathModule(),
       combinatoryModule(),
       programModule(null))));
