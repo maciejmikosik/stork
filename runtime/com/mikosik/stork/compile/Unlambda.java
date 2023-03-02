@@ -1,13 +1,13 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.compile.CombinatoryModule.B;
+import static com.mikosik.stork.compile.CombinatoryModule.C;
+import static com.mikosik.stork.compile.CombinatoryModule.I;
+import static com.mikosik.stork.compile.CombinatoryModule.K;
+import static com.mikosik.stork.compile.CombinatoryModule.S;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.change.Changes.changeLambda;
 import static com.mikosik.stork.model.change.Changes.inExpression;
-import static com.mikosik.stork.tool.common.CombinatoryModule.B;
-import static com.mikosik.stork.tool.common.CombinatoryModule.C;
-import static com.mikosik.stork.tool.common.CombinatoryModule.I;
-import static com.mikosik.stork.tool.common.CombinatoryModule.K;
-import static com.mikosik.stork.tool.common.CombinatoryModule.S;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

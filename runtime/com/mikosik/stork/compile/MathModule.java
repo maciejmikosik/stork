@@ -1,13 +1,13 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Logic.flip;
+import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.tool.common.Bridge.stork;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;

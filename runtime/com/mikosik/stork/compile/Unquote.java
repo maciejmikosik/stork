@@ -1,7 +1,7 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.model.change.Changes.changeQuote;
-import static com.mikosik.stork.tool.common.Bridge.stork;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.change.Change;

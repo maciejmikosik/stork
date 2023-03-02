@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.model.change.Changes.changeIdentifier;
 import static com.mikosik.stork.model.change.Changes.changeVariable;

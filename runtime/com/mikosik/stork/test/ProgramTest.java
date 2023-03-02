@@ -5,10 +5,10 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Node.node;
+import static com.mikosik.stork.compile.Link.link;
+import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
-import static com.mikosik.stork.tool.link.Link.link;
-import static com.mikosik.stork.tool.link.Stars.moduleFromDirectory;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
@@ -23,9 +23,9 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
+import com.mikosik.stork.compile.Stars;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.program.Program;
-import com.mikosik.stork.tool.link.Stars;
 
 public class ProgramTest {
   public static Test testProgramsIn(Node directory) {

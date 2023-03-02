@@ -16,8 +16,8 @@ import static org.quackery.report.AssertException.assertTrue;
 
 import org.quackery.Test;
 
+import com.mikosik.stork.compile.Compiler;
 import com.mikosik.stork.model.Instruction;
-import com.mikosik.stork.tool.compile.Compiler;
 
 public class TestEverything {
   public static Test testEverything() {

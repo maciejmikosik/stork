@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;

@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.decompile;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;

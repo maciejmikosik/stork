@@ -1,13 +1,13 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
+import static com.mikosik.stork.compile.Bind.export;
+import static com.mikosik.stork.compile.Bind.identifyVariables;
+import static com.mikosik.stork.compile.Link.link;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.change.Changes.inModule;
-import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
-import static com.mikosik.stork.tool.link.Bind.export;
-import static com.mikosik.stork.tool.link.Bind.identifyVariables;
-import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.stream.Collectors.toList;
 
@@ -22,7 +22,6 @@ import com.mikosik.stork.common.io.Node;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.tool.compile.Compiler;
 
 public class Stars {
   public static Module moduleFromDirectory(Node directory) {

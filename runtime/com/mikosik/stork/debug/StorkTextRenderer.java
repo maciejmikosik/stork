@@ -11,11 +11,11 @@ import java.util.WeakHashMap;
 
 import org.logbuddy.renderer.TextRenderer;
 
+import com.mikosik.stork.compile.Decompiler;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.tool.decompile.Decompiler;
 
 public final class StorkTextRenderer extends TextRenderer {
   private final Map<Stack, Integer> stackDepth = new WeakHashMap<>();

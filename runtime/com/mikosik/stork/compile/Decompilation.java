@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.decompile;
+package com.mikosik.stork.compile;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 

@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.compile;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;

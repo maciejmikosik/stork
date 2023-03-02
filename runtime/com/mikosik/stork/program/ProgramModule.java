@@ -2,6 +2,8 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.compile.Bridge.javaInteger;
+import static com.mikosik.stork.compile.CombinatoryModule.I;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
@@ -10,8 +12,6 @@ import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
-import static com.mikosik.stork.tool.common.Bridge.javaInteger;
-import static com.mikosik.stork.tool.common.CombinatoryModule.I;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;

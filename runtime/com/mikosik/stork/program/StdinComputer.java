@@ -1,9 +1,9 @@
 package com.mikosik.stork.program;
 
+import static com.mikosik.stork.compile.Bridge.NONE;
+import static com.mikosik.stork.compile.Bridge.some;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.tool.common.Bridge.NONE;
-import static com.mikosik.stork.tool.common.Bridge.some;
 
 import java.util.Map;
 import java.util.WeakHashMap;

@@ -2,6 +2,13 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
+import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
+import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.compile.Link.link;
+import static com.mikosik.stork.compile.MathModule.mathModule;
+import static com.mikosik.stork.compile.Unlambda.unlambda;
+import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.ChainedComputer.chained;
@@ -17,13 +24,6 @@ import static com.mikosik.stork.program.ProgramModule.WRITE_STREAM;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
-import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
-import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
-import static com.mikosik.stork.tool.link.Link.link;
-import static com.mikosik.stork.tool.link.MathModule.mathModule;
-import static com.mikosik.stork.tool.link.Unlambda.unlambda;
-import static com.mikosik.stork.tool.link.Unquote.unquote;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Output;
