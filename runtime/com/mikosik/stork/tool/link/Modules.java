@@ -12,19 +12,20 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class Modules {
-  public static Function<Module, Module> each(Function<Definition, Definition> transform) {
+  public static Function<Module, Module> onEachDefinition(
+      Function<? super Definition, Definition> transform) {
     return module -> module(module.definitions.map(transform));
   }
 
   public static Function<Definition, Definition> onIdentifier(
-      Function<Identifier, Identifier> change) {
+      Function<? super Identifier, Identifier> change) {
     return definition -> definition(
         change.apply(definition.identifier),
         definition.body);
   }
 
   public static Function<Identifier, Identifier> onNamespace(
-      Function<Namespace, Namespace> change) {
+      Function<? super Namespace, Namespace> change) {
     return identifier -> identifier(
         change.apply(identifier.namespace),
         identifier.variable);

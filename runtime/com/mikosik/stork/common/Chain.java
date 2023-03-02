@@ -148,7 +148,7 @@ public class Chain<E> implements Iterable<E> {
         : handleNotEmpty.apply(head(), tail());
   }
 
-  public <X> Chain<X> map(Function<E, X> mapper) {
+  public <X> Chain<X> map(Function<? super E, X> mapper) {
     Chain<E> original = this;
     Chain<X> mapped = chain();
     while (!original.isEmpty()) {
@@ -158,7 +158,7 @@ public class Chain<E> implements Iterable<E> {
     return mapped.reverse();
   }
 
-  public <X> Chain<X> flatMap(Function<E, Chain<X>> mapper) {
+  public <X> Chain<X> flatMap(Function<? super E, Chain<X>> mapper) {
     Chain<E> original = this;
     Chain<X> mapped = chain();
     while (!original.isEmpty()) {
