@@ -10,11 +10,15 @@ import static org.logbuddy.logger.InvocationDepthLogger.invocationDepth;
 import static org.logbuddy.logger.wire.FileLogger.fileLogger;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.logbuddy.Decorator;
 import org.logbuddy.Logger;
 import org.logbuddy.Renderer;
+
+import com.mikosik.stork.compute.Computer;
 
 public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
@@ -25,5 +29,12 @@ public class Debug {
         injecting(logger)));
     return traversing(decorator)
         .filter(field -> !Map.class.isAssignableFrom(field.getDeclaringClass()));
+  }
+
+  private static AtomicInteger countDebuggingComputer = new AtomicInteger();
+
+  public static Computer debugging(Computer computer) {
+    String fileName = "/tmp/stork_debugging_computer_" + countDebuggingComputer.getAndIncrement();
+    return configuredDecorator(Paths.get(fileName)).decorate(computer);
   }
 }
