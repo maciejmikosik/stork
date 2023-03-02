@@ -17,6 +17,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
+import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.program.Stdin;
 
 public class Decompilation {
@@ -52,16 +53,18 @@ public class Decompilation {
   private void decompile(Definition definition) {
     Identifier identifier = definition.identifier;
     decompile(local
-        ? identifier.toLocal().name
-        : identifier.name);
+        ? identifier.variable.name
+        : identifier.name());
     decompileBody(definition.body);
   }
 
   private void decompile(Expression expression) {
-    if (expression instanceof Identifier identifier) {
+    if (expression instanceof Variable variable) {
+      decompile(variable.name);
+    } else if (expression instanceof Identifier identifier) {
       decompile(local
-          ? identifier.toLocal().name
-          : identifier.name);
+          ? identifier.variable.name
+          : identifier.name());
     } else if (expression instanceof Integer integer) {
       decompile(integer.value.toString());
     } else if (expression instanceof Quote quote) {

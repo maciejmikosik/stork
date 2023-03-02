@@ -12,12 +12,12 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
+import static com.mikosik.stork.model.Variable.variable;
 
 import java.math.BigInteger;
 
@@ -27,10 +27,10 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.Variable;
 
 public class Compiler {
   public Module compileModule(Input input) {
@@ -73,7 +73,7 @@ public class Compiler {
   }
 
   protected Expression compileInvocation(Input input) {
-    Expression result = compileIdentifier(input);
+    Expression result = compileVariable(input);
     skipWhitespaces(input);
     while (input.peek().hasByte()
         && input.peek().getByte() == '(') {
@@ -88,8 +88,8 @@ public class Compiler {
     return result;
   }
 
-  protected Identifier compileIdentifier(Input input) {
-    return identifier(compileAlphanumeric(input));
+  protected Variable compileVariable(Input input) {
+    return variable(compileAlphanumeric(input));
   }
 
   protected Expression compileQuote(Input input) {
