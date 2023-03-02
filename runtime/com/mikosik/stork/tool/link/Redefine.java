@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.tool.link.Modules.onEachDefinition;
+import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 
 import java.util.Map;
 

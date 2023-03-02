@@ -3,7 +3,7 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.NamedInstruction.name;
-import static com.mikosik.stork.tool.link.Modules.onEachDefinition;
+import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.EagerInstruction;

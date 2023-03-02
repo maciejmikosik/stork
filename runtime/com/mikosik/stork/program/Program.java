@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.model.change.Changes.inModule;
 import static com.mikosik.stork.program.ProgramModule.WRITE_STREAM;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
@@ -17,7 +18,6 @@ import static com.mikosik.stork.tool.compute.InterruptibleComputer.interruptible
 import static com.mikosik.stork.tool.compute.LoopingComputer.looping;
 import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
-import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.tool.link.Link.link;

@@ -1,13 +1,13 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Logic.constant;
-import static com.mikosik.stork.tool.link.Changes.changeLambda;
-import static com.mikosik.stork.tool.link.Changes.changeVariable;
-import static com.mikosik.stork.tool.link.Changes.inExpression;
-import static com.mikosik.stork.tool.link.Changes.inModule;
-import static com.mikosik.stork.tool.link.Modules.onEachDefinition;
-import static com.mikosik.stork.tool.link.Modules.onIdentifier;
-import static com.mikosik.stork.tool.link.Modules.onNamespace;
+import static com.mikosik.stork.model.change.Changes.changeLambda;
+import static com.mikosik.stork.model.change.Changes.changeVariable;
+import static com.mikosik.stork.model.change.Changes.inExpression;
+import static com.mikosik.stork.model.change.Changes.inModule;
+import static com.mikosik.stork.model.change.Changes.onEachDefinition;
+import static com.mikosik.stork.model.change.Changes.onIdentifier;
+import static com.mikosik.stork.model.change.Changes.onNamespace;
 
 import java.util.function.Function;
 
@@ -16,6 +16,7 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
+import com.mikosik.stork.model.change.Change;
 
 public class Bind {
   public static final Change<Expression> bindLambdaParameter = changeLambda(

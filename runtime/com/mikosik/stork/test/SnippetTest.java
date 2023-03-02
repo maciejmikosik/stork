@@ -5,6 +5,8 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.change.Changes.inExpression;
+import static com.mikosik.stork.model.change.Changes.inModule;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
 import static com.mikosik.stork.tool.common.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.tool.common.Computations.abort;
@@ -19,8 +21,6 @@ import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.tool.link.Bind.identifyVariables;
-import static com.mikosik.stork.tool.link.Changes.inExpression;
-import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.tool.link.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.tool.link.Link.link;

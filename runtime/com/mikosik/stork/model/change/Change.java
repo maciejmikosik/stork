@@ -1,4 +1,4 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.model.change;
 
 import java.util.function.Function;
 

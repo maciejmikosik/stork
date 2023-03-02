@@ -1,13 +1,13 @@
 package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.change.Changes.changeLambda;
+import static com.mikosik.stork.model.change.Changes.inExpression;
 import static com.mikosik.stork.tool.common.CombinatoryModule.B;
 import static com.mikosik.stork.tool.common.CombinatoryModule.C;
 import static com.mikosik.stork.tool.common.CombinatoryModule.I;
 import static com.mikosik.stork.tool.common.CombinatoryModule.K;
 import static com.mikosik.stork.tool.common.CombinatoryModule.S;
-import static com.mikosik.stork.tool.link.Changes.changeLambda;
-import static com.mikosik.stork.tool.link.Changes.inExpression;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -15,6 +15,7 @@ import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.change.Change;
 
 /**
  * Transforms lambda abstractions into basis using SKI combinators.

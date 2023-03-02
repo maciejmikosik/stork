@@ -1,8 +1,8 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.tool.link.Changes.changeIdentifier;
-import static com.mikosik.stork.tool.link.Changes.changeVariable;
-import static com.mikosik.stork.tool.link.Changes.inModule;
+import static com.mikosik.stork.model.change.Changes.changeIdentifier;
+import static com.mikosik.stork.model.change.Changes.changeVariable;
+import static com.mikosik.stork.model.change.Changes.inModule;
 
 import java.util.Set;
 

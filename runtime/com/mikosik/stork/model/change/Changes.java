@@ -1,22 +1,44 @@
-package com.mikosik.stork.tool.link;
+package com.mikosik.stork.model.change;
 
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.tool.link.Modules.onEachDefinition;
+import static com.mikosik.stork.model.Module.module;
 
 import java.util.function.Function;
 
 import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 
 public class Changes {
+  public static Function<Module, Module> onEachDefinition(
+      Function<? super Definition, Definition> transform) {
+    return module -> module(module.definitions.map(transform));
+  }
+
+  public static Function<Definition, Definition> onIdentifier(
+      Function<? super Identifier, Identifier> change) {
+    return definition -> definition(
+        change.apply(definition.identifier),
+        definition.body);
+  }
+
+  public static Function<Identifier, Identifier> onNamespace(
+      Function<? super Namespace, Namespace> change) {
+    return identifier -> identifier(
+        change.apply(identifier.namespace),
+        identifier.variable);
+  }
+
   public static Function<Module, Module> inModule(Change<Expression> change) {
     return onEachDefinition(definition -> definition(
         (Identifier) change.apply(definition.identifier),
