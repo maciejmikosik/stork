@@ -25,7 +25,7 @@ public class Bind {
   public static Change<Expression> identifyVariables(Chain<Identifier> identifiers) {
     return changeVariable(variable -> identifiers
         .stream()
-        .filter(identifier -> variable.name.equals(identifier.toLocal().name))
+        .filter(identifier -> variable.name.equals(identifier.toLocal().name()))
         .map(identifier -> (Expression) identifier)
         .findFirst()
         .orElse(variable));

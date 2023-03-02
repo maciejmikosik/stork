@@ -53,8 +53,8 @@ public class Decompilation {
   private void decompile(Definition definition) {
     Identifier identifier = definition.identifier;
     decompile(local
-        ? identifier.toLocal().name
-        : identifier.name);
+        ? identifier.toLocal().name()
+        : identifier.name());
     decompileBody(definition.body);
   }
 
@@ -63,8 +63,8 @@ public class Decompilation {
       decompile(variable.name);
     } else if (expression instanceof Identifier identifier) {
       decompile(local
-          ? identifier.toLocal().name
-          : identifier.name);
+          ? identifier.toLocal().name()
+          : identifier.name());
     } else if (expression instanceof Integer integer) {
       decompile(integer.value.toString());
     } else if (expression instanceof Quote quote) {

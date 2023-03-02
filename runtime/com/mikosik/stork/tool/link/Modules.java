@@ -17,7 +17,7 @@ public class Modules {
   public static Function<Definition, Definition> changeDefinitionName(
       Function<String, String> change) {
     return definition -> definition(
-        identifier(change.apply(definition.identifier.name)),
+        identifier(change.apply(definition.identifier.name())),
         definition.body);
   }
 }

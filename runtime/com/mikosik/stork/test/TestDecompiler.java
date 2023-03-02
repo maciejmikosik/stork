@@ -184,7 +184,7 @@ public class TestDecompiler {
 
   private static Instruction inst(Identifier identifier) {
     return instructionsModule.definitions.stream()
-        .filter(definition -> definition.identifier.name.equals(identifier.name))
+        .filter(definition -> definition.identifier.equals(identifier))
         .map(definition -> definition.body)
         .map(body -> body instanceof EagerInstruction eager
             ? eager.instruction
