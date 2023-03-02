@@ -1,9 +1,8 @@
-package com.mikosik.stork.tool.compute;
+package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.common.Chain.chain;
 
 import com.mikosik.stork.common.Chain;
-import com.mikosik.stork.model.Computation;
 
 public class ChainedComputer implements Computer {
   private final Chain<Computer> computers;

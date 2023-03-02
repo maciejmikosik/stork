@@ -1,9 +1,9 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.compute.Computation.computation;
+import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Computation.computation;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.tool.common.Computations.abort;
 import static java.lang.String.format;
 
 import java.util.Map;
@@ -11,10 +11,10 @@ import java.util.WeakHashMap;
 
 import org.logbuddy.renderer.TextRenderer;
 
-import com.mikosik.stork.model.Computation;
+import com.mikosik.stork.compute.Computation;
+import com.mikosik.stork.compute.Computer;
+import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Stack;
-import com.mikosik.stork.tool.compute.Computer;
 import com.mikosik.stork.tool.decompile.Decompiler;
 
 public final class StorkTextRenderer extends TextRenderer {

@@ -1,9 +1,8 @@
-package com.mikosik.stork.tool.compute;
+package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.model.Computation.computation;
+import static com.mikosik.stork.compute.Computation.computation;
 
 import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Computation;
 
 public class ApplicationComputer implements Computer {
   private ApplicationComputer() {}

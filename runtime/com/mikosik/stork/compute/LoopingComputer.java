@@ -1,6 +1,4 @@
-package com.mikosik.stork.tool.compute;
-
-import com.mikosik.stork.model.Computation;
+package com.mikosik.stork.compute;
 
 public class LoopingComputer implements Computer {
   private final Computer computer;

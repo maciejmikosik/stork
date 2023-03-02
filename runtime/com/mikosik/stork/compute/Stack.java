@@ -1,8 +1,11 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.common.Check.check;
 
 import java.math.BigInteger;
+
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Integer;
 
 public class Stack {
   private final Type type;

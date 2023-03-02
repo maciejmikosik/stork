@@ -1,10 +1,8 @@
-package com.mikosik.stork.tool.common;
+package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.model.Application.application;
 
-import com.mikosik.stork.model.Computation;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Stack;
 
 public class Computations {
   public static Expression abort(Computation computation) {

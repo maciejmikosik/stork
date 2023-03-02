@@ -1,10 +1,7 @@
-package com.mikosik.stork.tool.compute;
+package com.mikosik.stork.compute;
 
+import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Computation.computation;
-
-import com.mikosik.stork.model.Computation;
-import com.mikosik.stork.model.Stack;
 
 public class ReturningComputer implements Computer {
   private ReturningComputer() {}
