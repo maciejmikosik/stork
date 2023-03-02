@@ -1,6 +1,6 @@
 package com.mikosik.stork.tool.link;
 
-import static com.mikosik.stork.tool.link.Modules.each;
+import static com.mikosik.stork.tool.link.Modules.onEachDefinition;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class Redefine {
         .toHashMap(
             definition -> definition.identifier,
             definition -> definition);
-    return each(definition -> updates.getOrDefault(definition.identifier, definition))
+    return onEachDefinition(definition -> updates.getOrDefault(definition.identifier, definition))
         .apply(original);
   }
 }

@@ -12,7 +12,8 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class Modules {
-  public static Function<Module, Module> each(Function<Definition, Definition> transform) {
+  public static Function<Module, Module> onEachDefinition(
+      Function<Definition, Definition> transform) {
     return module -> module(module.definitions.map(transform));
   }
 
