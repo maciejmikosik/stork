@@ -17,10 +17,14 @@ public class Identifier implements Expression {
     this.variable = variable;
   }
 
+  public static Identifier identifier(Namespace namespace, Variable variable) {
+    return new Identifier(namespace, variable);
+  }
+
   public static Identifier identifier(String name) {
     Chain<String> path = Chain.<String> chain()
         .addAll(name.split("\\."));
-    return new Identifier(
+    return identifier(
         namespace(path.tail()),
         variable(path.head()));
   }

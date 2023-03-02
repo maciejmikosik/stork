@@ -2,6 +2,7 @@ package com.mikosik.stork.tool.link;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.tool.link.Bind.export;
 import static com.mikosik.stork.tool.link.Bind.identifyVariables;
@@ -20,6 +21,7 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.tool.compile.Compiler;
 
 public class Stars {
@@ -35,7 +37,7 @@ public class Stars {
 
   private static Module moduleFromFile(Node directory, Node file) {
     Module module = compile(file);
-    String namespace = namespace(directory, file);
+    Namespace namespace = relative(directory, file);
     Chain<Identifier> imports = importsFor(file);
 
     return inModule(bindLambdaParameter)
@@ -64,11 +66,11 @@ public class Stars {
     return result;
   }
 
-  private static String namespace(Node directory, Node file) {
-    Path path = directory.relativeToNested(file.parent());
-    String packageName = path.toString().replace('/', '.');
-    return packageName.isEmpty()
-        ? packageName
-        : packageName + '.';
+  private static Namespace relative(Node directory, Node file) {
+    return directory.name().equals(file.parent().name())
+        ? namespace()
+        : namespace(chain(directory.relativeToNested(file.parent()))
+            .map(Path::toString)
+            .reverse());
   }
 }
