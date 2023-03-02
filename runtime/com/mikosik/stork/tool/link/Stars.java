@@ -3,7 +3,8 @@ package com.mikosik.stork.tool.link;
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
-import static com.mikosik.stork.tool.link.Bind.globalizeIdentifier;
+import static com.mikosik.stork.tool.link.Bind.export;
+import static com.mikosik.stork.tool.link.Bind.identifyVariables;
 import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.Link.link;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -36,12 +37,10 @@ public class Stars {
     Module module = compile(file);
     String namespace = namespace(directory, file);
     Chain<Identifier> imports = importsFor(file);
-    Chain<Identifier> selfImports = module.definitions
-        .map(definition -> identifier(namespace + definition.identifier.name));
 
     return inModule(bindLambdaParameter)
-        .andThen(inModule(globalizeIdentifier(selfImports)))
-        .andThen(inModule(globalizeIdentifier(imports)))
+        .andThen(export(namespace))
+        .andThen(inModule(identifyVariables(imports)))
         .apply(module);
   }
 

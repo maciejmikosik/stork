@@ -12,6 +12,7 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.ProgramModule.CLOSE_STREAM;
 import static com.mikosik.stork.program.ProgramModule.WRITE_BYTE;
 import static com.mikosik.stork.program.ProgramModule.programModule;
@@ -70,6 +71,10 @@ public class TestDecompiler {
                 .add(test("stdin(7)", stdin(input(new byte[0]), 7)))
                 .add(test("stdin(0)", stdin(input(new byte[0])))))
             .add(testInstructions())
+            .add(suite("variable")
+                .add(test("var", variable("var"))))
+            .add(suite("identifier")
+                .add(test("iden", identifier("iden"))))
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
             .add(suite("lambda")

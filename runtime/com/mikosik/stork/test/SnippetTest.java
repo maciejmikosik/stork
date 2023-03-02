@@ -18,7 +18,7 @@ import static com.mikosik.stork.tool.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.tool.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static com.mikosik.stork.tool.link.Bind.bindLambdaParameter;
-import static com.mikosik.stork.tool.link.Bind.globalizeIdentifier;
+import static com.mikosik.stork.tool.link.Bind.identifyVariables;
 import static com.mikosik.stork.tool.link.Changes.inExpression;
 import static com.mikosik.stork.tool.link.Changes.inModule;
 import static com.mikosik.stork.tool.link.CheckCollisions.checkCollisions;
@@ -122,7 +122,7 @@ public class SnippetTest implements Test {
   private Expression prepareSnippet(String snippet) {
     Expression compiled = new Compiler().compileExpression(input(snippet));
     return inExpression(bindLambdaParameter)
-        .andThen(inExpression(globalizeIdentifier(imports)))
+        .andThen(inExpression(identifyVariables(imports)))
         .andThen(inExpression(unlambda))
         .andThen(inExpression(unquote))
         .apply(compiled);
