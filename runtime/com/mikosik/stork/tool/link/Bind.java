@@ -1,5 +1,6 @@
 package com.mikosik.stork.tool.link;
 
+import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.tool.link.Changes.changeLambda;
 import static com.mikosik.stork.tool.link.Changes.changeVariable;
 import static com.mikosik.stork.tool.link.Changes.inExpression;
@@ -35,7 +36,7 @@ public class Bind {
 
   public static Function<Module, Module> export(Namespace namespace) {
     return module -> {
-      var globalModule = onEachDefinition(onIdentifier(onNamespace(n -> namespace)))
+      var globalModule = onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
           .apply(module);
       var globalNames = globalModule.definitions.map(definition -> definition.identifier);
       return inModule(identifyVariables(globalNames)).apply(globalModule);
