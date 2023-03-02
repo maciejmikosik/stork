@@ -1,7 +1,7 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.compile.Decompiler.decompiler;
 import static com.mikosik.stork.debug.HandlingChainDecorator.handlingChain;
-import static com.mikosik.stork.tool.decompile.Decompiler.decompiler;
 import static org.logbuddy.decorator.ComposedDecorator.compose;
 import static org.logbuddy.decorator.InjectingDecorator.injecting;
 import static org.logbuddy.decorator.InvocationDecorator.invocationDecorator;
