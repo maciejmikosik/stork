@@ -1,10 +1,12 @@
-package com.mikosik.stork.test;
+package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.test.SnippetTest.snippetTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Suite;
 import org.quackery.Test;
+
+import com.mikosik.stork.test.SnippetTest;
 
 public class TestInteger {
   public static Suite testInteger() {

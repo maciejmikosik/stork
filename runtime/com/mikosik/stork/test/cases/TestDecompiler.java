@@ -1,4 +1,4 @@
-package com.mikosik.stork.test;
+package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
