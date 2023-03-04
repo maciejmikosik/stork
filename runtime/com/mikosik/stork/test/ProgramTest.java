@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Node.node;
-import static com.mikosik.stork.compile.Link.link;
+import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
@@ -56,7 +56,7 @@ public class ProgramTest {
         .map(file -> Stars.moduleFromDirectory(file.parent()))
         .collect(toList());
 
-    Module module = link(chain(modules)
+    Module module = join(chain(modules)
         .add(moduleFromDirectory(node("core_star"))));
     Program program = program(identifier("main"), module);
     Input stdin = directory.child("stdin").tryInput();

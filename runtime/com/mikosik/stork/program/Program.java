@@ -2,10 +2,10 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.Link.link;
 import static com.mikosik.stork.compile.MathModule.mathModule;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.Unquote.unquote;
@@ -47,21 +47,21 @@ public class Program {
   }
 
   public void run(Input stdinInput, Output stdout) {
-    Module linkedModule = link(chain(
+    Module module = join(chain(
         mathModule(),
         combinatoryModule(),
         programModule(stdout),
-        module));
+        this.module));
 
-    checkCollisions(linkedModule);
-    checkUndefined(linkedModule);
+    checkCollisions(module);
+    checkUndefined(module);
 
-    linkedModule = inModule(unlambda)
+    module = inModule(unlambda)
         .andThen(inModule(unquote))
-        .apply(linkedModule);
+        .apply(module);
 
     Computer expressing = chained(
-        modulingComputer(linkedModule),
+        modulingComputer(module),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),
