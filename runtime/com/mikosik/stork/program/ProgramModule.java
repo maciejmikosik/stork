@@ -18,7 +18,6 @@ import static com.mikosik.stork.model.Variable.variable;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
@@ -38,7 +37,9 @@ public class ProgramModule {
     return module(chain(
         definition(WRITE_STREAM, writeStream(stdout)),
         definition(WRITE_BYTE, writeByte(stdout)),
-        definition(CLOSE_STREAM, CLOSE_STREAM_BODY)));
+        definition(CLOSE_STREAM, instruction(argument -> {
+          throw new RuntimeException("not applicable");
+        }))));
   }
 
   /**
@@ -102,8 +103,4 @@ public class ProgramModule {
       return I;
     }));
   }
-
-  private static final Instruction CLOSE_STREAM_BODY = argument -> {
-    throw new RuntimeException("not applicable");
-  };
 }
