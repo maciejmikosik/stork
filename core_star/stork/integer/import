@@ -1,9 +1,9 @@
-stork.integer.native.EQUAL
-stork.integer.native.MORETHAN
-stork.integer.native.ADD
-stork.integer.native.NEGATE
-stork.integer.native.MULTIPLY
-stork.integer.native.DIVIDEBY
+stork.integer.native.equal nativeEqual
+stork.integer.native.moreThan nativeMoreThan
+stork.integer.native.add nativeAdd
+stork.integer.native.negate nativeNegate
+stork.integer.native.multiply nativeMultiply
+stork.integer.native.divideBy nativeDivideBy
 stork.function.flip
 stork.boolean.not
 stork.boolean.and

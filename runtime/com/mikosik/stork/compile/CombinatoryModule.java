@@ -17,12 +17,12 @@ import com.mikosik.stork.model.Namespace;
 public class CombinatoryModule {
   public static final Namespace NAMESPACE = namespace(chain("native", "function", "stork"));
 
-  public static final Identifier I = id("I");
-  public static final Identifier Y = id("Y");
-  public static final Identifier K = id("K");
-  public static final Identifier S = id("S");
-  public static final Identifier C = id("C");
-  public static final Identifier B = id("B");
+  public static final Identifier I = id("i");
+  public static final Identifier Y = id("y");
+  public static final Identifier K = id("k");
+  public static final Identifier S = id("s");
+  public static final Identifier C = id("c");
+  public static final Identifier B = id("b");
 
   private static Identifier id(String name) {
     return identifier(NAMESPACE, variable(name));

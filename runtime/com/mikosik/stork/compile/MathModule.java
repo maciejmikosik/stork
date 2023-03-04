@@ -26,12 +26,12 @@ import com.mikosik.stork.model.Namespace;
 public class MathModule {
   public static final Namespace NAMESPACE = namespace(chain("native", "integer", "stork"));
 
-  public static final Identifier EQUAL = id("EQUAL");
-  public static final Identifier MORETHAN = id("MORETHAN");
-  public static final Identifier NEGATE = id("NEGATE");
-  public static final Identifier ADD = id("ADD");
-  public static final Identifier MULTIPLY = id("MULTIPLY");
-  public static final Identifier DIVIDEBY = id("DIVIDEBY");
+  public static final Identifier EQUAL = id("equal");
+  public static final Identifier MORETHAN = id("moreThan");
+  public static final Identifier NEGATE = id("negate");
+  public static final Identifier ADD = id("add");
+  public static final Identifier MULTIPLY = id("multiply");
+  public static final Identifier DIVIDEBY = id("divideBy");
 
   private static Identifier id(String name) {
     return identifier(NAMESPACE, variable(name));

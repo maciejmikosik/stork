@@ -1,10 +1,10 @@
 
   equal {
-    EQUAL
+    nativeEqual
   }
 
   moreThan {
-    MORETHAN
+    nativeMoreThan
   }
 
   lessThan {
@@ -26,11 +26,11 @@
   }
 
   negate {
-    NEGATE
+    nativeNegate
   }
 
   add {
-    ADD
+    nativeAdd
   }
 
   subtract(x) {
@@ -46,11 +46,11 @@
   }
 
   multiply {
-    MULTIPLY
+    nativeMultiply
   }
 
   divideBy {
-    DIVIDEBY
+    nativeDivideBy
   }
 
   modulo(divisor)(dividend) {
