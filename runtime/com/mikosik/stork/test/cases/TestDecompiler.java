@@ -1,4 +1,4 @@
-package com.mikosik.stork.test;
+package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
@@ -125,30 +125,30 @@ public class TestDecompiler {
                 .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
                 .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
         .add(suite("combinators")
-            .add(test("<stork.function.native.S>", inst(S)))
-            .add(test("<stork.function.native.S(x)>", apply(inst(S), x)))
-            .add(test("<stork.function.native.S(x)(y)>", apply(inst(S), x, y)))
-            .add(test("<stork.function.native.K>", inst(K)))
-            .add(test("<stork.function.native.K(x)>", apply(inst(K), x)))
-            .add(test("<stork.function.native.I>", inst(I)))
-            .add(test("<stork.function.native.C>", inst(C)))
-            .add(test("<stork.function.native.C(x)>", apply(inst(C), x)))
-            .add(test("<stork.function.native.C(x)(y)>", apply(inst(C), x, y)))
-            .add(test("<stork.function.native.B>", inst(B)))
-            .add(test("<stork.function.native.B(x)>", apply(inst(B), x)))
-            .add(test("<stork.function.native.B(x)(y)>", apply(inst(B), x, y)))
-            .add(test("<stork.function.native.Y>", inst(Y)))
-            .add(test("x(stork.function.native.Y(x))", apply(inst(Y), x))))
+            .add(test("<lang.native.combinator.s>", inst(S)))
+            .add(test("<lang.native.combinator.s(x)>", apply(inst(S), x)))
+            .add(test("<lang.native.combinator.s(x)(y)>", apply(inst(S), x, y)))
+            .add(test("<lang.native.combinator.k>", inst(K)))
+            .add(test("<lang.native.combinator.k(x)>", apply(inst(K), x)))
+            .add(test("<lang.native.combinator.i>", inst(I)))
+            .add(test("<lang.native.combinator.c>", inst(C)))
+            .add(test("<lang.native.combinator.c(x)>", apply(inst(C), x)))
+            .add(test("<lang.native.combinator.c(x)(y)>", apply(inst(C), x, y)))
+            .add(test("<lang.native.combinator.b>", inst(B)))
+            .add(test("<lang.native.combinator.b(x)>", apply(inst(B), x)))
+            .add(test("<lang.native.combinator.b(x)(y)>", apply(inst(B), x, y)))
+            .add(test("<lang.native.combinator.y>", inst(Y)))
+            .add(test("x(lang.native.combinator.y(x))", apply(inst(Y), x))))
         .add(suite("math")
-            .add(test("<stork.integer.native.EQUAL>", inst(EQUAL)))
-            .add(test("<stork.integer.native.MORETHAN>", inst(MORETHAN)))
-            .add(test("<stork.integer.native.NEGATE>", inst(NEGATE)))
-            .add(test("<stork.integer.native.ADD>", inst(ADD)))
-            .add(test("<stork.integer.native.MULTIPLY>", inst(MULTIPLY)))
-            .add(test("<stork.integer.native.DIVIDEBY>", inst(DIVIDEBY))))
+            .add(test("<lang.native.integer.equal>", inst(EQUAL)))
+            .add(test("<lang.native.integer.moreThan>", inst(MORETHAN)))
+            .add(test("<lang.native.integer.negate>", inst(NEGATE)))
+            .add(test("<lang.native.integer.add>", inst(ADD)))
+            .add(test("<lang.native.integer.multiply>", inst(MULTIPLY)))
+            .add(test("<lang.native.integer.divideBy>", inst(DIVIDEBY))))
         .add(suite("program")
-            .add(test("<stork.program.writeByte>", inst(WRITE_BYTE)))
-            .add(test("<stork.program.closeStream>", inst(CLOSE_STREAM))));
+            .add(test("<lang.native.program.writeByte>", inst(WRITE_BYTE)))
+            .add(test("<lang.native.program.closeStream>", inst(CLOSE_STREAM))));
   }
 
   private static Test test(String expected, Model model) {

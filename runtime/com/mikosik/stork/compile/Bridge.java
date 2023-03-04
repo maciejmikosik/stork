@@ -12,10 +12,10 @@ import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Integer;
 
 public class Bridge {
-  public static final Identifier TRUE = identifier("stork.boolean.true");
-  public static final Identifier FALSE = identifier("stork.boolean.false");
-  public static final Identifier SOME = identifier("stork.stream.some");
-  public static final Identifier NONE = identifier("stork.stream.none");
+  public static final Identifier TRUE = identifier("lang.boolean.true");
+  public static final Identifier FALSE = identifier("lang.boolean.false");
+  public static final Identifier SOME = identifier("lang.stream.some");
+  public static final Identifier NONE = identifier("lang.stream.none");
 
   public static Expression stork(String string) {
     Expression stream = NONE;

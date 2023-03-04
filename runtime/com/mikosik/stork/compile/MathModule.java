@@ -8,6 +8,8 @@ import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Variable.variable;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
@@ -19,14 +21,21 @@ import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Namespace;
 
 public class MathModule {
-  public static final Identifier EQUAL = identifier("stork.integer.native.EQUAL");
-  public static final Identifier MORETHAN = identifier("stork.integer.native.MORETHAN");
-  public static final Identifier NEGATE = identifier("stork.integer.native.NEGATE");
-  public static final Identifier ADD = identifier("stork.integer.native.ADD");
-  public static final Identifier MULTIPLY = identifier("stork.integer.native.MULTIPLY");
-  public static final Identifier DIVIDEBY = identifier("stork.integer.native.DIVIDEBY");
+  public static final Namespace NAMESPACE = namespace(chain("integer", "native", "lang"));
+
+  public static final Identifier EQUAL = id("equal");
+  public static final Identifier MORETHAN = id("moreThan");
+  public static final Identifier NEGATE = id("negate");
+  public static final Identifier ADD = id("add");
+  public static final Identifier MULTIPLY = id("multiply");
+  public static final Identifier DIVIDEBY = id("divideBy");
+
+  private static Identifier id(String name) {
+    return identifier(NAMESPACE, variable(name));
+  }
 
   public static Module mathModule() {
     return module(chain(

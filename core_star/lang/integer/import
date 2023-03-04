@@ -1,0 +1,12 @@
+lang.native.integer.equal nativeEqual
+lang.native.integer.moreThan nativeMoreThan
+lang.native.integer.add nativeAdd
+lang.native.integer.negate nativeNegate
+lang.native.integer.multiply nativeMultiply
+lang.native.integer.divideBy nativeDivideBy
+lang.function.flip
+lang.boolean.not
+lang.boolean.and
+lang.stream.single
+lang.stream.prepend
+lang.stream.append

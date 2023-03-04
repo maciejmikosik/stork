@@ -1,10 +1,12 @@
-package com.mikosik.stork.test;
+package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.test.SnippetTest.snippetTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Suite;
 import org.quackery.Test;
+
+import com.mikosik.stork.test.SnippetTest;
 
 public class TestInteger {
   public static Suite testInteger() {
@@ -58,10 +60,10 @@ public class TestInteger {
 
   private static Test testIntegerEqual() {
     return snippetTest("equal")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.equal")
-        .importing("stork.integer.negate")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.integer.equal")
+        .importing("lang.integer.negate")
         .test("equal(-1)(-1)", "true")
         .test("equal(-1)( 0)", "false")
         .test("equal(-1)( 1)", "false")
@@ -76,10 +78,10 @@ public class TestInteger {
 
   private static Test testIntegerMoreThan() {
     return snippetTest("moreThan")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.moreThan")
-        .importing("stork.integer.negate")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.integer.moreThan")
+        .importing("lang.integer.negate")
         .test("moreThan(-1)(-1)", "false")
         .test("moreThan(-1)( 0)", "true")
         .test("moreThan(-1)( 1)", "true")
@@ -94,10 +96,10 @@ public class TestInteger {
 
   private static Test testIntegerLessThan() {
     return snippetTest("lessThan")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.lessThan")
-        .importing("stork.integer.negate")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.integer.lessThan")
+        .importing("lang.integer.negate")
         .test("lessThan(-1)(-1)", "false")
         .test("lessThan(-1)( 0)", "false")
         .test("lessThan(-1)( 1)", "false")
@@ -112,10 +114,10 @@ public class TestInteger {
 
   private static Test testIntegerAtLeast() {
     return snippetTest("atLeast")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.atLeast")
-        .importing("stork.integer.negate")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.integer.atLeast")
+        .importing("lang.integer.negate")
         .test("atLeast(-1)(-1)", "true")
         .test("atLeast(-1)( 0)", "true")
         .test("atLeast(-1)( 1)", "true")
@@ -130,10 +132,10 @@ public class TestInteger {
 
   private static Test testIntegerAtMost() {
     return snippetTest("atMost")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.atMost")
-        .importing("stork.integer.negate")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.integer.atMost")
+        .importing("lang.integer.negate")
         .test("atMost(-1)(-1)", "true")
         .test("atMost(-1)( 0)", "false")
         .test("atMost(-1)( 1)", "false")
@@ -148,10 +150,10 @@ public class TestInteger {
 
   private static Test testIntegerWithin() {
     return snippetTest("within")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.integer.within")
-        .importing("stork.integer.negate")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.integer.within")
+        .importing("lang.integer.negate")
         .test("within(-1)(1)(-2)", "false")
         .test("within(-1)(1)(-1)", "true")
         .test("within(-1)(1)( 0)", "true")
@@ -162,7 +164,7 @@ public class TestInteger {
 
   private static Test testIntegerNegate() {
     return snippetTest("negate")
-        .importing("stork.integer.negate")
+        .importing("lang.integer.negate")
         .test("negate( 5)", "-5")
         .test("negate(-3)", " 3")
         .test("negate( 0)", " 0")
@@ -171,7 +173,7 @@ public class TestInteger {
 
   private static Test testIntegerAdd() {
     return snippetTest("add")
-        .importing("stork.integer.add")
+        .importing("lang.integer.add")
         .test("add(  2)( 3)", "  5")
         .test("add( -1)( 1)", "  0")
         .test("add(-10)(-5)", "-15")
@@ -180,7 +182,7 @@ public class TestInteger {
 
   private static Test testIntegerSubtract() {
     return snippetTest("subtract")
-        .importing("stork.integer.subtract")
+        .importing("lang.integer.subtract")
         .test("subtract(  2)( 3)", "1")
         .test("subtract( -1)( 1)", "2")
         .test("subtract(-10)(-5)", "5")
@@ -189,7 +191,7 @@ public class TestInteger {
 
   private static Test testIntegerIncrement() {
     return snippetTest("increment")
-        .importing("stork.integer.increment")
+        .importing("lang.integer.increment")
         .test("increment(-7)", "-6")
         .test("increment( 0)", " 1")
         .test("increment( 7)", " 8")
@@ -198,7 +200,7 @@ public class TestInteger {
 
   private static Test testIntegerDecrement() {
     return snippetTest("decrement")
-        .importing("stork.integer.decrement")
+        .importing("lang.integer.decrement")
         .test("decrement(-7)", "-8")
         .test("decrement( 0)", "-1")
         .test("decrement( 7)", " 6")
@@ -207,7 +209,7 @@ public class TestInteger {
 
   private static Test testIntegerMultiply() {
     return snippetTest("multiply")
-        .importing("stork.integer.multiply")
+        .importing("lang.integer.multiply")
         .test("multiply(-1)(-1)", " 1")
         .test("multiply(-1)( 0)", " 0")
         .test("multiply(-1)( 1)", "-1")
@@ -226,7 +228,7 @@ public class TestInteger {
 
   private static Test testIntegerDivideBy() {
     return snippetTest("divideBy")
-        .importing("stork.integer.divideBy")
+        .importing("lang.integer.divideBy")
         .test("divideBy(3)(-7)", "-2")
         .test("divideBy(3)(-6)", "-2")
         .test("divideBy(3)(-5)", "-1")
@@ -262,7 +264,7 @@ public class TestInteger {
 
   private static Test testIntegerModulo() {
     return snippetTest("modulo")
-        .importing("stork.integer.modulo")
+        .importing("lang.integer.modulo")
         .test("modulo(3)(-7)", "-1")
         .test("modulo(3)(-6)", " 0")
         .test("modulo(3)(-5)", "-2")
@@ -298,7 +300,7 @@ public class TestInteger {
 
   private static Test testIntegerSignum() {
     return snippetTest("signum")
-        .importing("stork.integer.signum")
+        .importing("lang.integer.signum")
         .test("signum(-21)", "-1")
         .test("signum( -1)", "-1")
         .test("signum(  0)", " 0")
@@ -309,7 +311,7 @@ public class TestInteger {
 
   private static Test testIntegerAbsolute() {
     return snippetTest("absolute")
-        .importing("stork.integer.absolute")
+        .importing("lang.integer.absolute")
         .test("absolute(-21)", "21")
         .test("absolute( -1)", " 1")
         .test("absolute(  0)", " 0")
@@ -320,7 +322,7 @@ public class TestInteger {
 
   private static Test testIntegerRelu() {
     return snippetTest("relu")
-        .importing("stork.integer.relu")
+        .importing("lang.integer.relu")
         .test("relu(-21)", " 0")
         .test("relu( -1)", " 0")
         .test("relu(  0)", " 0")
@@ -331,7 +333,7 @@ public class TestInteger {
 
   private static Test testIntegerCeil() {
     return snippetTest("ceil")
-        .importing("stork.integer.ceil")
+        .importing("lang.integer.ceil")
         .test("ceil(7)(5)", "5")
         .test("ceil(7)(9)", "7")
         .test("ceil(7)(7)", "7")
@@ -340,7 +342,7 @@ public class TestInteger {
 
   private static Test testIntegerFloor() {
     return snippetTest("floor")
-        .importing("stork.integer.floor")
+        .importing("lang.integer.floor")
         .test("floor(7)(5)", "7")
         .test("floor(7)(9)", "9")
         .test("floor(7)(7)", "7")
@@ -349,7 +351,7 @@ public class TestInteger {
 
   private static Test testIntegerClamp() {
     return snippetTest("clamp")
-        .importing("stork.integer.clamp")
+        .importing("lang.integer.clamp")
         .test("clamp(5)(7)(4)", "5")
         .test("clamp(5)(7)(5)", "5")
         .test("clamp(5)(7)(6)", "6")
