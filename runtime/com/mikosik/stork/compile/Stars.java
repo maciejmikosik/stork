@@ -1,7 +1,6 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
-import static com.mikosik.stork.common.Collections.stream;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
 import static com.mikosik.stork.compile.Bind.join;
@@ -10,6 +9,7 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -17,11 +17,11 @@ import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Stream;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
+import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
@@ -67,8 +67,19 @@ public class Stars {
   }
 
   private static Linkage linkageFrom(Input input) {
-    Scanner scanner = input.buffered().scan(US_ASCII);
-    return linkage(chain(stream(scanner).map(line -> link(identifier(line)))));
+    Stream<String> lines = input.bufferedReader(US_ASCII).lines();
+    return linkage(chain(lines.map(Stars::linkFrom)));
+  }
+
+  private static Link linkFrom(String line) {
+    String[] split = line.split(" ");
+    if (split.length == 1) {
+      return link(identifier(split[0]));
+    } else if (split.length == 2) {
+      return link(identifier(split[0]), variable(split[1]));
+    } else {
+      throw new RuntimeException();
+    }
   }
 
   private static Namespace relative(Node directory, Node file) {

@@ -32,7 +32,7 @@ public class Bind {
 
   public static Change<Variable> linking(Linkage linkage) {
     Map<String, Expression> map = linkage.links.toHashMap(
-        link -> link.identifier.variable.name,
+        link -> link.variable.name,
         link -> link.identifier);
     return variable -> map.getOrDefault(variable.name, variable);
   }
