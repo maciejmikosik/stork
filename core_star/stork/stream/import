@@ -1,9 +1,0 @@
-stork.optional.present
-stork.optional.absent
-stork.integer.add
-stork.integer.moreThan
-stork.integer.increment
-stork.integer.decrement
-stork.function.flip
-stork.boolean.false
-stork.boolean.or

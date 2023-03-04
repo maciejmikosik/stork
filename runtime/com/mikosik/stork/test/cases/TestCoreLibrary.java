@@ -19,11 +19,11 @@ public class TestCoreLibrary {
 
   private static SnippetTest testBoolean() {
     return snippetTest("boolean")
-        .importing("stork.boolean.true")
-        .importing("stork.boolean.false")
-        .importing("stork.boolean.not")
-        .importing("stork.boolean.and")
-        .importing("stork.boolean.or")
+        .importing("lang.boolean.true")
+        .importing("lang.boolean.false")
+        .importing("lang.boolean.not")
+        .importing("lang.boolean.and")
+        .importing("lang.boolean.or")
         .test("true (0)(1)", "0")
         .test("false(0)(1)", "1")
         .test("not(true)", "false")
@@ -40,9 +40,9 @@ public class TestCoreLibrary {
 
   private static SnippetTest testFunction() {
     return snippetTest("function")
-        .importing("stork.function.self")
-        .importing("stork.function.flip")
-        .importing("stork.function.compose")
+        .importing("lang.function.self")
+        .importing("lang.function.flip")
+        .importing("lang.function.compose")
         .test("self(0)", "0")
         .test("self(1)", "1")
         .test("flip(      (x)(y){x}  )(1)(2)", "2")
@@ -55,9 +55,9 @@ public class TestCoreLibrary {
 
   private static Test testOptional() {
     return snippetTest("optional")
-        .importing("stork.optional.present")
-        .importing("stork.optional.absent")
-        .importing("stork.optional.else")
+        .importing("lang.optional.present")
+        .importing("lang.optional.absent")
+        .importing("lang.optional.else")
         .test("present(1) ((x){x})(2)", "1")
         .test("absent     ((x){x})(2)", "2")
         .test("else(2)(present(1))", "1")

@@ -1,5 +1,5 @@
-stork.stream.single
-stork.stream.array
-stork.stream.append
-stork.stream.each
-stork.stream.flatten
+lang.stream.single
+lang.stream.array
+lang.stream.append
+lang.stream.each
+lang.stream.flatten
