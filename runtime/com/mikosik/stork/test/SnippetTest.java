@@ -4,12 +4,12 @@ import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
+import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
 import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.Decompiler.decompiler;
-import static com.mikosik.stork.compile.Link.link;
 import static com.mikosik.stork.compile.MathModule.mathModule;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
@@ -93,21 +93,20 @@ public class SnippetTest implements Test {
   private String compileAndCompute(String snippet) {
     Expression compiled = prepareSnippet(snippet);
 
-    Module coreModule = moduleFromDirectory(node("core_star"));
-    Module linkedModule = link(chain(
+    Module module = join(chain(
         mathModule(),
         combinatoryModule(),
-        coreModule));
+        moduleFromDirectory(node("core_star"))));
 
-    checkCollisions(linkedModule);
-    checkUndefined(linkedModule);
+    checkCollisions(module);
+    checkUndefined(module);
 
-    linkedModule = inModule(unlambda)
+    module = inModule(unlambda)
         .andThen(inModule(unquote))
-        .apply(linkedModule);
+        .apply(module);
 
     Computer expressing = chained(
-        modulingComputer(linkedModule),
+        modulingComputer(module),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),

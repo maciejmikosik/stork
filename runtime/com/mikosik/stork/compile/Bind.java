@@ -2,6 +2,7 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.change.Changes.changeLambda;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
@@ -13,6 +14,7 @@ import static com.mikosik.stork.model.change.Changes.onNamespace;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
@@ -46,5 +48,9 @@ public class Bind {
               : variable)))
           .apply(module);
     };
+  }
+
+  public static Module join(Chain<Module> modules) {
+    return module(modules.flatMap(module -> module.definitions));
   }
 }

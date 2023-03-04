@@ -4,8 +4,8 @@ import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Collections.stream;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
+import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
-import static com.mikosik.stork.compile.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
@@ -33,7 +33,7 @@ public class Stars {
     List<Module> modules = filter
         .map(file -> moduleFromFile(directory, file))
         .collect(toList());
-    return link(chain(modules));
+    return join(chain(modules));
   }
 
   private static Module moduleFromFile(Node directory, Node file) {

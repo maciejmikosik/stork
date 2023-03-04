@@ -2,6 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.CombinatoryModule.B;
 import static com.mikosik.stork.compile.CombinatoryModule.C;
 import static com.mikosik.stork.compile.CombinatoryModule.I;
@@ -10,7 +11,6 @@ import static com.mikosik.stork.compile.CombinatoryModule.S;
 import static com.mikosik.stork.compile.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.Decompiler.decompiler;
-import static com.mikosik.stork.compile.Link.link;
 import static com.mikosik.stork.compile.MathModule.ADD;
 import static com.mikosik.stork.compile.MathModule.DIVIDEBY;
 import static com.mikosik.stork.compile.MathModule.EQUAL;
@@ -194,7 +194,7 @@ public class TestDecompiler {
         .orElseThrow();
   }
 
-  private static final Module instructionsModule = injectNames(link(chain(
+  private static final Module instructionsModule = injectNames(join(chain(
       mathModule(),
       combinatoryModule(),
       programModule(null))));
