@@ -6,6 +6,8 @@ import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
+import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
@@ -20,7 +22,6 @@ import java.util.stream.Stream;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
-import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
@@ -67,7 +68,7 @@ public class Stars {
 
   private static Linkage linkageFrom(Input input) {
     Scanner scanner = input.buffered().scan(US_ASCII);
-    return linkage(chain(stream(scanner).map(Identifier::identifier)));
+    return linkage(chain(stream(scanner).map(line -> link(identifier(line)))));
   }
 
   private static Namespace relative(Node directory, Node file) {

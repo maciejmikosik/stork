@@ -5,9 +5,9 @@ import static com.mikosik.stork.common.Chain.chain;
 import com.mikosik.stork.common.Chain;
 
 public class Linkage {
-  public final Chain<Identifier> links;
+  public final Chain<Link> links;
 
-  private Linkage(Chain<Identifier> links) {
+  private Linkage(Chain<Link> links) {
     this.links = links;
   }
 
@@ -15,11 +15,11 @@ public class Linkage {
     return new Linkage(chain());
   }
 
-  public static Linkage linkage(Chain<Identifier> links) {
+  public static Linkage linkage(Chain<Link> links) {
     return new Linkage(links);
   }
 
-  public Linkage add(Identifier link) {
+  public Linkage add(Link link) {
     return linkage(links.add(link));
   }
 }

@@ -25,6 +25,7 @@ import static com.mikosik.stork.compute.LoopingComputer.looping;
 import static com.mikosik.stork.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
@@ -62,7 +63,7 @@ public class SnippetTest implements Test {
   }
 
   public SnippetTest importing(String global) {
-    linkage = linkage.add(identifier(global));
+    linkage = linkage.add(link(identifier(global)));
     return this;
   }
 
