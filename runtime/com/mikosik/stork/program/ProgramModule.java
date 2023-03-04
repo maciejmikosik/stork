@@ -23,7 +23,7 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 
 public class ProgramModule {
-  public static final Namespace NAMESPACE = namespace(chain("program", "stork"));
+  public static final Namespace NAMESPACE = namespace(chain("program", "native", "lang"));
 
   public static final Identifier WRITE_STREAM = id("writeStream");
   public static final Identifier WRITE_BYTE = id("writeByte");

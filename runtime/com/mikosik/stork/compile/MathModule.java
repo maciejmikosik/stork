@@ -24,7 +24,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class MathModule {
-  public static final Namespace NAMESPACE = namespace(chain("native", "integer", "stork"));
+  public static final Namespace NAMESPACE = namespace(chain("integer", "native", "lang"));
 
   public static final Identifier EQUAL = id("equal");
   public static final Identifier MORETHAN = id("moreThan");

@@ -15,7 +15,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class CombinatoryModule {
-  public static final Namespace NAMESPACE = namespace(chain("native", "function", "stork"));
+  public static final Namespace NAMESPACE = namespace(chain("combinator", "native", "lang"));
 
   public static final Identifier I = id("i");
   public static final Identifier Y = id("y");
