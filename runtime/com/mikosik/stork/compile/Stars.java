@@ -1,12 +1,14 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Collections.stream;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
-import static com.mikosik.stork.compile.Bind.identifyVariables;
+import static com.mikosik.stork.compile.Bind.linking;
 import static com.mikosik.stork.compile.Link.link;
-import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.stream.Collectors.toList;
@@ -16,10 +18,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
 import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
@@ -37,11 +39,11 @@ public class Stars {
   private static Module moduleFromFile(Node directory, Node file) {
     Module module = compile(file);
     Namespace namespace = relative(directory, file);
-    Chain<Identifier> imports = importsFor(file);
+    Linkage linkage = linkageFrom(file);
 
     return inModule(bindLambdaParameter)
         .andThen(export(namespace))
-        .andThen(inModule(identifyVariables(imports)))
+        .andThen(inModule(changeVariable(linking(linkage))))
         .apply(module);
   }
 
@@ -52,17 +54,20 @@ public class Stars {
     }
   }
 
-  private static Chain<Identifier> importsFor(Node file) {
-    Node importFile = file.parent().child("import");
-    Chain<Identifier> result = chain();
-    if (importFile.isRegularFile()) {
-      try (Scanner scanner = importFile.input().buffered().scan(US_ASCII)) {
-        while (scanner.hasNext()) {
-          result = result.add(identifier(scanner.nextLine()));
-        }
+  private static Linkage linkageFrom(Node file) {
+    Node linkageFile = file.parent().child("import");
+    if (linkageFile.isRegularFile()) {
+      try (Input input = linkageFile.input()) {
+        return linkageFrom(input);
       }
+    } else {
+      return linkage();
     }
-    return result;
+  }
+
+  private static Linkage linkageFrom(Input input) {
+    Scanner scanner = input.buffered().scan(US_ASCII);
+    return linkage(chain(stream(scanner).map(Identifier::identifier)));
   }
 
   private static Namespace relative(Node directory, Node file) {

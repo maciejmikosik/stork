@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
-import static com.mikosik.stork.compile.Bind.identifyVariables;
+import static com.mikosik.stork.compile.Bind.linking;
 import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
@@ -25,6 +25,8 @@ import static com.mikosik.stork.compute.LoopingComputer.looping;
 import static com.mikosik.stork.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Linkage.linkage;
+import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
@@ -43,12 +45,12 @@ import com.mikosik.stork.compile.Compiler;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 
 public class SnippetTest implements Test {
   private final String name;
-  private Chain<Identifier> imports = chain();
+  private Linkage linkage = linkage();
   private Chain<Test> tests = chain();
 
   private SnippetTest(String name) {
@@ -59,8 +61,8 @@ public class SnippetTest implements Test {
     return new SnippetTest(name);
   }
 
-  public SnippetTest importing(String importing) {
-    imports = imports.add(identifier(importing));
+  public SnippetTest importing(String global) {
+    linkage = linkage.add(identifier(global));
     return this;
   }
 
@@ -122,7 +124,7 @@ public class SnippetTest implements Test {
   private Expression prepareSnippet(String snippet) {
     Expression compiled = new Compiler().compileExpression(input(snippet));
     return inExpression(bindLambdaParameter)
-        .andThen(inExpression(identifyVariables(imports)))
+        .andThen(inExpression(changeVariable(linking(linkage))))
         .andThen(inExpression(unlambda))
         .andThen(inExpression(unquote))
         .apply(compiled);
