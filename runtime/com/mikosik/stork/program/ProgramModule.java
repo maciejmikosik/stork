@@ -11,19 +11,28 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Parameter.parameter;
+import static com.mikosik.stork.model.Variable.variable;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 
 public class ProgramModule {
-  public static final Identifier WRITE_STREAM = identifier("stork.program.writeStream");
-  public static final Identifier WRITE_BYTE = identifier("stork.program.writeByte");
-  public static final Identifier CLOSE_STREAM = identifier("stork.program.closeStream");
+  public static final Namespace NAMESPACE = namespace(chain("program", "stork"));
+
+  public static final Identifier WRITE_STREAM = id("writeStream");
+  public static final Identifier WRITE_BYTE = id("writeByte");
+  public static final Identifier CLOSE_STREAM = id("closeStream");
+
+  private static Identifier id(String name) {
+    return identifier(NAMESPACE, variable(name));
+  }
 
   public static Module programModule(Output stdout) {
     return module(chain(

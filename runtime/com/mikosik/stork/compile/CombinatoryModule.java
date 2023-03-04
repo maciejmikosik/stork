@@ -6,18 +6,27 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Variable.variable;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Namespace;
 
 public class CombinatoryModule {
-  public static final Identifier I = identifier("stork.function.native.I");
-  public static final Identifier Y = identifier("stork.function.native.Y");
-  public static final Identifier K = identifier("stork.function.native.K");
-  public static final Identifier S = identifier("stork.function.native.S");
-  public static final Identifier C = identifier("stork.function.native.C");
-  public static final Identifier B = identifier("stork.function.native.B");
+  public static final Namespace NAMESPACE = namespace(chain("native", "function", "stork"));
+
+  public static final Identifier I = id("I");
+  public static final Identifier Y = id("Y");
+  public static final Identifier K = id("K");
+  public static final Identifier S = id("S");
+  public static final Identifier C = id("C");
+  public static final Identifier B = id("B");
+
+  private static Identifier id(String name) {
+    return identifier(NAMESPACE, variable(name));
+  }
 
   public static Module combinatoryModule() {
     return module(chain(
