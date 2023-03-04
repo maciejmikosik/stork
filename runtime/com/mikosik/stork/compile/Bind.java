@@ -1,6 +1,7 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Logic.constant;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.change.Changes.changeLambda;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
@@ -37,10 +38,14 @@ public class Bind {
 
   public static Function<Module, Module> export(Namespace namespace) {
     return module -> {
-      var globalModule = onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
+      var names = module.definitions
+          .map(definition -> definition.identifier.variable.name)
+          .toHashSet();
+      return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
+          .andThen(inModule(changeVariable(variable -> names.contains(variable.name)
+              ? identifier(namespace, variable)
+              : variable)))
           .apply(module);
-      var globalNames = globalModule.definitions.map(definition -> definition.identifier);
-      return inModule(identifyVariables(globalNames)).apply(globalModule);
     };
   }
 }
