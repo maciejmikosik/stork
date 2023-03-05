@@ -19,6 +19,7 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.program.Stdin;
+import com.mikosik.stork.program.Stdout;
 
 public class Decompilation {
   private final boolean local;
@@ -100,6 +101,8 @@ public class Decompilation {
       decompile('(');
       decompile("" + stdin.index);
       decompile(')');
+    } else if (expression instanceof Stdout) {
+      decompile("stdout");
     }
   }
 

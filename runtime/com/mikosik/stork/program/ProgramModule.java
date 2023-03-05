@@ -15,7 +15,6 @@ import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
 
-import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
@@ -33,10 +32,10 @@ public class ProgramModule {
     return identifier(NAMESPACE, variable(name));
   }
 
-  public static Module programModule(Output stdout) {
+  public static Module programModule() {
     return module(chain(
-        definition(WRITE_STREAM, writeStream(stdout)),
-        definition(WRITE_BYTE, writeByte(stdout)),
+        definition(WRITE_STREAM, writeStream()),
+        definition(WRITE_BYTE, writeByte()),
         definition(CLOSE_STREAM, instruction(argument -> {
           throw new RuntimeException("not applicable");
         }))));
@@ -46,9 +45,9 @@ public class ProgramModule {
    * classical version
    *
    * <pre>
-   * writeStream(stream) {
+   * writeStream(output)(stream) {
    *   stream
-   *     ((head)(tail){ writeByte(head)(writeStream(tail)) })
+   *     ((head)(tail){ writeByte(output)(head)(writeStream(output)(tail)) })
    *     (closeStream)
    * }
    * </pre>
@@ -56,23 +55,25 @@ public class ProgramModule {
    * Y-recursive version
    *
    * <pre>
-   * writeStream = Y((self)(stream) {
+   * writeStream = Y((self)(output)(stream) {
    *   stream
-   *     ((head)(tail){ writeByte(head)(self(tail)) })
+   *     ((head)(tail){ writeByte(output)(head)(self(output)(tail)) })
    *     (closeStream)
    * })
    * </pre>
    */
-  private static Expression writeStream(Output output) {
+  private static Expression writeStream() {
+    Parameter output = parameter("output");
     Parameter stream = parameter("stream");
     Parameter head = parameter("head");
     Parameter tail = parameter("tail");
-    return lambda(stream,
+    return lambda(output, stream,
         application(stream,
             lambda(head, tail,
                 application(WRITE_BYTE,
+                    output,
                     head,
-                    application(WRITE_STREAM, tail))),
+                    application(WRITE_STREAM, output, tail))),
             CLOSE_STREAM));
   }
 
@@ -80,7 +81,7 @@ public class ProgramModule {
    * classical version
    *
    * <pre>
-   * writeByte(byte)(continue) {
+   * writeByte(output)(byte)(continue) {
    *   # imperatively write byte to output
    *   continue
    * }
@@ -89,17 +90,18 @@ public class ProgramModule {
    * instruction version
    *
    * <pre>
-   * writeByte(byte) {
+   * writeByte(output)(byte) {
    *   # imperatively write byte to output
    *   I
    * }
    * </pre>
    */
-  private static Expression writeByte(Output output) {
-    return eager(instruction(argument -> {
-      int oneByte = javaInteger(argument).intValueExact();
+  private static Expression writeByte() {
+    return eager(instruction((argStdout, argByte) -> {
+      Stdout stdout = (Stdout) argStdout;
+      int oneByte = javaInteger(argByte).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
-      output.write((byte) oneByte);
+      stdout.output.write((byte) oneByte);
       return I;
     }));
   }

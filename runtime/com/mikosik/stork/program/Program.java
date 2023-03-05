@@ -24,6 +24,7 @@ import static com.mikosik.stork.program.ProgramModule.WRITE_STREAM;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
+import static com.mikosik.stork.program.Stdout.stdout;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Output;
@@ -46,11 +47,11 @@ public class Program {
     return new Program(main, module);
   }
 
-  public void run(Input stdinInput, Output stdout) {
+  public void run(Input input, Output output) {
     Module module = join(chain(
         mathModule(),
         combinatoryModule(),
-        programModule(stdout),
+        programModule(),
         this.module));
 
     checkCollisions(module);
@@ -71,10 +72,11 @@ public class Program {
     Computation computation = computation(
         application(
             WRITE_STREAM,
-            application(main, stdin(stdinInput))));
+            stdout(output),
+            application(main, stdin(input))));
 
     Computation computed = computer.compute(computation);
-    stdout.close();
+    output.close();
     check(computed.stack.isEmpty());
   }
 }
