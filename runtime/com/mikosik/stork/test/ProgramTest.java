@@ -50,14 +50,8 @@ public class ProgramTest {
   }
 
   private static void run(Node directory) {
-    List<Module> modules = directory.children()
-        .filter(Node::isRegularFile)
-        .filter(ProgramTest::isStorkFile)
-        .map(file -> moduleFromDirectory(file.parent()))
-        .collect(toList());
-
     Module module = join(chain(
-        build(join(chain(modules))),
+        build(moduleFromDirectory(directory)),
         LANG_AND_PROGRAM_MODULE));
     Program program = program(identifier("main"), module);
     Input stdin = directory.child("stdin").tryInput();
@@ -74,10 +68,6 @@ public class ProgramTest {
           ascii(expectedStdout),
           ascii(actualStdout)));
     }
-  }
-
-  private static boolean isStorkFile(Node file) {
-    return file.name().equals("stork");
   }
 
   private static String nameOf(Node directory) {
