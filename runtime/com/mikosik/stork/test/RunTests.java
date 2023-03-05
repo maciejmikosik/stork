@@ -4,17 +4,24 @@ import static com.mikosik.stork.test.MoreReports.filter;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.cases.TestEverything.testEverything;
 import static java.lang.String.format;
+import static java.time.Duration.between;
 import static org.quackery.report.Reports.count;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
+
+import java.time.Instant;
 
 import org.quackery.Test;
 
 public class RunTests {
   public static void main(String[] args) {
+    Instant start = Instant.now();
     Test test = testEverything();
     Test report = run(test);
+    Instant stop = Instant.now();
     print(report);
+    double duration = between(start, stop).toMillis() / 1e3;
+    System.out.println(format("%.3f", duration));
   }
 
   private static void print(Test report) {
