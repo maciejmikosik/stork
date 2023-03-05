@@ -2,6 +2,7 @@ package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.CombinatoryModule.B;
 import static com.mikosik.stork.compile.CombinatoryModule.C;
@@ -34,6 +35,7 @@ import static com.mikosik.stork.program.ProgramModule.CLOSE_STREAM;
 import static com.mikosik.stork.program.ProgramModule.WRITE_BYTE;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.program.Stdout.stdout;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -70,6 +72,8 @@ public class TestDecompiler {
             .add(suite("stdin")
                 .add(test("stdin(7)", stdin(input(new byte[0]), 7)))
                 .add(test("stdin(0)", stdin(input(new byte[0])))))
+            .add(suite("stdout")
+                .add(test("stdout", stdout(output(null)))))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
@@ -197,5 +201,5 @@ public class TestDecompiler {
   private static final Module instructionsModule = injectNames(join(chain(
       mathModule(),
       combinatoryModule(),
-      programModule(null))));
+      programModule())));
 }

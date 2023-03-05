@@ -1,10 +1,17 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
+import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
+import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
+import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.compile.MathModule.mathModule;
+import static com.mikosik.stork.compile.Unlambda.unlambda;
+import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
@@ -27,6 +34,25 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class Stars {
+  public static Module langModule() {
+    return join(chain(
+        combinatoryModule(),
+        mathModule(),
+        moduleFromDirectory(node("core_star"))));
+  }
+
+  public static Module build(Module module) {
+    return inModule(unlambda)
+        .andThen(inModule(unquote))
+        .apply(module);
+  }
+
+  public static Module verify(Module module) {
+    checkCollisions(module);
+    checkUndefined(module);
+    return module;
+  }
+
   public static Module moduleFromDirectory(Node directory) {
     Stream<Node> filter = directory.nested()
         .filter(Node::isRegularFile)

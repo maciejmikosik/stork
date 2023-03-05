@@ -2,16 +2,9 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
-import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
-import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
-import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
-import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.Decompiler.decompiler;
-import static com.mikosik.stork.compile.MathModule.mathModule;
-import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
@@ -29,8 +22,8 @@ import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
-import static com.mikosik.stork.model.change.Changes.inModule;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
+import static com.mikosik.stork.test.Reuse.LANG_MODULE;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 
@@ -47,7 +40,6 @@ import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Linkage;
-import com.mikosik.stork.model.Module;
 
 public class SnippetTest implements Test {
   private final String name;
@@ -94,20 +86,8 @@ public class SnippetTest implements Test {
   private String compileAndCompute(String snippet) {
     Expression compiled = prepareSnippet(snippet);
 
-    Module module = join(chain(
-        mathModule(),
-        combinatoryModule(),
-        moduleFromDirectory(node("core_star"))));
-
-    checkCollisions(module);
-    checkUndefined(module);
-
-    module = inModule(unlambda)
-        .andThen(inModule(unquote))
-        .apply(module);
-
     Computer expressing = chained(
-        modulingComputer(module),
+        modulingComputer(LANG_MODULE),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),

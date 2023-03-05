@@ -4,11 +4,12 @@ import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
-import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.compile.Bind.join;
+import static com.mikosik.stork.compile.Stars.build;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
+import static com.mikosik.stork.test.Reuse.LANG_AND_PROGRAM_MODULE;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
@@ -23,7 +24,6 @@ import org.quackery.report.AssertException;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Node;
-import com.mikosik.stork.compile.Stars;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.program.Program;
 
@@ -50,14 +50,9 @@ public class ProgramTest {
   }
 
   private static void run(Node directory) {
-    List<Module> modules = directory.children()
-        .filter(Node::isRegularFile)
-        .filter(ProgramTest::isStorkFile)
-        .map(file -> Stars.moduleFromDirectory(file.parent()))
-        .collect(toList());
-
-    Module module = join(chain(modules)
-        .add(moduleFromDirectory(node("core_star"))));
+    Module module = join(chain(
+        build(moduleFromDirectory(directory)),
+        LANG_AND_PROGRAM_MODULE));
     Program program = program(identifier("main"), module);
     Input stdin = directory.child("stdin").tryInput();
     Buffer buffer = newBuffer();
@@ -73,10 +68,6 @@ public class ProgramTest {
           ascii(expectedStdout),
           ascii(actualStdout)));
     }
-  }
-
-  private static boolean isStorkFile(Node file) {
-    return file.name().equals("stork");
   }
 
   private static String nameOf(Node directory) {
