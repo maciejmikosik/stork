@@ -5,9 +5,6 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.linking;
 import static com.mikosik.stork.compile.Decompiler.decompiler;
-import static com.mikosik.stork.compile.Stars.build;
-import static com.mikosik.stork.compile.Stars.langModule;
-import static com.mikosik.stork.compile.Stars.verify;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
@@ -26,6 +23,7 @@ import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
 import static com.mikosik.stork.program.StdinComputer.stdinComputer;
+import static com.mikosik.stork.test.Reuse.LANG_MODULE;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 
@@ -42,7 +40,6 @@ import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Linkage;
-import com.mikosik.stork.model.Module;
 
 public class SnippetTest implements Test {
   private final String name;
@@ -88,10 +85,9 @@ public class SnippetTest implements Test {
 
   private String compileAndCompute(String snippet) {
     Expression compiled = prepareSnippet(snippet);
-    Module module = build(verify(langModule()));
 
     Computer expressing = chained(
-        modulingComputer(module),
+        modulingComputer(LANG_MODULE),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),

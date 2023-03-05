@@ -6,12 +6,10 @@ import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Stars.build;
-import static com.mikosik.stork.compile.Stars.langModule;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
-import static com.mikosik.stork.compile.Stars.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
-import static com.mikosik.stork.program.ProgramModule.programModule;
+import static com.mikosik.stork.test.Reuse.LANG_AND_PROGRAM_MODULE;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Case.newCase;
@@ -58,9 +56,9 @@ public class ProgramTest {
         .map(file -> moduleFromDirectory(file.parent()))
         .collect(toList());
 
-    Module module = build(verify(join(chain(modules)
-        .add(langModule())
-        .add(programModule()))));
+    Module module = join(chain(
+        build(join(chain(modules))),
+        LANG_AND_PROGRAM_MODULE));
     Program program = program(identifier("main"), module);
     Input stdin = directory.child("stdin").tryInput();
     Buffer buffer = newBuffer();
