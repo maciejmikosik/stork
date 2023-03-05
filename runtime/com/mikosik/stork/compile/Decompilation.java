@@ -45,7 +45,7 @@ public class Decompilation {
     if (!definitions.isEmpty()) {
       decompile(definitions.head());
       for (Definition definition : definitions.tail()) {
-        decompile(' ');
+        decompile('\n');
         decompile(definition);
       }
     }
