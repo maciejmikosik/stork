@@ -17,6 +17,7 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Unit.unit;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
@@ -32,6 +33,7 @@ import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
+import com.mikosik.stork.model.Unit;
 
 public class Stars {
   public static Module langModule() {
@@ -60,14 +62,21 @@ public class Stars {
   }
 
   private static Module moduleFromDirectory(Path rootDirectory, Path directory) {
-    Module module = compile(directory.resolve("stork"));
-    Namespace namespace = relative(rootDirectory, directory);
-    Linkage linkage = linkageFrom(directory.resolve("import"));
+    return selfBuild(unitFrom(rootDirectory, directory));
+  }
 
+  private static Module selfBuild(Unit unit) {
     return inModule(bindLambdaParameter)
-        .andThen(export(namespace))
-        .andThen(inModule(changeVariable(linking(linkage))))
-        .apply(module);
+        .andThen(export(unit.namespace))
+        .andThen(inModule(changeVariable(linking(unit.linkage))))
+        .apply(unit.module);
+  }
+
+  private static Unit unitFrom(Path rootDirectory, Path directory) {
+    return unit(
+        relative(rootDirectory, directory),
+        compile(directory.resolve("stork")),
+        linkageFrom(directory.resolve("import")));
   }
 
   private static Module compile(Path file) {
