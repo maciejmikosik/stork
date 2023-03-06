@@ -1,7 +1,8 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
-import static com.mikosik.stork.common.io.Node.node;
+import static com.mikosik.stork.common.io.Input.tryInput;
+import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
 import static com.mikosik.stork.compile.Bind.join;
@@ -21,11 +22,12 @@ import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.common.io.Node;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
@@ -36,7 +38,7 @@ public class Stars {
     return join(chain(
         combinatoryModule(),
         mathModule(),
-        moduleFromDirectory(node("core_star"))));
+        moduleFromDirectory(Paths.get("core_star"))));
   }
 
   public static Module build(Module module) {
@@ -51,16 +53,16 @@ public class Stars {
     return module;
   }
 
-  public static Module moduleFromDirectory(Node rootDirectory) {
-    return join(chain(rootDirectory.nested()
-        .filter(Node::isDirectory)
+  public static Module moduleFromDirectory(Path rootDirectory) {
+    return join(chain(walk(rootDirectory)
+        .filter(Files::isDirectory)
         .map(directory -> moduleFromDirectory(rootDirectory, directory))));
   }
 
-  private static Module moduleFromDirectory(Node rootDirectory, Node directory) {
-    Module module = compile(directory.child("stork"));
+  private static Module moduleFromDirectory(Path rootDirectory, Path directory) {
+    Module module = compile(directory.resolve("stork"));
     Namespace namespace = relative(rootDirectory, directory);
-    Linkage linkage = linkageFrom(directory.child("import"));
+    Linkage linkage = linkageFrom(directory.resolve("import"));
 
     return inModule(bindLambdaParameter)
         .andThen(export(namespace))
@@ -68,15 +70,15 @@ public class Stars {
         .apply(module);
   }
 
-  private static Module compile(Node file) {
-    try (Input input = file.tryInput().buffered()) {
+  private static Module compile(Path file) {
+    try (Input input = tryInput(file).buffered()) {
       Compiler compiler = new Compiler();
       return compiler.compileModule(input);
     }
   }
 
-  private static Linkage linkageFrom(Node file) {
-    try (Input input = file.tryInput().buffered()) {
+  private static Linkage linkageFrom(Path file) {
+    try (Input input = tryInput(file).buffered()) {
       return linkageFrom(input);
     }
   }
@@ -97,10 +99,10 @@ public class Stars {
     }
   }
 
-  private static Namespace relative(Node rootDirectory, Node directory) {
-    return rootDirectory.name().equals(directory.name())
+  private static Namespace relative(Path rootDirectory, Path directory) {
+    return rootDirectory.equals(directory)
         ? namespace()
-        : namespace(chain(rootDirectory.relativeToNested(directory))
+        : namespace(chain(rootDirectory.relativize(directory))
             .map(Path::toString)
             .reverse());
   }

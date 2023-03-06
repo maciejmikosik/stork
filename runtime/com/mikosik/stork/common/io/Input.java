@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.function.IntPredicate;
 
@@ -32,6 +34,20 @@ public class Input implements AutoCloseable {
 
   public static Input input(String string) {
     return input(string.getBytes(US_ASCII));
+  }
+
+  public static Input input(Path file) {
+    try {
+      return input(Files.newInputStream(file));
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
+  public static Input tryInput(Path file) {
+    return Files.isRegularFile(file)
+        ? input(file)
+        : input(new byte[0]);
   }
 
   public MaybeByte read() {

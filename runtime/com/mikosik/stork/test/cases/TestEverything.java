@@ -1,7 +1,6 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Node.node;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.model.EagerInstruction.eager;
@@ -14,6 +13,8 @@ import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.AssertException.assertTrue;
 
+import java.nio.file.Paths;
+
 import org.quackery.Test;
 
 import com.mikosik.stork.compile.Compiler;
@@ -22,7 +23,7 @@ import com.mikosik.stork.model.Instruction;
 public class TestEverything {
   public static Test testEverything() {
     return timeout(1, suite("test everything")
-        .add(testProgramsIn(node("runtime_test")))
+        .add(testProgramsIn(Paths.get("runtime_test")))
         .add(testDecompiler())
         .add(testCompiler())
         .add(testComputers())
