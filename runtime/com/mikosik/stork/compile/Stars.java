@@ -20,10 +20,8 @@ import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
-import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.stream.Stream;
 
 import com.mikosik.stork.common.io.Input;
@@ -53,20 +51,16 @@ public class Stars {
     return module;
   }
 
-  public static Module moduleFromDirectory(Node directory) {
-    Stream<Node> filter = directory.nested()
-        .filter(Node::isRegularFile)
-        .filter(file -> file.name().equals("stork"));
-    List<Module> modules = filter
-        .map(file -> moduleFromFile(directory, file))
-        .collect(toList());
-    return join(chain(modules));
+  public static Module moduleFromDirectory(Node rootDirectory) {
+    return join(chain(rootDirectory.nested()
+        .filter(Node::isDirectory)
+        .map(directory -> moduleFromDirectory(rootDirectory, directory))));
   }
 
-  private static Module moduleFromFile(Node directory, Node file) {
-    Module module = compile(file);
-    Namespace namespace = relative(directory, file);
-    Linkage linkage = linkageFrom(file);
+  private static Module moduleFromDirectory(Node rootDirectory, Node directory) {
+    Module module = compile(directory.child("stork"));
+    Namespace namespace = relative(rootDirectory, directory);
+    Linkage linkage = linkageFrom(directory.child("import"));
 
     return inModule(bindLambdaParameter)
         .andThen(export(namespace))
@@ -75,20 +69,15 @@ public class Stars {
   }
 
   private static Module compile(Node file) {
-    try (Input input = file.input().buffered()) {
+    try (Input input = file.tryInput().buffered()) {
       Compiler compiler = new Compiler();
       return compiler.compileModule(input);
     }
   }
 
   private static Linkage linkageFrom(Node file) {
-    Node linkageFile = file.parent().child("import");
-    if (linkageFile.isRegularFile()) {
-      try (Input input = linkageFile.input()) {
-        return linkageFrom(input);
-      }
-    } else {
-      return linkage();
+    try (Input input = file.tryInput().buffered()) {
+      return linkageFrom(input);
     }
   }
 
@@ -108,10 +97,10 @@ public class Stars {
     }
   }
 
-  private static Namespace relative(Node directory, Node file) {
-    return directory.name().equals(file.parent().name())
+  private static Namespace relative(Node rootDirectory, Node directory) {
+    return rootDirectory.name().equals(directory.name())
         ? namespace()
-        : namespace(chain(directory.relativeToNested(file.parent()))
+        : namespace(chain(rootDirectory.relativeToNested(directory))
             .map(Path::toString)
             .reverse());
   }
