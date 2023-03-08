@@ -36,4 +36,20 @@ public class InputOutput {
       throw unchecked(e);
     }
   }
+
+  public static Path createTempDirectory(String prefix) {
+    try {
+      return Files.createTempDirectory(prefix);
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
+  public static Path createFile(Path path) {
+    try {
+      return Files.createFile(path);
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
 }

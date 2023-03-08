@@ -2,7 +2,7 @@ package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Output.output;
+import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.CombinatoryModule.B;
 import static com.mikosik.stork.compile.CombinatoryModule.C;
@@ -73,7 +73,7 @@ public class TestDecompiler {
                 .add(test("stdin(7)", stdin(input(new byte[0]), 7)))
                 .add(test("stdin(0)", stdin(input(new byte[0])))))
             .add(suite("stdout")
-                .add(test("stdout", stdout(output(null)))))
+                .add(test("stdout", stdout(noOutput()))))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
