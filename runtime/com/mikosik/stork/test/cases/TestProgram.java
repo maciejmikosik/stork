@@ -1,11 +1,11 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.test.ProgramTest2.programTest;
+import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.test.ProgramTest2;
+import com.mikosik.stork.test.ProgramTest;
 
 public class TestProgram {
   public static Test testProgram() {
@@ -36,7 +36,7 @@ public class TestProgram {
             .add(processesStdinTwice()));
   }
 
-  private static ProgramTest2 functionReturnsArgument() {
+  private static ProgramTest functionReturnsArgument() {
     return programTest("returns argument")
         .file("stork", """
             main(stdin) {
@@ -50,7 +50,7 @@ public class TestProgram {
         .stdout("argument");
   }
 
-  private static ProgramTest2 functionReturnsConstant() {
+  private static ProgramTest functionReturnsConstant() {
     return programTest("returns constant")
         .file("stork", """
             main(stdin) {
@@ -64,7 +64,7 @@ public class TestProgram {
         .stdout("constant");
   }
 
-  private static ProgramTest2 functionForwardsArgumentAndResult() {
+  private static ProgramTest functionForwardsArgumentAndResult() {
     return programTest("forwards argument and result")
         .file("stork", """
             main(stdin) {
@@ -82,7 +82,7 @@ public class TestProgram {
         .stdout("y");
   }
 
-  private static ProgramTest2 applicationArgumentCanBeInteger() {
+  private static ProgramTest applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
         .file("stork", """
             main(stdin) {
@@ -96,7 +96,7 @@ public class TestProgram {
         .stdout("x");
   }
 
-  private static ProgramTest2 applicationArgumentCanBeLambda() {
+  private static ProgramTest applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
         .file("stork", """
             main(stdin) {
@@ -110,7 +110,7 @@ public class TestProgram {
         .stdout("");
   }
 
-  private static ProgramTest2 bindingIgnoresInteger() {
+  private static ProgramTest bindingIgnoresInteger() {
     return programTest("ignores integer")
         .file("stork", """
             apply2(f) {
@@ -124,7 +124,7 @@ public class TestProgram {
         .stdout("");
   }
 
-  private static ProgramTest2 shadowingLambdaParameters() {
+  private static ProgramTest shadowingLambdaParameters() {
     return programTest("lambda parameters")
         .file("stork", """
             main(stdin) {
@@ -138,7 +138,7 @@ public class TestProgram {
         .stdout("b");
   }
 
-  private static ProgramTest2 shadowingFunctionParameters() {
+  private static ProgramTest shadowingFunctionParameters() {
     return programTest("function parameters")
         .file("stork", """
             main(stdin) {
@@ -152,7 +152,7 @@ public class TestProgram {
         .stdout("b");
   }
 
-  private static ProgramTest2 shadowingFunctionByLambdaParameters() {
+  private static ProgramTest shadowingFunctionByLambdaParameters() {
     return programTest("function by lambda parameters")
         .file("stork", """
             main(stdin) {
@@ -166,7 +166,7 @@ public class TestProgram {
         .stdout("b");
   }
 
-  private static ProgramTest2 appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
+  private static ProgramTest appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
     return programTest("applied argument is not accidently bound to lambda parameter")
         .file("stork", """
             main(stdin) {
@@ -185,7 +185,7 @@ public class TestProgram {
         .stdout("y");
   }
 
-  private static ProgramTest2 cachesDuplicatedArgument() {
+  private static ProgramTest cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
         .file("import", """
             lang.integer.add
@@ -219,7 +219,7 @@ public class TestProgram {
         .stdout("");
   }
 
-  private static ProgramTest2 enablesStringLiterals() {
+  private static ProgramTest enablesStringLiterals() {
     return programTest("enables string literals")
         .file("stork", """
             main(stdin) {
@@ -229,7 +229,7 @@ public class TestProgram {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest2 importsCoreFunctions() {
+  private static ProgramTest importsCoreFunctions() {
     return programTest("imports core functions")
         .file("import", """
             lang.stream.append
@@ -242,7 +242,7 @@ public class TestProgram {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest2 stdoutCanBeEmpty() {
+  private static ProgramTest stdoutCanBeEmpty() {
     return programTest("stdout can be empty")
         .file("stork", """
             main(stdin) {
@@ -252,7 +252,7 @@ public class TestProgram {
         .stdout("");
   }
 
-  private static ProgramTest2 forwardsStdinToStdout() {
+  private static ProgramTest forwardsStdinToStdout() {
     return programTest("forwards stdin to stdout")
         .file("stork", """
             main(stdin) {
@@ -263,7 +263,7 @@ public class TestProgram {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest2 prependsStdin() {
+  private static ProgramTest prependsStdin() {
     return programTest("prepends stdin")
         .file("import", """
             lang.stream.prepend
@@ -277,7 +277,7 @@ public class TestProgram {
         .stdout("!Hello World");
   }
 
-  private static ProgramTest2 appendsStdin() {
+  private static ProgramTest appendsStdin() {
     return programTest("appends stdin")
         .file("import", """
             lang.stream.append
@@ -291,7 +291,7 @@ public class TestProgram {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest2 buildsStdout() {
+  private static ProgramTest buildsStdout() {
     return programTest("builds stdout")
         .file("import", """
             lang.stream.some
@@ -305,7 +305,7 @@ public class TestProgram {
         .stdout("xyz");
   }
 
-  private static ProgramTest2 processesStdinTwice() {
+  private static ProgramTest processesStdinTwice() {
     return programTest("processes stdin twice")
         .file("import", """
             lang.stream.append

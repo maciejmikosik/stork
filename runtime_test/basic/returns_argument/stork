@@ -1,8 +1,0 @@
-
-  identity(x) {
-    x
-  }
-
-  main(stdin) {
-    identity("y")
-  }

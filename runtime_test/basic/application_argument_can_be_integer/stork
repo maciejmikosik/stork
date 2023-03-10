@@ -1,8 +1,0 @@
-
-  function(x) {
-    "x"
-  }
-
-  main(stdin) {
-    function(2)
-  }
