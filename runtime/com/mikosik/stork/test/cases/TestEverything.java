@@ -9,6 +9,7 @@ import static com.mikosik.stork.test.ProgramTest.testProgramsIn;
 import static com.mikosik.stork.test.Runners.timeout;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
+import static com.mikosik.stork.test.cases.TestProgram.testProgram;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.AssertException.assertTrue;
@@ -24,6 +25,7 @@ public class TestEverything {
   public static Test testEverything() {
     return timeout(1, suite("test everything")
         .add(testProgramsIn(Paths.get("runtime_test")))
+        .add(testProgram())
         .add(testDecompiler())
         .add(testCompiler())
         .add(testComputers())
