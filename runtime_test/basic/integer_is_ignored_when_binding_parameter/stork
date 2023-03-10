@@ -1,8 +1,0 @@
-
-  apply2(f) {
-    f(2)
-  }
-
-  main(stdin) {
-    ""
-  }

@@ -1,4 +1,0 @@
-
-  main(stdin) {
-    prepend(reverse(stdin))(stdin)
-  }

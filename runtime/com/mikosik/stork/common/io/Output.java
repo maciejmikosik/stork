@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Output implements AutoCloseable {
   private final OutputStream output;
@@ -17,6 +19,18 @@ public class Output implements AutoCloseable {
 
   public static Output output(OutputStream output) {
     return new Output(output);
+  }
+
+  public static Output noOutput() {
+    return output(OutputStream.nullOutputStream());
+  }
+
+  public static Output output(Path file) {
+    try {
+      return output(Files.newOutputStream(file));
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
   }
 
   public void write(byte b) {

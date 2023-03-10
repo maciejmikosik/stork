@@ -1,8 +1,0 @@
-
-  apply(lambda) {
-    lambda
-  }
-
-  main(stdin) {
-    apply((x)(x){ x })("a")("b")
-  }

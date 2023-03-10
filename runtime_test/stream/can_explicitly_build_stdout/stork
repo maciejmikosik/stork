@@ -1,4 +1,0 @@
-
-  main(stdin) {
-    some(120)(some(121)(some(122)(none)))
-  }
