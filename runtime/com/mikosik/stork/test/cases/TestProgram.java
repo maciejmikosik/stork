@@ -26,7 +26,14 @@ public class TestProgram {
             .add(appliedArgumentIsNotAccidentlyBoundToLambdaParameter()))
         .add(cachesDuplicatedArgument())
         .add(enablesStringLiterals())
-        .add(importsCoreFunctions());
+        .add(importsCoreFunctions())
+        .add(suite("stdin/stdout")
+            .add(stdoutCanBeEmpty())
+            .add(forwardsStdinToStdout())
+            .add(prependsStdin())
+            .add(appendsStdin())
+            .add(buildsStdout())
+            .add(processesStdinTwice()));
   }
 
   private static ProgramTest2 functionReturnsArgument() {
@@ -233,5 +240,83 @@ public class TestProgram {
             }
             """)
         .stdout("Hello World!");
+  }
+
+  private static ProgramTest2 stdoutCanBeEmpty() {
+    return programTest("stdout can be empty")
+        .file("stork", """
+            main(stdin) {
+              ""
+            }
+            """)
+        .stdout("");
+  }
+
+  private static ProgramTest2 forwardsStdinToStdout() {
+    return programTest("forwards stdin to stdout")
+        .file("stork", """
+            main(stdin) {
+              stdin
+            }
+            """)
+        .stdin("Hello World!")
+        .stdout("Hello World!");
+  }
+
+  private static ProgramTest2 prependsStdin() {
+    return programTest("prepends stdin")
+        .file("import", """
+            lang.stream.prepend
+            """)
+        .file("stork", """
+            main(stdin) {
+              prepend("!")(stdin)
+            }
+            """)
+        .stdin("Hello World")
+        .stdout("!Hello World");
+  }
+
+  private static ProgramTest2 appendsStdin() {
+    return programTest("appends stdin")
+        .file("import", """
+            lang.stream.append
+            """)
+        .file("stork", """
+            main(stdin) {
+              append("!")(stdin)
+            }
+            """)
+        .stdin("Hello World")
+        .stdout("Hello World!");
+  }
+
+  private static ProgramTest2 buildsStdout() {
+    return programTest("builds stdout")
+        .file("import", """
+            lang.stream.some
+            lang.stream.none
+            """)
+        .file("stork", """
+            main(stdin) {
+              some(120)(some(121)(some(122)(none)))
+            }
+            """)
+        .stdout("xyz");
+  }
+
+  private static ProgramTest2 processesStdinTwice() {
+    return programTest("processes stdin twice")
+        .file("import", """
+            lang.stream.append
+            lang.stream.reverse
+            """)
+        .file("stork", """
+            main(stdin) {
+              reverse(append(reverse(stdin))(reverse(stdin)))
+            }
+            """)
+        .stdin("abc")
+        .stdout("abcabc");
   }
 }
