@@ -1,6 +1,7 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.test.SnippetTest.snippetTest;
+import static com.mikosik.stork.test.StreamTest.streamTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Suite;
@@ -32,8 +33,8 @@ public class TestInteger {
         .add(testIntegerRelu())
         .add(testIntegerCeil())
         .add(testIntegerFloor())
-        .add(testIntegerClamp());
-    // TODO test formatting of integer using program test
+        .add(testIntegerClamp())
+        .add(testIntegerFormat());
   }
 
   private static SnippetTest testIntegerCanonical() {
@@ -358,5 +359,16 @@ public class TestInteger {
         .test("clamp(5)(7)(7)", "7")
         .test("clamp(5)(7)(8)", "7")
         .test("clamp(1)(3)(clamp(5)(7)(8))", "3");
+  }
+
+  private static Test testIntegerFormat() {
+    return streamTest("format")
+        .importing("lang.integer.format")
+        .test("format(0)", "0")
+        .test("format(1)", "1")
+        .test("format(-1)", "-1")
+        .test("format(1000000000)", "1000000000")
+        .test("format(123456789123456789)", "123456789123456789")
+        .test("format(-123456789123456789)", "-123456789123456789");
   }
 }
