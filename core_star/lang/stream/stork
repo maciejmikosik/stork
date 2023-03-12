@@ -124,8 +124,12 @@
     flip(append)
   }
 
-  flatten {
-    reduce(none)(append)
+  flatten(streams) {
+    streams
+      ((head)(tail) {
+        prepend(head)(flatten(tail))
+      })
+      (none)
   }
 
   array(size) {
