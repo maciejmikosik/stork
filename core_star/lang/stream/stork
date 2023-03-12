@@ -49,6 +49,12 @@
       (repeat(element))
   }
 
+  cycle(stream) {
+    hasSome(stream)
+      (prepend(stream)(cycle(stream)))
+      (none)
+  }
+
   tryFirst(stream) {
     stream
       ((head)(tail){ present(head) })
