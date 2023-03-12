@@ -10,7 +10,9 @@
 
   hasSome(stream) {
     stream
-      ((head)(tail) { true })
+      ((head)(tail) {
+        true
+      })
       (false)
   }
 
@@ -35,7 +37,9 @@
 
   length(stream) {
     stream
-      ((head)(tail){ add(1)(length(tail)) })
+      ((head)(tail) {
+        add(1)(length(tail))
+      })
       (0)
   }
 
@@ -67,8 +71,7 @@
         ((head)(tail) {
           some(head)(limit(decrement(n))(tail))
         })
-        (none)
-      )
+        (none))
       (none)
   }
 
@@ -78,8 +81,7 @@
         ((head)(tail) {
           skip(decrement(n))(tail)
         })
-        (none)
-      )
+        (none))
       (stream)
   }
 
