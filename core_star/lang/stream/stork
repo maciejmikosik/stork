@@ -98,10 +98,6 @@
       (false)
   }
 
-  tryFind(condition)(stream) {
-    tryFirst(filter(condition)(stream))
-  }
-
   each(transform)(stream) {
     stream
       ((head)(tail) {
