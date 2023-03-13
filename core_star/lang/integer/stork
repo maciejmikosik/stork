@@ -59,40 +59,30 @@
       (dividend)
   }
 
-  signum(number) {
-    moreThan(0)(number)
-      (1)
-      (lessThan(0)(number)
-        (-1)
-        (0))
+  signum {
+    compose
+      (if(moreThan(0))(constant(1)))
+      (if(lessThan(0))(constant(-1)))
   }
 
-  absolute(number) {
-    lessThan(0)(number)
-      (negate(number))
-      (number)
+  absolute {
+    if(lessThan(0))(negate)
   }
 
-  relu(number) {
-    lessThan(0)(number)
-      (0)
-      (number)
+  relu {
+    floor(0)
   }
 
-  ceil(max)(number) {
-    moreThan(max)(number)
-      (max)
-      (number)
+  ceil(max) {
+    if(moreThan(max))(constant(max))
   }
 
-  floor(min)(number) {
-    lessThan(min)(number)
-      (min)
-      (number)
+  floor(min) {
+    if(lessThan(min))(constant(min))
   }
 
-  clamp(min)(max)(number) {
-    ceil(max)(floor(min)(number))
+  clamp(min)(max) {
+    compose(ceil(max))(floor(min))
   }
 
   format {
