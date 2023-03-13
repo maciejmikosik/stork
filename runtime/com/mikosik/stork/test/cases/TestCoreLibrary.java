@@ -22,11 +22,11 @@ public class TestCoreLibrary {
 
   private static SnippetTest testFunction() {
     return snippetTest("function")
-        .importing("lang.function.self")
+        .importing("lang.function.identity")
         .importing("lang.function.flip")
         .importing("lang.function.compose")
-        .test("self(0)", "0")
-        .test("self(1)", "1")
+        .test("identity(0)", "0")
+        .test("identity(1)", "1")
         .test("flip(      (x)(y){x}  )(1)(2)", "2")
         .test("flip(flip( (x)(y){x} ))(1)(2)", "1")
         .test("compose((x){x})((x){x})(0)", "0")

@@ -11,6 +11,6 @@
 
   else(default)(optional) {
     optional
-      (self)
+      (identity)
       (default)
   }
