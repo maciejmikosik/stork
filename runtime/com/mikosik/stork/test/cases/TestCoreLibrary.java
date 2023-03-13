@@ -1,6 +1,7 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.test.SnippetTest.snippetTest;
+import static com.mikosik.stork.test.cases.TestBoolean.testBoolean;
 import static com.mikosik.stork.test.cases.TestInteger.testInteger;
 import static com.mikosik.stork.test.cases.TestStream.testStream;
 import static org.quackery.Suite.suite;
@@ -17,27 +18,6 @@ public class TestCoreLibrary {
         .add(testInteger())
         .add(testStream())
         .add(testOptional());
-  }
-
-  private static SnippetTest testBoolean() {
-    return snippetTest("boolean")
-        .importing("lang.boolean.true")
-        .importing("lang.boolean.false")
-        .importing("lang.boolean.not")
-        .importing("lang.boolean.and")
-        .importing("lang.boolean.or")
-        .test("true (0)(1)", "0")
-        .test("false(0)(1)", "1")
-        .test("not(true)", "false")
-        .test("not(false)", "true")
-        .test("and(true) (true) ", "true")
-        .test("and(true) (false)", "false")
-        .test("and(false)(true) ", "false")
-        .test("and(false)(false)", "false")
-        .test("or(true) (true) ", "true")
-        .test("or(true) (false)", "true")
-        .test("or(false)(true) ", "true")
-        .test("or(false)(false)", "false");
   }
 
   private static SnippetTest testFunction() {
