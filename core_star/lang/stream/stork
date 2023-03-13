@@ -8,6 +8,17 @@
   }
 
 
+  hasSome(stream) {
+    stream
+      ((head)(tail) {
+        true
+      })
+      (false)
+  }
+
+  hasNone(stream) {
+    not(hasSome(stream))
+  }
 
   reduce(sum)(add)(stream) {
     stream
@@ -26,7 +37,9 @@
 
   length(stream) {
     stream
-      ((head)(tail){ add(1)(length(tail)) })
+      ((head)(tail) {
+        add(1)(length(tail))
+      })
       (0)
   }
 
@@ -38,6 +51,12 @@
     some
       (element)
       (repeat(element))
+  }
+
+  cycle(stream) {
+    hasSome(stream)
+      (prepend(stream)(cycle(stream)))
+      (none)
   }
 
   tryFirst(stream) {
@@ -52,8 +71,7 @@
         ((head)(tail) {
           some(head)(limit(decrement(n))(tail))
         })
-        (none)
-      )
+        (none))
       (none)
   }
 
@@ -63,8 +81,7 @@
         ((head)(tail) {
           skip(decrement(n))(tail)
         })
-        (none)
-      )
+        (none))
       (stream)
   }
 
@@ -89,17 +106,7 @@
   }
 
   contains(condition)(stream){
-    stream
-      ((head)(tail) {
-        or
-          (condition(head))
-          (contains(condition)(tail))
-      })
-      (false)
-  }
-
-  tryFind(condition)(stream) {
-    tryFirst(filter(condition)(stream))
+    hasSome(filter(condition)(stream))
   }
 
   each(transform)(stream) {
@@ -128,8 +135,12 @@
     flip(append)
   }
 
-  flatten {
-    reduce(none)(append)
+  flatten(streams) {
+    streams
+      ((head)(tail) {
+        prepend(head)(flatten(tail))
+      })
+      (none)
   }
 
   array(size) {

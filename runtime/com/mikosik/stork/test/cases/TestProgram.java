@@ -32,7 +32,6 @@ public class TestProgram {
             .add(forwardsStdinToStdout())
             .add(prependsStdin())
             .add(appendsStdin())
-            .add(buildsStdout())
             .add(processesStdinTwice()));
   }
 
@@ -289,20 +288,6 @@ public class TestProgram {
             """)
         .stdin("Hello World")
         .stdout("Hello World!");
-  }
-
-  private static ProgramTest buildsStdout() {
-    return programTest("builds stdout")
-        .file("import", """
-            lang.stream.some
-            lang.stream.none
-            """)
-        .file("stork", """
-            main(stdin) {
-              some(120)(some(121)(some(122)(none)))
-            }
-            """)
-        .stdout("xyz");
   }
 
   private static ProgramTest processesStdinTwice() {

@@ -2,6 +2,7 @@ package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.test.SnippetTest.snippetTest;
 import static com.mikosik.stork.test.cases.TestInteger.testInteger;
+import static com.mikosik.stork.test.cases.TestStream.testStream;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -14,6 +15,7 @@ public class TestCoreLibrary {
         .add(testBoolean())
         .add(testFunction())
         .add(testInteger())
+        .add(testStream())
         .add(testOptional());
   }
 
