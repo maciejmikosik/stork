@@ -8,6 +8,9 @@
   }
 
 
+  equal(a)(b) {
+    a(b)(b(false)(true))
+  }
 
   not(bool) {
     bool(false)(true)
@@ -19,4 +22,12 @@
 
   or(a)(b) {
     a(true)(b)
+  }
+
+  xor(a)(b) {
+    a(b(false)(true))(b)
+  }
+
+  format(bool) {
+    bool("true")("false")
   }

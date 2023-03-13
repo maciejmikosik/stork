@@ -8,9 +8,8 @@
   }
 
 
-
-  else(default)(optional) {
-    optional
-      (self)
+  else(default)(maybe) {
+    maybe
+      (identity)
       (default)
   }

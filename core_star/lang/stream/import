@@ -1,5 +1,5 @@
-lang.optional.present
-lang.optional.absent
+lang.maybe.present
+lang.maybe.absent
 lang.integer.add
 lang.integer.moreThan
 lang.integer.increment

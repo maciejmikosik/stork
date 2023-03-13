@@ -1,6 +1,10 @@
 
-  self(x) {
+  identity(x) {
     x
+  }
+
+  constant(value)(argument) {
+    value
   }
 
   compose(f)(g)(x) {
@@ -9,4 +13,10 @@
 
   flip(f)(x)(y) {
     f(y)(x)
+  }
+
+  if(condition)(function)(argument) {
+    condition(argument)
+      (function(argument))
+      (argument)
   }
