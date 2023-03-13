@@ -2,13 +2,12 @@ package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.test.SnippetTest.snippetTest;
 import static com.mikosik.stork.test.cases.TestBoolean.testBoolean;
+import static com.mikosik.stork.test.cases.TestFunction.testFunction;
 import static com.mikosik.stork.test.cases.TestInteger.testInteger;
 import static com.mikosik.stork.test.cases.TestStream.testStream;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
-
-import com.mikosik.stork.test.SnippetTest;
 
 public class TestCoreLibrary {
   public static Test testCoreLibrary() {
@@ -18,21 +17,6 @@ public class TestCoreLibrary {
         .add(testInteger())
         .add(testStream())
         .add(testOptional());
-  }
-
-  private static SnippetTest testFunction() {
-    return snippetTest("function")
-        .importing("lang.function.identity")
-        .importing("lang.function.flip")
-        .importing("lang.function.compose")
-        .test("identity(0)", "0")
-        .test("identity(1)", "1")
-        .test("flip(      (x)(y){x}  )(1)(2)", "2")
-        .test("flip(flip( (x)(y){x} ))(1)(2)", "1")
-        .test("compose((x){x})((x){x})(0)", "0")
-        .test("compose((x){1})((x){x})(0)", "1")
-        .test("compose((x){x})((x){2})(0)", "2")
-        .test("compose((x){1})((x){2})(0)", "1");
   }
 
   private static Test testOptional() {
