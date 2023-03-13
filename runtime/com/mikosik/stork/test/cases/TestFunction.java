@@ -12,6 +12,11 @@ public class TestFunction {
             .importing("lang.function.identity")
             .test("identity(0)", "0")
             .test("identity(1)", "1"))
+        .add(snippetTest("constant")
+            .importing("lang.function.constant")
+            .test("constant(1)(1)", "1")
+            .test("constant(1)(2)", "1")
+            .test("constant(1)(3)", "1"))
         .add(snippetTest("flip")
             .importing("lang.function.flip")
             .test("flip(      (x)(y){x}  )(1)(2)", "2")
@@ -21,6 +26,12 @@ public class TestFunction {
             .test("compose((x){x})((x){x})(0)", "0")
             .test("compose((x){1})((x){x})(0)", "1")
             .test("compose((x){x})((x){2})(0)", "2")
-            .test("compose((x){1})((x){2})(0)", "1"));
+            .test("compose((x){1})((x){2})(0)", "1"))
+        .add(snippetTest("if")
+            .importing("lang.function.if")
+            .importing("lang.integer.equal")
+            .importing("lang.integer.add")
+            .test("if(equal(10))(add(1))(10)", "11")
+            .test("if(equal(10))(add(1))(5)", "5"));
   }
 }
