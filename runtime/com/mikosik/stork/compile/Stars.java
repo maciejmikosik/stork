@@ -1,7 +1,9 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
+import static com.mikosik.stork.common.io.InputOutput.components;
 import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
@@ -110,9 +112,7 @@ public class Stars {
 
   private static Namespace relative(Path rootDirectory, Path directory) {
     return rootDirectory.equals(directory)
-        ? namespace()
-        : namespace(chain(rootDirectory.relativize(directory))
-            .map(Path::toString)
-            .reverse());
+        ? namespace(sequence())
+        : namespace(components(rootDirectory.relativize(directory)));
   }
 }

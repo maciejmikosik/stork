@@ -1,12 +1,15 @@
 package com.mikosik.stork.common.io;
 
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.logbuddy.common.Collections.stream;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class InputOutput {
@@ -51,5 +54,11 @@ public class InputOutput {
     } catch (IOException e) {
       throw unchecked(e);
     }
+  }
+
+  public static List<String> components(Path path) {
+    return stream(path)
+        .map(Path::toString)
+        .collect(toSequence());
   }
 }
