@@ -34,20 +34,20 @@ public class Bind {
                   .apply(lambda));
 
   public static Change<Variable> linking(Linkage linkage) {
-    Map<String, Expression> map = linkage.links.stream()
+    Map<Variable, Expression> map = linkage.links.stream()
         .collect(toMap(
-            link -> link.variable.name,
+            link -> link.variable,
             link -> link.identifier));
-    return variable -> map.getOrDefault(variable.name, variable);
+    return variable -> map.getOrDefault(variable, variable);
   }
 
   public static Function<Module, Module> export(Namespace namespace) {
     return module -> {
-      var names = module.definitions.stream()
-          .map(definition -> definition.identifier.variable.name)
+      var variables = module.definitions.stream()
+          .map(definition -> definition.identifier.variable)
           .collect(toSet());
       return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
-          .andThen(inModule(changeVariable(variable -> names.contains(variable.name)
+          .andThen(inModule(changeVariable(variable -> variables.contains(variable)
               ? identifier(namespace, variable)
               : variable)))
           .apply(module);
