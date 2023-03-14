@@ -1,7 +1,9 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
+import static com.mikosik.stork.common.io.InputOutput.components;
 import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
@@ -26,7 +28,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Link;
@@ -37,7 +38,7 @@ import com.mikosik.stork.model.Unit;
 
 public class Stars {
   public static Module langModule() {
-    return join(chain(
+    return join(sequence(
         combinatoryModule(),
         mathModule(),
         moduleFromDirectory(Paths.get("core_star"))));
@@ -56,9 +57,10 @@ public class Stars {
   }
 
   public static Module moduleFromDirectory(Path rootDirectory) {
-    return join(chain(walk(rootDirectory)
+    return join(walk(rootDirectory)
         .filter(Files::isDirectory)
-        .map(directory -> moduleFromDirectory(rootDirectory, directory))));
+        .map(directory -> moduleFromDirectory(rootDirectory, directory))
+        .collect(toSequence()));
   }
 
   private static Module moduleFromDirectory(Path rootDirectory, Path directory) {
@@ -93,8 +95,9 @@ public class Stars {
   }
 
   private static Linkage linkageFrom(Input input) {
-    Stream<String> lines = input.bufferedReader(US_ASCII).lines();
-    return linkage(chain(lines.map(Stars::linkFrom)));
+    return linkage(input.bufferedReader(US_ASCII).lines()
+        .map(Stars::linkFrom)
+        .collect(toSequence()));
   }
 
   private static Link linkFrom(String line) {
@@ -110,9 +113,7 @@ public class Stars {
 
   private static Namespace relative(Path rootDirectory, Path directory) {
     return rootDirectory.equals(directory)
-        ? namespace()
-        : namespace(chain(rootDirectory.relativize(directory))
-            .map(Path::toString)
-            .reverse());
+        ? namespace(sequence())
+        : namespace(components(rootDirectory.relativize(directory)));
   }
 }

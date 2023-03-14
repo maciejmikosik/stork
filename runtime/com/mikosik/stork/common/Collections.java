@@ -14,4 +14,8 @@ public class Collections {
         spliteratorUnknownSize(iterator, ORDERED),
         parallel);
   }
+
+  public static <E> Stream<E> stream(Iterable<E> iterable) {
+    return StreamSupport.stream(iterable.spliterator(), false);
+  }
 }

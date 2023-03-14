@@ -1,25 +1,17 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 
-import com.mikosik.stork.common.Chain;
+import java.util.List;
 
 public class Linkage {
-  public final Chain<Link> links;
+  public final List<Link> links;
 
-  private Linkage(Chain<Link> links) {
+  private Linkage(List<Link> links) {
     this.links = links;
   }
 
-  public static Linkage linkage() {
-    return new Linkage(chain());
-  }
-
-  public static Linkage linkage(Chain<Link> links) {
-    return new Linkage(links);
-  }
-
-  public Linkage add(Link link) {
-    return linkage(links.add(link));
+  public static Linkage linkage(List<Link> links) {
+    return new Linkage(sequence(links));
   }
 }

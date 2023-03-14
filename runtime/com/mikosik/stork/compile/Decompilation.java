@@ -2,7 +2,6 @@ package com.mikosik.stork.compile;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
@@ -41,13 +40,14 @@ public class Decompilation {
   }
 
   private void decompile(Module module) {
-    Chain<Definition> definitions = module.definitions;
-    if (!definitions.isEmpty()) {
-      decompile(definitions.head());
-      for (Definition definition : definitions.tail()) {
-        decompile(' ');
-        decompile(definition);
-      }
+    if (!module.definitions.isEmpty()) {
+      decompile(module.definitions.get(0));
+      module.definitions.stream()
+          .skip(1)
+          .forEach(definition -> {
+            decompile(' ');
+            decompile(definition);
+          });
     }
   }
 

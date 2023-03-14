@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Logic.flip;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
@@ -24,7 +24,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class MathModule {
-  public static final Namespace NAMESPACE = namespace(chain("integer", "native", "lang"));
+  public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "integer"));
 
   public static final Identifier EQUAL = id("equal");
   public static final Identifier MORETHAN = id("moreThan");
@@ -38,7 +38,7 @@ public class MathModule {
   }
 
   public static Module mathModule() {
-    return module(chain(
+    return module(sequence(
         define(EQUAL, instructionIIB(BigInteger::equals)),
         define(MORETHAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),

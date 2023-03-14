@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
@@ -11,7 +11,6 @@ import static com.mikosik.stork.compile.Stars.build;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
-import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.Reuse.LANG_AND_PROGRAM_MODULE;
 import static java.lang.String.format;
@@ -20,6 +19,7 @@ import static org.quackery.Case.newCase;
 
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -27,16 +27,14 @@ import org.quackery.Body;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Link;
-import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 
 public class StreamTest implements Test {
   private final String name;
-  private Linkage linkage = linkage();
-  private Chain<Test> tests = chain();
+  private final List<Link> links = new LinkedList<>();
+  private final List<Test> tests = new LinkedList<>();
 
   private StreamTest(String name) {
     this.name = name;
@@ -47,13 +45,13 @@ public class StreamTest implements Test {
   }
 
   public StreamTest importing(String global) {
-    linkage = linkage.add(link(identifier(global)));
+    links.add(link(identifier(global)));
     return this;
   }
 
   public StreamTest test(String actual, String expected) {
     var escapedActual = actual.replace('\'', '\"');
-    tests = tests.add(newCase(
+    tests.add(newCase(
         format("%s = %s", escapedActual, expected),
         () -> run(escapedActual, expected)));
     return this;
@@ -63,7 +61,7 @@ public class StreamTest implements Test {
     Path directory = createTempDirectory("stork_test_program_");
 
     Output linkageOutput = output(directory.resolve("import"));
-    for (Link link : linkage.links) {
+    for (Link link : links) {
       linkageOutput.write(bytes(link.identifier.name()));
       linkageOutput.write(bytes("\n"));
     }
@@ -77,7 +75,7 @@ public class StreamTest implements Test {
         """.formatted(actual)));
     storkOutput.close();
 
-    Module module = join(chain(
+    Module module = join(sequence(
         build(moduleFromDirectory(directory)),
         LANG_AND_PROGRAM_MODULE));
     var program = program(identifier("main"), module);
@@ -98,7 +96,7 @@ public class StreamTest implements Test {
 
   public <R> R visit(BiFunction<String, Body, R> caseHandler,
       BiFunction<String, List<Test>, R> suiteHandler) {
-    return suiteHandler.apply(name, tests.reverse().toLinkedList());
+    return suiteHandler.apply(name, sequence(tests));
   }
 
   private byte[] bytes(String string) {

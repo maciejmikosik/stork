@@ -1,7 +1,6 @@
 package com.mikosik.stork.debug;
 
 import static com.mikosik.stork.compile.Decompiler.decompiler;
-import static com.mikosik.stork.debug.HandlingChainDecorator.handlingChain;
 import static org.logbuddy.decorator.ComposedDecorator.compose;
 import static org.logbuddy.decorator.InjectingDecorator.injecting;
 import static org.logbuddy.decorator.InvocationDecorator.invocationDecorator;
@@ -20,9 +19,9 @@ public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
     Renderer<String> renderer = new StorkTextRenderer(decompiler().local());
     Logger logger = invocationDepth(fileLogger(logFile, renderer));
-    Decorator decorator = handlingChain(compose(
+    Decorator decorator = compose(
         invocationDecorator(logger),
-        injecting(logger)));
+        injecting(logger));
     return traversing(decorator)
         .filter(field -> !Map.class.isAssignableFrom(field.getDeclaringClass()));
   }

@@ -1,6 +1,6 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -15,7 +15,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class CombinatoryModule {
-  public static final Namespace NAMESPACE = namespace(chain("combinator", "native", "lang"));
+  public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "combinator"));
 
   public static final Identifier I = id("i");
   public static final Identifier Y = id("y");
@@ -29,7 +29,7 @@ public class CombinatoryModule {
   }
 
   public static Module combinatoryModule() {
-    return module(chain(
+    return module(sequence(
         /** I(x) = x */
         definition(I, instruction(x -> x)),
 

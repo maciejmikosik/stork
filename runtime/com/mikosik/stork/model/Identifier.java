@@ -1,12 +1,13 @@
 package com.mikosik.stork.model;
 
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.lang.String.join;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
-
-import com.mikosik.stork.common.Chain;
 
 public class Identifier implements Expression {
   public final Namespace namespace;
@@ -22,15 +23,16 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(String name) {
-    Chain<String> path = Chain.<String> chain()
-        .addAll(name.split("\\."));
+    List<String> path = sequence(name.split("\\."));
     return identifier(
-        namespace(path.tail()),
-        variable(path.head()));
+        namespace(path.subList(0, path.size() - 1)),
+        variable(path.get(path.size() - 1)));
   }
 
   public String name() {
-    return join(".", namespace.path.add(variable.name).reverse().toLinkedList());
+    List<String> path = new LinkedList<>(namespace.path);
+    path.add(variable.name);
+    return join(".", path);
   }
 
   public boolean equals(Object that) {

@@ -1,7 +1,7 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.compile.Bridge.javaInteger;
 import static com.mikosik.stork.compile.CombinatoryModule.I;
 import static com.mikosik.stork.model.Application.application;
@@ -22,7 +22,7 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 
 public class ProgramModule {
-  public static final Namespace NAMESPACE = namespace(chain("program", "native", "lang"));
+  public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "program"));
 
   public static final Identifier WRITE_STREAM = id("writeStream");
   public static final Identifier WRITE_BYTE = id("writeByte");
@@ -33,7 +33,7 @@ public class ProgramModule {
   }
 
   public static Module programModule() {
-    return module(chain(
+    return module(sequence(
         definition(WRITE_STREAM, writeStream()),
         definition(WRITE_BYTE, writeByte()),
         definition(CLOSE_STREAM, instruction(argument -> {
