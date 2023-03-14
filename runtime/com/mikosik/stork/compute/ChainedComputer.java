@@ -1,22 +1,18 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 
-import com.mikosik.stork.common.Chain;
+import java.util.List;
 
 public class ChainedComputer implements Computer {
-  private final Chain<Computer> computers;
+  private final List<Computer> computers;
 
-  private ChainedComputer(Chain<Computer> computers) {
+  private ChainedComputer(List<Computer> computers) {
     this.computers = computers;
   }
 
-  public static Computer chained(Chain<Computer> computers) {
-    return new ChainedComputer(computers);
-  }
-
-  public static Computer chained(Computer... computers) {
-    return new ChainedComputer(chain(computers));
+  public static Computer chained(List<Computer> computers) {
+    return new ChainedComputer(sequence(computers));
   }
 
   public Computation compute(Computation computation) {

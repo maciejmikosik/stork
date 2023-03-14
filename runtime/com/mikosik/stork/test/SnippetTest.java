@@ -86,12 +86,12 @@ public class SnippetTest implements Test {
   private String compileAndCompute(String snippet) {
     Expression compiled = prepareSnippet(snippet);
 
-    Computer expressing = chained(
+    Computer expressing = chained(sequence(
         modulingComputer(LANG_MODULE),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),
-        returningComputer());
+        returningComputer()));
     Computer computer = looping(interruptible(caching(expressing)));
 
     Computation computed = computer.compute(computation(compiled));
