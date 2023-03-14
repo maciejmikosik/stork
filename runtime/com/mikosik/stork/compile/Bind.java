@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Logic.constant;
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.change.Changes.changeLambda;
@@ -14,10 +14,10 @@ import static com.mikosik.stork.model.change.Changes.onNamespace;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
@@ -54,8 +54,9 @@ public class Bind {
     };
   }
 
-  public static Module join(Chain<Module> modules) {
-    return module(modules.flatMap(module -> chain(module.definitions))
-        .toLinkedList());
+  public static Module join(List<Module> modules) {
+    return module(modules.stream()
+        .flatMap(module -> module.definitions.stream())
+        .collect(toSequence()));
   }
 }

@@ -1,7 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
@@ -76,7 +76,7 @@ public class ProgramTest implements Test {
       output(filePath).write(file.getValue());
     }
 
-    Module module = join(chain(
+    Module module = join(sequence(
         build(moduleFromDirectory(directory)),
         LANG_AND_PROGRAM_MODULE));
     Program program = program(identifier("main"), module);

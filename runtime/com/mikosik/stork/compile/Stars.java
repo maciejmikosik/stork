@@ -1,6 +1,5 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
@@ -39,7 +38,7 @@ import com.mikosik.stork.model.Unit;
 
 public class Stars {
   public static Module langModule() {
-    return join(chain(
+    return join(sequence(
         combinatoryModule(),
         mathModule(),
         moduleFromDirectory(Paths.get("core_star"))));
@@ -58,9 +57,10 @@ public class Stars {
   }
 
   public static Module moduleFromDirectory(Path rootDirectory) {
-    return join(chain(walk(rootDirectory)
+    return join(walk(rootDirectory)
         .filter(Files::isDirectory)
-        .map(directory -> moduleFromDirectory(rootDirectory, directory))));
+        .map(directory -> moduleFromDirectory(rootDirectory, directory))
+        .collect(toSequence()));
   }
 
   private static Module moduleFromDirectory(Path rootDirectory, Path directory) {

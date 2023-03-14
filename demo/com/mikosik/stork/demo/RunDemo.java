@@ -1,6 +1,6 @@
 package com.mikosik.stork.demo;
 
-import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Bind.join;
@@ -19,7 +19,7 @@ import com.mikosik.stork.program.Program;
 
 public class RunDemo {
   public static void main(String[] args) {
-    Module module = build(verify(join(chain(
+    Module module = build(verify(join(sequence(
         moduleFromDirectory(Paths.get("demo/com/mikosik/stork/demo")),
         programModule(),
         langModule()))));

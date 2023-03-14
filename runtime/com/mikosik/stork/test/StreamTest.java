@@ -1,6 +1,5 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
@@ -76,7 +75,7 @@ public class StreamTest implements Test {
         """.formatted(actual)));
     storkOutput.close();
 
-    Module module = join(chain(
+    Module module = join(sequence(
         build(moduleFromDirectory(directory)),
         LANG_AND_PROGRAM_MODULE));
     var program = program(identifier("main"), module);

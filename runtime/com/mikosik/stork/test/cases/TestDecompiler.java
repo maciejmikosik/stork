@@ -1,6 +1,5 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
@@ -198,7 +197,7 @@ public class TestDecompiler {
         .orElseThrow();
   }
 
-  private static final Module instructionsModule = injectNames(join(chain(
+  private static final Module instructionsModule = injectNames(join(sequence(
       mathModule(),
       combinatoryModule(),
       programModule())));
