@@ -10,6 +10,7 @@ import static com.mikosik.stork.model.change.Changes.inModule;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
 import static com.mikosik.stork.model.change.Changes.onNamespace;
+import static java.util.stream.Collectors.toMap;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -31,9 +32,10 @@ public class Bind {
                   .apply(lambda));
 
   public static Change<Variable> linking(Linkage linkage) {
-    Map<String, Expression> map = linkage.links.toHashMap(
-        link -> link.variable.name,
-        link -> link.identifier);
+    Map<String, Expression> map = linkage.links.stream()
+        .collect(toMap(
+            link -> link.variable.name,
+            link -> link.identifier));
     return variable -> map.getOrDefault(variable.name, variable);
   }
 

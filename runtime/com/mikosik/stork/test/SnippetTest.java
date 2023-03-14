@@ -1,6 +1,5 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
@@ -105,7 +104,7 @@ public class SnippetTest implements Test {
   private Expression prepareSnippet(String snippet) {
     Expression compiled = new Compiler().compileExpression(input(snippet));
     return inExpression(bindLambdaParameter)
-        .andThen(inExpression(changeVariable(linking(linkage(chain(links))))))
+        .andThen(inExpression(changeVariable(linking(linkage(sequence(links))))))
         .andThen(inExpression(unlambda))
         .andThen(inExpression(unquote))
         .apply(compiled);
