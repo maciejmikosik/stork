@@ -1,6 +1,5 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.compile.Bridge.stork;
@@ -39,7 +38,7 @@ public class MathModule {
   }
 
   public static Module mathModule() {
-    return module(chain(
+    return module(sequence(
         define(EQUAL, instructionIIB(BigInteger::equals)),
         define(MORETHAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),

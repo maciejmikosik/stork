@@ -1,5 +1,6 @@
 package com.mikosik.stork.model.change;
 
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -22,7 +23,9 @@ import com.mikosik.stork.model.Variable;
 public class Changes {
   public static Function<Module, Module> onEachDefinition(
       Function<? super Definition, Definition> transform) {
-    return module -> module(module.definitions.map(transform));
+    return module -> module(module.definitions.stream()
+        .map(transform)
+        .collect(toSequence()));
   }
 
   public static Function<Definition, Definition> onIdentifier(

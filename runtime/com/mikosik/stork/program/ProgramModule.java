@@ -1,6 +1,5 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.compile.Bridge.javaInteger;
@@ -34,7 +33,7 @@ public class ProgramModule {
   }
 
   public static Module programModule() {
-    return module(chain(
+    return module(sequence(
         definition(WRITE_STREAM, writeStream()),
         definition(WRITE_BYTE, writeByte()),
         definition(CLOSE_STREAM, instruction(argument -> {

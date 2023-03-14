@@ -1,6 +1,5 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -30,7 +29,7 @@ public class CombinatoryModule {
   }
 
   public static Module combinatoryModule() {
-    return module(chain(
+    return module(sequence(
         /** I(x) = x */
         definition(I, instruction(x -> x)),
 

@@ -3,6 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.model.change.Changes.changeIdentifier;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.Set;
 
@@ -15,9 +16,9 @@ public class CheckUndefined {
     inModule(changeVariable(variable -> {
       throw new RuntimeException(variable.name);
     })).apply(module);
-    Set<Identifier> defined = module.definitions
+    Set<Identifier> defined = module.definitions.stream()
         .map(definition -> definition.identifier)
-        .toHashSet();
+        .collect(toSet());
     inModule(changeIdentifier(identifier -> {
       if (!defined.contains(identifier)) {
         throw new RuntimeException(identifier.name());

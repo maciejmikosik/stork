@@ -1,6 +1,5 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;
 import static com.mikosik.stork.common.Throwables.fail;
@@ -20,8 +19,9 @@ import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 
 import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.common.io.Ascii;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.MaybeByte;
@@ -34,13 +34,13 @@ import com.mikosik.stork.model.Variable;
 
 public class Compiler {
   public Module compileModule(Input input) {
-    Chain<Definition> definitions = chain();
+    List<Definition> definitions = new LinkedList<>();
     while (input.peek().hasByte()) {
       skipWhitespaces(input);
-      definitions = definitions.add(compileDefinition(input));
+      definitions.add(compileDefinition(input));
       skipWhitespaces(input);
     }
-    return module(definitions.reverse());
+    return module(definitions);
   }
 
   public Definition compileDefinition(Input input) {

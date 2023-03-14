@@ -1,6 +1,7 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Bind.join;
@@ -46,7 +47,6 @@ import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.compile.Decompiler;
 import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
@@ -93,10 +93,10 @@ public class TestDecompiler {
             .add(test("f(x)(y){x}", definition("f", lambda(x, y, x))))
             .add(test("f{g}", definition("f", identifier("g")))))
         .add(suite("module")
-            .add(test("", module(Chain.chain())))
-            .add(test("f{x}", module(chain(
+            .add(test("", module(sequence())))
+            .add(test("f{x}", module(sequence(
                 definition("f", identifier("x"))))))
-            .add(test("f{x} g{y}", module(chain(
+            .add(test("f{x} g{y}", module(sequence(
                 definition("f", identifier("x")),
                 definition("g", identifier("y")))))))
         .add(suite("local")

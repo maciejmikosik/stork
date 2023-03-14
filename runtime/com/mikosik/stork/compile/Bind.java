@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.Chain.chain;
 import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
@@ -11,6 +12,7 @@ import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
 import static com.mikosik.stork.model.change.Changes.onNamespace;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -41,9 +43,9 @@ public class Bind {
 
   public static Function<Module, Module> export(Namespace namespace) {
     return module -> {
-      var names = module.definitions
+      var names = module.definitions.stream()
           .map(definition -> definition.identifier.variable.name)
-          .toHashSet();
+          .collect(toSet());
       return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
           .andThen(inModule(changeVariable(variable -> names.contains(variable.name)
               ? identifier(namespace, variable)
@@ -53,6 +55,7 @@ public class Bind {
   }
 
   public static Module join(Chain<Module> modules) {
-    return module(modules.flatMap(module -> module.definitions));
+    return module(modules.flatMap(module -> chain(module.definitions))
+        .toLinkedList());
   }
 }
