@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Chain.chain;
+import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.linking;
@@ -27,6 +28,7 @@ import static com.mikosik.stork.test.Reuse.LANG_MODULE;
 import static java.lang.String.format;
 import static org.quackery.Case.newCase;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -34,17 +36,16 @@ import org.quackery.Body;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.Chain;
 import com.mikosik.stork.compile.Compiler;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Linkage;
+import com.mikosik.stork.model.Link;
 
 public class SnippetTest implements Test {
   private final String name;
-  private Linkage linkage = linkage();
-  private Chain<Test> tests = chain();
+  private final List<Link> links = new LinkedList<>();
+  private final List<Test> tests = new LinkedList<>();
 
   private SnippetTest(String name) {
     this.name = name;
@@ -55,12 +56,12 @@ public class SnippetTest implements Test {
   }
 
   public SnippetTest importing(String global) {
-    linkage = linkage.add(link(identifier(global)));
+    links.add(link(identifier(global)));
     return this;
   }
 
   public SnippetTest test(String actual, String expected) {
-    tests = tests.add(newCase(
+    tests.add(newCase(
         format("%s = %s", actual, expected),
         () -> run(actual, expected)));
     return this;
@@ -104,7 +105,7 @@ public class SnippetTest implements Test {
   private Expression prepareSnippet(String snippet) {
     Expression compiled = new Compiler().compileExpression(input(snippet));
     return inExpression(bindLambdaParameter)
-        .andThen(inExpression(changeVariable(linking(linkage))))
+        .andThen(inExpression(changeVariable(linking(linkage(chain(links))))))
         .andThen(inExpression(unlambda))
         .andThen(inExpression(unquote))
         .apply(compiled);
@@ -112,6 +113,6 @@ public class SnippetTest implements Test {
 
   public <R> R visit(BiFunction<String, Body, R> caseHandler,
       BiFunction<String, List<Test>, R> suiteHandler) {
-    return suiteHandler.apply(name, tests.reverse().toLinkedList());
+    return suiteHandler.apply(name, sequence(tests));
   }
 }
