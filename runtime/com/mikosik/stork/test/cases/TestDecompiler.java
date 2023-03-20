@@ -3,6 +3,7 @@ package com.mikosik.stork.test.cases;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
+import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.removeNamespaces;
 import static com.mikosik.stork.compile.CombinatoryModule.B;
@@ -12,7 +13,7 @@ import static com.mikosik.stork.compile.CombinatoryModule.K;
 import static com.mikosik.stork.compile.CombinatoryModule.S;
 import static com.mikosik.stork.compile.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.Decompiler.decompiler;
+import static com.mikosik.stork.compile.Decompiler.decompile;
 import static com.mikosik.stork.compile.MathModule.ADD;
 import static com.mikosik.stork.compile.MathModule.DIVIDEBY;
 import static com.mikosik.stork.compile.MathModule.EQUAL;
@@ -47,7 +48,6 @@ import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.compile.Decompiler;
 import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -156,17 +156,13 @@ public class TestDecompiler {
   }
 
   private static Test test(String expected, Model model) {
-    return test(decompiler(), expected, model);
-  }
-
-  private static Test test(Decompiler decompiler, String expected, Model model) {
     return newCase(expected, () -> {
-      run(decompiler, model, expected);
+      run(model, expected);
     });
   }
 
-  private static void run(Decompiler decompiler, Model model, String expected) {
-    String actual = decompiler.decompile(model);
+  private static void run(Model model, String expected) {
+    String actual = ascii(decompile(model));
     if (!expected.equals(actual)) {
       throw new AssertException(format(""
           + "expected\n"

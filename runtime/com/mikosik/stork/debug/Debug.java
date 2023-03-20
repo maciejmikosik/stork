@@ -1,6 +1,5 @@
 package com.mikosik.stork.debug;
 
-import static com.mikosik.stork.compile.Decompiler.decompiler;
 import static org.logbuddy.decorator.ComposedDecorator.compose;
 import static org.logbuddy.decorator.InjectingDecorator.injecting;
 import static org.logbuddy.decorator.InvocationDecorator.invocationDecorator;
@@ -17,7 +16,7 @@ import org.logbuddy.Renderer;
 
 public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
-    Renderer<String> renderer = new StorkTextRenderer(decompiler());
+    Renderer<String> renderer = new StorkTextRenderer();
     Logger logger = invocationDepth(fileLogger(logFile, renderer));
     Decorator decorator = compose(
         invocationDecorator(logger),

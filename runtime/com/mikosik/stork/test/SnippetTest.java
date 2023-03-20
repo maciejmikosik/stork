@@ -2,10 +2,11 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.linking;
 import static com.mikosik.stork.compile.Bind.removeNamespaces;
-import static com.mikosik.stork.compile.Decompiler.decompiler;
+import static com.mikosik.stork.compile.Decompiler.decompile;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
@@ -97,7 +98,7 @@ public class SnippetTest implements Test {
 
     Computation computed = computer.compute(computation(compiled));
 
-    return decompiler().decompile(removeNamespaces(abort(computed)));
+    return ascii(decompile(removeNamespaces(abort(computed))));
   }
 
   private Expression prepareSnippet(String snippet) {
