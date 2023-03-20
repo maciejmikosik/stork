@@ -21,11 +21,9 @@ import com.mikosik.stork.program.Stdin;
 import com.mikosik.stork.program.Stdout;
 
 public class Decompilation {
-  private final boolean local;
   private final Output output;
 
-  public Decompilation(boolean local, Output output) {
-    this.local = local;
+  public Decompilation(Output output) {
     this.output = output;
   }
 
@@ -53,9 +51,7 @@ public class Decompilation {
 
   private void decompile(Definition definition) {
     Identifier identifier = definition.identifier;
-    decompile(local
-        ? identifier.variable.name
-        : identifier.name());
+    decompile(identifier.name());
     decompileBody(definition.body);
   }
 
@@ -63,9 +59,7 @@ public class Decompilation {
     if (expression instanceof Variable variable) {
       decompile(variable.name);
     } else if (expression instanceof Identifier identifier) {
-      decompile(local
-          ? identifier.variable.name
-          : identifier.name());
+      decompile(identifier.name());
     } else if (expression instanceof Integer integer) {
       decompile(integer.value.toString());
     } else if (expression instanceof Quote quote) {

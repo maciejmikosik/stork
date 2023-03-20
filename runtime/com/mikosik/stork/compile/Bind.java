@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.change.Changes.changeIdentifier;
 import static com.mikosik.stork.model.change.Changes.changeLambda;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
@@ -52,6 +53,11 @@ public class Bind {
               : variable)))
           .apply(module);
     };
+  }
+
+  public static Expression removeNamespaces(Expression expression) {
+    return inExpression(changeIdentifier(identifier -> identifier(identifier.variable)))
+        .apply(expression);
   }
 
   public static Module join(List<Module> modules) {

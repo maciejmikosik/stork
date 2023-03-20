@@ -1,5 +1,6 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.compile.Bind.removeNamespaces;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.model.Application.application;
@@ -50,7 +51,7 @@ public final class StorkTextRenderer extends TextRenderer {
   }
 
   private String render(Expression expression) {
-    return decompiler.decompile(expression);
+    return decompiler.decompile(removeNamespaces(expression));
   }
 
   private String render(Stack stack) {

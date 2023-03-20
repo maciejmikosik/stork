@@ -22,6 +22,10 @@ public class Identifier implements Expression {
     return new Identifier(namespace, variable);
   }
 
+  public static Identifier identifier(Variable variable) {
+    return new Identifier(namespace(sequence()), variable);
+  }
+
   public static Identifier identifier(String name) {
     List<String> path = sequence(name.split("\\."));
     return identifier(

@@ -17,7 +17,7 @@ import org.logbuddy.Renderer;
 
 public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
-    Renderer<String> renderer = new StorkTextRenderer(decompiler().local());
+    Renderer<String> renderer = new StorkTextRenderer(decompiler());
     Logger logger = invocationDepth(fileLogger(logFile, renderer));
     Decorator decorator = compose(
         invocationDecorator(logger),

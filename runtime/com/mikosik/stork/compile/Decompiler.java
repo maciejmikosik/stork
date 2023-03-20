@@ -8,22 +8,14 @@ import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.model.Model;
 
 public class Decompiler {
-  private boolean local = false;
-
-  private Decompiler(boolean local) {
-    this.local = local;
-  }
+  private Decompiler() {}
 
   public static Decompiler decompiler() {
-    return new Decompiler(false);
-  }
-
-  public Decompiler local() {
-    return new Decompiler(true);
+    return new Decompiler();
   }
 
   public Decompilation to(Output output) {
-    return new Decompilation(local, output);
+    return new Decompilation(output);
   }
 
   public String decompile(Model model) {

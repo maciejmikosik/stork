@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Bind.join;
+import static com.mikosik.stork.compile.Bind.removeNamespaces;
 import static com.mikosik.stork.compile.CombinatoryModule.B;
 import static com.mikosik.stork.compile.CombinatoryModule.C;
 import static com.mikosik.stork.compile.CombinatoryModule.I;
@@ -99,8 +100,8 @@ public class TestDecompiler {
                 definition("f", identifier("x")),
                 definition("g", identifier("y")))))))
         .add(suite("local")
-            .add(test(decompiler().local(), "function", identifier("package.package.function")))
-            .add(test(decompiler().local(), "function", identifier("function"))));
+            .add(test("function", removeNamespaces(identifier("package.package.function"))))
+            .add(test("function", removeNamespaces(identifier("function")))));
   }
 
   private static Suite testInstructions() {
