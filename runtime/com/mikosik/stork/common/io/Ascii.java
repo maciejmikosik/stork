@@ -44,4 +44,8 @@ public class Ascii {
   public static String ascii(byte[] bytes) {
     return new String(bytes, US_ASCII);
   }
+
+  public static byte[] bytes(String string) {
+    return string.getBytes(US_ASCII);
+  }
 }

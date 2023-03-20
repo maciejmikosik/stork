@@ -4,10 +4,10 @@ import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.lang.String.join;
+import static java.util.Objects.hash;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class Identifier implements Expression {
   public final Namespace namespace;
@@ -20,6 +20,10 @@ public class Identifier implements Expression {
 
   public static Identifier identifier(Namespace namespace, Variable variable) {
     return new Identifier(namespace, variable);
+  }
+
+  public static Identifier identifier(Variable variable) {
+    return new Identifier(namespace(sequence()), variable);
   }
 
   public static Identifier identifier(String name) {
@@ -35,23 +39,17 @@ public class Identifier implements Expression {
     return join(".", path);
   }
 
-  public boolean equals(Object that) {
-    return that instanceof Identifier identifier
+  public boolean equals(Object object) {
+    return object instanceof Identifier identifier
         && equals(identifier);
   }
 
   private boolean equals(Identifier that) {
-    return namespace.path.equals(that.namespace.path)
-        && variable.name.equals(that.variable.name);
+    return namespace.equals(that.namespace)
+        && variable.equals(that.variable);
   }
 
   public int hashCode() {
-    return Objects.hash(
-        namespace.path,
-        variable.name);
-  }
-
-  public String toString() {
-    return name();
+    return hash(namespace, variable);
   }
 }

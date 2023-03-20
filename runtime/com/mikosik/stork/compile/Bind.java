@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.change.Changes.changeIdentifier;
 import static com.mikosik.stork.model.change.Changes.changeLambda;
 import static com.mikosik.stork.model.change.Changes.changeVariable;
 import static com.mikosik.stork.model.change.Changes.inExpression;
@@ -34,24 +35,29 @@ public class Bind {
                   .apply(lambda));
 
   public static Change<Variable> linking(Linkage linkage) {
-    Map<String, Expression> map = linkage.links.stream()
+    Map<Variable, Expression> map = linkage.links.stream()
         .collect(toMap(
-            link -> link.variable.name,
+            link -> link.variable,
             link -> link.identifier));
-    return variable -> map.getOrDefault(variable.name, variable);
+    return variable -> map.getOrDefault(variable, variable);
   }
 
   public static Function<Module, Module> export(Namespace namespace) {
     return module -> {
-      var names = module.definitions.stream()
-          .map(definition -> definition.identifier.variable.name)
+      var variables = module.definitions.stream()
+          .map(definition -> definition.identifier.variable)
           .collect(toSet());
       return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
-          .andThen(inModule(changeVariable(variable -> names.contains(variable.name)
+          .andThen(inModule(changeVariable(variable -> variables.contains(variable)
               ? identifier(namespace, variable)
               : variable)))
           .apply(module);
     };
+  }
+
+  public static Expression removeNamespaces(Expression expression) {
+    return inExpression(changeIdentifier(identifier -> identifier(identifier.variable)))
+        .apply(expression);
   }
 
   public static Module join(List<Module> modules) {

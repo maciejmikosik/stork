@@ -14,4 +14,17 @@ public class Namespace {
   public static Namespace namespace(List<String> path) {
     return new Namespace(sequence(path));
   }
+
+  public boolean equals(Object object) {
+    return object instanceof Namespace namespace
+        && equals(namespace);
+  }
+
+  private boolean equals(Namespace that) {
+    return path.equals(that.path);
+  }
+
+  public int hashCode() {
+    return path.hashCode();
+  }
 }
