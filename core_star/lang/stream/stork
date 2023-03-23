@@ -158,6 +158,20 @@
       (none)
   }
 
+  interlace(streams) {
+    streams
+      ((headStream)(tailStreams) {
+        headStream
+          ((head)(tail){
+            some
+              (head)
+              (interlace(append(single(tail))(tailStreams)))
+          })
+          (interlace(tailStreams))
+      })
+      (none)
+  }
+
   array(size) {
     array2(size)(none)
   }
