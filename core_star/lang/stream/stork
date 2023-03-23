@@ -173,19 +173,17 @@
   }
 
   array(size) {
-    array2(size)(none)
+    arrayCollecting(size)(none)
   }
 
-  array2(size)(collected) {
+  arrayCollecting(size)(collected) {
     moreThan(0)(size)
-      (array3(size)(collected))
-      (reverse(collected))
-  }
-
-  array3(size)(collected)(element) {
-    array2
-      (decrement(size))
-      (some(element)(collected))
+      ((element) {
+        arrayCollecting
+          (decrement(size))
+          (append(single(element))(collected))
+      })
+      (collected)
   }
 
   generate(next)(current) {
