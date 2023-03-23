@@ -9,10 +9,12 @@ import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Stars.build;
+import static com.mikosik.stork.compile.Stars.langModule;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
+import static com.mikosik.stork.compile.Stars.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
-import static com.mikosik.stork.test.Reuse.LANG_AND_PROGRAM_MODULE;
+import static com.mikosik.stork.program.ProgramModule.programModule;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -34,6 +36,10 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
+  private static final Module LANG_AND_PROGRAM_MODULE = build(verify(join(sequence(
+      langModule(),
+      programModule()))));
+
   private final String name;
   private final Path directory;
   private final Map<Path, byte[]> files = new HashMap<>();
