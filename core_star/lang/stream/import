@@ -7,5 +7,6 @@ lang.integer.decrement
 lang.function.flip
 lang.boolean.true
 lang.boolean.false
+lang.boolean.and
 lang.boolean.or
 lang.boolean.not
