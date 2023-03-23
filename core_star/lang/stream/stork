@@ -8,6 +8,7 @@
   }
 
 
+
   hasSome(stream) {
     stream
       ((head)(tail) {
@@ -18,6 +19,20 @@
 
   hasNone(stream) {
     not(hasSome(stream))
+  }
+
+  equal(equalElements)(streamA)(streamB) {
+    streamA
+      ((headA)(tailA) {
+        streamB
+          ((headB)(tailB) {
+            and
+              (equalElements(headA)(headB))
+              (equal(equalElements)(tailA)(tailB))
+          })
+          (false)
+      })
+      (hasNone(streamB))
   }
 
   reduce(sum)(add)(stream) {
@@ -143,20 +158,32 @@
       (none)
   }
 
+  interlace(streams) {
+    streams
+      ((headStream)(tailStreams) {
+        headStream
+          ((head)(tail){
+            some
+              (head)
+              (interlace(append(single(tail))(tailStreams)))
+          })
+          (interlace(tailStreams))
+      })
+      (none)
+  }
+
   array(size) {
-    array2(size)(none)
+    arrayCollecting(size)(none)
   }
 
-  array2(size)(collected) {
+  arrayCollecting(size)(collected) {
     moreThan(0)(size)
-      (array3(size)(collected))
-      (reverse(collected))
-  }
-
-  array3(size)(collected)(element) {
-    array2
-      (decrement(size))
-      (some(element)(collected))
+      ((element) {
+        arrayCollecting
+          (decrement(size))
+          (append(single(element))(collected))
+      })
+      (collected)
   }
 
   generate(next)(current) {
