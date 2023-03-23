@@ -21,10 +21,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.BiFunction;
 
 import org.quackery.Body;
@@ -42,7 +40,7 @@ public class ProgramTest implements Test {
 
   private final String name;
   private final Path directory;
-  private final Map<Path, byte[]> files = new HashMap<>();
+  private final List<File> files = new LinkedList<>();
   private byte[] stdin = new byte[0];
   private byte[] expectedStdout = null;
 
@@ -56,7 +54,7 @@ public class ProgramTest implements Test {
   }
 
   public ProgramTest file(String path, String content) {
-    files.put(Paths.get(path), bytes(content));
+    files.add(new File(Paths.get(path), bytes(content)));
     return this;
   }
 
@@ -77,10 +75,10 @@ public class ProgramTest implements Test {
 
   private void run() {
     check(expectedStdout != null);
-    for (Entry<Path, byte[]> file : files.entrySet()) {
-      Path filePath = directory.resolve(file.getKey());
-      output(filePath).write(file.getValue());
-    }
+    files.forEach(file -> {
+      output(directory.resolve(file.path))
+          .write(file.content);
+    });
 
     Module module = join(sequence(
         build(moduleFromDirectory(directory)),
@@ -103,4 +101,6 @@ public class ProgramTest implements Test {
   private byte[] bytes(String string) {
     return string.getBytes(UTF_8);
   }
+
+  private static record File(Path path, byte[] content) {}
 }
