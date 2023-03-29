@@ -8,8 +8,9 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Bind.join;
+import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.compile.MathModule.mathModule;
 import static com.mikosik.stork.compile.Stars.build;
-import static com.mikosik.stork.compile.Stars.langModule;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.compile.Stars.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -34,8 +35,10 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
-  private static final Module LANG_AND_PROGRAM_MODULE = build(verify(join(sequence(
-      langModule(),
+  private static final Module NATIVE_MODULE = build(verify(join(sequence(
+      moduleFromDirectory(Paths.get("core_star")),
+      combinatoryModule(),
+      mathModule(),
       programModule()))));
 
   private final String name;
@@ -82,7 +85,7 @@ public class ProgramTest implements Test {
 
     Module module = join(sequence(
         build(moduleFromDirectory(directory)),
-        LANG_AND_PROGRAM_MODULE));
+        NATIVE_MODULE));
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());

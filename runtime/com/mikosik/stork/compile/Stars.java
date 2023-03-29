@@ -11,8 +11,6 @@ import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
 import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
 import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
-import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.MathModule.mathModule;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -29,7 +27,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Link;
@@ -39,13 +36,6 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
 
 public class Stars {
-  public static Module langModule() {
-    return join(sequence(
-        combinatoryModule(),
-        mathModule(),
-        moduleFromDirectory(Paths.get("core_star"))));
-  }
-
   public static Module build(Module module) {
     return onEachDefinition(onBody(deep(unlambda)))
         .andThen(onEachDefinition(onBody(deep(unquote))))
