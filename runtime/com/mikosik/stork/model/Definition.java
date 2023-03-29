@@ -2,7 +2,7 @@ package com.mikosik.stork.model;
 
 import static com.mikosik.stork.model.Identifier.identifier;
 
-public class Definition implements Model {
+public class Definition {
   public final Identifier identifier;
   public final Expression body;
 

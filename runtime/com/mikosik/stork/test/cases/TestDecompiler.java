@@ -13,7 +13,6 @@ import static com.mikosik.stork.compile.CombinatoryModule.K;
 import static com.mikosik.stork.compile.CombinatoryModule.S;
 import static com.mikosik.stork.compile.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.Decompiler.decompile;
 import static com.mikosik.stork.compile.MathModule.ADD;
 import static com.mikosik.stork.compile.MathModule.DIVIDEBY;
 import static com.mikosik.stork.compile.MathModule.EQUAL;
@@ -43,16 +42,19 @@ import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import java.math.BigInteger;
+import java.util.function.Function;
 
 import org.quackery.Suite;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
+import com.mikosik.stork.common.io.Serializable;
+import com.mikosik.stork.compile.Decompiler;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
-import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Parameter;
 
@@ -155,23 +157,31 @@ public class TestDecompiler {
             .add(test("<lang.native.program.closeStream>", inst(CLOSE_STREAM))));
   }
 
-  private static Test test(String expected, Model model) {
-    return newCase(expected, () -> {
-      run(model, expected);
-    });
+  private static Test test(String expected, Expression expression) {
+    return test(expected, expression, Decompiler::decompile);
   }
 
-  private static void run(Model model, String expected) {
-    String actual = ascii(decompile(model));
-    if (!expected.equals(actual)) {
-      throw new AssertException(format(""
-          + "expected\n"
-          + "  %s\n"
-          + "but was\n"
-          + "  %s\n",
-          expected,
-          actual));
-    }
+  private static Test test(String expected, Definition definition) {
+    return test(expected, definition, Decompiler::decompile);
+  }
+
+  private static Test test(String expected, Module module) {
+    return test(expected, module, Decompiler::decompile);
+  }
+
+  private static <M> Test test(String expected, M model, Function<M, Serializable> decompiler) {
+    return newCase(expected, () -> {
+      String actual = ascii(decompiler.apply(model));
+      if (!expected.equals(actual)) {
+        throw new AssertException(format(""
+            + "expected\n"
+            + "  %s\n"
+            + "but was\n"
+            + "  %s\n",
+            expected,
+            actual));
+      }
+    });
   }
 
   private static Expression apply(Instruction instruction, Expression... arguments) {

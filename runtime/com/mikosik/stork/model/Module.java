@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Sequence.sequence;
 
 import java.util.List;
 
-public class Module implements Model {
+public class Module {
   public final List<Definition> definitions;
 
   private Module(List<Definition> definitions) {
