@@ -16,7 +16,6 @@ import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Model;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Parameter;
@@ -26,18 +25,6 @@ import com.mikosik.stork.program.Stdin;
 import com.mikosik.stork.program.Stdout;
 
 public class Decompiler {
-  public static Serializable decompile(Model model) {
-    if (model instanceof Module module) {
-      return decompile(module);
-    } else if (model instanceof Definition definition) {
-      return decompile(definition);
-    } else if (model instanceof Expression expression) {
-      return decompile(expression);
-    } else {
-      throw new RuntimeException(format("unknown model: %s", model));
-    }
-  }
-
   public static Serializable decompile(Module module) {
     return join(module.definitions.stream()
         .flatMap(definition -> Stream.of(
@@ -48,9 +35,8 @@ public class Decompiler {
   }
 
   public static Serializable decompile(Definition definition) {
-    Identifier identifier = definition.identifier;
     return join(
-        serializable(identifier.name()),
+        serializable(definition.identifier.name()),
         decompileBody(definition.body));
   }
 

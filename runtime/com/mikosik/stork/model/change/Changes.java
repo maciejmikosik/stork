@@ -22,63 +22,69 @@ import com.mikosik.stork.model.Variable;
 
 public class Changes {
   public static Function<Module, Module> onEachDefinition(
-      Function<? super Definition, Definition> transform) {
+      Function<? super Definition, ? extends Definition> change) {
     return module -> module(module.definitions.stream()
-        .map(transform)
+        .map(change)
         .collect(toSequence()));
   }
 
   public static Function<Definition, Definition> onIdentifier(
-      Function<? super Identifier, Identifier> change) {
+      Function<? super Identifier, ? extends Identifier> change) {
     return definition -> definition(
         change.apply(definition.identifier),
         definition.body);
   }
 
+  public static Function<Definition, Definition> onBody(
+      Function<? super Expression, ? extends Expression> change) {
+    return definition -> definition(
+        definition.identifier,
+        change.apply(definition.body));
+  }
+
   public static Function<Identifier, Identifier> onNamespace(
-      Function<? super Namespace, Namespace> change) {
+      Function<? super Namespace, ? extends Namespace> change) {
     return identifier -> identifier(
         change.apply(identifier.namespace),
         identifier.variable);
   }
 
-  public static Function<Module, Module> inModule(Change<Expression> change) {
-    return onEachDefinition(definition -> definition(
-        (Identifier) change.apply(definition.identifier),
-        inExpression(change).apply(definition.body)));
-  }
-
-  public static Change<Expression> inExpression(Change<Expression> change) {
+  public static Function<Expression, Expression> deep(
+      Function<? super Expression, ? extends Expression> change) {
     return expression -> expression instanceof Lambda lambda
         ? change.apply(lambda(
             (Parameter) change.apply(lambda.parameter),
-            inExpression(change).apply(lambda.body)))
+            deep(change).apply(lambda.body)))
         : expression instanceof Application application
             ? change.apply(application(
-                inExpression(change).apply(application.function),
-                inExpression(change).apply(application.argument)))
+                deep(change).apply(application.function),
+                deep(change).apply(application.argument)))
             : change.apply(expression);
   }
 
-  public static Change<Expression> changeIdentifier(Change<Identifier> change) {
+  public static Function<Expression, Expression> ifIdentifier(
+      Function<? super Identifier, ? extends Expression> change) {
     return expression -> expression instanceof Identifier identifier
         ? change.apply(identifier)
         : expression;
   }
 
-  public static Change<Expression> changeVariable(Change<Variable> change) {
+  public static Function<Expression, Expression> ifVariable(
+      Function<? super Variable, ? extends Expression> change) {
     return expression -> expression instanceof Variable variable
         ? change.apply(variable)
         : expression;
   }
 
-  public static Change<Expression> changeLambda(Change<Lambda> change) {
+  public static Function<Expression, Expression> ifLambda(
+      Function<? super Lambda, ? extends Expression> change) {
     return expression -> expression instanceof Lambda lambda
         ? change.apply(lambda)
         : expression;
   }
 
-  public static Change<Expression> changeQuote(Change<Quote> change) {
+  public static Function<Expression, Expression> ifQuote(
+      Function<? super Quote, ? extends Expression> change) {
     return expression -> expression instanceof Quote quote
         ? change.apply(quote)
         : expression;

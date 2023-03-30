@@ -21,8 +21,10 @@ import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Unit.unit;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.model.change.Changes.changeVariable;
-import static com.mikosik.stork.model.change.Changes.inModule;
+import static com.mikosik.stork.model.change.Changes.deep;
+import static com.mikosik.stork.model.change.Changes.ifVariable;
+import static com.mikosik.stork.model.change.Changes.onBody;
+import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.nio.file.Files;
@@ -45,8 +47,8 @@ public class Stars {
   }
 
   public static Module build(Module module) {
-    return inModule(unlambda)
-        .andThen(inModule(unquote))
+    return onEachDefinition(onBody(deep(unlambda)))
+        .andThen(onEachDefinition(onBody(deep(unquote))))
         .apply(module);
   }
 
@@ -68,9 +70,9 @@ public class Stars {
   }
 
   private static Module selfBuild(Unit unit) {
-    return inModule(bindLambdaParameter)
+    return onEachDefinition(onBody(deep(bindLambdaParameter)))
         .andThen(export(unit.namespace))
-        .andThen(inModule(changeVariable(linking(unit.linkage))))
+        .andThen(onEachDefinition(onBody(deep(ifVariable(linking(unit.linkage))))))
         .apply(unit.module);
   }
 
