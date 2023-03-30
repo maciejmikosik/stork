@@ -10,12 +10,12 @@ import static com.mikosik.stork.model.change.Changes.changeLambda;
 import static com.mikosik.stork.model.change.Changes.inExpression;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.change.Change;
 
 /**
  * Transforms lambda abstractions into basis using SKI combinators.
@@ -25,7 +25,7 @@ import com.mikosik.stork.model.change.Change;
 public class Unlambda {
   // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
   // 5. T[λx.λy.E] => T[λx.T[λy.E]]
-  public static final Change<Expression> unlambda = changeLambda(Unlambda::transform);
+  public static final Function<Expression, Expression> unlambda = changeLambda(Unlambda::transform);
 
   private static Expression transform(Lambda lambda) {
     return transform(lambda.parameter, lambda.body);

@@ -42,13 +42,15 @@ public class Changes {
         identifier.variable);
   }
 
-  public static Function<Module, Module> inModule(Change<Expression> change) {
+  public static Function<Module, Module> inModule(
+      Function<Expression, Expression> change) {
     return onEachDefinition(definition -> definition(
         (Identifier) change.apply(definition.identifier),
         inExpression(change).apply(definition.body)));
   }
 
-  public static Change<Expression> inExpression(Change<Expression> change) {
+  public static Function<Expression, Expression> inExpression(
+      Function<Expression, Expression> change) {
     return expression -> expression instanceof Lambda lambda
         ? change.apply(lambda(
             (Parameter) change.apply(lambda.parameter),
@@ -60,25 +62,29 @@ public class Changes {
             : change.apply(expression);
   }
 
-  public static Change<Expression> changeIdentifier(Change<Identifier> change) {
+  public static Function<Expression, Expression> changeIdentifier(
+      Function<Identifier, Expression> change) {
     return expression -> expression instanceof Identifier identifier
         ? change.apply(identifier)
         : expression;
   }
 
-  public static Change<Expression> changeVariable(Change<Variable> change) {
+  public static Function<Expression, Expression> changeVariable(
+      Function<Variable, Expression> change) {
     return expression -> expression instanceof Variable variable
         ? change.apply(variable)
         : expression;
   }
 
-  public static Change<Expression> changeLambda(Change<Lambda> change) {
+  public static Function<Expression, Expression> changeLambda(
+      Function<Lambda, Expression> change) {
     return expression -> expression instanceof Lambda lambda
         ? change.apply(lambda)
         : expression;
   }
 
-  public static Change<Expression> changeQuote(Change<Quote> change) {
+  public static Function<Expression, Expression> changeQuote(
+      Function<Quote, Expression> change) {
     return expression -> expression instanceof Quote quote
         ? change.apply(quote)
         : expression;

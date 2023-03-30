@@ -24,17 +24,16 @@ import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.model.change.Change;
 
 public class Bind {
-  public static final Change<Expression> bindLambdaParameter = changeLambda(
+  public static final Function<Expression, Expression> bindLambdaParameter = changeLambda(
       lambda -> inExpression(changeVariable(
           variable -> variable.name.equals(lambda.parameter.name)
               ? lambda.parameter
               : variable))
                   .apply(lambda));
 
-  public static Change<Variable> linking(Linkage linkage) {
+  public static Function<Variable, Expression> linking(Linkage linkage) {
     Map<Variable, Expression> map = linkage.links.stream()
         .collect(toMap(
             link -> link.variable,
