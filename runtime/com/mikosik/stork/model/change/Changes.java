@@ -45,7 +45,7 @@ public class Changes {
   public static Function<Module, Module> inModule(
       Function<? super Expression, ? extends Expression> change) {
     return onEachDefinition(definition -> definition(
-        (Identifier) change.apply(definition.identifier),
+        definition.identifier,
         inExpression(change).apply(definition.body)));
   }
 
