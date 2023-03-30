@@ -21,7 +21,7 @@ import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Unit.unit;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.model.change.Changes.changeVariable;
+import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -70,7 +70,7 @@ public class Stars {
   private static Module selfBuild(Unit unit) {
     return inModule(bindLambdaParameter)
         .andThen(export(unit.namespace))
-        .andThen(inModule(changeVariable(linking(unit.linkage))))
+        .andThen(inModule(ifVariable(linking(unit.linkage))))
         .apply(unit.module);
   }
 

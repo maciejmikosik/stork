@@ -4,10 +4,10 @@ import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.change.Changes.changeIdentifier;
-import static com.mikosik.stork.model.change.Changes.changeLambda;
-import static com.mikosik.stork.model.change.Changes.changeVariable;
-import static com.mikosik.stork.model.change.Changes.inExpression;
+import static com.mikosik.stork.model.change.Changes.deep;
+import static com.mikosik.stork.model.change.Changes.ifIdentifier;
+import static com.mikosik.stork.model.change.Changes.ifLambda;
+import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.inModule;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
@@ -26,8 +26,8 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Variable;
 
 public class Bind {
-  public static final Function<Expression, Expression> bindLambdaParameter = changeLambda(
-      lambda -> inExpression(changeVariable(
+  public static final Function<Expression, Expression> bindLambdaParameter = ifLambda(
+      lambda -> deep(ifVariable(
           variable -> variable.name.equals(lambda.parameter.name)
               ? lambda.parameter
               : variable))
@@ -47,7 +47,7 @@ public class Bind {
           .map(definition -> definition.identifier.variable)
           .collect(toSet());
       return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
-          .andThen(inModule(changeVariable(variable -> variables.contains(variable)
+          .andThen(inModule(ifVariable(variable -> variables.contains(variable)
               ? identifier(namespace, variable)
               : variable)))
           .apply(module);
@@ -55,7 +55,7 @@ public class Bind {
   }
 
   public static Expression removeNamespaces(Expression expression) {
-    return inExpression(changeIdentifier(identifier -> identifier(identifier.variable)))
+    return deep(ifIdentifier(identifier -> identifier(identifier.variable)))
         .apply(expression);
   }
 

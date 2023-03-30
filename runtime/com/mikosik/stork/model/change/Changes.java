@@ -46,44 +46,44 @@ public class Changes {
       Function<? super Expression, ? extends Expression> change) {
     return onEachDefinition(definition -> definition(
         definition.identifier,
-        inExpression(change).apply(definition.body)));
+        deep(change).apply(definition.body)));
   }
 
-  public static Function<Expression, Expression> inExpression(
+  public static Function<Expression, Expression> deep(
       Function<? super Expression, ? extends Expression> change) {
     return expression -> expression instanceof Lambda lambda
         ? change.apply(lambda(
             (Parameter) change.apply(lambda.parameter),
-            inExpression(change).apply(lambda.body)))
+            deep(change).apply(lambda.body)))
         : expression instanceof Application application
             ? change.apply(application(
-                inExpression(change).apply(application.function),
-                inExpression(change).apply(application.argument)))
+                deep(change).apply(application.function),
+                deep(change).apply(application.argument)))
             : change.apply(expression);
   }
 
-  public static Function<Expression, Expression> changeIdentifier(
+  public static Function<Expression, Expression> ifIdentifier(
       Function<? super Identifier, ? extends Expression> change) {
     return expression -> expression instanceof Identifier identifier
         ? change.apply(identifier)
         : expression;
   }
 
-  public static Function<Expression, Expression> changeVariable(
+  public static Function<Expression, Expression> ifVariable(
       Function<? super Variable, ? extends Expression> change) {
     return expression -> expression instanceof Variable variable
         ? change.apply(variable)
         : expression;
   }
 
-  public static Function<Expression, Expression> changeLambda(
+  public static Function<Expression, Expression> ifLambda(
       Function<? super Lambda, ? extends Expression> change) {
     return expression -> expression instanceof Lambda lambda
         ? change.apply(lambda)
         : expression;
   }
 
-  public static Function<Expression, Expression> changeQuote(
+  public static Function<Expression, Expression> ifQuote(
       Function<? super Quote, ? extends Expression> change) {
     return expression -> expression instanceof Quote quote
         ? change.apply(quote)
