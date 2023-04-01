@@ -3,18 +3,23 @@ package com.mikosik.stork.model.change;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.NamedInstruction.name;
 
 import java.util.function.Function;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
@@ -51,15 +56,25 @@ public class Changes {
 
   public static Function<Expression, Expression> deep(
       Function<? super Expression, ? extends Expression> change) {
-    return expression -> expression instanceof Lambda lambda
-        ? change.apply(lambda(
+    return expression -> {
+      if (expression instanceof Lambda lambda) {
+        return change.apply(lambda(
             (Parameter) change.apply(lambda.parameter),
-            deep(change).apply(lambda.body)))
-        : expression instanceof Application application
-            ? change.apply(application(
-                deep(change).apply(application.function),
-                deep(change).apply(application.argument)))
-            : change.apply(expression);
+            deep(change).apply(lambda.body)));
+      } else if (expression instanceof Application application) {
+        return change.apply(application(
+            deep(change).apply(application.function),
+            deep(change).apply(application.argument)));
+      } else if (expression instanceof EagerInstruction instruction) {
+        return change.apply(eager((Instruction) change.apply(instruction.instruction)));
+      } else if (expression instanceof NamedInstruction instruction) {
+        return change.apply(name(
+            change.apply(instruction.name),
+            (Instruction) change.apply(instruction.instruction)));
+      } else {
+        return change.apply(expression);
+      }
+    };
   }
 
   public static Function<Expression, Expression> ifIdentifier(
