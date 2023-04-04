@@ -35,18 +35,18 @@ public class Changes {
         definition.body);
   }
 
+  public static Function<Definition, Definition> onBody(
+      Function<? super Expression, ? extends Expression> change) {
+    return definition -> definition(
+        definition.identifier,
+        change.apply(definition.body));
+  }
+
   public static Function<Identifier, Identifier> onNamespace(
       Function<? super Namespace, ? extends Namespace> change) {
     return identifier -> identifier(
         change.apply(identifier.namespace),
         identifier.variable);
-  }
-
-  public static Function<Module, Module> inModule(
-      Function<? super Expression, ? extends Expression> change) {
-    return onEachDefinition(definition -> definition(
-        definition.identifier,
-        deep(change).apply(definition.body)));
   }
 
   public static Function<Expression, Expression> deep(

@@ -8,7 +8,7 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifIdentifier;
 import static com.mikosik.stork.model.change.Changes.ifLambda;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
-import static com.mikosik.stork.model.change.Changes.inModule;
+import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
 import static com.mikosik.stork.model.change.Changes.onNamespace;
@@ -47,9 +47,10 @@ public class Bind {
           .map(definition -> definition.identifier.variable)
           .collect(toSet());
       return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
-          .andThen(inModule(ifVariable(variable -> variables.contains(variable)
-              ? identifier(namespace, variable)
-              : variable)))
+          .andThen(onEachDefinition(onBody(deep(
+              ifVariable(variable -> variables.contains(variable)
+                  ? identifier(namespace, variable)
+                  : variable)))))
           .apply(module);
     };
   }
