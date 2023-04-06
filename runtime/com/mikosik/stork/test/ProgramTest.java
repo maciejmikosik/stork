@@ -12,7 +12,7 @@ import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.MathModule.mathModule;
 import static com.mikosik.stork.compile.Stars.build;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
-import static com.mikosik.stork.compile.Stars.verify;
+import static com.mikosik.stork.compile.problem.VerifyModule.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.ProgramModule.programModule;

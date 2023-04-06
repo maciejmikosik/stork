@@ -6,15 +6,19 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
+import static java.util.stream.Stream.concat;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
@@ -88,5 +92,33 @@ public class Changes {
     return expression -> expression instanceof Quote quote
         ? change.apply(quote)
         : expression;
+  }
+
+  public static Stream<Expression> walk(Expression expression) {
+    return concat(
+        walkChildren(expression),
+        Stream.of(expression));
+  }
+
+  private static Stream<Expression> walkChildren(Expression expression) {
+    if (expression instanceof Lambda lambda) {
+      return concat(
+          Stream.of(lambda.parameter),
+          walk(lambda.body));
+    } else if (expression instanceof Application application) {
+      return concat(
+          walk(application.function),
+          walk(application.argument));
+    } else if (expression instanceof EagerInstruction instruction) {
+      return concat(
+          walk(instruction.instruction),
+          Stream.of(instruction));
+    } else if (expression instanceof NamedInstruction instruction) {
+      return concat(
+          walk(instruction.instruction),
+          Stream.of(instruction));
+    } else {
+      return Stream.of();
+    }
   }
 }

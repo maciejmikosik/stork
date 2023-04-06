@@ -9,8 +9,6 @@ import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.Bind.export;
 import static com.mikosik.stork.compile.Bind.join;
 import static com.mikosik.stork.compile.Bind.linking;
-import static com.mikosik.stork.compile.CheckCollisions.checkCollisions;
-import static com.mikosik.stork.compile.CheckUndefined.checkUndefined;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -40,12 +38,6 @@ public class Stars {
     return onEachDefinition(onBody(deep(unlambda)))
         .andThen(onEachDefinition(onBody(deep(unquote))))
         .apply(module);
-  }
-
-  public static Module verify(Module module) {
-    checkCollisions(module);
-    checkUndefined(module);
-    return module;
   }
 
   public static Module moduleFromDirectory(Path rootDirectory) {
