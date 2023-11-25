@@ -5,13 +5,14 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.test.Runners.timeout;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.TestProgram.testProgram;
+import static java.time.Duration.ofSeconds;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.AssertException.assertTrue;
+import static org.quackery.run.Runners.timeout;
 
 import org.quackery.Test;
 
@@ -20,7 +21,7 @@ import com.mikosik.stork.model.Instruction;
 
 public class TestEverything {
   public static Test testEverything() {
-    return timeout(1, suite("test everything")
+    return timeout(ofSeconds(1), suite("test everything")
         .add(testProgram())
         .add(testDecompiler())
         .add(testCompiler())
