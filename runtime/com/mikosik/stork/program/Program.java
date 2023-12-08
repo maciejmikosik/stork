@@ -27,26 +27,27 @@ import com.mikosik.stork.model.Module;
 
 public class Program {
   private final Expression main;
-  private final Module module;
+  private final Computer computer;
 
-  private Program(Expression main, Module module) {
+  private Program(Expression main, Computer computer) {
     this.main = main;
-    this.module = module;
+    this.computer = computer;
   }
 
   public static Program program(Identifier main, Module module) {
-    return new Program(main, module);
+    return new Program(main, buildComputer(module));
   }
 
-  public void run(Input input, Output output) {
-    Computer expressing = chained(sequence(
+  private static Computer buildComputer(Module module) {
+    return looping(interruptible(caching(chained(sequence(
         modulingComputer(module),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),
-        returningComputer()));
-    Computer computer = looping(interruptible(caching(expressing)));
+        returningComputer())))));
+  }
 
+  public void run(Input input, Output output) {
     Computation computation = computation(
         application(
             WRITE_STREAM,
