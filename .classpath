@@ -8,6 +8,6 @@
 	<classpathentry kind="src" path="demo"/>
 	<classpathentry kind="src" path="runtime"/>
 	<classpathentry kind="lib" path="jar/quackery-0.17.0.jar" sourcepath="jar/quackery-0.17.0.jar"/>
-	<classpathentry kind="lib" path="jar/logbuddy-0.18.0.jar" sourcepath="jar/logbuddy-0.18.0.jar"/>
+	<classpathentry kind="lib" path="jar/logbuddy-0.19.1.jar" sourcepath="jar/logbuddy-0.19.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
