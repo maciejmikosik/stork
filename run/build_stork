@@ -1,0 +1,47 @@
+#!/bin/bash -e
+
+########## SETUP ROOT DIRECTORY ##########
+HERE=`dirname ${0}`
+cd "${HERE}/.."
+PROJECT=`pwd`
+
+
+########## CREATE BUILDING DIRECTORY ##########
+BUILDING=`mktemp --directory -t build_stork_XXXXXXXX`
+
+########## COMPILE JAVA SOURCE TO BIN ##########
+BIN="${BUILDING}/bin"
+javac \
+  -sourcepath runtime \
+  -d "${BIN}" \
+  "runtime/com/mikosik/stork/run/RunStork.java"
+
+########## ADD META-INF WITH MAIN CLASS TO BIN ##########
+
+mkdir ${BIN}/META-INF
+echo "Main-Class: com.mikosik.stork.run.RunStork" > ${BIN}/META-INF/MANIFEST.MF
+
+########## ZIP BIN TO JAR ##########
+
+cd "${BIN}"
+zip \
+  --quiet \
+  -X \
+  --recurse-paths \
+  "${BUILDING}/stork.jar" \
+  ./*
+cd "${BUILDING}"
+rm --recursive --force "${BIN}"
+
+########## BUILD HASHBANG ##########
+
+echo "#!/usr/bin/java -jar" > ${BUILDING}/stork
+cat stork.jar >> ${BUILDING}/stork
+chmod +x stork
+rm ${BUILDING}/stork.jar
+
+########## REPORT ##########
+echo "created ${BUILDING}/stork"
+
+########## RUN ##########
+${BUILDING}/stork
