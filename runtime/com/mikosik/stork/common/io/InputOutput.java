@@ -1,9 +1,9 @@
 package com.mikosik.stork.common.io;
 
+import static com.mikosik.stork.common.Collections.stream;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.logbuddy.common.Collections.stream;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
