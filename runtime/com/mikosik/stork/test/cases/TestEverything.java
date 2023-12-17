@@ -10,6 +10,7 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
+import static com.mikosik.stork.test.cases.TestParseOptions.testParseOptions;
 import static com.mikosik.stork.test.cases.TestProgram.testProgram;
 import static java.nio.file.Files.createTempFile;
 import static java.time.Duration.ofSeconds;
@@ -28,6 +29,7 @@ public class TestEverything {
   public static Test testEverything() {
     return timeout(ofSeconds(1), suite("test everything")
         .add(testProgram())
+        .add(testParseOptions())
         .add(testDecompiler())
         .add(testCompiler())
         .add(testComputers())
