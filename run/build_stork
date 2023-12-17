@@ -44,4 +44,4 @@ rm ${BUILDING}/stork.jar
 echo "created ${BUILDING}/stork"
 
 ########## RUN ##########
-${BUILDING}/stork
+${BUILDING}/stork --version
