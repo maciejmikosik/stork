@@ -5,6 +5,9 @@ HERE=`dirname ${0}`
 cd "${HERE}/.."
 PROJECT=`pwd`
 
+java ./runtime/com/mikosik/stork/run/Build.java
+
+exit 0;
 
 ########## CREATE BUILDING DIRECTORY ##########
 BUILDING=`mktemp --directory -t build_stork_XXXXXXXX`
