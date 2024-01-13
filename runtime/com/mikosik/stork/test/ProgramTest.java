@@ -77,7 +77,7 @@ public class ProgramTest implements Test {
 
   public <R> R visit(BiFunction<String, Body, R> caseHandler,
       BiFunction<String, List<Test>, R> suiteHandler) {
-    return caseHandler.apply(name, () -> ProgramTest.this.run());
+    return caseHandler.apply(name, this::run);
   }
 
   private void run() {
