@@ -13,7 +13,7 @@ public class TestBoolean {
             .importing("lang.boolean.false")
             .test("true (0)(1)", 0)
             .test("false(0)(1)", 1))
-        .add(snippetSuite("not")
+        .add(snippetSuite("equal")
             .importing("lang.boolean.true")
             .importing("lang.boolean.false")
             .importing("lang.boolean.equal")
