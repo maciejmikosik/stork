@@ -61,6 +61,10 @@ public class ProgramTest implements Test {
     return this;
   }
 
+  public ProgramTest sourceFile(String content) {
+    return file("stork", content);
+  }
+
   public ProgramTest stdin(String stdin) {
     this.stdin = bytes(stdin);
     return this;

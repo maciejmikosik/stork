@@ -42,7 +42,7 @@ public class SnippetSuite implements Test {
     var type = typeOf(expected);
     return programTest(nameTemplate(type).formatted(snippet, expected))
         .file("import", linkage + extraLinkage(type))
-        .file("stork", mainTemplate(type).formatted(snippet))
+        .sourceFile(mainTemplate(type).formatted(snippet))
         .stdout(expected.toString());
   }
 

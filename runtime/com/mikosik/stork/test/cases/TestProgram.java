@@ -37,7 +37,7 @@ public class TestProgram {
 
   private static ProgramTest functionReturnsArgument() {
     return programTest("returns argument")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               identity("argument")
             }
@@ -51,7 +51,7 @@ public class TestProgram {
 
   private static ProgramTest functionReturnsConstant() {
     return programTest("returns constant")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               constant
             }
@@ -65,7 +65,7 @@ public class TestProgram {
 
   private static ProgramTest functionForwardsArgumentAndResult() {
     return programTest("forwards argument and result")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               function("y")
             }
@@ -83,7 +83,7 @@ public class TestProgram {
 
   private static ProgramTest applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               function(2)
             }
@@ -97,7 +97,7 @@ public class TestProgram {
 
   private static ProgramTest applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               apply((x){x})("")
             }
@@ -111,7 +111,7 @@ public class TestProgram {
 
   private static ProgramTest bindingIgnoresInteger() {
     return programTest("ignores integer")
-        .file("stork", """
+        .sourceFile("""
             apply2(f) {
               f(2)
             }
@@ -125,7 +125,7 @@ public class TestProgram {
 
   private static ProgramTest shadowingLambdaParameters() {
     return programTest("lambda parameters")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               apply((x)(x){ x })("a")("b")
             }
@@ -139,7 +139,7 @@ public class TestProgram {
 
   private static ProgramTest shadowingFunctionParameters() {
     return programTest("function parameters")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               function("a")("b")
             }
@@ -153,7 +153,7 @@ public class TestProgram {
 
   private static ProgramTest shadowingFunctionByLambdaParameters() {
     return programTest("function by lambda parameters")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               function("a")("b")
             }
@@ -167,7 +167,7 @@ public class TestProgram {
 
   private static ProgramTest appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
     return programTest("applied argument is not accidently bound to lambda parameter")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               f(y)(z)
             }
@@ -190,7 +190,7 @@ public class TestProgram {
             lang.integer.add
             lang.integer.equal
             """)
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               equal(0)(longCalculation)
                 ("")
@@ -220,7 +220,7 @@ public class TestProgram {
 
   private static ProgramTest enablesStringLiterals() {
     return programTest("enables string literals")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               "Hello World!"
             }
@@ -233,7 +233,7 @@ public class TestProgram {
         .file("import", """
             lang.stream.append
             """)
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               append("!")("Hello World")
             }
@@ -243,7 +243,7 @@ public class TestProgram {
 
   private static ProgramTest stdoutCanBeEmpty() {
     return programTest("stdout can be empty")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               ""
             }
@@ -253,7 +253,7 @@ public class TestProgram {
 
   private static ProgramTest forwardsStdinToStdout() {
     return programTest("forwards stdin to stdout")
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               stdin
             }
@@ -267,7 +267,7 @@ public class TestProgram {
         .file("import", """
             lang.stream.prepend
             """)
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               prepend("!")(stdin)
             }
@@ -281,7 +281,7 @@ public class TestProgram {
         .file("import", """
             lang.stream.append
             """)
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               append("!")(stdin)
             }
@@ -296,7 +296,7 @@ public class TestProgram {
             lang.stream.append
             lang.stream.reverse
             """)
-        .file("stork", """
+        .sourceFile("""
             main(stdin) {
               reverse(append(reverse(stdin))(reverse(stdin)))
             }
