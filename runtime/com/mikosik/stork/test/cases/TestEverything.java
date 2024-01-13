@@ -36,16 +36,18 @@ public class TestEverything {
   }
 
   private static Test testCompiler() {
-    Compiler compiler = new Compiler();
+    canCompile("identifier", "function");
     return suite("compiler can compile standalone")
-        .add(newCase("identifier",
-            () -> compiler.compileExpression(input("function"))))
-        .add(newCase("application",
-            () -> compiler.compileExpression(input("function(argument)"))))
-        .add(newCase("lambda",
-            () -> compiler.compileExpression(input("(x){ x }"))))
-        .add(newCase("integer",
-            () -> compiler.compileExpression(input("123"))));
+        .add(canCompile("identifier", "function"))
+        .add(canCompile("application", "function(argument)"))
+        .add(canCompile("lambda", "(x){ x }"))
+        .add(canCompile("integer", "123"));
+  }
+
+  private static Test canCompile(String testName, String source) {
+    return newCase(testName, () -> {
+      new Compiler().compileExpression(input(source));
+    });
   }
 
   private static Test testComputers() {
