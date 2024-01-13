@@ -36,7 +36,7 @@ import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
   private static final Module NATIVE_MODULE = build(verify(join(sequence(
-      moduleFromDirectory(Paths.get("core_star")),
+      moduleFromDirectory(Paths.get("core_library")),
       combinatoryModule(),
       mathModule(),
       programModule()))));

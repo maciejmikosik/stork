@@ -27,7 +27,7 @@ public class RunDemo {
   public static void main(String[] args) {
     Module module = build(verify(join(sequence(
         moduleFromDirectory(Paths.get("demo/com/mikosik/stork/demo")),
-        moduleFromDirectory(Paths.get("core_star")),
+        moduleFromDirectory(Paths.get("core_library")),
         programModule(),
         combinatoryModule(),
         mathModule()))));
