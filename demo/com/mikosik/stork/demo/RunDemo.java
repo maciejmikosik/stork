@@ -9,16 +9,21 @@ import static com.mikosik.stork.compile.MathModule.mathModule;
 import static com.mikosik.stork.compile.Stars.build;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.compile.problem.VerifyModule.verify;
+import static com.mikosik.stork.debug.Debug.configuredDecorator;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.ProgramModule.programModule;
+import static org.logbuddy.decorator.NoDecorator.noDecorator;
 
 import java.nio.file.Paths;
 
+import org.logbuddy.Decorator;
+
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.program.Program;
 
 public class RunDemo {
+  private final static boolean isLogging = false;
+
   public static void main(String[] args) {
     Module module = build(verify(join(sequence(
         moduleFromDirectory(Paths.get("demo/com/mikosik/stork/demo")),
@@ -27,7 +32,11 @@ public class RunDemo {
         combinatoryModule(),
         mathModule()))));
 
-    Program program = program(identifier("main"), module);
-    program.run(input(System.in), output(System.out));
+    Decorator decorator = isLogging
+        ? configuredDecorator(Paths.get("/tmp/stork.log"))
+        : noDecorator();
+
+    decorator.decorate(program(identifier("main"), module))
+        .run(input(System.in), output(System.out));
   }
 }

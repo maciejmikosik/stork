@@ -12,6 +12,7 @@ import org.logbuddy.Logger;
 import org.logbuddy.Renderer;
 
 import com.mikosik.stork.compute.Computer;
+import com.mikosik.stork.program.Program;
 
 public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
@@ -23,10 +24,15 @@ public class Debug {
   private static Decorator filteringTypes(Decorator decorator) {
     return new Decorator() {
       public <T> T decorate(T decorable) {
-        return decorable instanceof Computer
+        return shouldLog(decorable)
             ? decorator.decorate(decorable)
             : decorable;
       }
     };
+  }
+
+  private static boolean shouldLog(Object decorable) {
+    return decorable instanceof Program
+        || decorable instanceof Computer;
   }
 }

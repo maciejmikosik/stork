@@ -3,12 +3,17 @@ package com.mikosik.stork.test.cases;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.InstructionComputer.instructionComputer;
+import static com.mikosik.stork.debug.Debug.configuredDecorator;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.TestProgram.testProgram;
+import static java.nio.file.Files.createTempFile;
 import static java.time.Duration.ofSeconds;
+import static java.util.Collections.emptyList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.AssertException.assertTrue;
@@ -26,6 +31,7 @@ public class TestEverything {
         .add(testDecompiler())
         .add(testCompiler())
         .add(testComputers())
+        .add(testLogbuddyDecorator())
         .add(testCoreLibrary()));
   }
 
@@ -56,5 +62,14 @@ public class TestEverything {
           var computed = computer.compute(computation);
           assertTrue(computation == computed);
         }));
+  }
+
+  private static Test testLogbuddyDecorator() {
+    return newCase("logbuddy decorator can decorate program", () -> {
+      var module = module(emptyList());
+      var logFile = createTempFile("stork_test_", "");
+      configuredDecorator(logFile)
+          .decorate(program(identifier("main"), module));
+    });
   }
 }
