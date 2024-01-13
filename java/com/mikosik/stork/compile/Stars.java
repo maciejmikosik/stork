@@ -61,7 +61,7 @@ public class Stars {
   private static Unit unitFrom(Path rootDirectory, Path directory) {
     return unit(
         relative(rootDirectory, directory),
-        compile(directory.resolve("stork")),
+        compile(directory.resolve("source")),
         linkageFrom(directory.resolve("import")));
   }
 

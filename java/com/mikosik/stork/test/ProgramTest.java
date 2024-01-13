@@ -62,7 +62,7 @@ public class ProgramTest implements Test {
   }
 
   public ProgramTest sourceFile(String content) {
-    return file("stork", content);
+    return file("source", content);
   }
 
   public ProgramTest stdin(String stdin) {
