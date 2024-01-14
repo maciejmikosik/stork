@@ -1,0 +1,63 @@
+#!/bin/bash -e
+
+########## PERSONAL CONFIGURATION ##########
+
+DESTINATION="${HOME}"
+
+########## SETUP DIRECTORIES ##########
+
+HERE=`dirname ${0}`
+cd "${HERE}/.."
+PROJECT=`pwd`
+BUILDING=`mktemp --directory -t stork_run_build_XXXXXXXX`
+BIN="${BUILDING}/bin"
+
+########## COMPILE JAVA SOURCE TO BIN ##########
+
+javac \
+  -sourcepath java \
+  -d "${BIN}" \
+  "java/com/mikosik/stork/Stork.java"
+
+########## ADD META-INF WITH MAIN CLASS TO BIN ##########
+
+mkdir "${BIN}/META-INF"
+echo "Main-Class: com.mikosik.stork.Stork" > ${BIN}/META-INF/MANIFEST.MF
+
+########## ADD CORE STAR TO BIN ##########
+
+cd "${PROJECT}/core_library"
+zip \
+  --quiet \
+  -X \
+  --recurse-paths \
+  "${BIN}/core.star" \
+  ./*
+
+########## ZIP BIN TO JAR ##########
+
+cd "${BIN}"
+zip \
+  --quiet \
+  -X \
+  --recurse-paths \
+  "${BUILDING}/stork.jar" \
+  ./*
+cd "${BUILDING}"
+rm --recursive --force "${BIN}"
+
+########## BUILD HASHBANG ##########
+
+echo "#!/usr/bin/java -jar" > "${BUILDING}/stork"
+cat stork.jar >> "${BUILDING}/stork"
+chmod +x stork
+rm "${BUILDING}/stork.jar"
+
+########## CLEANUP ##########
+
+mv --interactive "${BUILDING}/stork" "${DESTINATION}/stork"
+rm "${BUILDING}" -rf
+
+########## REPORT ##########
+
+echo "created ${DESTINATION}/stork"
