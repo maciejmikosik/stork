@@ -1,5 +1,2 @@
-lang.stream.single
-lang.stream.array
-lang.stream.append
-lang.stream.each
-lang.stream.flatten
+lang.stream.limit
+lang.stream.reverse
