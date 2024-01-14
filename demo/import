@@ -1,2 +1,7 @@
-lang.stream.limit
-lang.stream.reverse
+lang.boolean.not
+lang.boolean.or
+lang.stream.append
+lang.stream.prepend
+lang.stream.single
+lang.stream.while
+lang.integer.equal
