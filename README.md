@@ -111,7 +111,7 @@ Build `stork` binary. Default destination is your home directory.
 
 Go to demo directory in stork project.
 
-    cd demo/com/mikosik/stork/demo
+    cd demo
 
 Run stork (update path if you moved binary from home directory)
 
