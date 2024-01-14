@@ -1,4 +1,4 @@
-package com.mikosik.stork.demo;
+package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
@@ -21,7 +21,7 @@ import org.logbuddy.Decorator;
 
 import com.mikosik.stork.model.Module;
 
-public class RunDemo {
+public class Demo {
   private final static boolean isLogging = false;
 
   public static void main(String[] args) {
