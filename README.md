@@ -64,7 +64,7 @@ Syntax is designed so putting name before lambda turns it into function definiti
 
 Other data structures are represented using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding). To get data from "fields" you need to provide visitor (one for each constructor variant) which is a function that takes "fields" as parameters.
 
-Something similar to `java.util.Optional` can be implemented by defining two constructors `present(element)` and `absent`
+Something similar to `java.util.Optional` can be implemented by defining two constructors `present(element)` and `absent`.
 
     present(element)(visitPresent)(visitAbsent) {
       visitPresent(element)
