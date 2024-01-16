@@ -1,4 +1,0 @@
-
-  main(stdin) {
-    reverse(limit(10)(stdin))
-  }

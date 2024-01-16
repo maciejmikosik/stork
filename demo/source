@@ -1,0 +1,31 @@
+
+  main(stdin) {
+    prepend
+      (line("what is your name?"))
+      (greet(line(firstLine(stdin))))
+  }
+
+  greet(name) {
+    prepend("hello ")(name)
+  }
+
+  line {
+    append(single(LF))
+  }
+
+  firstLine {
+    while(negate(isNewlineCharacter))
+  }
+
+  negate(predicate)(item) {
+    not(predicate(item))
+  }
+
+  isNewlineCharacter(character) {
+    or
+      (equal(LF)(character))
+      (equal(CR)(character))
+  }
+
+  LF { 10 }
+  CR { 13 }
