@@ -1,15 +1,17 @@
 package com.mikosik.stork.compute;
 
+import static com.mikosik.stork.common.Slot.slot;
 import static com.mikosik.stork.compute.Computation.computation;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import com.mikosik.stork.common.Slot;
 import com.mikosik.stork.model.Expression;
 
 public class CachingComputer implements Computer {
-  private final Map<Stack, Result> original = new WeakHashMap<>();
-  private final Map<Expression, Result> computed = new WeakHashMap<>();
+  private final Map<Stack, Slot<Expression>> cachedStacks = new WeakHashMap<>();
+  private final Map<Expression, Slot<Expression>> cachedExpressions = new WeakHashMap<>();
 
   private final Computer computer;
 
@@ -22,36 +24,34 @@ public class CachingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computed.containsKey(computation.expression)
-        ? computation(computed.get(computation.expression).get(), computation.stack)
-        : cacheAndCompute(computation);
-  }
-
-  private Computation cacheAndCompute(Computation computation) {
-    cache(computation.expression, computation.stack);
-    return computer.compute(computation);
-  }
-
-  private void cache(Expression expression, Stack stack) {
-    if (original.containsKey(stack)) {
-      Result result = original.get(stack);
-      computed.put(result.get(), result);
-      result.set(expression);
+    if (cacheHas(computation)) {
+      return fromCache(computation);
     } else {
-      original.put(stack, new Result().set(expression));
+      toCache(computation);
+      return computer.compute(computation);
     }
   }
 
-  private static final class Result {
-    private Expression expression;
+  private boolean cacheHas(Computation computation) {
+    return cachedExpressions.containsKey(computation.expression);
+  }
 
-    public Expression get() {
-      return expression;
-    }
+  private Computation fromCache(Computation computation) {
+    var cachedExpression = cachedExpressions.get(computation.expression).value;
+    return cachedExpression == computation.expression
+        ? computation
+        : computation(
+            cachedExpression,
+            computation.stack);
+  }
 
-    public Result set(Expression expression) {
-      this.expression = expression;
-      return this;
+  private void toCache(Computation computation) {
+    if (cachedStacks.containsKey(computation.stack)) {
+      var slot = cachedStacks.get(computation.stack);
+      cachedExpressions.put(slot.value, slot);
+      slot.value = computation.expression;
+    } else {
+      cachedStacks.put(computation.stack, slot(computation.expression));
     }
   }
 }
