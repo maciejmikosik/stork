@@ -38,9 +38,11 @@ public class CachingComputer implements Computer {
 
   private Computation fromCache(Computation computation) {
     var cachedExpression = cachedExpressions.get(computation.expression).value;
-    return computation(
-        cachedExpression,
-        computation.stack);
+    return cachedExpression == computation.expression
+        ? computation
+        : computation(
+            cachedExpression,
+            computation.stack);
   }
 
   private void toCache(Computation computation) {
