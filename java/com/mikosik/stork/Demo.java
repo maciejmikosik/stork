@@ -10,6 +10,7 @@ import static com.mikosik.stork.compile.Stars.build;
 import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
 import static com.mikosik.stork.compile.problem.VerifyModule.verify;
 import static com.mikosik.stork.debug.Debug.configuredDecorator;
+import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.ProgramModule.programModule;
@@ -28,9 +29,9 @@ public class Demo {
     Module module = build(verify(join(sequence(
         moduleFromDirectory(Paths.get("demo")),
         moduleFromDirectory(Paths.get("core_library")),
-        programModule(),
-        combinatoryModule(),
-        mathModule()))));
+        maybeInjectNames(programModule()),
+        maybeInjectNames(combinatoryModule()),
+        maybeInjectNames(mathModule())))));
 
     Decorator decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))
@@ -38,5 +39,11 @@ public class Demo {
 
     decorator.decorate(program(identifier("main"), module))
         .run(input(System.in), output(System.out));
+  }
+
+  private static Module maybeInjectNames(Module module) {
+    return isLogging
+        ? injectNames(module)
+        : module;
   }
 }

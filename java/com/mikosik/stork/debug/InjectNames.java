@@ -13,20 +13,24 @@ import com.mikosik.stork.model.NamedInstruction;
 
 public class InjectNames {
   public static Module injectNames(Module module) {
-    return onEachDefinition(InjectNames::intoInstruction).apply(module);
+    return onEachDefinition(InjectNames::injectName)
+        .apply(module);
   }
 
-  private static Definition intoInstruction(Definition definition) {
-    if (definition.body instanceof EagerInstruction eager) {
+  private static Definition injectName(Definition definition) {
+    var identifier = definition.identifier;
+    var body = definition.body;
+
+    if (body instanceof EagerInstruction eager) {
       return definition(
-          definition.identifier,
-          eager(name(definition.identifier, eager.instruction)));
-    } else if (definition.body instanceof NamedInstruction instruction) {
+          identifier,
+          eager(name(identifier, eager.instruction)));
+    } else if (body instanceof NamedInstruction) {
       return definition;
-    } else if (definition.body instanceof Instruction instruction) {
+    } else if (body instanceof Instruction instruction) {
       return definition(
-          definition.identifier,
-          name(definition.identifier, instruction));
+          identifier,
+          name(identifier, instruction));
     } else {
       return definition;
     }

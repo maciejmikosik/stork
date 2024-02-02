@@ -1,10 +1,10 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Sequence.sequence;
+import static com.mikosik.stork.compile.Bridge.instruction;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Instruction.instruction;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
