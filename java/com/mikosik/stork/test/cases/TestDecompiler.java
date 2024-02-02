@@ -14,9 +14,9 @@ import static com.mikosik.stork.compile.CombinatoryModule.S;
 import static com.mikosik.stork.compile.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.MathModule.ADD;
-import static com.mikosik.stork.compile.MathModule.DIVIDEBY;
+import static com.mikosik.stork.compile.MathModule.DIVIDE_BY;
 import static com.mikosik.stork.compile.MathModule.EQUAL;
-import static com.mikosik.stork.compile.MathModule.MORETHAN;
+import static com.mikosik.stork.compile.MathModule.MORE_THAN;
 import static com.mikosik.stork.compile.MathModule.MULTIPLY;
 import static com.mikosik.stork.compile.MathModule.NEGATE;
 import static com.mikosik.stork.compile.MathModule.mathModule;
@@ -147,11 +147,11 @@ public class TestDecompiler {
             .add(test("x(lang.native.combinator.y(x))", apply(inst(Y), x))))
         .add(suite("math")
             .add(test("<lang.native.integer.equal>", inst(EQUAL)))
-            .add(test("<lang.native.integer.moreThan>", inst(MORETHAN)))
+            .add(test("<lang.native.integer.moreThan>", inst(MORE_THAN)))
             .add(test("<lang.native.integer.negate>", inst(NEGATE)))
             .add(test("<lang.native.integer.add>", inst(ADD)))
             .add(test("<lang.native.integer.multiply>", inst(MULTIPLY)))
-            .add(test("<lang.native.integer.divideBy>", inst(DIVIDEBY))))
+            .add(test("<lang.native.integer.divideBy>", inst(DIVIDE_BY))))
         .add(suite("program")
             .add(test("<lang.native.program.writeByte>", inst(WRITE_BYTE)))
             .add(test("<lang.native.program.closeStream>", inst(CLOSE_STREAM))));

@@ -27,11 +27,11 @@ public class MathModule {
   public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "integer"));
 
   public static final Identifier EQUAL = id("equal");
-  public static final Identifier MORETHAN = id("moreThan");
+  public static final Identifier MORE_THAN = id("moreThan");
   public static final Identifier NEGATE = id("negate");
   public static final Identifier ADD = id("add");
   public static final Identifier MULTIPLY = id("multiply");
-  public static final Identifier DIVIDEBY = id("divideBy");
+  public static final Identifier DIVIDE_BY = id("divideBy");
 
   private static Identifier id(String name) {
     return identifier(NAMESPACE, variable(name));
@@ -40,11 +40,11 @@ public class MathModule {
   public static Module mathModule() {
     return module(sequence(
         define(EQUAL, instructionIIB(BigInteger::equals)),
-        define(MORETHAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
+        define(MORE_THAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),
         define(ADD, instructionIII(BigInteger::add)),
         define(MULTIPLY, instructionIII(BigInteger::multiply)),
-        define(DIVIDEBY, instructionIII(flip(BigInteger::divide)))));
+        define(DIVIDE_BY, instructionIII(flip(BigInteger::divide)))));
   }
 
   private static Definition define(Identifier name, Instruction instruction) {
