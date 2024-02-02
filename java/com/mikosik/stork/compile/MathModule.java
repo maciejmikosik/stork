@@ -2,6 +2,7 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.common.Sequence.sequence;
+import static com.mikosik.stork.compile.Bridge.javaInteger;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
@@ -16,10 +17,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
-import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
@@ -53,20 +52,16 @@ public class MathModule {
 
   private static Instruction instructionII(
       Function<BigInteger, BigInteger> function) {
-    return instruction(x -> stork(function.apply(java(x))));
+    return instruction(x -> stork(function.apply(javaInteger(x))));
   }
 
   private static Instruction instructionIII(
       BiFunction<BigInteger, BigInteger, BigInteger> function) {
-    return instruction((x, y) -> stork(function.apply(java(x), java(y))));
+    return instruction((x, y) -> stork(function.apply(javaInteger(x), javaInteger(y))));
   }
 
   private static Instruction instructionIIB(
       BiFunction<BigInteger, BigInteger, Boolean> function) {
-    return instruction((x, y) -> stork(function.apply(java(x), java(y))));
-  }
-
-  private static BigInteger java(Expression expression) {
-    return ((Integer) expression).value;
+    return instruction((x, y) -> stork(function.apply(javaInteger(x), javaInteger(y))));
   }
 }
