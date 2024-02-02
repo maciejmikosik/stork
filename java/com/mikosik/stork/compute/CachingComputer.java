@@ -24,23 +24,32 @@ public class CachingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return cachedExpressions.containsKey(computation.expression)
-        ? computation(cachedExpressions.get(computation.expression).value, computation.stack)
-        : cacheAndCompute(computation);
-  }
-
-  private Computation cacheAndCompute(Computation computation) {
-    cache(computation.expression, computation.stack);
-    return computer.compute(computation);
-  }
-
-  private void cache(Expression expression, Stack stack) {
-    if (cachedStacks.containsKey(stack)) {
-      var slot = cachedStacks.get(stack);
-      cachedExpressions.put(slot.value, slot);
-      slot.value = expression;
+    if (cacheHas(computation)) {
+      return fromCache(computation);
     } else {
-      cachedStacks.put(stack, slot(expression));
+      toCache(computation);
+      return computer.compute(computation);
+    }
+  }
+
+  private boolean cacheHas(Computation computation) {
+    return cachedExpressions.containsKey(computation.expression);
+  }
+
+  private Computation fromCache(Computation computation) {
+    var cachedExpression = cachedExpressions.get(computation.expression).value;
+    return computation(
+        cachedExpression,
+        computation.stack);
+  }
+
+  private void toCache(Computation computation) {
+    if (cachedStacks.containsKey(computation.stack)) {
+      var slot = cachedStacks.get(computation.stack);
+      cachedExpressions.put(slot.value, slot);
+      slot.value = computation.expression;
+    } else {
+      cachedStacks.put(computation.stack, slot(computation.expression));
     }
   }
 }
