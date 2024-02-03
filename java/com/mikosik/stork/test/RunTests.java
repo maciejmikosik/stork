@@ -13,8 +13,8 @@ import static org.quackery.run.Runners.run;
 import org.quackery.Test;
 
 /**
- * Logging tests that use logbuddy require those options. They allow logbuddy to read private fields
- * of classes in java.* package.
+ * Logging tests that use logbuddy require those options. They allow logbuddy to
+ * read private fields of classes in java.* package.
  *
  * <pre>
 --add-opens=java.base/java.lang=ALL-UNNAMED
