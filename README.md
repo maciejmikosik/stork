@@ -6,7 +6,7 @@ Stork is functional programming language with minimalistic syntax. It has no key
 
 ### keywords as functions
 
-There are no keywords like `if`, `else`, `true` or `false`. Bool values are just ordinary functions in core library. They use [Church encodings](https://en.wikipedia.org/wiki/Church_encoding).
+There are no keywords like `if`, `else`, `true` or `false`. Bool values are just ordinary functions in core library. They use [Church encodings](https://en.wikipedia.org/wiki/Church_encoding#Church_Booleans).
 
     true(a)(b) { a }
     false(a)(b) { b }
