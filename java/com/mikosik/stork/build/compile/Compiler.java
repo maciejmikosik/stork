@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build.compile;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;

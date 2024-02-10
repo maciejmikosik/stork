@@ -1,8 +1,8 @@
-package com.mikosik.stork.compile.problem;
+package com.mikosik.stork.build.link.problem;
 
 import com.mikosik.stork.model.Identifier;
 
-public class DuplicatedDefinition implements Problem {
+public class DuplicatedDefinition implements CannotLink {
   public final Identifier identifier;
 
   private DuplicatedDefinition(Identifier identifier) {

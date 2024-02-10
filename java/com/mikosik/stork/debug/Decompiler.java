@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.debug;
 
 import static com.mikosik.stork.common.io.Serializables.join;
 import static com.mikosik.stork.common.io.Serializables.serializable;

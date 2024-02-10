@@ -1,10 +1,10 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build.link;
 
-import static com.mikosik.stork.compile.CombinatoryModule.B;
-import static com.mikosik.stork.compile.CombinatoryModule.C;
-import static com.mikosik.stork.compile.CombinatoryModule.I;
-import static com.mikosik.stork.compile.CombinatoryModule.K;
-import static com.mikosik.stork.compile.CombinatoryModule.S;
+import static com.mikosik.stork.build.link.CombinatoryModule.B;
+import static com.mikosik.stork.build.link.CombinatoryModule.C;
+import static com.mikosik.stork.build.link.CombinatoryModule.I;
+import static com.mikosik.stork.build.link.CombinatoryModule.K;
+import static com.mikosik.stork.build.link.CombinatoryModule.S;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifLambda;

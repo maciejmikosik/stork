@@ -1,10 +1,10 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.build.link.Bind.removeNamespaces;
 import static com.mikosik.stork.common.io.Serializables.ascii;
-import static com.mikosik.stork.compile.Bind.removeNamespaces;
-import static com.mikosik.stork.compile.Decompiler.decompile;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.Computations.abort;
+import static com.mikosik.stork.debug.Decompiler.decompile;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static java.lang.String.format;

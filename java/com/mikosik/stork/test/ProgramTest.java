@@ -1,5 +1,11 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.build.Stars.build;
+import static com.mikosik.stork.build.Stars.moduleFromDirectory;
+import static com.mikosik.stork.build.link.Bind.join;
+import static com.mikosik.stork.build.link.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.build.link.MathModule.mathModule;
+import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Ascii.ascii;
@@ -7,12 +13,6 @@ import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Bind.join;
-import static com.mikosik.stork.compile.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.MathModule.mathModule;
-import static com.mikosik.stork.compile.Stars.build;
-import static com.mikosik.stork.compile.Stars.moduleFromDirectory;
-import static com.mikosik.stork.compile.problem.VerifyModule.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.ProgramModule.programModule;

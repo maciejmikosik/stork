@@ -23,7 +23,7 @@ import static org.quackery.run.Runners.timeout;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.compile.Compiler;
+import com.mikosik.stork.build.compile.Compiler;
 import com.mikosik.stork.model.Instruction;
 
 public class TestEverything {

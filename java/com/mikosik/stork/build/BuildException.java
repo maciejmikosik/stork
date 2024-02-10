@@ -1,20 +1,20 @@
-package com.mikosik.stork.compile.problem;
+package com.mikosik.stork.build;
 
 import static java.util.stream.Collectors.joining;
 
 import java.util.List;
 
-public class ProblemException extends RuntimeException {
-  private ProblemException(String message) {
+public class BuildException extends RuntimeException {
+  private BuildException(String message) {
     super(message);
   }
 
-  public static void report(List<? extends Problem> problems) {
+  public static void report(List<? extends CannotBuild> problems) {
     if (!problems.isEmpty()) {
       String message = problems.stream()
           .map(problem -> problem.toString())
           .collect(joining("\n", "\n", "\n"));
-      throw new ProblemException(message);
+      throw new BuildException(message);
     }
   }
 }

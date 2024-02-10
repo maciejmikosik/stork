@@ -1,16 +1,16 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build;
 
+import static com.mikosik.stork.build.link.Bind.bindLambdaParameter;
+import static com.mikosik.stork.build.link.Bind.export;
+import static com.mikosik.stork.build.link.Bind.join;
+import static com.mikosik.stork.build.link.Bind.linking;
+import static com.mikosik.stork.build.link.Unlambda.unlambda;
+import static com.mikosik.stork.build.link.Unquote.unquote;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
 import static com.mikosik.stork.common.io.InputOutput.components;
 import static com.mikosik.stork.common.io.InputOutput.walk;
-import static com.mikosik.stork.compile.Bind.bindLambdaParameter;
-import static com.mikosik.stork.compile.Bind.export;
-import static com.mikosik.stork.compile.Bind.join;
-import static com.mikosik.stork.compile.Bind.linking;
-import static com.mikosik.stork.compile.Unlambda.unlambda;
-import static com.mikosik.stork.compile.Unquote.unquote;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
@@ -26,6 +26,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import com.mikosik.stork.build.compile.Compiler;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;

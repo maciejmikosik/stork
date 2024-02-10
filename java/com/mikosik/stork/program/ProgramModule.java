@@ -1,10 +1,10 @@
 package com.mikosik.stork.program;
 
+import static com.mikosik.stork.build.link.Bridge.instruction;
+import static com.mikosik.stork.build.link.Bridge.javaInteger;
+import static com.mikosik.stork.build.link.CombinatoryModule.I;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Sequence.sequence;
-import static com.mikosik.stork.compile.Bridge.instruction;
-import static com.mikosik.stork.compile.Bridge.javaInteger;
-import static com.mikosik.stork.compile.CombinatoryModule.I;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;

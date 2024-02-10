@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build.link;
 
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static java.util.stream.Collectors.toMap;
