@@ -64,6 +64,11 @@ public class ProgramTest implements Test {
     return this;
   }
 
+  public ProgramTest importFile(String content) {
+    fsBuilder.importFile(content);
+    return this;
+  }
+
   public ProgramTest stdin(String stdin) {
     this.stdin = bytes(stdin);
     return this;

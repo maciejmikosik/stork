@@ -28,6 +28,10 @@ public class FsBuilder {
     return file("source", content);
   }
 
+  public FsBuilder importFile(String content) {
+    return file("import", content);
+  }
+
   public FsBuilder delete() {
     deleteRecursively(directory);
     return this;
