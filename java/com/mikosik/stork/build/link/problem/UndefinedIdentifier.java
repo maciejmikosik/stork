@@ -3,7 +3,7 @@ package com.mikosik.stork.build.link.problem;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 
-public class UndefinedIdentifier implements Problem {
+public class UndefinedIdentifier implements CannotLink {
   public final Identifier identifier;
   public final Definition definition;
 

@@ -1,6 +1,6 @@
 package com.mikosik.stork.build.link.problem;
 
-import static com.mikosik.stork.build.link.problem.ProblemException.report;
+import static com.mikosik.stork.build.BuildException.report;
 import static com.mikosik.stork.build.link.problem.UndefinedIdentifier.undefinedImport;
 import static com.mikosik.stork.build.link.problem.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.common.Collections.flatten;

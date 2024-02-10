@@ -3,7 +3,7 @@ package com.mikosik.stork.build.link.problem;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Variable;
 
-public class UndefinedVariable implements Problem {
+public class UndefinedVariable implements CannotLink {
   public final Variable variable;
   public final Definition definition;
 
