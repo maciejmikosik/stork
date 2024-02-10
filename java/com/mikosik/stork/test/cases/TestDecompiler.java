@@ -49,7 +49,7 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.io.Serializable;
-import com.mikosik.stork.compile.Decompiler;
+import com.mikosik.stork.debug.Decompiler;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
