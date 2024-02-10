@@ -12,17 +12,16 @@ import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
-import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.ProgramModule.programModule;
+import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -42,14 +41,13 @@ public class ProgramTest implements Test {
       programModule()))));
 
   private final String name;
-  private final Path directory;
-  private final List<File> files = new LinkedList<>();
+  private final FsBuilder fsBuilder;
   private byte[] stdin = new byte[0];
   private byte[] expectedStdout = null;
 
   private ProgramTest(String name, Path directory) {
     this.name = name;
-    this.directory = directory;
+    this.fsBuilder = fsBuilder(directory);
   }
 
   public static ProgramTest programTest(String name) {
@@ -57,12 +55,13 @@ public class ProgramTest implements Test {
   }
 
   public ProgramTest file(String path, String content) {
-    files.add(new File(Paths.get(path), bytes(content)));
+    fsBuilder.file(path, content);
     return this;
   }
 
   public ProgramTest sourceFile(String content) {
-    return file("source", content);
+    fsBuilder.sourceFile(content);
+    return this;
   }
 
   public ProgramTest stdin(String stdin) {
@@ -82,13 +81,9 @@ public class ProgramTest implements Test {
 
   private void run() {
     check(expectedStdout != null);
-    files.forEach(file -> {
-      output(directory.resolve(file.path))
-          .write(file.content);
-    });
 
     Module module = join(sequence(
-        build(moduleFromDirectory(directory)),
+        build(moduleFromDirectory(fsBuilder.directory)),
         NATIVE_MODULE));
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
@@ -108,6 +103,4 @@ public class ProgramTest implements Test {
   private byte[] bytes(String string) {
     return string.getBytes(UTF_8);
   }
-
-  private static record File(Path path, byte[] content) {}
 }
