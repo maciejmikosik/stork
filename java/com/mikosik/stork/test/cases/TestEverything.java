@@ -1,6 +1,7 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.InputOutput.delete;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.InstructionComputer.instructionComputer;
@@ -86,6 +87,7 @@ public class TestEverything {
       var logFile = createTempFile("stork_test_", "");
       configuredDecorator(logFile)
           .decorate(program(identifier("main"), module));
+      delete(logFile);
     });
   }
 }
