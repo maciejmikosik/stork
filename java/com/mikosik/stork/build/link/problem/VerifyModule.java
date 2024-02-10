@@ -1,12 +1,12 @@
-package com.mikosik.stork.compile.problem;
+package com.mikosik.stork.build.link.problem;
 
+import static com.mikosik.stork.build.link.problem.ProblemException.report;
+import static com.mikosik.stork.build.link.problem.UndefinedIdentifier.undefinedImport;
+import static com.mikosik.stork.build.link.problem.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.common.Collections.flatten;
 import static com.mikosik.stork.common.Collections.instanceOf;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
-import static com.mikosik.stork.compile.problem.ProblemException.report;
-import static com.mikosik.stork.compile.problem.UndefinedIdentifier.undefinedImport;
-import static com.mikosik.stork.compile.problem.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.model.change.Changes.walk;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;

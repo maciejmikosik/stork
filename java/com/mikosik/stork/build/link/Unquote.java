@@ -1,6 +1,6 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build.link;
 
-import static com.mikosik.stork.compile.Bridge.stork;
+import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.model.change.Changes.ifQuote;
 
 import java.util.function.Function;

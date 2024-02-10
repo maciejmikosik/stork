@@ -1,10 +1,10 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build.link;
 
+import static com.mikosik.stork.build.link.Bridge.instruction;
+import static com.mikosik.stork.build.link.Bridge.javaInteger;
+import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.common.Sequence.sequence;
-import static com.mikosik.stork.compile.Bridge.instruction;
-import static com.mikosik.stork.compile.Bridge.javaInteger;
-import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;

@@ -1,7 +1,7 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.compile.Bridge.NONE;
-import static com.mikosik.stork.compile.Bridge.some;
+import static com.mikosik.stork.build.link.Bridge.NONE;
+import static com.mikosik.stork.build.link.Bridge.some;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
 

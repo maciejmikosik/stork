@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.problem;
+package com.mikosik.stork.build.link.problem;
 
 import static java.util.stream.Collectors.joining;
 

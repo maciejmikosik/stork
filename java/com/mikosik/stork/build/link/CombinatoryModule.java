@@ -1,7 +1,7 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.build.link;
 
+import static com.mikosik.stork.build.link.Bridge.instruction;
 import static com.mikosik.stork.common.Sequence.sequence;
-import static com.mikosik.stork.compile.Bridge.instruction;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
