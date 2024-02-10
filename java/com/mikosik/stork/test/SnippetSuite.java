@@ -41,7 +41,7 @@ public class SnippetSuite implements Test {
   private Test buildCase(String snippet, Object expected) {
     var type = typeOf(expected);
     return programTest(nameTemplate(type).formatted(snippet, expected))
-        .file("import", linkage + extraLinkage(type))
+        .importFile(linkage + extraLinkage(type))
         .sourceFile(mainTemplate(type).formatted(snippet))
         .stdout(expected.toString());
   }

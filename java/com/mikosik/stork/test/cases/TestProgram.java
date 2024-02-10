@@ -186,7 +186,7 @@ public class TestProgram {
 
   private static ProgramTest cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
-        .file("import", """
+        .importFile("""
             lang.integer.add
             lang.integer.equal
             """)
@@ -230,7 +230,7 @@ public class TestProgram {
 
   private static ProgramTest importsCoreFunctions() {
     return programTest("imports core functions")
-        .file("import", """
+        .importFile("""
             lang.stream.append
             """)
         .sourceFile("""
@@ -264,7 +264,7 @@ public class TestProgram {
 
   private static ProgramTest prependsStdin() {
     return programTest("prepends stdin")
-        .file("import", """
+        .importFile("""
             lang.stream.prepend
             """)
         .sourceFile("""
@@ -278,7 +278,7 @@ public class TestProgram {
 
   private static ProgramTest appendsStdin() {
     return programTest("appends stdin")
-        .file("import", """
+        .importFile("""
             lang.stream.append
             """)
         .sourceFile("""
@@ -292,7 +292,7 @@ public class TestProgram {
 
   private static ProgramTest processesStdinTwice() {
     return programTest("processes stdin twice")
-        .file("import", """
+        .importFile("""
             lang.stream.append
             lang.stream.reverse
             """)
