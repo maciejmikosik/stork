@@ -40,6 +40,21 @@ public class InputOutput {
     }
   }
 
+  public static void delete(Path path) {
+    try {
+      Files.delete(path);
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
+  public static void deleteRecursively(Path path) {
+    if (Files.isDirectory(path)) {
+      children(path).forEach(InputOutput::deleteRecursively);
+    }
+    delete(path);
+  }
+
   public static Path createTempDirectory(String prefix) {
     try {
       return Files.createTempDirectory(prefix);

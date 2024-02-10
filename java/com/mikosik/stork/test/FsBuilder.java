@@ -1,5 +1,7 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.io.InputOutput.deleteRecursively;
+import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.common.io.Output.output;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -25,6 +27,16 @@ public class FsBuilder {
 
   public FsBuilder sourceFile(String content) {
     return file("source", content);
+  }
+
+  public FsBuilder delete() {
+    deleteRecursively(directory);
+    return this;
+  }
+
+  public static void main(String[] args) {
+    walk(Path.of("/home/fafkulec/desktop"))
+        .forEach(file -> System.out.println(file));
   }
 
   private byte[] bytes(String string) {
