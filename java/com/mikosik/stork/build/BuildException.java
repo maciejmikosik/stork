@@ -4,18 +4,20 @@ import static java.util.stream.Collectors.joining;
 
 import java.util.List;
 
-public class BuildException extends RuntimeException {
-  public final List<? extends CannotBuild> problems;
+import com.mikosik.stork.model.Problem;
 
-  private BuildException(List<? extends CannotBuild> problems) {
+public class BuildException extends RuntimeException {
+  public final List<? extends Problem> problems;
+
+  private BuildException(List<? extends Problem> problems) {
     this.problems = problems;
   }
 
-  public static BuildException cannotBuild(List<? extends CannotBuild> problems) {
+  public static BuildException cannotBuild(List<? extends Problem> problems) {
     return new BuildException(problems);
   }
 
-  public static void report(List<? extends CannotBuild> problems) {
+  public static void report(List<? extends Problem> problems) {
     if (!problems.isEmpty()) {
       throw cannotBuild(problems);
     }
