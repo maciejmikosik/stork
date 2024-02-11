@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.build.link.problem.DuplicatedDefinition.duplicatedDefinition;
-import static com.mikosik.stork.build.link.problem.UndefinedIdentifier.undefinedImport;
+import static com.mikosik.stork.build.link.problem.UndefinedImport.undefinedImport;
 import static com.mikosik.stork.build.link.problem.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
