@@ -36,9 +36,9 @@ import org.quackery.Test;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.build.BuildException;
-import com.mikosik.stork.build.CannotBuild;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Problem;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
@@ -52,7 +52,7 @@ public class ProgramTest implements Test {
   private final FsBuilder fsBuilder;
   private byte[] stdin = new byte[0];
   private byte[] expectedStdout = null;
-  private final List<CannotBuild> expectedProblems = new LinkedList<>();
+  private final List<Problem> expectedProblems = new LinkedList<>();
 
   private ProgramTest(String name, Path directory) {
     this.name = name;
@@ -89,7 +89,7 @@ public class ProgramTest implements Test {
     return this;
   }
 
-  public ProgramTest expect(CannotBuild problem) {
+  public ProgramTest expect(Problem problem) {
     check(expectedStdout == null);
     expectedProblems.add(problem);
     return this;
@@ -138,8 +138,8 @@ public class ProgramTest implements Test {
   }
 
   private void buildAndAssertProblems() {
-    var actual = messagesFrom(buildAndReturnProblems());
-    var expected = messagesFrom(expectedProblems);
+    var actual = descriptions(buildAndReturnProblems());
+    var expected = descriptions(expectedProblems);
     var common = intersection(actual, expected);
     actual.removeAll(common);
     expected.removeAll(common);
@@ -148,7 +148,7 @@ public class ProgramTest implements Test {
     }
   }
 
-  private List<? extends CannotBuild> buildAndReturnProblems() {
+  private List<? extends Problem> buildAndReturnProblems() {
     try {
       verify(join(sequence(
           moduleFromDirectory(fsBuilder.directory),
@@ -159,9 +159,9 @@ public class ProgramTest implements Test {
     }
   }
 
-  private static Set<String> messagesFrom(List<? extends CannotBuild> problems) {
+  private static Set<String> descriptions(List<? extends Problem> problems) {
     return problems.stream()
-        .map(Object::toString)
+        .map(Problem::description)
         .collect(toCollection(HashSet::new));
   }
 
