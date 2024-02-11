@@ -3,24 +3,24 @@ package com.mikosik.stork.build.link.problem;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 
-public class UndefinedIdentifier implements CannotLink {
+public class UndefinedImport implements CannotLink {
   public final Identifier identifier;
   public final Definition definition;
 
-  private UndefinedIdentifier(
+  private UndefinedImport(
       Definition definition,
       Identifier identifier) {
     this.definition = definition;
     this.identifier = identifier;
   }
 
-  public static UndefinedIdentifier undefinedImport(
+  public static UndefinedImport undefinedImport(
       Definition definition,
       Identifier identifier) {
-    return new UndefinedIdentifier(definition, identifier);
+    return new UndefinedImport(definition, identifier);
   }
 
-  public String toString() {
+  public String description() {
     return """
         undefined import
           definition: %s
