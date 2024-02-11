@@ -20,7 +20,7 @@ public class UndefinedVariable implements CannotLink {
     return new UndefinedVariable(definition, variable);
   }
 
-  public String toString() {
+  public String description() {
     return """
         undefined variable
           definition: %s

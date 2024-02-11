@@ -138,8 +138,8 @@ public class ProgramTest implements Test {
   }
 
   private void buildAndAssertProblems() {
-    var actual = messagesFrom(buildAndReturnProblems());
-    var expected = messagesFrom(expectedProblems);
+    var actual = descriptions(buildAndReturnProblems());
+    var expected = descriptions(expectedProblems);
     var common = intersection(actual, expected);
     actual.removeAll(common);
     expected.removeAll(common);
@@ -159,9 +159,9 @@ public class ProgramTest implements Test {
     }
   }
 
-  private static Set<String> messagesFrom(List<? extends Problem> problems) {
+  private static Set<String> descriptions(List<? extends Problem> problems) {
     return problems.stream()
-        .map(Object::toString)
+        .map(Problem::description)
         .collect(toCollection(HashSet::new));
   }
 
