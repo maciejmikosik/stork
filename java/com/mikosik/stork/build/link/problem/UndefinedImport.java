@@ -20,7 +20,7 @@ public class UndefinedImport implements CannotLink {
     return new UndefinedImport(definition, identifier);
   }
 
-  public String toString() {
+  public String description() {
     return """
         undefined import
           definition: %s

@@ -13,7 +13,7 @@ public class DuplicatedDefinition implements CannotLink {
     return new DuplicatedDefinition(identifier);
   }
 
-  public String toString() {
+  public String description() {
     return """
         duplicated definition
           identifier: %s
