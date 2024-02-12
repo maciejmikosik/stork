@@ -2,10 +2,13 @@ package com.mikosik.stork.build;
 
 import static com.mikosik.stork.build.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.build.link.Bind.export;
-import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.Bind.linking;
+import static com.mikosik.stork.build.link.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.build.link.MathModule.mathModule;
+import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.Unlambda.unlambda;
 import static com.mikosik.stork.build.link.Unquote.unquote;
+import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
@@ -21,6 +24,7 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
+import static com.mikosik.stork.program.ProgramModule.programModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.nio.file.Files;
@@ -35,17 +39,25 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
 
 public class Stars {
-  public static Module build(Module module) {
+  public static Module buildCoreLibrary(Path directory) {
+    return verify(join(
+        build(directory),
+        combinatoryModule(),
+        mathModule(),
+        makeComputable(programModule())));
+  }
+
+  private static Module makeComputable(Module module) {
     return onEachDefinition(onBody(deep(unlambda)))
         .andThen(onEachDefinition(onBody(deep(unquote))))
         .apply(module);
   }
 
-  public static Module moduleFromDirectory(Path rootDirectory) {
-    return join(walk(rootDirectory)
+  public static Module build(Path rootDirectory) {
+    return makeComputable(join(walk(rootDirectory)
         .filter(Files::isDirectory)
         .map(directory -> moduleFromDirectory(rootDirectory, directory))
-        .collect(toSequence()));
+        .collect(toSequence())));
   }
 
   private static Module moduleFromDirectory(Path rootDirectory, Path directory) {

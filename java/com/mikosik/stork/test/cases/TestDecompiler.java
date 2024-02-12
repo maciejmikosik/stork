@@ -1,6 +1,5 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.Bind.removeNamespaces;
 import static com.mikosik.stork.build.link.CombinatoryModule.B;
 import static com.mikosik.stork.build.link.CombinatoryModule.C;
@@ -16,6 +15,7 @@ import static com.mikosik.stork.build.link.MathModule.MORE_THAN;
 import static com.mikosik.stork.build.link.MathModule.MULTIPLY;
 import static com.mikosik.stork.build.link.MathModule.NEGATE;
 import static com.mikosik.stork.build.link.MathModule.mathModule;
+import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
@@ -204,8 +204,8 @@ public class TestDecompiler {
         .orElseThrow();
   }
 
-  private static final Module instructionsModule = injectNames(join(sequence(
+  private static final Module instructionsModule = injectNames(join(
       mathModule(),
       combinatoryModule(),
-      programModule())));
+      programModule()));
 }
