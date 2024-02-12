@@ -2,10 +2,10 @@ package com.mikosik.stork.build;
 
 import static com.mikosik.stork.build.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.build.link.Bind.export;
-import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.Bind.linking;
 import static com.mikosik.stork.build.link.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.build.link.MathModule.mathModule;
+import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.Unlambda.unlambda;
 import static com.mikosik.stork.build.link.Unquote.unquote;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
@@ -40,11 +40,11 @@ import com.mikosik.stork.model.Unit;
 
 public class Stars {
   public static Module buildCoreLibrary(Path directory) {
-    return verify(join(sequence(
+    return verify(join(
         build(directory),
         combinatoryModule(),
         mathModule(),
-        makeComputable(programModule()))));
+        makeComputable(programModule())));
   }
 
   private static Module makeComputable(Module module) {

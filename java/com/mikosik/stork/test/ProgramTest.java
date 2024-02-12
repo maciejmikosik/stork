@@ -2,7 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.Stars.buildCoreLibrary;
-import static com.mikosik.stork.build.link.Bind.join;
+import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Collections.intersection;
@@ -112,9 +112,9 @@ public class ProgramTest implements Test {
   }
 
   private void runAndAssertStdout() {
-    Module module = verify(join(sequence(
+    Module module = verify(join(
         build(fsBuilder.directory),
-        NATIVE_MODULE)));
+        NATIVE_MODULE));
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());
