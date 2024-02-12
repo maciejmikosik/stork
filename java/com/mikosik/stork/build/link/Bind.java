@@ -1,9 +1,7 @@
 package com.mikosik.stork.build.link;
 
 import static com.mikosik.stork.common.Logic.constant;
-import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifIdentifier;
 import static com.mikosik.stork.model.change.Changes.ifLambda;
@@ -15,7 +13,6 @@ import static com.mikosik.stork.model.change.Changes.onNamespace;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -58,11 +55,5 @@ public class Bind {
   public static Expression removeNamespaces(Expression expression) {
     return deep(ifIdentifier(identifier -> identifier(identifier.variable)))
         .apply(expression);
-  }
-
-  public static Module join(List<Module> modules) {
-    return module(modules.stream()
-        .flatMap(module -> module.definitions.stream())
-        .collect(toSequence()));
   }
 }
