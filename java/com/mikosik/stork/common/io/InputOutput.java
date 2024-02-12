@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -22,6 +23,10 @@ public class InputOutput {
     var buffer = newBuffer();
     throwable.printStackTrace(buffer.asOutput().asPrintStream(charset));
     return new String(buffer.bytes(), charset);
+  }
+
+  public static Path path(String name) {
+    return Paths.get(name);
   }
 
   public static Stream<Path> children(Path path) {
