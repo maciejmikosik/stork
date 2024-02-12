@@ -2,7 +2,6 @@ package com.mikosik.stork;
 
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.Stars.buildCoreLibrary;
-import static com.mikosik.stork.build.Stars.moduleFromDirectory;
 import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Sequence.sequence;
@@ -20,9 +19,9 @@ import java.util.Map;
 
 public class Stork {
   public static void main(String[] args) {
-    var module = build(verify(join(sequence(
+    var module = verify(join(sequence(
         buildCoreLibrary(pathToCoreLibraryInsideJar()),
-        moduleFromDirectory(Paths.get("."))))));
+        build(Paths.get(".")))));
 
     program(identifier("main"), module)
         .run(input(System.in), output(System.out));

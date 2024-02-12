@@ -40,24 +40,24 @@ import com.mikosik.stork.model.Unit;
 
 public class Stars {
   public static Module buildCoreLibrary(Path directory) {
-    return build(verify(join(sequence(
-        moduleFromDirectory(directory),
+    return verify(join(sequence(
+        build(directory),
         combinatoryModule(),
         mathModule(),
-        programModule()))));
+        makeComputable(programModule()))));
   }
 
-  public static Module build(Module module) {
+  private static Module makeComputable(Module module) {
     return onEachDefinition(onBody(deep(unlambda)))
         .andThen(onEachDefinition(onBody(deep(unquote))))
         .apply(module);
   }
 
-  public static Module moduleFromDirectory(Path rootDirectory) {
-    return join(walk(rootDirectory)
+  public static Module build(Path rootDirectory) {
+    return makeComputable(join(walk(rootDirectory)
         .filter(Files::isDirectory)
         .map(directory -> moduleFromDirectory(rootDirectory, directory))
-        .collect(toSequence()));
+        .collect(toSequence())));
   }
 
   private static Module moduleFromDirectory(Path rootDirectory, Path directory) {
