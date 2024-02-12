@@ -2,7 +2,6 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.Stars.buildCoreLibrary;
-import static com.mikosik.stork.build.Stars.moduleFromDirectory;
 import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Check.check;
@@ -113,9 +112,9 @@ public class ProgramTest implements Test {
   }
 
   private void runAndAssertStdout() {
-    Module module = build(verify(join(sequence(
-        moduleFromDirectory(fsBuilder.directory),
-        NATIVE_MODULE))));
+    Module module = verify(join(sequence(
+        build(fsBuilder.directory),
+        NATIVE_MODULE)));
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());
@@ -145,7 +144,7 @@ public class ProgramTest implements Test {
   private List<? extends Problem> buildAndReturnProblems() {
     try {
       verify(join(sequence(
-          moduleFromDirectory(fsBuilder.directory),
+          build(fsBuilder.directory),
           NATIVE_MODULE)));
       return emptyList();
     } catch (BuildException exception) {

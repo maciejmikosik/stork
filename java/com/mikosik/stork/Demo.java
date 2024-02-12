@@ -2,7 +2,6 @@ package com.mikosik.stork;
 
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.Stars.buildCoreLibrary;
-import static com.mikosik.stork.build.Stars.moduleFromDirectory;
 import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Sequence.sequence;
@@ -24,9 +23,9 @@ public class Demo {
   private final static boolean isLogging = false;
 
   public static void main(String[] args) {
-    Module module = build(verify(join(sequence(
-        moduleFromDirectory(Paths.get("demo")),
-        maybeInjectNames(buildCoreLibrary(Paths.get("core_library")))))));
+    Module module = verify(join(sequence(
+        build(Paths.get("demo")),
+        maybeInjectNames(buildCoreLibrary(Paths.get("core_library"))))));
 
     Decorator decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))
