@@ -11,6 +11,7 @@ import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
+import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
@@ -20,7 +21,6 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toCollection;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -39,7 +39,7 @@ import com.mikosik.stork.model.Problem;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
-  private static final Module NATIVE_MODULE = buildCoreLibrary(Paths.get("core_library"));
+  private static final Module NATIVE_MODULE = buildCoreLibrary(path("core_library"));
 
   private final String name;
   private final FsBuilder fsBuilder;

@@ -6,6 +6,7 @@ import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
@@ -14,14 +15,13 @@ import static java.nio.file.FileSystems.newFileSystem;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 public class Stork {
   public static void main(String[] args) {
     var module = verify(join(sequence(
         buildCoreLibrary(pathToCoreLibraryInsideJar()),
-        build(Paths.get(".")))));
+        build(path(".")))));
 
     program(identifier("main"), module)
         .run(input(System.in), output(System.out));

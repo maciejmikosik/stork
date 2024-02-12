@@ -6,6 +6,7 @@ import static com.mikosik.stork.build.link.Bind.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.debug.Debug.configuredDecorator;
 import static com.mikosik.stork.debug.InjectNames.injectNames;
@@ -24,7 +25,7 @@ public class Demo {
 
   public static void main(String[] args) {
     Module module = verify(join(sequence(
-        build(Paths.get("demo")),
+        build(path("demo")),
         maybeInjectNames(buildCoreLibrary(Paths.get("core_library"))))));
 
     Decorator decorator = isLogging
