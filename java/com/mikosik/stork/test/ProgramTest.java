@@ -39,7 +39,7 @@ import com.mikosik.stork.model.Problem;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
-  private static final Module NATIVE_MODULE = buildCoreLibrary(path("core_library"));
+  private static final Module CORE_LIBRARY = buildCoreLibrary(path("core_library"));
 
   private final String name;
   private final FsBuilder fsBuilder;
@@ -114,7 +114,7 @@ public class ProgramTest implements Test {
   private void runAndAssertStdout() {
     Module module = verify(join(
         build(fsBuilder.directory),
-        NATIVE_MODULE));
+        CORE_LIBRARY));
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());
@@ -145,7 +145,7 @@ public class ProgramTest implements Test {
     try {
       verify(join(sequence(
           build(fsBuilder.directory),
-          NATIVE_MODULE)));
+          CORE_LIBRARY)));
       return emptyList();
     } catch (BuildException exception) {
       return exception.problems;
