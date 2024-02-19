@@ -25,7 +25,7 @@ public class BuildException extends RuntimeException {
 
   public String getMessage() {
     return problems.stream()
-        .map(problem -> problem.toString())
+        .map(problem -> problem.description())
         .collect(joining("\n", "\n", "\n"));
   }
 }
