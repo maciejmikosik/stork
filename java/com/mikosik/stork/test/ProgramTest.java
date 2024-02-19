@@ -5,7 +5,6 @@ import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Collections.intersection;
-import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
@@ -109,9 +108,7 @@ public class ProgramTest implements Test {
   }
 
   private void runAndAssertStdout() {
-    Module module = verify(join(
-        build(fsBuilder.directory),
-        CORE_LIBRARY));
+    Module module = buildAndVerify();
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());
@@ -140,13 +137,17 @@ public class ProgramTest implements Test {
 
   private List<? extends Problem> buildAndReturnProblems() {
     try {
-      verify(join(sequence(
-          build(fsBuilder.directory),
-          CORE_LIBRARY)));
+      buildAndVerify();
       return emptyList();
     } catch (BuildException exception) {
       return exception.problems;
     }
+  }
+
+  private Module buildAndVerify() {
+    return verify(join(
+        build(fsBuilder.directory),
+        CORE_LIBRARY));
   }
 
   private static Set<String> descriptions(List<? extends Problem> problems) {
