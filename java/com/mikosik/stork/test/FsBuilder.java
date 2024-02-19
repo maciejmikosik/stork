@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.io.InputOutput.createDirectories;
 import static com.mikosik.stork.common.io.InputOutput.deleteRecursively;
 import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.common.io.Output.output;
@@ -20,8 +21,12 @@ public class FsBuilder {
   }
 
   public FsBuilder file(String path, String content) {
-    output(directory.resolve(path))
-        .write(bytes(content));
+    return file(directory.resolve(path), content);
+  }
+
+  private FsBuilder file(Path path, String content) {
+    createDirectories(path.getParent());
+    output(path).write(bytes(content));
     return this;
   }
 
