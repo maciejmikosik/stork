@@ -1,7 +1,6 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.build.Stars.build;
-import static com.mikosik.stork.build.Stars.buildCoreLibrary;
 import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Check.check;
@@ -11,9 +10,9 @@ import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
-import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
+import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -39,8 +38,6 @@ import com.mikosik.stork.model.Problem;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
-  private static final Module CORE_LIBRARY = buildCoreLibrary(path("core_library"));
-
   private final String name;
   private final FsBuilder fsBuilder;
   private byte[] stdin = new byte[0];
