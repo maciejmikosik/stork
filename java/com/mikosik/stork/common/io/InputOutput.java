@@ -76,6 +76,14 @@ public class InputOutput {
     }
   }
 
+  public static Path createDirectories(Path path) {
+    try {
+      return Files.createDirectories(path);
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
   public static List<String> components(Path path) {
     return stream(path)
         .map(Path::toString)

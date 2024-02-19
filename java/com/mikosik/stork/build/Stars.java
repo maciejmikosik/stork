@@ -8,7 +8,6 @@ import static com.mikosik.stork.build.link.MathModule.mathModule;
 import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.Unlambda.unlambda;
 import static com.mikosik.stork.build.link.Unquote.unquote;
-import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
@@ -40,11 +39,11 @@ import com.mikosik.stork.model.Unit;
 
 public class Stars {
   public static Module buildCoreLibrary(Path directory) {
-    return verify(join(
+    return join(
         build(directory),
         combinatoryModule(),
         mathModule(),
-        makeComputable(programModule())));
+        makeComputable(programModule()));
   }
 
   private static Module makeComputable(Module module) {
