@@ -1,14 +1,13 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.build.Stars.buildCoreLibrary;
 import static com.mikosik.stork.build.link.problem.DuplicatedDefinition.duplicatedDefinition;
 import static com.mikosik.stork.build.link.problem.UndefinedImport.undefinedImport;
 import static com.mikosik.stork.build.link.problem.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
-import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -31,7 +30,7 @@ public class TestBuild {
 
   private static Test coreLibraryHasNoProblems() {
     return newCase("core library has no problems", () -> {
-      verify(buildCoreLibrary(path("core_library")));
+      verify(CORE_LIBRARY);
     });
   }
 
