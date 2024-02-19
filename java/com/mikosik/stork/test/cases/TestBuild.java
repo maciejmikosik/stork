@@ -47,11 +47,17 @@ public class TestBuild {
   }
 
   private static Test reportsDuplicatedDefinition() {
-    return programTest("duplicated definition")
-        .sourceFile("""
-            function { 1 }
-            function { 2 }
-            """)
-        .expect(duplicatedDefinition(identifier("function")));
+    return suite("duplicated definition")
+        .add(programTest("of user functions")
+            .sourceFile("""
+                function { 1 }
+                function { 2 }
+                """)
+            .expect(duplicatedDefinition(identifier("function"))))
+        .add(programTest("with core function")
+            .file("lang/stream/source", """
+                length { 1 }
+                """)
+            .expect(duplicatedDefinition(identifier("lang.stream.length"))));
   }
 }
