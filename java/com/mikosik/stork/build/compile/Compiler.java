@@ -2,6 +2,7 @@ package com.mikosik.stork.build.compile;
 
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Logic.not;
+import static com.mikosik.stork.common.PeekableIterator.peekable;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.common.io.Ascii.DOUBLE_QUOTE;
 import static com.mikosik.stork.common.io.Ascii.ascii;
@@ -20,6 +21,7 @@ import static com.mikosik.stork.model.Variable.variable;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.IntPredicate;
@@ -34,7 +36,11 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
 
 public class Compiler {
-  public Module compileModule(PeekableIterator<Byte> input) {
+  public Module compile(Iterator<Byte> input) {
+    return compile(peekable(input));
+  }
+
+  private Module compile(PeekableIterator<Byte> input) {
     List<Definition> definitions = new LinkedList<>();
     while (input.hasNext()) {
       skipWhitespaces(input);
@@ -44,14 +50,14 @@ public class Compiler {
     return module(definitions);
   }
 
-  public Definition compileDefinition(PeekableIterator<Byte> input) {
+  private Definition compileDefinition(PeekableIterator<Byte> input) {
     String name = compileAlphanumeric(input);
     skipWhitespaces(input);
     Expression body = compileBody(input);
     return definition(name, body);
   }
 
-  public Expression compileExpression(PeekableIterator<Byte> input) {
+  private Expression compileExpression(PeekableIterator<Byte> input) {
     skipWhitespaces(input);
     if (!input.hasNext()) {
       return fail("unexpected end of stream");
@@ -70,11 +76,11 @@ public class Compiler {
     }
   }
 
-  protected Expression compileInteger(PeekableIterator<Byte> input) {
+  private Expression compileInteger(PeekableIterator<Byte> input) {
     return integer(new BigInteger(compileAlphanumeric(input)));
   }
 
-  protected Expression compileInvocation(PeekableIterator<Byte> input) {
+  private Expression compileInvocation(PeekableIterator<Byte> input) {
     Expression result = compileVariable(input);
     skipWhitespaces(input);
     while (input.hasNext() && input.peek() == '(') {
@@ -89,18 +95,18 @@ public class Compiler {
     return result;
   }
 
-  protected Variable compileVariable(PeekableIterator<Byte> input) {
+  private Variable compileVariable(PeekableIterator<Byte> input) {
     return variable(compileAlphanumeric(input));
   }
 
-  protected Expression compileQuote(PeekableIterator<Byte> input) {
+  private Expression compileQuote(PeekableIterator<Byte> input) {
     check(input.next() == DOUBLE_QUOTE);
     var bytes = readAll(not(Ascii::isDoubleQuote), input);
     check(input.next() == DOUBLE_QUOTE);
     return quote(ascii(bytes));
   }
 
-  protected Lambda compileLambda(PeekableIterator<Byte> input) {
+  private Lambda compileLambda(PeekableIterator<Byte> input) {
     check(input.next() == '(');
     skipWhitespaces(input);
     Parameter parameter = parameter(compileAlphanumeric(input));
@@ -110,7 +116,7 @@ public class Compiler {
     return lambda(parameter, compileBody(input));
   }
 
-  protected Expression compileBody(PeekableIterator<Byte> input) {
+  private Expression compileBody(PeekableIterator<Byte> input) {
     var oneByte = (byte) input.peek();
     if (oneByte == '(') {
       return compileLambda(input);
@@ -121,7 +127,7 @@ public class Compiler {
     }
   }
 
-  protected Expression compileScope(PeekableIterator<Byte> input) {
+  private Expression compileScope(PeekableIterator<Byte> input) {
     check(input.next() == '{');
     skipWhitespaces(input);
     Expression body = compileExpression(input);
@@ -130,13 +136,13 @@ public class Compiler {
     return body;
   }
 
-  protected String compileAlphanumeric(PeekableIterator<Byte> input) {
+  private String compileAlphanumeric(PeekableIterator<Byte> input) {
     return isAlphanumeric(input.peek())
         ? ascii(readAll(Ascii::isAlphanumeric, input))
         : fail("expected alphanumeric but was %c", input.peek());
   }
 
-  protected void skipWhitespaces(PeekableIterator<Byte> input) {
+  private void skipWhitespaces(PeekableIterator<Byte> input) {
     readAll(Ascii::isWhitespace, input);
   }
 
