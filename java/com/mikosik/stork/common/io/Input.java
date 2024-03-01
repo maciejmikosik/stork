@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.IntPredicate;
 
@@ -98,6 +100,29 @@ public class Input implements AutoCloseable {
     pumpTo(output);
     output.flush();
     return this;
+  }
+
+  public Iterator<Byte> iterator() {
+    return new Iterator<>() {
+      public boolean hasNext() {
+        try {
+          return input.available() > 0;
+        } catch (IOException e) {
+          throw unchecked(e);
+        }
+      }
+
+      public Byte next() {
+        if (!hasNext()) {
+          throw new NoSuchElementException();
+        }
+        try {
+          return (byte) input.read();
+        } catch (IOException e) {
+          throw unchecked(e);
+        }
+      }
+    };
   }
 
   public MaybeByte peek() {
