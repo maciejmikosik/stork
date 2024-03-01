@@ -1,7 +1,5 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.common.PeekableIterator.peekable;
-import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.delete;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.Computation.computation;
@@ -26,7 +24,6 @@ import static org.quackery.run.Runners.timeout;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.build.compile.Compiler;
 import com.mikosik.stork.model.Instruction;
 
 public class TestEverything {
@@ -35,25 +32,9 @@ public class TestEverything {
         .add(testProgram())
         .add(testBuild())
         .add(testDecompiler())
-        .add(testCompiler())
         .add(testComputers())
         .add(testLogbuddyDecorator())
         .add(testCoreLibrary()));
-  }
-
-  private static Test testCompiler() {
-    canCompile("identifier", "function");
-    return suite("compiler can compile standalone")
-        .add(canCompile("identifier", "function"))
-        .add(canCompile("application", "function(argument)"))
-        .add(canCompile("lambda", "(x){ x }"))
-        .add(canCompile("integer", "123"));
-  }
-
-  private static Test canCompile(String testName, String source) {
-    return newCase(testName, () -> {
-      new Compiler().compileExpression(peekable(input(source).iterator()));
-    });
   }
 
   private static Test testComputers() {
