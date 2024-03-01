@@ -18,13 +18,14 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.IntPredicate;
 
+import com.mikosik.stork.common.PeekableIterator;
 import com.mikosik.stork.common.io.Ascii;
-import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.common.io.MaybeByte;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
@@ -33,9 +34,9 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
 
 public class Compiler {
-  public Module compileModule(Input input) {
+  public Module compileModule(PeekableIterator<Byte> input) {
     List<Definition> definitions = new LinkedList<>();
-    while (input.peek().hasByte()) {
+    while (input.hasNext()) {
       skipWhitespaces(input);
       definitions.add(compileDefinition(input));
       skipWhitespaces(input);
@@ -43,99 +44,109 @@ public class Compiler {
     return module(definitions);
   }
 
-  public Definition compileDefinition(Input input) {
+  public Definition compileDefinition(PeekableIterator<Byte> input) {
     String name = compileAlphanumeric(input);
     skipWhitespaces(input);
     Expression body = compileBody(input);
     return definition(name, body);
   }
 
-  public Expression compileExpression(Input input) {
+  public Expression compileExpression(PeekableIterator<Byte> input) {
     skipWhitespaces(input);
-    MaybeByte maybeByte = input.peek();
-    if (!maybeByte.hasByte()) {
-      return fail("unexpected end of stream", maybeByte);
-    } else if (isNumeric(maybeByte.getByte())) {
+    if (!input.hasNext()) {
+      return fail("unexpected end of stream");
+    }
+    byte oneByte = input.peek();
+    if (isNumeric(oneByte)) {
       return compileInteger(input);
-    } else if (isLetter(maybeByte.getByte())) {
+    } else if (isLetter(oneByte)) {
       return compileInvocation(input);
-    } else if (isDoubleQuote(maybeByte.getByte())) {
+    } else if (isDoubleQuote(oneByte)) {
       return compileQuote(input);
-    } else if (maybeByte.getByte() == '(') {
+    } else if (oneByte == '(') {
       return compileLambda(input);
     } else {
-      return fail("unexpected character [%c]", maybeByte.getByte());
+      return fail("unexpected character [%c]", oneByte);
     }
   }
 
-  protected Expression compileInteger(Input input) {
+  protected Expression compileInteger(PeekableIterator<Byte> input) {
     return integer(new BigInteger(compileAlphanumeric(input)));
   }
 
-  protected Expression compileInvocation(Input input) {
+  protected Expression compileInvocation(PeekableIterator<Byte> input) {
     Expression result = compileVariable(input);
     skipWhitespaces(input);
-    while (input.peek().hasByte()
-        && input.peek().getByte() == '(') {
-      input.read();
+    while (input.hasNext() && input.peek() == '(') {
+      input.next();
       skipWhitespaces(input);
       Expression argument = compileExpression(input);
       skipWhitespaces(input);
-      check(input.read().getByte() == ')');
+      check(input.next() == ')');
       result = application(result, argument);
       skipWhitespaces(input);
     }
     return result;
   }
 
-  protected Variable compileVariable(Input input) {
+  protected Variable compileVariable(PeekableIterator<Byte> input) {
     return variable(compileAlphanumeric(input));
   }
 
-  protected Expression compileQuote(Input input) {
-    check(input.read().getByte() == DOUBLE_QUOTE);
-    byte[] bytes = input.readAllBytes(not(Ascii::isDoubleQuote));
-    check(input.read().getByte() == DOUBLE_QUOTE);
+  protected Expression compileQuote(PeekableIterator<Byte> input) {
+    check(input.next() == DOUBLE_QUOTE);
+    var bytes = readAll(not(Ascii::isDoubleQuote), input);
+    check(input.next() == DOUBLE_QUOTE);
     return quote(ascii(bytes));
   }
 
-  protected Lambda compileLambda(Input input) {
-    check(input.read().getByte() == '(');
+  protected Lambda compileLambda(PeekableIterator<Byte> input) {
+    check(input.next() == '(');
     skipWhitespaces(input);
     Parameter parameter = parameter(compileAlphanumeric(input));
     skipWhitespaces(input);
-    check(input.read().getByte() == ')');
+    check(input.next() == ')');
     skipWhitespaces(input);
     return lambda(parameter, compileBody(input));
   }
 
-  protected Expression compileBody(Input input) {
-    MaybeByte maybeByte = input.peek();
-    if (maybeByte.getByte() == '(') {
+  protected Expression compileBody(PeekableIterator<Byte> input) {
+    var oneByte = (byte) input.peek();
+    if (oneByte == '(') {
       return compileLambda(input);
-    } else if (maybeByte.getByte() == '{') {
+    } else if (oneByte == '{') {
       return compileScope(input);
     } else {
-      return fail("expected ( or { but was %c", maybeByte);
+      return fail("expected ( or { but was %c", oneByte);
     }
   }
 
-  protected Expression compileScope(Input input) {
-    check(input.read().getByte() == '{');
+  protected Expression compileScope(PeekableIterator<Byte> input) {
+    check(input.next() == '{');
     skipWhitespaces(input);
     Expression body = compileExpression(input);
     skipWhitespaces(input);
-    check(input.read().getByte() == '}');
+    check(input.next() == '}');
     return body;
   }
 
-  protected String compileAlphanumeric(Input input) {
-    return isAlphanumeric(input.peek().getByte())
-        ? ascii(input.readAllBytes(Ascii::isAlphanumeric))
+  protected String compileAlphanumeric(PeekableIterator<Byte> input) {
+    return isAlphanumeric(input.peek())
+        ? ascii(readAll(Ascii::isAlphanumeric, input))
         : fail("expected alphanumeric but was %c", input.peek());
   }
 
-  protected void skipWhitespaces(Input input) {
-    input.readAllBytes(Ascii::isWhitespace);
+  protected void skipWhitespaces(PeekableIterator<Byte> input) {
+    readAll(Ascii::isWhitespace, input);
+  }
+
+  private static byte[] readAll(
+      IntPredicate condition,
+      PeekableIterator<Byte> iterator) {
+    var output = new ByteArrayOutputStream();
+    while (iterator.hasNext() && condition.test(iterator.peek())) {
+      output.write(iterator.next());
+    }
+    return output.toByteArray();
   }
 }

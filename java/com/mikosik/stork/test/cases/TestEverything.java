@@ -1,5 +1,6 @@
 package com.mikosik.stork.test.cases;
 
+import static com.mikosik.stork.common.PeekableIterator.peekable;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.delete;
 import static com.mikosik.stork.compute.CachingComputer.caching;
@@ -51,7 +52,7 @@ public class TestEverything {
 
   private static Test canCompile(String testName, String source) {
     return newCase(testName, () -> {
-      new Compiler().compileExpression(input(source));
+      new Compiler().compileExpression(peekable(input(source).iterator()));
     });
   }
 
