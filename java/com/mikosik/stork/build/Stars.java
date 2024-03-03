@@ -80,7 +80,7 @@ public class Stars {
   private static Module compile(Path file) {
     try (Input input = tryInput(file).buffered()) {
       Compiler compiler = new Compiler();
-      return compiler.compileModule(input);
+      return compiler.compile(input.iterator());
     }
   }
 
