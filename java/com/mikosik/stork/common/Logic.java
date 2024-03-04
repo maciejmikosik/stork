@@ -2,10 +2,10 @@ package com.mikosik.stork.common;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 public class Logic {
-  public static IntPredicate not(IntPredicate predicate) {
+  public static <T> Predicate<T> not(Predicate<T> predicate) {
     return item -> !predicate.test(item);
   }
 

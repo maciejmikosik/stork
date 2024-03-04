@@ -22,7 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 import com.mikosik.stork.common.PeekableIterator;
 import com.mikosik.stork.common.io.Ascii;
@@ -162,7 +162,7 @@ public class Compilation {
     readAll(Ascii::isWhitespace);
   }
 
-  private byte[] readAll(IntPredicate condition) {
+  private byte[] readAll(Predicate<Byte> condition) {
     var output = new ByteArrayOutputStream();
     while (hasNext() && condition.test(peek())) {
       output.write(next());
