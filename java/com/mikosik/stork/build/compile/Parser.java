@@ -1,6 +1,7 @@
 package com.mikosik.stork.build.compile;
 
 import static com.mikosik.stork.build.compile.ByteToken.token;
+import static com.mikosik.stork.build.compile.IntegerLiteral.literal;
 import static com.mikosik.stork.build.compile.Label.label;
 import static com.mikosik.stork.build.compile.StringLiteral.literal;
 import static com.mikosik.stork.common.Check.check;
@@ -8,7 +9,9 @@ import static com.mikosik.stork.common.PeekableIterator.peekable;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
+import static com.mikosik.stork.common.io.Ascii.isNumeric;
 
+import java.math.BigInteger;
 import java.util.Iterator;
 
 import com.mikosik.stork.common.PeekableIterator;
@@ -30,6 +33,8 @@ public class Parser {
           return parseStringLiteral(iterator);
         } else if (isLetter(firstByte)) {
           return parseLabel(iterator);
+        } else if (isNumeric(firstByte)) {
+          return parseIntegerLiteral(iterator);
         } else {
           return token(iterator.next());
         }
@@ -53,5 +58,13 @@ public class Parser {
       builder.append((char) iterator.next().byteValue());
     }
     return label(builder.toString());
+  }
+
+  private static IntegerLiteral parseIntegerLiteral(PeekableIterator<Byte> iterator) {
+    var builder = new StringBuilder();
+    while (iterator.hasNext() && isNumeric(iterator.peek())) {
+      builder.append((char) iterator.next().byteValue());
+    }
+    return literal(new BigInteger(builder.toString()));
   }
 }
