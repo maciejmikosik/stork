@@ -34,13 +34,13 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
 
 public class Compilation {
-  private final PeekableIterator<Byte> input;
+  private final PeekableIterator<Token> input;
 
-  private Compilation(PeekableIterator<Byte> input) {
+  private Compilation(PeekableIterator<Token> input) {
     this.input = input;
   }
 
-  public static Compilation compilation(PeekableIterator<Byte> input) {
+  public static Compilation compilation(PeekableIterator<Token> input) {
     return new Compilation(input);
   }
 
@@ -66,7 +66,7 @@ public class Compilation {
     if (!hasNext()) {
       return fail("unexpected end of stream");
     }
-    byte oneByte = peek();
+    byte oneByte = peekByte();
     if (isNumeric(oneByte)) {
       return compileInteger();
     } else if (isLetter(oneByte)) {
@@ -87,12 +87,12 @@ public class Compilation {
   private Expression compileInvocation() {
     Expression result = compileVariable();
     skipWhitespaces();
-    while (hasNext() && peek() == '(') {
+    while (hasNext() && peekByte() == '(') {
       next();
       skipWhitespaces();
       Expression argument = compileExpression();
       skipWhitespaces();
-      check(next() == ')');
+      check(nextByte() == ')');
       result = application(result, argument);
       skipWhitespaces();
     }
@@ -104,24 +104,24 @@ public class Compilation {
   }
 
   private Expression compileQuote() {
-    check(next() == DOUBLE_QUOTE);
+    check(nextByte() == DOUBLE_QUOTE);
     var bytes = readAll(not(Ascii::isDoubleQuote));
-    check(next() == DOUBLE_QUOTE);
+    check(nextByte() == DOUBLE_QUOTE);
     return quote(ascii(bytes));
   }
 
   private Lambda compileLambda() {
-    check(next() == '(');
+    check(nextByte() == '(');
     skipWhitespaces();
     Parameter parameter = parameter(compileAlphanumeric());
     skipWhitespaces();
-    check(next() == ')');
+    check(nextByte() == ')');
     skipWhitespaces();
     return lambda(parameter, compileBody());
   }
 
   private Expression compileBody() {
-    var oneByte = (byte) peek();
+    var oneByte = (byte) peekByte();
     if (oneByte == '(') {
       return compileLambda();
     } else if (oneByte == '{') {
@@ -132,16 +132,16 @@ public class Compilation {
   }
 
   private Expression compileScope() {
-    check(next() == '{');
+    check(nextByte() == '{');
     skipWhitespaces();
     Expression body = compileExpression();
     skipWhitespaces();
-    check(next() == '}');
+    check(nextByte() == '}');
     return body;
   }
 
   private String compileAlphanumeric() {
-    return isAlphanumeric(peek())
+    return isAlphanumeric(peekByte())
         ? ascii(readAll(Ascii::isAlphanumeric))
         : fail("expected alphanumeric but was %c", peek());
   }
@@ -150,12 +150,20 @@ public class Compilation {
     return input.hasNext();
   }
 
-  private Byte next() {
+  private Token next() {
     return input.next();
   }
 
-  private Byte peek() {
+  private Byte nextByte() {
+    return ((ByteToken) next()).value;
+  }
+
+  private Token peek() {
     return input.peek();
+  }
+
+  private Byte peekByte() {
+    return ((ByteToken) peek()).value;
   }
 
   private void skipWhitespaces() {
@@ -164,8 +172,8 @@ public class Compilation {
 
   private byte[] readAll(Predicate<Byte> condition) {
     var output = new ByteArrayOutputStream();
-    while (hasNext() && condition.test(peek())) {
-      output.write(next());
+    while (hasNext() && condition.test(peekByte())) {
+      output.write(nextByte());
     }
     return output.toByteArray();
   }
