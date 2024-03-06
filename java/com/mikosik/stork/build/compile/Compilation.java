@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
-import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -52,7 +51,7 @@ public class Compilation {
   }
 
   private Definition compileDefinition() {
-    String name = compileAlphanumeric();
+    String name = nextLabel();
     skipWhitespaces();
     Expression body = compileBody();
     return definition(name, body);
@@ -67,12 +66,12 @@ public class Compilation {
     if (token instanceof StringLiteral literal) {
       next();
       return quote(literal.string);
+    } else if (token instanceof Label label) {
+      return compileInvocation();
     }
     byte oneByte = peekByte();
     if (isNumeric(oneByte)) {
       return compileInteger();
-    } else if (isLetter(oneByte)) {
-      return compileInvocation();
     } else if (oneByte == '(') {
       return compileLambda();
     } else {
@@ -100,13 +99,13 @@ public class Compilation {
   }
 
   private Variable compileVariable() {
-    return variable(compileAlphanumeric());
+    return variable(nextLabel());
   }
 
   private Lambda compileLambda() {
     check(nextByte() == '(');
     skipWhitespaces();
-    Parameter parameter = parameter(compileAlphanumeric());
+    Parameter parameter = parameter(nextLabel());
     skipWhitespaces();
     check(nextByte() == ')');
     skipWhitespaces();
@@ -145,6 +144,10 @@ public class Compilation {
 
   private Token next() {
     return input.next();
+  }
+
+  private String nextLabel() {
+    return ((Label) next()).string;
   }
 
   private Byte nextByte() {
