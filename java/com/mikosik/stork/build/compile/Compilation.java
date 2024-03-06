@@ -14,7 +14,7 @@ import static com.mikosik.stork.model.Variable.variable;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mikosik.stork.common.PeekableIterator;
+import com.mikosik.stork.common.Peekerator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
@@ -23,13 +23,13 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Variable;
 
 public class Compilation {
-  private final PeekableIterator<Token> input;
+  private final Peekerator<Token> input;
 
-  private Compilation(PeekableIterator<Token> input) {
+  private Compilation(Peekerator<Token> input) {
     this.input = input;
   }
 
-  public static Compilation compilation(PeekableIterator<Token> input) {
+  public static Compilation compilation(Peekerator<Token> input) {
     return new Compilation(input);
   }
 

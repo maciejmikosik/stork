@@ -5,7 +5,7 @@ import static com.mikosik.stork.build.compile.Label.label;
 import static com.mikosik.stork.build.compile.StringLiteral.literal;
 import static com.mikosik.stork.build.compile.Symbol.symbol;
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.PeekableIterator.peekable;
+import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
@@ -15,14 +15,14 @@ import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import java.math.BigInteger;
 import java.util.Iterator;
 
-import com.mikosik.stork.common.PeekableIterator;
+import com.mikosik.stork.common.Peekerator;
 
 public class Parser {
   public static Iterator<Token> parse(Iterator<Byte> iterator) {
-    return parse(peekable(iterator));
+    return parse(peekerator(iterator));
   }
 
-  private static Iterator<Token> parse(PeekableIterator<Byte> iterator) {
+  private static Iterator<Token> parse(Peekerator<Byte> iterator) {
     return new Iterator<>() {
       public boolean hasNext() {
         skipWhitespaces();
@@ -51,7 +51,7 @@ public class Parser {
     };
   }
 
-  private static StringLiteral parseStringLiteral(PeekableIterator<Byte> iterator) {
+  private static StringLiteral parseStringLiteral(Peekerator<Byte> iterator) {
     check(isDoubleQuote(iterator.next()));
     var builder = new StringBuilder();
     while (iterator.hasNext() && !isDoubleQuote(iterator.peek())) {
@@ -61,7 +61,7 @@ public class Parser {
     return literal(builder.toString());
   }
 
-  private static Label parseLabel(PeekableIterator<Byte> iterator) {
+  private static Label parseLabel(Peekerator<Byte> iterator) {
     var builder = new StringBuilder();
     while (iterator.hasNext() && isAlphanumeric(iterator.peek())) {
       builder.append((char) iterator.next().byteValue());
@@ -69,7 +69,7 @@ public class Parser {
     return label(builder.toString());
   }
 
-  private static IntegerLiteral parseIntegerLiteral(PeekableIterator<Byte> iterator) {
+  private static IntegerLiteral parseIntegerLiteral(Peekerator<Byte> iterator) {
     var builder = new StringBuilder();
     while (iterator.hasNext() && isNumeric(iterator.peek())) {
       builder.append((char) iterator.next().byteValue());
