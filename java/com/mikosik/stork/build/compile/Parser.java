@@ -1,9 +1,9 @@
 package com.mikosik.stork.build.compile;
 
-import static com.mikosik.stork.build.compile.ByteToken.token;
 import static com.mikosik.stork.build.compile.IntegerLiteral.literal;
 import static com.mikosik.stork.build.compile.Label.label;
 import static com.mikosik.stork.build.compile.StringLiteral.literal;
+import static com.mikosik.stork.build.compile.Symbol.symbol;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.PeekableIterator.peekable;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
@@ -39,7 +39,7 @@ public class Parser {
         } else if (isNumeric(firstByte)) {
           return parseIntegerLiteral(iterator);
         } else {
-          return token(iterator.next());
+          return symbol(iterator.next());
         }
       }
 

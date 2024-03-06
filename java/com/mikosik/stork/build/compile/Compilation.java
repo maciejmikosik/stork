@@ -61,20 +61,20 @@ public class Compilation {
       next();
       return stork(literal.value);
     }
-    byte oneByte = peekByte();
-    if (oneByte == '(') {
+    byte symbol = peekSymbol();
+    if (symbol == '(') {
       return compileLambda();
     } else {
-      return fail("unexpected character [%c]", oneByte);
+      return fail("unexpected character [%c]", symbol);
     }
   }
 
   private Expression compileInvocation() {
     Expression result = compileVariable();
-    while (hasNext() && peekByte() == '(') {
+    while (hasNext() && peekSymbol() == '(') {
       next();
       Expression argument = compileExpression();
-      check(nextByte() == ')');
+      check(nextSymbol() == ')');
       result = application(result, argument);
     }
     return result;
@@ -85,27 +85,27 @@ public class Compilation {
   }
 
   private Lambda compileLambda() {
-    check(nextByte() == '(');
+    check(nextSymbol() == '(');
     Parameter parameter = parameter(nextLabel());
-    check(nextByte() == ')');
+    check(nextSymbol() == ')');
     return lambda(parameter, compileBody());
   }
 
   private Expression compileBody() {
-    var oneByte = (byte) peekByte();
-    if (oneByte == '(') {
+    var symbol = peekSymbol();
+    if (symbol == '(') {
       return compileLambda();
-    } else if (oneByte == '{') {
+    } else if (symbol == '{') {
       return compileScope();
     } else {
-      return fail("expected ( or { but was %c", oneByte);
+      return fail("expected ( or { but was %c", symbol);
     }
   }
 
   private Expression compileScope() {
-    check(nextByte() == '{');
+    check(nextSymbol() == '{');
     Expression body = compileExpression();
-    check(nextByte() == '}');
+    check(nextSymbol() == '}');
     return body;
   }
 
@@ -121,15 +121,15 @@ public class Compilation {
     return ((Label) next()).string;
   }
 
-  private Byte nextByte() {
-    return ((ByteToken) next()).value;
+  private byte nextSymbol() {
+    return ((Symbol) next()).character;
   }
 
   private Token peek() {
     return input.peek();
   }
 
-  private Byte peekByte() {
-    return ((ByteToken) peek()).value;
+  private byte peekSymbol() {
+    return ((Symbol) peek()).character;
   }
 }
