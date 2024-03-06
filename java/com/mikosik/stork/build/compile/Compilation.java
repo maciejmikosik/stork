@@ -1,12 +1,9 @@
 package com.mikosik.stork.build.compile;
 
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Logic.not;
 import static com.mikosik.stork.common.Throwables.fail;
-import static com.mikosik.stork.common.io.Ascii.DOUBLE_QUOTE;
 import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
-import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
@@ -66,13 +63,16 @@ public class Compilation {
     if (!hasNext()) {
       return fail("unexpected end of stream");
     }
+    var token = peek();
+    if (token instanceof StringLiteral literal) {
+      next();
+      return quote(literal.string);
+    }
     byte oneByte = peekByte();
     if (isNumeric(oneByte)) {
       return compileInteger();
     } else if (isLetter(oneByte)) {
       return compileInvocation();
-    } else if (isDoubleQuote(oneByte)) {
-      return compileQuote();
     } else if (oneByte == '(') {
       return compileLambda();
     } else {
@@ -101,13 +101,6 @@ public class Compilation {
 
   private Variable compileVariable() {
     return variable(compileAlphanumeric());
-  }
-
-  private Expression compileQuote() {
-    check(nextByte() == DOUBLE_QUOTE);
-    var bytes = readAll(not(Ascii::isDoubleQuote));
-    check(nextByte() == DOUBLE_QUOTE);
-    return quote(ascii(bytes));
   }
 
   private Lambda compileLambda() {
@@ -172,7 +165,9 @@ public class Compilation {
 
   private byte[] readAll(Predicate<Byte> condition) {
     var output = new ByteArrayOutputStream();
-    while (hasNext() && condition.test(peekByte())) {
+    while (hasNext()
+        && peek() instanceof ByteToken token
+        && condition.test(peekByte())) {
       output.write(nextByte());
     }
     return output.toByteArray();
