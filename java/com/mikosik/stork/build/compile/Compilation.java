@@ -2,6 +2,7 @@ package com.mikosik.stork.build.compile;
 
 import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -11,6 +12,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,8 +31,8 @@ public class Compilation {
     this.input = input;
   }
 
-  public static Compilation compilation(Peekerator<Token> input) {
-    return new Compilation(input);
+  public static Compilation compilation(Iterator<Token> input) {
+    return new Compilation(peekerator(input));
   }
 
   public Module compile() {
