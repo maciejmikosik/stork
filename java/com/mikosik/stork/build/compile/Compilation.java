@@ -1,172 +1,134 @@
 package com.mikosik.stork.build.compile;
 
+import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Logic.not;
+import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.Throwables.fail;
-import static com.mikosik.stork.common.io.Ascii.DOUBLE_QUOTE;
-import static com.mikosik.stork.common.io.Ascii.ascii;
-import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
-import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
-import static com.mikosik.stork.common.io.Ascii.isLetter;
-import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 
-import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Predicate;
 
-import com.mikosik.stork.common.PeekableIterator;
-import com.mikosik.stork.common.io.Ascii;
+import com.mikosik.stork.common.Peekerator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Variable;
 
 public class Compilation {
-  private final PeekableIterator<Byte> input;
+  private final Peekerator<Token> input;
 
-  private Compilation(PeekableIterator<Byte> input) {
+  private Compilation(Peekerator<Token> input) {
     this.input = input;
   }
 
-  public static Compilation compilation(PeekableIterator<Byte> input) {
-    return new Compilation(input);
+  public static Compilation compilation(Iterator<Token> input) {
+    return new Compilation(peekerator(input));
   }
 
   public Module compile() {
-    List<Definition> definitions = new LinkedList<>();
+    var definitions = new LinkedList<Definition>();
     while (hasNext()) {
-      skipWhitespaces();
       definitions.add(compileDefinition());
-      skipWhitespaces();
     }
     return module(definitions);
   }
 
   private Definition compileDefinition() {
-    String name = compileAlphanumeric();
-    skipWhitespaces();
-    Expression body = compileBody();
+    var name = nextLabel();
+    var body = compileBody();
     return definition(name, body);
   }
 
   private Expression compileExpression() {
-    skipWhitespaces();
     if (!hasNext()) {
       return fail("unexpected end of stream");
     }
-    byte oneByte = peek();
-    if (isNumeric(oneByte)) {
-      return compileInteger();
-    } else if (isLetter(oneByte)) {
+    var token = peek();
+    if (token instanceof StringLiteral literal) {
+      next();
+      return quote(literal.string);
+    } else if (token instanceof Label label) {
       return compileInvocation();
-    } else if (isDoubleQuote(oneByte)) {
-      return compileQuote();
-    } else if (oneByte == '(') {
+    } else if (token instanceof IntegerLiteral literal) {
+      next();
+      return stork(literal.value);
+    }
+    var symbol = peekSymbol();
+    if (symbol == '(') {
       return compileLambda();
     } else {
-      return fail("unexpected character [%c]", oneByte);
+      return fail("unexpected character [%c]", symbol);
     }
   }
 
-  private Expression compileInteger() {
-    return integer(new BigInteger(compileAlphanumeric()));
-  }
-
   private Expression compileInvocation() {
-    Expression result = compileVariable();
-    skipWhitespaces();
-    while (hasNext() && peek() == '(') {
+    var result = compileVariable();
+    while (hasNext() && peekSymbol() == '(') {
       next();
-      skipWhitespaces();
-      Expression argument = compileExpression();
-      skipWhitespaces();
-      check(next() == ')');
+      var argument = compileExpression();
+      check(nextSymbol() == ')');
       result = application(result, argument);
-      skipWhitespaces();
     }
     return result;
   }
 
-  private Variable compileVariable() {
-    return variable(compileAlphanumeric());
-  }
-
-  private Expression compileQuote() {
-    check(next() == DOUBLE_QUOTE);
-    var bytes = readAll(not(Ascii::isDoubleQuote));
-    check(next() == DOUBLE_QUOTE);
-    return quote(ascii(bytes));
+  private Expression compileVariable() {
+    return variable(nextLabel());
   }
 
   private Lambda compileLambda() {
-    check(next() == '(');
-    skipWhitespaces();
-    Parameter parameter = parameter(compileAlphanumeric());
-    skipWhitespaces();
-    check(next() == ')');
-    skipWhitespaces();
+    check(nextSymbol() == '(');
+    var parameter = parameter(nextLabel());
+    check(nextSymbol() == ')');
     return lambda(parameter, compileBody());
   }
 
   private Expression compileBody() {
-    var oneByte = (byte) peek();
-    if (oneByte == '(') {
+    var symbol = peekSymbol();
+    if (symbol == '(') {
       return compileLambda();
-    } else if (oneByte == '{') {
+    } else if (symbol == '{') {
       return compileScope();
     } else {
-      return fail("expected ( or { but was %c", oneByte);
+      return fail("expected ( or { but was %c", symbol);
     }
   }
 
   private Expression compileScope() {
-    check(next() == '{');
-    skipWhitespaces();
-    Expression body = compileExpression();
-    skipWhitespaces();
-    check(next() == '}');
+    check(nextSymbol() == '{');
+    var body = compileExpression();
+    check(nextSymbol() == '}');
     return body;
-  }
-
-  private String compileAlphanumeric() {
-    return isAlphanumeric(peek())
-        ? ascii(readAll(Ascii::isAlphanumeric))
-        : fail("expected alphanumeric but was %c", peek());
   }
 
   private boolean hasNext() {
     return input.hasNext();
   }
 
-  private Byte next() {
+  private Token next() {
     return input.next();
   }
 
-  private Byte peek() {
+  private String nextLabel() {
+    return ((Label) next()).string;
+  }
+
+  private byte nextSymbol() {
+    return ((Symbol) next()).character;
+  }
+
+  private Token peek() {
     return input.peek();
   }
 
-  private void skipWhitespaces() {
-    readAll(Ascii::isWhitespace);
-  }
-
-  private byte[] readAll(Predicate<Byte> condition) {
-    var output = new ByteArrayOutputStream();
-    while (hasNext() && condition.test(peek())) {
-      output.write(next());
-    }
-    return output.toByteArray();
+  private byte peekSymbol() {
+    return ((Symbol) peek()).character;
   }
 }

@@ -2,18 +2,18 @@ package com.mikosik.stork.common;
 
 import java.util.Iterator;
 
-public class PeekableIterator<E> implements Iterator<E> {
+public class Peekerator<E> implements Iterator<E> {
   private final Iterator<E> iterator;
 
   private boolean hasPeeked;
   private E peeked;
 
-  private PeekableIterator(Iterator<E> iterator) {
+  private Peekerator(Iterator<E> iterator) {
     this.iterator = iterator;
   }
 
-  public static <E> PeekableIterator<E> peekable(Iterator<E> iterator) {
-    return new PeekableIterator<E>(iterator);
+  public static <E> Peekerator<E> peekerator(Iterator<E> iterator) {
+    return new Peekerator<E>(iterator);
   }
 
   public boolean hasNext() {
