@@ -14,15 +14,12 @@ import static com.mikosik.stork.model.Variable.variable;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import com.mikosik.stork.common.Peekerator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Variable;
 
 public class Compilation {
   private final Peekerator<Token> input;
@@ -36,7 +33,7 @@ public class Compilation {
   }
 
   public Module compile() {
-    List<Definition> definitions = new LinkedList<>();
+    var definitions = new LinkedList<Definition>();
     while (hasNext()) {
       definitions.add(compileDefinition());
     }
@@ -44,8 +41,8 @@ public class Compilation {
   }
 
   private Definition compileDefinition() {
-    String name = nextLabel();
-    Expression body = compileBody();
+    var name = nextLabel();
+    var body = compileBody();
     return definition(name, body);
   }
 
@@ -63,7 +60,7 @@ public class Compilation {
       next();
       return stork(literal.value);
     }
-    byte symbol = peekSymbol();
+    var symbol = peekSymbol();
     if (symbol == '(') {
       return compileLambda();
     } else {
@@ -72,23 +69,23 @@ public class Compilation {
   }
 
   private Expression compileInvocation() {
-    Expression result = compileVariable();
+    var result = compileVariable();
     while (hasNext() && peekSymbol() == '(') {
       next();
-      Expression argument = compileExpression();
+      var argument = compileExpression();
       check(nextSymbol() == ')');
       result = application(result, argument);
     }
     return result;
   }
 
-  private Variable compileVariable() {
+  private Expression compileVariable() {
     return variable(nextLabel());
   }
 
   private Lambda compileLambda() {
     check(nextSymbol() == '(');
-    Parameter parameter = parameter(nextLabel());
+    var parameter = parameter(nextLabel());
     check(nextSymbol() == ')');
     return lambda(parameter, compileBody());
   }
@@ -106,7 +103,7 @@ public class Compilation {
 
   private Expression compileScope() {
     check(nextSymbol() == '{');
-    Expression body = compileExpression();
+    var body = compileExpression();
     check(nextSymbol() == '}');
     return body;
   }
