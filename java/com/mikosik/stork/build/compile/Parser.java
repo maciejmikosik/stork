@@ -10,6 +10,7 @@ import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
+import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -24,10 +25,12 @@ public class Parser {
   private static Iterator<Token> parse(PeekableIterator<Byte> iterator) {
     return new Iterator<>() {
       public boolean hasNext() {
+        skipWhitespaces();
         return iterator.hasNext();
       }
 
       public Token next() {
+        skipWhitespaces();
         var firstByte = iterator.peek();
         if (isDoubleQuote(firstByte)) {
           return parseStringLiteral(iterator);
@@ -37,6 +40,12 @@ public class Parser {
           return parseIntegerLiteral(iterator);
         } else {
           return token(iterator.next());
+        }
+      }
+
+      private void skipWhitespaces() {
+        while (iterator.hasNext() && isWhitespace(iterator.peek())) {
+          iterator.next();
         }
       }
     };

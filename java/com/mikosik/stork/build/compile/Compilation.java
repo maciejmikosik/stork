@@ -11,13 +11,10 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 
-import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import com.mikosik.stork.common.PeekableIterator;
-import com.mikosik.stork.common.io.Ascii;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
@@ -39,22 +36,18 @@ public class Compilation {
   public Module compile() {
     List<Definition> definitions = new LinkedList<>();
     while (hasNext()) {
-      skipWhitespaces();
       definitions.add(compileDefinition());
-      skipWhitespaces();
     }
     return module(definitions);
   }
 
   private Definition compileDefinition() {
     String name = nextLabel();
-    skipWhitespaces();
     Expression body = compileBody();
     return definition(name, body);
   }
 
   private Expression compileExpression() {
-    skipWhitespaces();
     if (!hasNext()) {
       return fail("unexpected end of stream");
     }
@@ -78,15 +71,11 @@ public class Compilation {
 
   private Expression compileInvocation() {
     Expression result = compileVariable();
-    skipWhitespaces();
     while (hasNext() && peekByte() == '(') {
       next();
-      skipWhitespaces();
       Expression argument = compileExpression();
-      skipWhitespaces();
       check(nextByte() == ')');
       result = application(result, argument);
-      skipWhitespaces();
     }
     return result;
   }
@@ -97,11 +86,8 @@ public class Compilation {
 
   private Lambda compileLambda() {
     check(nextByte() == '(');
-    skipWhitespaces();
     Parameter parameter = parameter(nextLabel());
-    skipWhitespaces();
     check(nextByte() == ')');
-    skipWhitespaces();
     return lambda(parameter, compileBody());
   }
 
@@ -118,9 +104,7 @@ public class Compilation {
 
   private Expression compileScope() {
     check(nextByte() == '{');
-    skipWhitespaces();
     Expression body = compileExpression();
-    skipWhitespaces();
     check(nextByte() == '}');
     return body;
   }
@@ -147,19 +131,5 @@ public class Compilation {
 
   private Byte peekByte() {
     return ((ByteToken) peek()).value;
-  }
-
-  private void skipWhitespaces() {
-    readAll(Ascii::isWhitespace);
-  }
-
-  private byte[] readAll(Predicate<Byte> condition) {
-    var output = new ByteArrayOutputStream();
-    while (hasNext()
-        && peek() instanceof ByteToken token
-        && condition.test(peekByte())) {
-      output.write(nextByte());
-    }
-    return output.toByteArray();
   }
 }
