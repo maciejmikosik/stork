@@ -1,13 +1,10 @@
 package com.mikosik.stork.build.compile;
 
+import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Throwables.fail;
-import static com.mikosik.stork.common.io.Ascii.ascii;
-import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
-import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
@@ -15,7 +12,6 @@ import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -68,19 +64,16 @@ public class Compilation {
       return quote(literal.string);
     } else if (token instanceof Label label) {
       return compileInvocation();
+    } else if (token instanceof IntegerLiteral literal) {
+      next();
+      return stork(literal.value);
     }
     byte oneByte = peekByte();
-    if (isNumeric(oneByte)) {
-      return compileInteger();
-    } else if (oneByte == '(') {
+    if (oneByte == '(') {
       return compileLambda();
     } else {
       return fail("unexpected character [%c]", oneByte);
     }
-  }
-
-  private Expression compileInteger() {
-    return integer(new BigInteger(compileAlphanumeric()));
   }
 
   private Expression compileInvocation() {
@@ -130,12 +123,6 @@ public class Compilation {
     skipWhitespaces();
     check(nextByte() == '}');
     return body;
-  }
-
-  private String compileAlphanumeric() {
-    return isAlphanumeric(peekByte())
-        ? ascii(readAll(Ascii::isAlphanumeric))
-        : fail("expected alphanumeric but was %c", peek());
   }
 
   private boolean hasNext() {
