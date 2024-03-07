@@ -4,7 +4,7 @@ import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 
 public class MaybeByte {
-  public static final MaybeByte NO_BYTE = new MaybeByte((byte) 0);
+  private static final MaybeByte NO_BYTE = new MaybeByte((byte) 0);
   private static final MaybeByte[] BYTES = new MaybeByte[256];
 
   static {
@@ -21,6 +21,10 @@ public class MaybeByte {
 
   public static MaybeByte justByte(byte value) {
     return BYTES[toUnsignedInt(value)];
+  }
+
+  public static MaybeByte noByte() {
+    return NO_BYTE;
   }
 
   public static MaybeByte maybeByte(int code) {
