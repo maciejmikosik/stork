@@ -6,6 +6,14 @@ public class Ascii {
   public static byte SINGLE_QUOTE = '\'';
   public static byte DOUBLE_QUOTE = '\"';
 
+  public static boolean isAscii(byte character) {
+    return 0 <= character;
+  }
+
+  public static boolean isPrintable(byte character) {
+    return 32 <= character && character <= 126;
+  }
+
   public static boolean isLetter(byte character) {
     return 'a' <= character && character <= 'z'
         || 'A' <= character && character <= 'Z';
