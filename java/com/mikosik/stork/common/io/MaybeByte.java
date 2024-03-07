@@ -1,5 +1,6 @@
 package com.mikosik.stork.common.io;
 
+import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 
 public class MaybeByte {
@@ -19,7 +20,7 @@ public class MaybeByte {
   }
 
   public static MaybeByte justByte(byte value) {
-    return BYTES[unsigned(value)];
+    return BYTES[toUnsignedInt(value)];
   }
 
   public static MaybeByte maybeByte(int code) {
@@ -41,10 +42,6 @@ public class MaybeByte {
   public String toString() {
     return this == NO_BYTE
         ? "NO_BYTE"
-        : format("just(%d)", unsigned(value));
-  }
-
-  private static int unsigned(byte value) {
-    return value & 0xFF;
+        : format("just(%d)", toUnsignedInt(value));
   }
 }
