@@ -30,7 +30,7 @@ import org.quackery.Body;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.build.BuildException;
+import com.mikosik.stork.build.ProblemException;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Problem;
@@ -139,7 +139,7 @@ public class ProgramTest implements Test {
     try {
       buildAndVerify();
       return emptyList();
-    } catch (BuildException exception) {
+    } catch (ProblemException exception) {
       return exception.problems;
     }
   }
