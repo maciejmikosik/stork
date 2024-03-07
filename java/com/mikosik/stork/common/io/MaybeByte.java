@@ -4,12 +4,12 @@ import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 
 public class MaybeByte {
-  private static final MaybeByte NO_BYTE = new MaybeByte((byte) 0);
-  private static final MaybeByte[] BYTES = new MaybeByte[256];
+  private static final MaybeByte[] BYTES = new MaybeByte[257];
 
   static {
-    for (int i = 0; i < BYTES.length; i++) {
-      BYTES[i] = new MaybeByte((byte) i);
+    BYTES[0] = new MaybeByte((byte) 0);
+    for (int i = 0; i < 256; i++) {
+      BYTES[i + 1] = new MaybeByte((byte) i);
     }
   }
 
@@ -20,23 +20,23 @@ public class MaybeByte {
   }
 
   public static MaybeByte justByte(byte value) {
-    return BYTES[toUnsignedInt(value)];
+    return BYTES[toUnsignedInt(value) + 1];
   }
 
   public static MaybeByte noByte() {
-    return NO_BYTE;
+    return BYTES[0];
   }
 
   public static MaybeByte maybeByte(int code) {
-    return code == -1 ? NO_BYTE : justByte((byte) code);
+    return BYTES[code + 1];
   }
 
   public boolean hasByte() {
-    return this != NO_BYTE;
+    return this != BYTES[0];
   }
 
   public byte getByte() {
-    if (this == NO_BYTE) {
+    if (this == BYTES[0]) {
       throw new RuntimeException("NO_BYTE");
     } else {
       return value;
@@ -44,7 +44,7 @@ public class MaybeByte {
   }
 
   public String toString() {
-    return this == NO_BYTE
+    return this == BYTES[0]
         ? "NO_BYTE"
         : format("just(%d)", toUnsignedInt(value));
   }
