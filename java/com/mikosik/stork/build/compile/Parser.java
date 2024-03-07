@@ -1,15 +1,19 @@
 package com.mikosik.stork.build.compile;
 
+import static com.mikosik.stork.build.ProblemException.exception;
 import static com.mikosik.stork.build.compile.IntegerLiteral.literal;
 import static com.mikosik.stork.build.compile.Label.label;
 import static com.mikosik.stork.build.compile.StringLiteral.literal;
 import static com.mikosik.stork.build.compile.Symbol.symbol;
+import static com.mikosik.stork.build.compile.problem.IllegalCode.illegalCode;
+import static com.mikosik.stork.build.compile.problem.IllegalCode.illegalCodeInStringLiteral;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
+import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 
 import java.math.BigInteger;
@@ -38,8 +42,10 @@ public class Parser {
           return parseLabel(iterator);
         } else if (isNumeric(firstByte)) {
           return parseIntegerLiteral(iterator);
-        } else {
+        } else if ("(){}".indexOf(firstByte) >= 0) {
           return symbol(iterator.next());
+        } else {
+          throw exception(illegalCode(iterator.next()));
         }
       }
 
@@ -55,7 +61,11 @@ public class Parser {
     check(isDoubleQuote(iterator.next()));
     var builder = new StringBuilder();
     while (iterator.hasNext() && !isDoubleQuote(iterator.peek())) {
-      builder.append((char) iterator.next().byteValue());
+      var nextByte = iterator.next().byteValue();
+      if (!isPrintable(nextByte)) {
+        throw exception(illegalCodeInStringLiteral(nextByte));
+      }
+      builder.append((char) nextByte);
     }
     check(isDoubleQuote(iterator.next()));
     return literal(builder.toString());
