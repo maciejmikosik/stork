@@ -27,8 +27,8 @@ public class MaybeByte {
     return BYTES[0];
   }
 
-  public static MaybeByte maybeByte(int code) {
-    return BYTES[code + 1];
+  public static MaybeByte maybeByte(int value) {
+    return BYTES[value + 1];
   }
 
   public boolean hasByte() {
