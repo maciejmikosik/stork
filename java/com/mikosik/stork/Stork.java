@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Map;
 
-import com.mikosik.stork.build.BuildException;
+import com.mikosik.stork.build.ProblemException;
 import com.mikosik.stork.model.Problem;
 
 public class Stork {
@@ -28,7 +28,7 @@ public class Stork {
 
       program(identifier("main"), module)
           .run(input(System.in), output(System.out));
-    } catch (BuildException e) {
+    } catch (ProblemException e) {
       for (Problem problem : e.problems) {
         System.err.println(problem.description());
       }
