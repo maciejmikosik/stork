@@ -15,7 +15,7 @@ import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toCollection;
 
 import java.nio.file.Path;
@@ -98,17 +98,26 @@ public class ProgramTest implements Test {
   }
 
   private void run() {
-    if (expectedStdout != null) {
-      runAndAssertStdout();
-    } else if (!expectedProblems.isEmpty()) {
-      buildAndAssertProblems();
-    } else {
-      throw new RuntimeException();
+    Module module;
+    try {
+      module = buildAndVerify();
+    } catch (ProblemException exception) {
+      var actual = descriptions(exception.problems);
+      var expected = descriptions(expectedProblems);
+      var common = intersection(actual, expected);
+      actual.removeAll(common);
+      expected.removeAll(common);
+      if (!expected.isEmpty() || !actual.isEmpty()) {
+        throw new AssertException(formatMessage(actual, expected));
+      }
+      return;
     }
-  }
+    if (!expectedProblems.isEmpty()) {
+      throw new AssertException(formatMessage(
+          emptySet(),
+          descriptions(expectedProblems)));
+    }
 
-  private void runAndAssertStdout() {
-    Module module = buildAndVerify();
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());
@@ -121,26 +130,6 @@ public class ProgramTest implements Test {
           + "  %s\n",
           ascii(expectedStdout),
           ascii(actualStdout)));
-    }
-  }
-
-  private void buildAndAssertProblems() {
-    var actual = descriptions(buildAndReturnProblems());
-    var expected = descriptions(expectedProblems);
-    var common = intersection(actual, expected);
-    actual.removeAll(common);
-    expected.removeAll(common);
-    if (!expected.isEmpty() || !actual.isEmpty()) {
-      throw new AssertException(formatMessage(actual, expected));
-    }
-  }
-
-  private List<? extends Problem> buildAndReturnProblems() {
-    try {
-      buildAndVerify();
-      return emptyList();
-    } catch (ProblemException exception) {
-      return exception.problems;
     }
   }
 
