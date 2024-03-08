@@ -1,12 +1,9 @@
 package com.mikosik.stork.build.compile;
 
-import static com.mikosik.stork.build.ProblemException.exception;
 import static com.mikosik.stork.build.compile.IntegerLiteral.literal;
 import static com.mikosik.stork.build.compile.Label.label;
 import static com.mikosik.stork.build.compile.StringLiteral.literal;
 import static com.mikosik.stork.build.compile.Symbol.symbol;
-import static com.mikosik.stork.build.compile.problem.IllegalCode.illegalCode;
-import static com.mikosik.stork.build.compile.problem.IllegalCode.illegalCodeInStringLiteral;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
@@ -15,6 +12,9 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
+import static com.mikosik.stork.problem.ProblemException.exception;
+import static com.mikosik.stork.problem.build.compile.IllegalCode.illegalCode;
+import static com.mikosik.stork.problem.build.compile.IllegalCode.illegalCodeInStringLiteral;
 
 import java.math.BigInteger;
 import java.util.Iterator;

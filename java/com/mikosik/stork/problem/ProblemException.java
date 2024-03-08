@@ -1,11 +1,9 @@
-package com.mikosik.stork.build;
+package com.mikosik.stork.problem;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 import java.util.List;
-
-import com.mikosik.stork.model.Problem;
 
 public class ProblemException extends RuntimeException {
   public final List<Problem> problems;

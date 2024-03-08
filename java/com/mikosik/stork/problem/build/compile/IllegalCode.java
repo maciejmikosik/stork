@@ -1,9 +1,9 @@
-package com.mikosik.stork.build.compile.problem;
+package com.mikosik.stork.problem.build.compile;
 
-import static com.mikosik.stork.build.compile.problem.IllegalCode.Location.ANYWHERE;
-import static com.mikosik.stork.build.compile.problem.IllegalCode.Location.IN_STRING_LITERAL;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
+import static com.mikosik.stork.problem.build.compile.IllegalCode.Location.ANYWHERE;
+import static com.mikosik.stork.problem.build.compile.IllegalCode.Location.IN_STRING_LITERAL;
 import static java.lang.Byte.toUnsignedInt;
 
 public class IllegalCode implements CannotCompile {

@@ -3,7 +3,7 @@ package com.mikosik.stork;
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.Stars.buildCoreLibrary;
 import static com.mikosik.stork.build.link.Modules.join;
-import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
+import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
@@ -16,8 +16,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Map;
 
-import com.mikosik.stork.build.ProblemException;
-import com.mikosik.stork.model.Problem;
+import com.mikosik.stork.problem.Problem;
+import com.mikosik.stork.problem.ProblemException;
 
 public class Stork {
   public static void main(String[] args) {
