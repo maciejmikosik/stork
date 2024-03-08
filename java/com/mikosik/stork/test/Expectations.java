@@ -16,6 +16,8 @@ import java.util.Set;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.problem.Problem;
+import com.mikosik.stork.problem.build.CannotBuild;
+import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Expectations {
   private Type type = null;
@@ -34,8 +36,13 @@ public class Expectations {
     this.stdout = stdout;
   }
 
-  public void expect(Problem problem) {
+  public void expect(CannotBuild problem) {
     tryExpect(Type.CANNOT_BUILD);
+    problems.add(problem);
+  }
+
+  public void expect(CannotCompute problem) {
+    tryExpect(Type.CANNOT_COMPUTE);
     problems.add(problem);
   }
 
@@ -44,9 +51,17 @@ public class Expectations {
     this.type = type;
   }
 
-  public void actualProblems(List<Problem> actualProblems) {
+  public void actualBuildProblems(List<Problem> actualProblems) {
+    actualProblems(Type.CANNOT_BUILD, actualProblems);
+  }
+
+  public void actualComputeProblems(List<Problem> actualProblems) {
+    actualProblems(Type.CANNOT_COMPUTE, actualProblems);
+  }
+
+  private void actualProblems(Type type, List<Problem> actualProblems) {
     var actual = descriptions(actualProblems);
-    var expected = descriptions(problems);
+    var expected = descriptions(expectedProblems(type));
     var common = intersection(actual, expected);
     actual.removeAll(common);
     expected.removeAll(common);
@@ -55,8 +70,10 @@ public class Expectations {
     }
   }
 
-  public void actualProblems() {
-    actualProblems(emptyList());
+  private List<Problem> expectedProblems(Type type) {
+    return this.type == type
+        ? problems
+        : emptyList();
   }
 
   public void actualStdout(byte[] actualStdout) {
@@ -97,6 +114,6 @@ public class Expectations {
   }
 
   private enum Type {
-    STDOUT, CANNOT_BUILD
+    STDOUT, CANNOT_BUILD, CANNOT_COMPUTE
   }
 }
