@@ -3,6 +3,9 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Collections.intersection;
 import static com.mikosik.stork.common.io.Ascii.ascii;
+import static com.mikosik.stork.test.Expectations.Type.CANNOT_BUILD;
+import static com.mikosik.stork.test.Expectations.Type.CANNOT_COMPUTE;
+import static com.mikosik.stork.test.Expectations.Type.STDOUT;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toCollection;
@@ -21,8 +24,8 @@ import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Expectations {
   private Type type = null;
-  public byte[] stdout;
-  public final List<Problem> problems = new LinkedList<>();
+  private final List<Problem> problems = new LinkedList<>();
+  private byte[] stdout;
 
   private Expectations() {}
 
@@ -30,33 +33,28 @@ public class Expectations {
     return new Expectations();
   }
 
-  public void stdout(byte[] stdout) {
-    check(type == null);
-    type = Type.STDOUT;
-    this.stdout = stdout;
-  }
-
-  public void expect(CannotBuild problem) {
-    tryExpect(Type.CANNOT_BUILD);
+  public void expect(Problem problem) {
+    expect(typeOf(problem));
     problems.add(problem);
   }
 
-  public void expect(CannotCompute problem) {
-    tryExpect(Type.CANNOT_COMPUTE);
-    problems.add(problem);
-  }
-
-  private void tryExpect(Type type) {
+  private void expect(Type type) {
     check(this.type == null || this.type == type);
     this.type = type;
   }
 
+  public void stdout(byte[] stdout) {
+    check(type == null);
+    type = STDOUT;
+    this.stdout = stdout;
+  }
+
   public void actualBuildProblems(List<Problem> actualProblems) {
-    actualProblems(Type.CANNOT_BUILD, actualProblems);
+    actualProblems(CANNOT_BUILD, actualProblems);
   }
 
   public void actualComputeProblems(List<Problem> actualProblems) {
-    actualProblems(Type.CANNOT_COMPUTE, actualProblems);
+    actualProblems(CANNOT_COMPUTE, actualProblems);
   }
 
   private void actualProblems(Type type, List<Problem> actualProblems) {
@@ -70,22 +68,16 @@ public class Expectations {
     }
   }
 
+  private static Set<String> descriptions(List<? extends Problem> problems) {
+    return problems.stream()
+        .map(Problem::description)
+        .collect(toCollection(HashSet::new));
+  }
+
   private List<Problem> expectedProblems(Type type) {
     return this.type == type
         ? problems
         : emptyList();
-  }
-
-  public void actualStdout(byte[] actualStdout) {
-    if (!Arrays.equals(actualStdout, stdout)) {
-      throw new AssertException(format(""
-          + "expected output\n"
-          + "  %s\n"
-          + "but was\n"
-          + "  %s\n",
-          ascii(stdout),
-          ascii(actualStdout)));
-    }
   }
 
   private static String formatMessage(Set<String> actual, Set<String> expected) {
@@ -107,13 +99,29 @@ public class Expectations {
     }
   }
 
-  private static Set<String> descriptions(List<? extends Problem> problems) {
-    return problems.stream()
-        .map(Problem::description)
-        .collect(toCollection(HashSet::new));
+  public void actualStdout(byte[] actualStdout) {
+    if (!Arrays.equals(actualStdout, stdout)) {
+      throw new AssertException(format(""
+          + "expected output\n"
+          + "  %s\n"
+          + "but was\n"
+          + "  %s\n",
+          ascii(stdout),
+          ascii(actualStdout)));
+    }
   }
 
-  private enum Type {
-    STDOUT, CANNOT_BUILD, CANNOT_COMPUTE
+  private Type typeOf(Problem problem) {
+    if (problem instanceof CannotBuild) {
+      return CANNOT_BUILD;
+    } else if (problem instanceof CannotCompute) {
+      return CANNOT_COMPUTE;
+    } else {
+      throw new RuntimeException();
+    }
+  }
+
+  enum Type {
+    CANNOT_BUILD, CANNOT_COMPUTE, STDOUT
   }
 }
