@@ -22,9 +22,8 @@ import org.quackery.Body;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
-import com.mikosik.stork.problem.build.CannotBuild;
-import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
   private final String name;
@@ -66,12 +65,7 @@ public class ProgramTest implements Test {
     return this;
   }
 
-  public ProgramTest expect(CannotBuild problem) {
-    expectations.expect(problem);
-    return this;
-  }
-
-  public ProgramTest expect(CannotCompute problem) {
+  public ProgramTest expect(Problem problem) {
     expectations.expect(problem);
     return this;
   }
