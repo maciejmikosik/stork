@@ -1,12 +1,12 @@
-package com.mikosik.stork.build.compile.problem;
+package com.mikosik.stork.problem.build.parse;
 
-import static com.mikosik.stork.build.compile.problem.IllegalCode.Location.ANYWHERE;
-import static com.mikosik.stork.build.compile.problem.IllegalCode.Location.IN_STRING_LITERAL;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
+import static com.mikosik.stork.problem.build.parse.IllegalCode.Location.ANYWHERE;
+import static com.mikosik.stork.problem.build.parse.IllegalCode.Location.IN_STRING_LITERAL;
 import static java.lang.Byte.toUnsignedInt;
 
-public class IllegalCode implements CannotCompile {
+public class IllegalCode implements CannotParse {
   public final byte code;
   public final Location location;
 
