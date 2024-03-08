@@ -15,7 +15,7 @@ import java.util.Set;
 
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.model.Problem;
+import com.mikosik.stork.problem.Problem;
 
 public class Expectations {
   private Type type = null;
