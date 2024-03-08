@@ -8,13 +8,13 @@ import java.util.List;
 import com.mikosik.stork.model.Problem;
 
 public class ProblemException extends RuntimeException {
-  public final List<? extends Problem> problems;
+  public final List<Problem> problems;
 
-  private ProblemException(List<? extends Problem> problems) {
+  private ProblemException(List<Problem> problems) {
     this.problems = problems;
   }
 
-  public static ProblemException exception(List<? extends Problem> problems) {
+  public static ProblemException exception(List<Problem> problems) {
     return new ProblemException(problems);
   }
 
@@ -22,7 +22,7 @@ public class ProblemException extends RuntimeException {
     return exception(asList(problem));
   }
 
-  public static void report(List<? extends Problem> problems) {
+  public static void report(List<Problem> problems) {
     if (!problems.isEmpty()) {
       throw exception(problems);
     }

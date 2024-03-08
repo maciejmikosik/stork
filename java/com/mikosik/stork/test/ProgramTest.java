@@ -3,32 +3,22 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
-import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Collections.intersection;
-import static com.mikosik.stork.common.io.Ascii.ascii;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
+import static com.mikosik.stork.test.Expectations.expectations;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
-import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toCollection;
 
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.quackery.Body;
 import org.quackery.Test;
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.build.ProblemException;
 import com.mikosik.stork.common.io.Buffer;
@@ -40,8 +30,7 @@ public class ProgramTest implements Test {
   private final String name;
   private final FsBuilder fsBuilder;
   private byte[] stdin = new byte[0];
-  private byte[] expectedStdout = null;
-  private final List<Problem> expectedProblems = new LinkedList<>();
+  private final Expectations expectations = expectations();
 
   private ProgramTest(String name, Path directory) {
     this.name = name;
@@ -73,14 +62,12 @@ public class ProgramTest implements Test {
   }
 
   public ProgramTest stdout(String expectedStdout) {
-    check(expectedProblems.isEmpty());
-    this.expectedStdout = bytes(expectedStdout);
+    expectations.stdout(bytes(expectedStdout));
     return this;
   }
 
   public ProgramTest expect(Problem problem) {
-    check(expectedStdout == null);
-    expectedProblems.add(problem);
+    expectations.expect(problem);
     return this;
   }
 
@@ -98,81 +85,22 @@ public class ProgramTest implements Test {
   }
 
   private void run() {
-    if (expectedStdout != null) {
-      runAndAssertStdout();
-    } else if (!expectedProblems.isEmpty()) {
-      buildAndAssertProblems();
-    } else {
-      throw new RuntimeException();
+    Module module;
+    try {
+      module = verify(join(
+          build(fsBuilder.directory),
+          CORE_LIBRARY));
+    } catch (ProblemException exception) {
+      expectations.actualProblems(exception.problems);
+      return;
     }
-  }
+    expectations.actualProblems();
 
-  private void runAndAssertStdout() {
-    Module module = buildAndVerify();
     Program program = program(identifier("main"), module);
     Buffer buffer = newBuffer();
     program.run(input(stdin), buffer.asOutput());
     byte[] actualStdout = buffer.bytes();
-    if (!Arrays.equals(actualStdout, expectedStdout)) {
-      throw new AssertException(format(""
-          + "expected output\n"
-          + "  %s\n"
-          + "but was\n"
-          + "  %s\n",
-          ascii(expectedStdout),
-          ascii(actualStdout)));
-    }
-  }
-
-  private void buildAndAssertProblems() {
-    var actual = descriptions(buildAndReturnProblems());
-    var expected = descriptions(expectedProblems);
-    var common = intersection(actual, expected);
-    actual.removeAll(common);
-    expected.removeAll(common);
-    if (!expected.isEmpty() || !actual.isEmpty()) {
-      throw new AssertException(formatMessage(actual, expected));
-    }
-  }
-
-  private List<? extends Problem> buildAndReturnProblems() {
-    try {
-      buildAndVerify();
-      return emptyList();
-    } catch (ProblemException exception) {
-      return exception.problems;
-    }
-  }
-
-  private Module buildAndVerify() {
-    return verify(join(
-        build(fsBuilder.directory),
-        CORE_LIBRARY));
-  }
-
-  private static Set<String> descriptions(List<? extends Problem> problems) {
-    return problems.stream()
-        .map(Problem::description)
-        .collect(toCollection(HashSet::new));
-  }
-
-  private static String formatMessage(Set<String> actual, Set<String> expected) {
-    var builder = new StringBuilder();
-    append(builder, "expected", expected);
-    append(builder, "not expected", actual);
-    return builder.toString();
-  }
-
-  private static void append(
-      StringBuilder builder,
-      String headline,
-      Set<String> problems) {
-    if (!problems.isEmpty()) {
-      builder.append(headline).append("\n\n");
-      for (String problem : problems) {
-        builder.append(problem).append("\n");
-      }
-    }
+    expectations.actualStdout(actualStdout);
   }
 
   private byte[] bytes(String string) {
