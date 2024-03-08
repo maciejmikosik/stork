@@ -13,8 +13,8 @@ import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.problem.ProblemException.exception;
-import static com.mikosik.stork.problem.build.compile.IllegalCode.illegalCode;
-import static com.mikosik.stork.problem.build.compile.IllegalCode.illegalCodeInStringLiteral;
+import static com.mikosik.stork.problem.build.parse.IllegalCode.illegalCode;
+import static com.mikosik.stork.problem.build.parse.IllegalCode.illegalCodeInStringLiteral;
 
 import java.math.BigInteger;
 import java.util.Iterator;
