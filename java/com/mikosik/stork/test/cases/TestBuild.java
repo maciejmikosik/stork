@@ -1,14 +1,14 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.build.compile.problem.IllegalCode.illegalCode;
-import static com.mikosik.stork.build.compile.problem.IllegalCode.illegalCodeInStringLiteral;
-import static com.mikosik.stork.build.link.problem.DuplicatedDefinition.duplicatedDefinition;
-import static com.mikosik.stork.build.link.problem.UndefinedImport.undefinedImport;
-import static com.mikosik.stork.build.link.problem.UndefinedVariable.undefinedVariable;
-import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
+import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.problem.build.link.DuplicatedDefinition.duplicatedDefinition;
+import static com.mikosik.stork.problem.build.link.UndefinedImport.undefinedImport;
+import static com.mikosik.stork.problem.build.link.UndefinedVariable.undefinedVariable;
+import static com.mikosik.stork.problem.build.parse.IllegalCode.illegalCode;
+import static com.mikosik.stork.problem.build.parse.IllegalCode.illegalCodeInStringLiteral;
 import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static java.nio.charset.StandardCharsets.UTF_8;

@@ -2,7 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.build.Stars.build;
 import static com.mikosik.stork.build.link.Modules.join;
-import static com.mikosik.stork.build.link.problem.VerifyModule.verify;
+import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
@@ -20,10 +20,10 @@ import java.util.function.BiFunction;
 import org.quackery.Body;
 import org.quackery.Test;
 
-import com.mikosik.stork.build.ProblemException;
 import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.Problem;
+import com.mikosik.stork.problem.Problem;
+import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {

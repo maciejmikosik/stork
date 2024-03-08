@@ -1,4 +1,4 @@
-package com.mikosik.stork.build.link.problem;
+package com.mikosik.stork.problem.build.link;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
