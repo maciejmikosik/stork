@@ -1,12 +1,9 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.io.InputOutput.formatStackTrace;
-import static java.util.stream.Collectors.toList;
-import static org.quackery.Suite.suite;
-import static org.quackery.help.Helpers.thrownBy;
+import static com.mikosik.stork.common.Throwables.messageOf;
+import static com.mikosik.stork.common.Throwables.stackTraceOf;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.quackery.Body;
 import org.quackery.Test;
@@ -35,14 +32,12 @@ public class MoreReports {
     try {
       body.run();
     } catch (Throwable exception) {
-      builder.append(path).append(name).append("\n");
-      builder.append("\n");
-      if (exception instanceof AssertException) {
-        builder.append(exception.getMessage());
-      } else {
-        builder.append(formatStackTrace(exception));
-      }
-      builder.append(SEPARATOR);
+      builder.append(path).append(name).append("\n\n")
+          .append(messageOf(exception)).append("\n")
+          .append(exception instanceof AssertException
+              ? ""
+              : stackTraceOf(exception))
+          .repeat("-", 50).append("\n");
     }
   }
 
@@ -50,35 +45,5 @@ public class MoreReports {
     for (Test child : children) {
       format(builder, path + name + " / ", child);
     }
-  }
-
-  private static final String SEPARATOR = repeat(50, '-') + "\n";
-
-  private static String repeat(int times, char character) {
-    return new String(new char[times]).replace((char) 0, character);
-  }
-
-  public static Optional<Test> filter(Class<? extends Throwable> type, Test test) {
-    return test.visit(
-        (name, body) -> thrownBy(body)
-            .flatMap(throwable -> type.isInstance(throwable)
-                ? Optional.of(throwable)
-                : Optional.empty())
-            .map(throwable -> test),
-        (name, children) -> filter(type, name, children));
-  }
-
-  private static Optional<Test> filter(
-      Class<? extends Throwable> type,
-      String name,
-      List<Test> children) {
-    List<Test> filteredChildren = children.stream()
-        .map(child -> filter(type, child))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(toList());
-    return filteredChildren.isEmpty()
-        ? Optional.empty()
-        : Optional.of(suite(name).addAll(filteredChildren));
   }
 }
