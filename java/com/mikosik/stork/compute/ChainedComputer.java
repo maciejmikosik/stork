@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.Sequence.sequence;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
@@ -12,7 +12,11 @@ public class ChainedComputer implements Computer {
   }
 
   public static Computer chained(List<Computer> computers) {
-    return new ChainedComputer(sequence(computers));
+    return new ChainedComputer(computers);
+  }
+
+  public static Computer chained(Computer... computers) {
+    return new ChainedComputer(asList(computers));
   }
 
   public Computation compute(Computation computation) {

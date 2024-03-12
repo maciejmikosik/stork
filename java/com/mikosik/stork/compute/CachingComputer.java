@@ -2,6 +2,7 @@ package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.common.Slot.slot;
 import static com.mikosik.stork.compute.Computation.computation;
+import static com.mikosik.stork.compute.UncloningComputer.uncloning;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -20,7 +21,7 @@ public class CachingComputer implements Computer {
   }
 
   public static Computer caching(Computer computer) {
-    return new CachingComputer(computer);
+    return uncloning(new CachingComputer(computer));
   }
 
   public Computation compute(Computation computation) {
@@ -37,12 +38,9 @@ public class CachingComputer implements Computer {
   }
 
   private Computation fromCache(Computation computation) {
-    var cachedExpression = cachedExpressions.get(computation.expression).value;
-    return cachedExpression == computation.expression
-        ? computation
-        : computation(
-            cachedExpression,
-            computation.stack);
+    return computation(
+        cachedExpressions.get(computation.expression).value,
+        computation.stack);
   }
 
   private void toCache(Computation computation) {
