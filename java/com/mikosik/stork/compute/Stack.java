@@ -1,6 +1,9 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.compute.Stack.Type.ARGUMENT;
+import static com.mikosik.stork.compute.Stack.Type.EMPTY;
+import static com.mikosik.stork.compute.Stack.Type.FUNCTION;
 
 import java.math.BigInteger;
 
@@ -19,23 +22,23 @@ public class Stack {
   }
 
   public static Stack stack() {
-    return new Stack(Type.EMPTY, null, null);
+    return new Stack(EMPTY, null, null);
   }
 
-  private boolean has(Type type) {
+  private boolean isType(Type type) {
     return this.type == type;
   }
 
   public boolean isEmpty() {
-    return has(Type.EMPTY);
+    return isType(EMPTY);
   }
 
   public boolean hasArgument() {
-    return has(Type.ARGUMENT);
+    return isType(ARGUMENT);
   }
 
   public Expression argument() {
-    check(has(Type.ARGUMENT));
+    check(hasArgument());
     return expression;
   }
 
@@ -48,28 +51,28 @@ public class Stack {
   }
 
   public Stack pushArgument(Expression argument) {
-    return new Stack(Type.ARGUMENT, argument, this);
+    return new Stack(ARGUMENT, argument, this);
   }
 
   public boolean hasFunction() {
-    return has(Type.FUNCTION);
+    return isType(FUNCTION);
   }
 
   public Expression function() {
-    check(has(Type.FUNCTION));
+    check(hasFunction());
     return expression;
   }
 
   public Stack pushFunction(Expression function) {
-    return new Stack(Type.FUNCTION, function, this);
+    return new Stack(FUNCTION, function, this);
   }
 
   public Stack pop() {
-    check(type != Type.EMPTY);
+    check(!isEmpty());
     return previous;
   }
 
-  private static enum Type {
+  static enum Type {
     EMPTY, ARGUMENT, FUNCTION
   }
 }
