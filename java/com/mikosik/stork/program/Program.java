@@ -1,7 +1,6 @@
 package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.ChainedComputer.chained;
@@ -39,12 +38,12 @@ public class Program {
   }
 
   private static Computer buildComputer(Module module) {
-    return looping(interruptible(caching(chained(sequence(
+    return looping(interruptible(caching(chained(
         modulingComputer(module),
         instructionComputer(),
         applicationComputer(),
         stdinComputer(),
-        returningComputer())))));
+        returningComputer()))));
   }
 
   public void run(Input input, Output output) {
