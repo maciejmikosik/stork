@@ -22,20 +22,20 @@ public class Stack {
     return new Stack(Type.EMPTY, null, null);
   }
 
-  private boolean has(Type type) {
+  private boolean isType(Type type) {
     return this.type == type;
   }
 
   public boolean isEmpty() {
-    return has(Type.EMPTY);
+    return isType(Type.EMPTY);
   }
 
   public boolean hasArgument() {
-    return has(Type.ARGUMENT);
+    return isType(Type.ARGUMENT);
   }
 
   public Expression argument() {
-    check(has(Type.ARGUMENT));
+    check(hasArgument());
     return expression;
   }
 
@@ -52,11 +52,11 @@ public class Stack {
   }
 
   public boolean hasFunction() {
-    return has(Type.FUNCTION);
+    return isType(Type.FUNCTION);
   }
 
   public Expression function() {
-    check(has(Type.FUNCTION));
+    check(hasFunction());
     return expression;
   }
 
@@ -65,7 +65,7 @@ public class Stack {
   }
 
   public Stack pop() {
-    check(type != Type.EMPTY);
+    check(!isEmpty());
     return previous;
   }
 
