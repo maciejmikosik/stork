@@ -4,7 +4,9 @@ import static com.mikosik.stork.common.io.InputOutput.delete;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.InstructionComputer.instructionComputer;
+import static com.mikosik.stork.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.debug.Debug.configuredDecorator;
+import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
@@ -16,6 +18,7 @@ import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.TestProgram.testProgram;
 import static java.nio.file.Files.createTempFile;
 import static java.time.Duration.ofSeconds;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -24,6 +27,8 @@ import static org.quackery.run.Runners.timeout;
 
 import org.quackery.Test;
 
+import com.mikosik.stork.compute.Computation;
+import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.model.Instruction;
 
 public class TestEverything {
@@ -52,17 +57,28 @@ public class TestEverything {
               var computed = computer.compute(computation);
               assertTrue(computation == computed);
             })))
-        .add(suite("caching computer")
-            .add(newCase("does not duplicate computation", () -> {
+        .add(suite("unclone computation")
+            .add(newCase("caching computer", () -> {
               var computer = caching(computation -> computation);
               var computation = computation(variable("variable"));
-              var computed = computer.compute(computation);
-              assertTrue(computation == computed);
-              computed = computer.compute(computed);
-              assertTrue(computation == computed);
-              computed = computer.compute(computed);
-              assertTrue(computation == computed);
+              assertUncloning(computer, computation);
+            }))
+            .add(newCase("moduling computer", () -> {
+              var identifier = identifier("mock");
+              var computer = modulingComputer(module(asList(
+                  definition(identifier, identifier))));
+              var computation = computation(identifier);
+              assertUncloning(computer, computation);
             })));
+  }
+
+  private static void assertUncloning(Computer computer, Computation computation) {
+    var computed = computer.compute(computation);
+    assertTrue(computation == computed);
+    computed = computer.compute(computed);
+    assertTrue(computation == computed);
+    computed = computer.compute(computed);
+    assertTrue(computation == computed);
   }
 
   private static Test testLogbuddyDecorator() {

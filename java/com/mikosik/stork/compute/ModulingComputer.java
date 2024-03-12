@@ -1,6 +1,7 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
+import static com.mikosik.stork.compute.UncloningComputer.uncloning;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class ModulingComputer implements Computer {
     for (Definition definition : module.definitions) {
       table.put(definition.identifier, definition.body);
     }
-    return new ModulingComputer(table);
+    return uncloning(new ModulingComputer(table));
   }
 
   public Computation compute(Computation computation) {
