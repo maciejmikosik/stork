@@ -22,7 +22,9 @@ import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
+// TODO replace lang.native by undefine functions
 public class MathModule {
+  // TODO inline all constants into mathModule method
   public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "integer"));
 
   public static final Identifier EQUAL = id("equal");

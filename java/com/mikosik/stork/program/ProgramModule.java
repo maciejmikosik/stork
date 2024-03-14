@@ -41,6 +41,8 @@ public class ProgramModule {
         }))));
   }
 
+  // TODO Replace pre with @snippet in the future. Eclipse gives warning now.
+
   /**
    * classical version
    *
@@ -97,8 +99,10 @@ public class ProgramModule {
    * </pre>
    */
   private static Expression writeByte() {
+    // TODO argStdout doesn't have to be eager, only argByte. Change order.
     return eager(instruction((argStdout, argByte) -> {
       Stdout stdout = (Stdout) argStdout;
+      // TODO Generate error message when writing not byte
       int oneByte = javaInteger(argByte).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       stdout.output.write((byte) oneByte);

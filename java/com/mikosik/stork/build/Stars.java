@@ -37,6 +37,8 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
 
+// TODO cascading imports
+// TODO model of entire source code
 public class Stars {
   public static Module buildCoreLibrary(Path directory) {
     return join(

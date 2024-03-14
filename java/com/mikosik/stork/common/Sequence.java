@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
 
+// TODO Replace by Stream.toList().
 public class Sequence {
   public static <E> List<E> sequence(List<E> list) {
     return unmodifiableList(list);

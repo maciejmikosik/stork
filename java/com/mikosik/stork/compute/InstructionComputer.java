@@ -13,6 +13,7 @@ public class InstructionComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
+    // TODO use simpler eager in combination with flip
     Stack stack = computation.stack;
     if (!stack.hasArgument()) {
       return computation;
