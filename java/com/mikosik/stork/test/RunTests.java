@@ -5,6 +5,8 @@ import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.cases.TestEverything.testEverything;
 import static java.lang.String.format;
+import static java.time.Duration.between;
+import static java.time.Instant.now;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 
@@ -24,9 +26,22 @@ import org.quackery.Test;
  */
 public class RunTests {
   public static void main(String[] args) {
-    Test test = testEverything();
-    Test report = run(test);
+    var start = now();
+    var test = testEverything();
+    var building = between(start, now());
+
+    start = now();
+    var report = run(test);
+    var running = between(start, now());
+
     print(report);
+    System.out.println("""
+
+        building: %sms
+         running: %sms
+        """.formatted(
+        building.toMillis(),
+        running.toMillis()));
   }
 
   private static void print(Test report) {
