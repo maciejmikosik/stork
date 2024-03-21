@@ -47,7 +47,9 @@
   }
 
   tryAt(index)(stream) {
-    tryFirst(skip(index)(stream))
+    atLeast(0)(index)
+      (tryFirst(skip(index)(stream)))
+      (absent)
   }
 
   length(stream) {

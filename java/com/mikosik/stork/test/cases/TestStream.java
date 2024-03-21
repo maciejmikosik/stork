@@ -162,8 +162,7 @@ public class TestStream {
             .test("contains(equal(120))('xyz')", true))
         .add(snippetSuite("tryAt")
             .importing("lang.stream.tryAt")
-            // TODO fix index out of bounds
-            // .test("tryAt(-1)(some(10)(some(20)(some(30)(none))))((x){x})(99)", "99")
+            .test("tryAt(-1)('abc')((x){x})(99)", 99)
             .test("tryAt(0)('abc')((x){x})(-1)", 97)
             .test("tryAt(1)('abc')((x){x})(-1)", 98)
             .test("tryAt(2)('abc')((x){x})(-1)", 99)
