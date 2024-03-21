@@ -2,12 +2,8 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Throwables.messageOf;
 import static com.mikosik.stork.common.Throwables.stackTraceOf;
-import static java.util.stream.Collectors.toList;
-import static org.quackery.Suite.suite;
-import static org.quackery.help.Helpers.thrownBy;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.quackery.Body;
 import org.quackery.Test;
@@ -49,29 +45,5 @@ public class MoreReports {
     for (Test child : children) {
       format(builder, path + name + " / ", child);
     }
-  }
-
-  public static Optional<Test> filter(Class<? extends Throwable> type, Test test) {
-    return test.visit(
-        (name, body) -> thrownBy(body)
-            .flatMap(throwable -> type.isInstance(throwable)
-                ? Optional.of(throwable)
-                : Optional.empty())
-            .map(throwable -> test),
-        (name, children) -> filter(type, name, children));
-  }
-
-  private static Optional<Test> filter(
-      Class<? extends Throwable> type,
-      String name,
-      List<Test> children) {
-    List<Test> filteredChildren = children.stream()
-        .map(child -> filter(type, child))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(toList());
-    return filteredChildren.isEmpty()
-        ? Optional.empty()
-        : Optional.of(suite(name).addAll(filteredChildren));
   }
 }
