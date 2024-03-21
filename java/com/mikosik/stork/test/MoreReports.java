@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.io.InputOutput.formatStackTrace;
+import static com.mikosik.stork.common.Throwables.messageOf;
+import static com.mikosik.stork.common.Throwables.stackTraceOf;
 import static java.util.stream.Collectors.toList;
 import static org.quackery.Suite.suite;
 import static org.quackery.help.Helpers.thrownBy;
@@ -35,14 +36,12 @@ public class MoreReports {
     try {
       body.run();
     } catch (Throwable exception) {
-      builder.append(path).append(name).append("\n");
-      builder.append("\n");
-      if (exception instanceof AssertException) {
-        builder.append(exception.getMessage());
-      } else {
-        builder.append(formatStackTrace(exception));
-      }
-      builder.append(SEPARATOR);
+      builder.append(path).append(name).append("\n\n")
+          .append(messageOf(exception)).append("\n")
+          .append(exception instanceof AssertException
+              ? ""
+              : stackTraceOf(exception))
+          .repeat("-", 50).append("\n");
     }
   }
 
@@ -50,12 +49,6 @@ public class MoreReports {
     for (Test child : children) {
       format(builder, path + name + " / ", child);
     }
-  }
-
-  private static final String SEPARATOR = repeat(50, '-') + "\n";
-
-  private static String repeat(int times, char character) {
-    return new String(new char[times]).replace((char) 0, character);
   }
 
   public static Optional<Test> filter(Class<? extends Throwable> type, Test test) {
