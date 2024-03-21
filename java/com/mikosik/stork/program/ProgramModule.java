@@ -21,6 +21,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 
+@SuppressWarnings("javadoc")
 public class ProgramModule {
   public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "program"));
 
@@ -44,23 +45,23 @@ public class ProgramModule {
   /**
    * classical version
    *
-   * <pre>
-   * writeStream(output)(stream) {
-   *   stream
-   *     ((head)(tail){ writeByte(output)(head)(writeStream(output)(tail)) })
-   *     (closeStream)
+   * {@snippet :
+   *   writeStream(output)(stream) {
+   *     stream
+   *       ((head)(tail){ writeByte(output)(head)(writeStream(output)(tail)) })
+   *       (closeStream)
+   *   }
    * }
-   * </pre>
    *
    * Y-recursive version
    *
-   * <pre>
-   * writeStream = Y((self)(output)(stream) {
-   *   stream
-   *     ((head)(tail){ writeByte(output)(head)(self(output)(tail)) })
-   *     (closeStream)
-   * })
-   * </pre>
+   * {@snippet :
+   *   writeStream = Y((self)(output)(stream) {
+   *     stream
+   *       ((head)(tail){ writeByte(output)(head)(self(output)(tail)) })
+   *       (closeStream)
+   *   })
+   * }
    */
   private static Expression writeStream() {
     Parameter output = parameter("output");
@@ -80,21 +81,21 @@ public class ProgramModule {
   /**
    * classical version
    *
-   * <pre>
-   * writeByte(output)(byte)(continue) {
-   *   # imperatively write byte to output
-   *   continue
+   * {@snippet :
+   *   writeByte(output)(byte)(continue) {
+   *     # imperatively write byte to output
+   *     continue
+   *   }
    * }
-   * </pre>
    *
    * instruction version
    *
-   * <pre>
-   * writeByte(output)(byte) {
-   *   # imperatively write byte to output
-   *   I
+   * {@snippet :
+   *   writeByte(output)(byte) {
+   *     # imperatively write byte to output
+   *     I
+   *   }
    * }
-   * </pre>
    */
   private static Expression writeByte() {
     return eager(instruction((argStdout, argByte) -> {

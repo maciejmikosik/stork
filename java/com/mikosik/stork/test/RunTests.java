@@ -14,16 +14,17 @@ import org.quackery.Test;
 
 /**
  * Logging tests that use logbuddy require those options. They allow logbuddy to
- * read private fields of classes in java.* package.
+ * read private fields of classes in {@code java.*} package.
  *
- * <pre>
---add-opens=java.base/java.lang=ALL-UNNAMED
---add-opens=java.base/java.util=ALL-UNNAMED
---add-opens=java.base/java.math=ALL-UNNAMED
---add-opens=java.base/java.lang.ref=ALL-UNNAMED
---add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
- * </pre>
+ * {@snippet :
+ * --add-opens=java.base/java.lang=ALL-UNNAMED
+ * --add-opens=java.base/java.util=ALL-UNNAMED
+ * --add-opens=java.base/java.math=ALL-UNNAMED
+ * --add-opens=java.base/java.lang.ref=ALL-UNNAMED
+ * --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+ * }
  */
+@SuppressWarnings("javadoc")
 public class RunTests {
   public static void main(String[] args) {
     var start = now();
