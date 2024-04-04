@@ -12,6 +12,7 @@ import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.Expectations.expectations;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Collections.emptyList;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -20,11 +21,9 @@ import java.util.function.BiFunction;
 import org.quackery.Body;
 import org.quackery.Test;
 
-import com.mikosik.stork.common.io.Buffer;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
-import com.mikosik.stork.program.Program;
 
 public class ProgramTest implements Test {
   private final String name;
@@ -91,14 +90,23 @@ public class ProgramTest implements Test {
           build(fsBuilder.directory),
           CORE_LIBRARY));
     } catch (ProblemException exception) {
-      expectations.actualProblems(exception.problems);
+      expectations.actualBuildProblems(exception.problems);
       return;
     }
-    expectations.actualProblems();
+    expectations.actualBuildProblems(emptyList());
 
-    Program program = program(identifier("main"), module);
-    Buffer buffer = newBuffer();
-    program.run(input(stdin), buffer.asOutput());
+    var program = program(identifier("main"), module);
+    var buffer = newBuffer();
+    var input = input(stdin);
+    var output = buffer.asOutput();
+    try {
+      program.run(input, output);
+    } catch (ProblemException exception) {
+      expectations.actualComputeProblems(exception.problems);
+      return;
+    }
+    expectations.actualComputeProblems(emptyList());
+
     byte[] actualStdout = buffer.bytes();
     expectations.actualStdout(actualStdout);
   }
