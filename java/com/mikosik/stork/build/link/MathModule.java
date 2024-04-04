@@ -1,7 +1,6 @@
 package com.mikosik.stork.build.link;
 
 import static com.mikosik.stork.build.link.Bridge.instruction;
-import static com.mikosik.stork.build.link.Bridge.javaInteger;
 import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.common.Sequence.sequence;
@@ -11,14 +10,18 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.problem.ProblemException.exception;
+import static com.mikosik.stork.problem.compute.ExpectedInteger.expectedInteger;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
+import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
@@ -63,5 +66,13 @@ public class MathModule {
   private static Instruction instructionIIB(
       BiFunction<BigInteger, BigInteger, Boolean> function) {
     return instruction((x, y) -> stork(function.apply(javaInteger(x), javaInteger(y))));
+  }
+
+  public static BigInteger javaInteger(Expression expression) {
+    if (expression instanceof Integer integer) {
+      return integer.value;
+    } else {
+      throw exception(expectedInteger(expression));
+    }
   }
 }
