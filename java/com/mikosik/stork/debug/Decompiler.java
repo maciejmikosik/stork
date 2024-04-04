@@ -64,7 +64,7 @@ public class Decompiler {
           serializable('<'),
           decompile(instruction.name),
           serializable('>'));
-    } else if (expression instanceof Instruction instruction) {
+    } else if (expression instanceof Instruction) {
       return serializable("<>");
     } else if (expression instanceof Parameter parameter) {
       return serializable(parameter.name);
