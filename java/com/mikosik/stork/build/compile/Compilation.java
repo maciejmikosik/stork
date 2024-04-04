@@ -54,7 +54,7 @@ public class Compilation {
     if (token instanceof StringLiteral literal) {
       next();
       return quote(literal.string);
-    } else if (token instanceof Label label) {
+    } else if (token instanceof Label) {
       return compileInvocation();
     } else if (token instanceof IntegerLiteral literal) {
       next();
