@@ -11,9 +11,9 @@ There are no keywords like `if`, `else`, `true` or `false`. Bool values are just
     true(a)(b) { a }
     false(a)(b) { b }
 
-Consider function that returns `"yes"` or `"no"` depending if argument is `true` or `false`. In java you would write
+Consider function that returns `"yes"` or `"no"` depending if argument is `true` or `false`. In javascript you would write
 
-    public static String yesOrNo(boolean bool) {
+    function yesOrNo(bool) {
       return bool ? "yes" : "no";
     }
 
