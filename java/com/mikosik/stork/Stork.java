@@ -19,6 +19,7 @@ import java.util.Map;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
 
+// TODO Add --debug option. Similar to {@link Demo} main.
 public class Stork {
   public static void main(String[] args) {
     try {

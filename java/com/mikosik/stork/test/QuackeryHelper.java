@@ -51,6 +51,7 @@ public class QuackeryHelper {
                 .toList())));
   }
 
+  // TODO fix case if test is single case (not suite) so it is filtered
   public static Test filterFailed(Test test) {
     return deep(filter(t -> t.visit(
         (name, body) -> thrownBy(body).isPresent(),

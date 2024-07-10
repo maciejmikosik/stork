@@ -53,6 +53,7 @@ public class Ascii {
     return new String(bytes, US_ASCII);
   }
 
+  // TODO make ASCII explicit
   public static byte[] bytes(String string) {
     return string.getBytes(US_ASCII);
   }

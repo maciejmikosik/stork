@@ -12,6 +12,8 @@ import static org.quackery.run.Runners.run;
 
 import org.quackery.Test;
 
+// TODO Replace pre with @snippet in the future. Eclipse gives warning now.
+
 /**
  * Logging tests that use logbuddy require those options. They allow logbuddy to
  * read private fields of classes in {@code java.*} package.

@@ -7,6 +7,9 @@ import java.util.Iterator;
 
 import com.mikosik.stork.model.Module;
 
+// TODO propose syntax for arrays
+// TODO allow direct lambda application (x){x}(arg)
+// TODO allow snake notation
 public class Compiler {
   public Module compile(Iterator<Byte> input) {
     return compilation(parse(input)).compile();

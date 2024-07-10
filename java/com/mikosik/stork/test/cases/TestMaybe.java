@@ -14,7 +14,7 @@ public class TestMaybe {
         .add(snippetSuite("absent")
             .importing("lang.maybe.absent")
             .test("absent((x){x})(2)", 2))
-        .add(snippetSuite("absent")
+        .add(snippetSuite("absent") // TODO fix name of test absent->else
             .importing("lang.maybe.else")
             .importing("lang.maybe.present")
             .importing("lang.maybe.absent")

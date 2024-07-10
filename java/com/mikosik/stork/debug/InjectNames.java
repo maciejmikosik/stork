@@ -22,6 +22,7 @@ public class InjectNames {
     var body = definition.body;
 
     if (body instanceof EagerInstruction eager) {
+      // TODO this case is can be handled by instaceof Instruction
       return definition(
           identifier,
           eager(name(identifier, eager.instruction)));
