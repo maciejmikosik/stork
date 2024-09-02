@@ -1,5 +1,6 @@
 package com.mikosik.stork.common;
 
+// TODO consistent naming E vs V
 public class Slot<E> {
   public E value;
 

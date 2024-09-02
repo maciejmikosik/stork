@@ -15,6 +15,7 @@ public class Buffer {
     return output(data);
   }
 
+  // TODO replace by asInput
   public byte[] bytes() {
     return data.toByteArray();
   }

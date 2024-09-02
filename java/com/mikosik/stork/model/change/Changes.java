@@ -53,6 +53,7 @@ public class Changes {
         identifier.variable);
   }
 
+  // TODO include nested instructions
   public static Function<Expression, Expression> deep(
       Function<? super Expression, ? extends Expression> change) {
     return expression -> expression instanceof Lambda lambda

@@ -34,6 +34,7 @@ public class Input implements AutoCloseable {
     return input(new ByteArrayInputStream(bytes));
   }
 
+  // TODO require caller to specify charset or call getBytes explicitly
   public static Input input(String string) {
     return input(string.getBytes(US_ASCII));
   }

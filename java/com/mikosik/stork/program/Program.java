@@ -54,7 +54,10 @@ public class Program {
             application(main, stdin(input))));
 
     Computation computed = computer.compute(computation);
+    // TODO Program should not close stream, only flush.
     output.close();
+    // TODO Check if computed.expression is closeStream.
+    // TODO Generate good error message.
     check(computed.stack.isEmpty());
   }
 }
