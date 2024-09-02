@@ -1,13 +1,16 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
+import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
 import static com.mikosik.stork.test.cases.TestEverything.testEverything;
 import static java.lang.System.exit;
+import static org.quackery.Case.newCase;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 
@@ -28,6 +31,7 @@ import org.quackery.Test;
 @SuppressWarnings("javadoc")
 public class RunTests {
   public static void main(String[] args) {
+    runAndReport(coreLibraryHasNoProblems());
     runAndReport(testEverything());
   }
 
@@ -54,5 +58,11 @@ public class RunTests {
           nameOf(test),
           count(report));
     }
+  }
+
+  private static Test coreLibraryHasNoProblems() {
+    return newCase("core library has no problems", () -> {
+      verify(CORE_LIBRARY);
+    });
   }
 }
