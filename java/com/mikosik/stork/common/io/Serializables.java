@@ -13,6 +13,7 @@ public class Serializables {
     return output -> output.write(oneByte);
   }
 
+  // TODO make ASCII explicit
   public static Serializable serializable(String string) {
     return serializable(bytes(string));
   }
@@ -29,6 +30,7 @@ public class Serializables {
     return output -> serializables.forEach(serializable -> serializable.serialize(output));
   }
 
+  // TODO extract byte[] serialize(Serializable)
   public static String ascii(Serializable serializable) {
     Buffer buffer = newBuffer();
     serializable.serialize(buffer.asOutput());

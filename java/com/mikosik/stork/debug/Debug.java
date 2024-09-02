@@ -14,6 +14,8 @@ import org.logbuddy.Renderer;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.program.Program;
 
+// TODO Computer that detects infinite loops. Should cache Computation and Stack.
+// TODO profiler Computer that shows hotspots
 public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
     Renderer<String> renderer = new StorkTextRenderer();
