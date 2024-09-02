@@ -29,10 +29,14 @@ public class Identifier implements Expression {
   public static Identifier identifier(String name) {
     List<String> path = sequence(name.split("\\."));
     return identifier(
+        // TODO create ImmutableList
+        // TODO create common withoutLast(List)
         namespace(path.subList(0, path.size() - 1)),
+        // TODO create common last(List)
         variable(path.get(path.size() - 1)));
   }
 
+  // TODO Try to combine 2 stream into one and join them.
   public String name() {
     List<String> path = new LinkedList<>(namespace.path);
     path.add(variable.name);

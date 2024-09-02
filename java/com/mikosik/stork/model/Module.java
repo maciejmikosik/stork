@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Sequence.sequence;
 
 import java.util.List;
 
+// TODO rename to library
 public class Module {
   public final List<Definition> definitions;
 

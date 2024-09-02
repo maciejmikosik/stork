@@ -16,6 +16,7 @@ public class ExpectedInteger implements CannotCompute {
     return new ExpectedInteger(expression);
   }
 
+  // TODO print type of expression
   public String description() {
     return """
           wrong type

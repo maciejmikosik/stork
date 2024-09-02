@@ -16,6 +16,8 @@ import static org.quackery.run.Runners.run;
 
 import org.quackery.Test;
 
+// TODO why @snippet gives warning? Must be suppressed for now.
+
 /**
  * Logging tests that use logbuddy require those options. They allow logbuddy to
  * read private fields of classes in {@code java.*} package.
