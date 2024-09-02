@@ -69,4 +69,10 @@ public class QuackeryHelper {
             .mapToInt(QuackeryHelper::count)
             .sum());
   }
+
+  public static String nameOf(Test test) {
+    return test.visit(
+        (name, body) -> name,
+        (name, children) -> name);
+  }
 }

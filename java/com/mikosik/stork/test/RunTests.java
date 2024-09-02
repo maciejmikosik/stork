@@ -1,12 +1,13 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.StandardOutput.err;
+import static com.mikosik.stork.common.StandardOutput.out;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
+import static com.mikosik.stork.test.QuackeryHelper.nameOf;
 import static com.mikosik.stork.test.cases.TestEverything.testEverything;
-import static java.lang.String.format;
-import static java.time.Duration.between;
-import static java.time.Instant.now;
+import static java.lang.System.exit;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 
@@ -27,37 +28,31 @@ import org.quackery.Test;
 @SuppressWarnings("javadoc")
 public class RunTests {
   public static void main(String[] args) {
-    var start = now();
-    var test = testEverything();
-    var building = between(start, now());
-
-    start = now();
-    var report = run(test);
-    var running = between(start, now());
-
-    print(report);
-    System.out.println("""
-
-        building: %sms
-         running: %sms
-        """.formatted(
-        building.toMillis(),
-        running.toMillis()));
+    runAndReport(testEverything());
   }
 
-  private static void print(Test report) {
+  private static void runAndReport(Test test) {
+    var report = run(test);
     var failed = filterFailed(report);
-    if (count(failed) == 0) {
-      System.out.print(format(""
-          + "%s\n"
-          + "no failures\n",
-          format(report)));
+    if (count(failed) > 0) {
+      err("""
+          suite  : %s
+          cases  : %d
+          failed : %d
+          """,
+          nameOf(test),
+          count(report),
+          count(failed));
+      err(format(failed));
+      err(formatExceptions(failed));
+      exit(1);
     } else {
-      System.err.print(format(""
-          + "%s\n"
-          + "%s\n",
-          format(failed),
-          formatExceptions(failed)));
+      out("""
+          suite  : %s
+          cases  : %d
+          """,
+          nameOf(test),
+          count(report));
     }
   }
 }
