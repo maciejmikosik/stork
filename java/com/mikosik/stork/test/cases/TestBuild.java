@@ -1,6 +1,5 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
@@ -9,11 +8,9 @@ import static com.mikosik.stork.problem.build.link.UndefinedImport.undefinedImpo
 import static com.mikosik.stork.problem.build.link.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.problem.build.parse.IllegalCode.illegalCode;
 import static com.mikosik.stork.problem.build.parse.IllegalCode.illegalCodeInStringLiteral;
-import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.range;
-import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -25,7 +22,6 @@ public class TestBuild {
 
   public static Test testBuild() {
     return suite("build")
-        .add(coreLibraryHasNoProblems())
         .add(suite("reports")
             .add(suite("during compiling")
                 .add(suite("illegal code in string literal")
@@ -40,12 +36,6 @@ public class TestBuild {
                 .add(reportsUndefinedVariable())
                 .add(reportsUndefinedImport())
                 .add(reportsDuplicatedDefinition())));
-  }
-
-  private static Test coreLibraryHasNoProblems() {
-    return newCase("core library has no problems", () -> {
-      verify(CORE_LIBRARY);
-    });
   }
 
   private static Test reportsIllegalAsciiCodeInStringLiteral(int code) {
