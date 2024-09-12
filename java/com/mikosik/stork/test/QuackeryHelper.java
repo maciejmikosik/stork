@@ -52,10 +52,14 @@ public class QuackeryHelper {
   }
 
   public static Test filterFailed(Test test) {
-    return deep(filter(t -> t.visit(
-        (name, body) -> thrownBy(body).isPresent(),
-        (name, children) -> !children.isEmpty())))
-            .apply(test);
+    return test.visit(
+        (caseName, caseBody) -> thrownBy(caseBody).isPresent()
+            ? test
+            : suite(caseName),
+        (suiteName, suiteChildren) -> deep(filter(t -> t.visit(
+            (name, body) -> thrownBy(body).isPresent(),
+            (name, children) -> !children.isEmpty())))
+                .apply(test));
   }
 
   public static int count(Test test) {
@@ -64,5 +68,11 @@ public class QuackeryHelper {
         (name, children) -> children.stream()
             .mapToInt(QuackeryHelper::count)
             .sum());
+  }
+
+  public static String nameOf(Test test) {
+    return test.visit(
+        (name, body) -> name,
+        (name, children) -> name);
   }
 }
