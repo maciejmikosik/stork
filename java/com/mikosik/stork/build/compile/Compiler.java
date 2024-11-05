@@ -4,7 +4,6 @@ import static com.mikosik.stork.build.compile.Parser.parse;
 import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
-import static com.mikosik.stork.common.Throwables.fail;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
@@ -12,6 +11,8 @@ import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.problem.ProblemException.exception;
+import static com.mikosik.stork.problem.build.compile.UnexpectedToken.unexpected;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -49,7 +50,7 @@ public class Compiler {
       default -> switch (input.next()) {
         case StringLiteral literal -> quote(literal.string);
         case IntegerLiteral literal -> stork(literal.value);
-        case Token token -> fail(unexpected(token));
+        case Token token -> failUnexpected(token);
       };
     };
   }
@@ -100,7 +101,7 @@ public class Compiler {
     return switch (input.peek()) {
       case Symbol symbol when symbol.character == '(' -> compileLambda(input);
       case Symbol symbol when symbol.character == '{' -> compileScope(input);
-      case Token token -> fail(unexpected(token));
+      case Token token -> failUnexpected(token);
     };
   }
 
@@ -123,23 +124,11 @@ public class Compiler {
     Token token = input.next();
     return type.isInstance(token)
         ? (T) token
-        : fail(unexpected(token));
+        : failUnexpected(token);
   }
 
-  private static String unexpected(Token token) {
-    // TODO extract reusable formatter template
-    return switch (token) {
-      case Label label -> "unexpected label [%s]"
-          .formatted(label.string);
-      case Symbol symbol -> "unexpected symbol [%c]"
-          .formatted(symbol.character);
-      case IntegerLiteral literal -> "unexpected integer literal [%s]"
-          .formatted(literal.value);
-      case StringLiteral literal -> "unexpected string literal [%s]"
-          .formatted(literal.string);
-      default -> "unexpected token [%s]"
-          .formatted(token.getClass().getSimpleName());
-    };
+  private static <T> T failUnexpected(Token token) {
+    throw exception(unexpected(token));
   }
 
   private static <E> Iterator<E> checkingEOF(Iterator<E> iterator) {
