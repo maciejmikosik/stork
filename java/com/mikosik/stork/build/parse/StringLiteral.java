@@ -1,4 +1,4 @@
-package com.mikosik.stork.build.compile;
+package com.mikosik.stork.build.parse;
 
 public class StringLiteral implements Token {
   public final String string;
