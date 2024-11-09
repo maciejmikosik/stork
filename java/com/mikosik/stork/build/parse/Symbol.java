@@ -1,4 +1,4 @@
-package com.mikosik.stork.build.compile;
+package com.mikosik.stork.build.parse;
 
 public class Symbol implements Token {
   public final Byte character;

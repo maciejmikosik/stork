@@ -8,6 +8,7 @@ import static com.mikosik.stork.build.link.MathModule.mathModule;
 import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.Unlambda.unlambda;
 import static com.mikosik.stork.build.link.Unquote.unquote;
+import static com.mikosik.stork.build.parse.Parser.parse;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.io.Input.tryInput;
@@ -79,8 +80,7 @@ public class Stars {
 
   private static Module compile(Path file) {
     try (Input input = tryInput(file).buffered()) {
-      Compiler compiler = new Compiler();
-      return compiler.compile(input.iterator());
+      return Compiler.compile(parse(input.iterator()));
     }
   }
 
