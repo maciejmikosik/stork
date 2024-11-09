@@ -1,9 +1,9 @@
-package com.mikosik.stork.build.compile;
+package com.mikosik.stork.build.parse;
 
-import static com.mikosik.stork.build.compile.IntegerLiteral.literal;
-import static com.mikosik.stork.build.compile.Label.label;
-import static com.mikosik.stork.build.compile.StringLiteral.literal;
-import static com.mikosik.stork.build.compile.Symbol.symbol;
+import static com.mikosik.stork.build.parse.IntegerLiteral.literal;
+import static com.mikosik.stork.build.parse.Label.label;
+import static com.mikosik.stork.build.parse.StringLiteral.literal;
+import static com.mikosik.stork.build.parse.Symbol.symbol;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;

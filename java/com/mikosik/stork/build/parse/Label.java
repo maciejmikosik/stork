@@ -1,4 +1,4 @@
-package com.mikosik.stork.build.compile;
+package com.mikosik.stork.build.parse;
 
 public class Label implements Token {
   public String string;
