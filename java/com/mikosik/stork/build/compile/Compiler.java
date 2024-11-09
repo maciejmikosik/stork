@@ -1,6 +1,5 @@
 package com.mikosik.stork.build.compile;
 
-import static com.mikosik.stork.build.compile.Parser.parse;
 import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
@@ -18,6 +17,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+import com.mikosik.stork.build.parse.IntegerLiteral;
+import com.mikosik.stork.build.parse.Label;
+import com.mikosik.stork.build.parse.StringLiteral;
+import com.mikosik.stork.build.parse.Symbol;
+import com.mikosik.stork.build.parse.Token;
 import com.mikosik.stork.common.Peekerator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -25,8 +29,8 @@ import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 
 public class Compiler {
-  public static Module compile(Iterator<Byte> input) {
-    return compile(peekerator(checkingEOF(parse(input))));
+  public static Module compile(Iterator<Token> iterator) {
+    return compile(peekerator(checkingEOF(iterator)));
   }
 
   public static Module compile(Peekerator<Token> input) {
