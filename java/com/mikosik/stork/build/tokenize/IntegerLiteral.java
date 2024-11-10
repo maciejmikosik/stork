@@ -1,4 +1,4 @@
-package com.mikosik.stork.build.parse;
+package com.mikosik.stork.build.tokenize;
 
 import java.math.BigInteger;
 
