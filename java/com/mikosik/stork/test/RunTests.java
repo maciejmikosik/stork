@@ -1,8 +1,8 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
+import static com.mikosik.stork.compile.link.VerifyModule.verify;
 import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
