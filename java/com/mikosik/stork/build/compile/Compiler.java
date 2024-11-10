@@ -50,7 +50,10 @@ public class Compiler {
   private static Expression compileExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
       case Label label -> compileInvocation(input);
-      case Symbol symbol when symbol.character == '(' -> compileLambda(input);
+      case Symbol symbol -> switch (symbol.character) {
+        case '(' -> compileLambda(input);
+        default -> failUnexpected(symbol);
+      };
       default -> switch (input.next()) {
         case StringLiteral literal -> quote(literal.string);
         case IntegerLiteral literal -> stork(literal.value);
@@ -72,9 +75,10 @@ public class Compiler {
       Expression function,
       Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Symbol symbol when symbol.character == '(' -> {
-        yield compileSomeArguments(function, input);
-      }
+      case Symbol symbol -> switch (symbol.character) {
+        case '(' -> compileSomeArguments(function, input);
+        default -> function;
+      };
       default -> function;
     };
   }
@@ -103,8 +107,11 @@ public class Compiler {
 
   private static Expression compileBody(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Symbol symbol when symbol.character == '(' -> compileLambda(input);
-      case Symbol symbol when symbol.character == '{' -> compileScope(input);
+      case Symbol symbol -> switch (symbol.character) {
+        case '(' -> compileLambda(input);
+        case '{' -> compileScope(input);
+        default -> failUnexpected(symbol);
+      };
       case Token token -> failUnexpected(token);
     };
   }
