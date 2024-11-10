@@ -12,7 +12,7 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.module;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
-import static com.mikosik.stork.test.cases.TestBuild.testBuild;
+import static com.mikosik.stork.test.cases.TestCompiler.testCompiler;
 import static com.mikosik.stork.test.cases.TestCompute.testCompute;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
@@ -36,7 +36,7 @@ public class TestEverything {
   public static Test testEverything() {
     return timeout(ofSeconds(1), suite("test everything")
         .add(testProgram())
-        .add(testBuild())
+        .add(testCompiler())
         .add(testCompute())
         .add(testDecompiler())
         .add(testComputers())

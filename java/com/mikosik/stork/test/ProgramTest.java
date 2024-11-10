@@ -1,11 +1,11 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.build.Stars.build;
-import static com.mikosik.stork.build.link.Modules.join;
-import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
+import static com.mikosik.stork.compile.Compiler.compileDirectory;
+import static com.mikosik.stork.compile.link.Modules.join;
+import static com.mikosik.stork.compile.link.VerifyModule.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
@@ -87,13 +87,13 @@ public class ProgramTest implements Test {
     Module module;
     try {
       module = verify(join(
-          build(fsBuilder.directory),
+          compileDirectory(fsBuilder.directory),
           CORE_LIBRARY));
     } catch (ProblemException exception) {
-      expectations.actualBuildProblems(exception.problems);
+      expectations.actualCompileProblems(exception.problems);
       return;
     }
-    expectations.actualBuildProblems(emptyList());
+    expectations.actualCompileProblems(emptyList());
 
     var program = program(identifier("main"), module);
     var buffer = newBuffer();
