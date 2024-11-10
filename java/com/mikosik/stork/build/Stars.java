@@ -8,6 +8,7 @@ import static com.mikosik.stork.build.link.MathModule.mathModule;
 import static com.mikosik.stork.build.link.Modules.join;
 import static com.mikosik.stork.build.link.Unlambda.unlambda;
 import static com.mikosik.stork.build.link.Unquote.unquote;
+import static com.mikosik.stork.build.parse.Parser.parse;
 import static com.mikosik.stork.build.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
@@ -30,7 +31,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import com.mikosik.stork.build.compile.Compiler;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
@@ -80,7 +80,7 @@ public class Stars {
 
   private static Module compile(Path file) {
     try (Input input = tryInput(file).buffered()) {
-      return Compiler.compile(tokenize(input.iterator()));
+      return parse(tokenize(input.iterator()));
     }
   }
 
