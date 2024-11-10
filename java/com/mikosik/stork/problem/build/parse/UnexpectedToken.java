@@ -1,4 +1,4 @@
-package com.mikosik.stork.problem.build.compile;
+package com.mikosik.stork.problem.build.parse;
 
 import com.mikosik.stork.build.tokenize.IntegerLiteral;
 import com.mikosik.stork.build.tokenize.Label;
@@ -6,7 +6,7 @@ import com.mikosik.stork.build.tokenize.StringLiteral;
 import com.mikosik.stork.build.tokenize.Symbol;
 import com.mikosik.stork.build.tokenize.Token;
 
-public class UnexpectedToken implements CannotCompile {
+public class UnexpectedToken implements CannotParse {
   private final Token token;
 
   private UnexpectedToken(Token token) {

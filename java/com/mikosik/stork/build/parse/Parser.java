@@ -1,4 +1,4 @@
-package com.mikosik.stork.build.compile;
+package com.mikosik.stork.build.parse;
 
 import static com.mikosik.stork.build.link.Bridge.stork;
 import static com.mikosik.stork.common.Check.check;
@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.ProblemException.exception;
-import static com.mikosik.stork.problem.build.compile.UnexpectedToken.unexpected;
+import static com.mikosik.stork.problem.build.parse.UnexpectedToken.unexpected;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -28,30 +28,30 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 
-public class Compiler {
-  public static Module compile(Iterator<Token> iterator) {
-    return compile(peekerator(checkingEOF(iterator)));
+public class Parser {
+  public static Module parse(Iterator<Token> iterator) {
+    return parse(peekerator(checkingEOF(iterator)));
   }
 
-  public static Module compile(Peekerator<Token> input) {
+  private static Module parse(Peekerator<Token> input) {
     var definitions = new LinkedList<Definition>();
     while (input.hasNext()) {
-      definitions.add(compileDefinition(input));
+      definitions.add(parseDefinition(input));
     }
     return module(definitions);
   }
 
-  private static Definition compileDefinition(Peekerator<Token> input) {
+  private static Definition parseDefinition(Peekerator<Token> input) {
     return definition(
-        compileName(input),
-        compileBody(input));
+        parseName(input),
+        parseBody(input));
   }
 
-  private static Expression compileExpression(Peekerator<Token> input) {
+  private static Expression parseExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Label label -> compileInvocation(input);
+      case Label label -> parseInvocation(input);
       case Symbol symbol -> switch (symbol.character) {
-        case '(' -> compileLambda(input);
+        case '(' -> parseLambda(input);
         default -> failUnexpected(symbol);
       };
       default -> switch (input.next()) {
@@ -62,68 +62,68 @@ public class Compiler {
     };
   }
 
-  private static Expression compileInvocation(Peekerator<Token> input) {
-    var function = compileVariable(input);
-    return compileArguments(function, input);
+  private static Expression parseInvocation(Peekerator<Token> input) {
+    var function = parseVariable(input);
+    return parseArguments(function, input);
   }
 
-  private static Expression compileVariable(Peekerator<Token> input) {
-    return variable(compileName(input));
+  private static Expression parseVariable(Peekerator<Token> input) {
+    return variable(parseName(input));
   }
 
-  private static Expression compileArguments(
+  private static Expression parseArguments(
       Expression function,
       Peekerator<Token> input) {
     return switch (input.peek()) {
       case Symbol symbol -> switch (symbol.character) {
-        case '(' -> compileSomeArguments(function, input);
+        case '(' -> parseSomeArguments(function, input);
         default -> function;
       };
       default -> function;
     };
   }
 
-  private static Expression compileSomeArguments(
+  private static Expression parseSomeArguments(
       Expression function,
       Peekerator<Token> input) {
-    var argument = compileArgument(input);
+    var argument = parseArgument(input);
     var application = application(function, argument);
-    return compileArguments(application, input);
+    return parseArguments(application, input);
   }
 
-  private static Expression compileArgument(Peekerator<Token> input) {
+  private static Expression parseArgument(Peekerator<Token> input) {
     checkNextSymbol('(', input);
-    var argument = compileExpression(input);
+    var argument = parseExpression(input);
     checkNextSymbol(')', input);
     return argument;
   }
 
-  private static Lambda compileLambda(Peekerator<Token> input) {
+  private static Lambda parseLambda(Peekerator<Token> input) {
     checkNextSymbol('(', input);
-    var parameter = parameter(compileName(input));
+    var parameter = parameter(parseName(input));
     checkNextSymbol(')', input);
-    return lambda(parameter, compileBody(input));
+    return lambda(parameter, parseBody(input));
   }
 
-  private static Expression compileBody(Peekerator<Token> input) {
+  private static Expression parseBody(Peekerator<Token> input) {
     return switch (input.peek()) {
       case Symbol symbol -> switch (symbol.character) {
-        case '(' -> compileLambda(input);
-        case '{' -> compileScope(input);
+        case '(' -> parseLambda(input);
+        case '{' -> parseScope(input);
         default -> failUnexpected(symbol);
       };
       case Token token -> failUnexpected(token);
     };
   }
 
-  private static Expression compileScope(Peekerator<Token> input) {
+  private static Expression parseScope(Peekerator<Token> input) {
     checkNextSymbol('{', input);
-    var body = compileExpression(input);
+    var body = parseExpression(input);
     checkNextSymbol('}', input);
     return body;
   }
 
-  private static String compileName(Peekerator<Token> input) {
+  private static String parseName(Peekerator<Token> input) {
     return next(Label.class, input).string;
   }
 
