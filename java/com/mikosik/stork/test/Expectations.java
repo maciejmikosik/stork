@@ -3,7 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Collections.intersection;
 import static com.mikosik.stork.common.io.Ascii.ascii;
-import static com.mikosik.stork.test.Expectations.Type.CANNOT_BUILD;
+import static com.mikosik.stork.test.Expectations.Type.CANNOT_COMPILE;
 import static com.mikosik.stork.test.Expectations.Type.CANNOT_COMPUTE;
 import static com.mikosik.stork.test.Expectations.Type.STDOUT;
 import static java.lang.String.format;
@@ -19,7 +19,7 @@ import java.util.Set;
 import org.quackery.report.AssertException;
 
 import com.mikosik.stork.problem.Problem;
-import com.mikosik.stork.problem.build.CannotBuild;
+import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Expectations {
@@ -49,8 +49,8 @@ public class Expectations {
     this.stdout = stdout;
   }
 
-  public void actualBuildProblems(List<Problem> actualProblems) {
-    actualProblems(CANNOT_BUILD, actualProblems);
+  public void actualCompileProblems(List<Problem> actualProblems) {
+    actualProblems(CANNOT_COMPILE, actualProblems);
   }
 
   public void actualComputeProblems(List<Problem> actualProblems) {
@@ -112,8 +112,8 @@ public class Expectations {
   }
 
   private Type typeOf(Problem problem) {
-    if (problem instanceof CannotBuild) {
-      return CANNOT_BUILD;
+    if (problem instanceof CannotCompile) {
+      return CANNOT_COMPILE;
     } else if (problem instanceof CannotCompute) {
       return CANNOT_COMPUTE;
     } else {
@@ -122,6 +122,6 @@ public class Expectations {
   }
 
   enum Type {
-    CANNOT_BUILD, CANNOT_COMPUTE, STDOUT
+    CANNOT_COMPILE, CANNOT_COMPUTE, STDOUT
   }
 }

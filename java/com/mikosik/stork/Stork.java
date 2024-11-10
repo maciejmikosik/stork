@@ -1,12 +1,12 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.build.Stars.build;
-import static com.mikosik.stork.build.Stars.buildCoreLibrary;
-import static com.mikosik.stork.build.link.Modules.join;
-import static com.mikosik.stork.build.link.VerifyModule.verify;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
+import static com.mikosik.stork.compile.Compiler.compileCoreLibrary;
+import static com.mikosik.stork.compile.Compiler.compileDirectory;
+import static com.mikosik.stork.compile.link.Modules.join;
+import static com.mikosik.stork.compile.link.VerifyModule.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static java.nio.file.FileSystems.newFileSystem;
@@ -23,8 +23,8 @@ public class Stork {
   public static void main(String[] args) {
     try {
       var module = verify(join(
-          buildCoreLibrary(pathToCoreLibraryInsideJar()),
-          build(path("."))));
+          compileCoreLibrary(pathToCoreLibraryInsideJar()),
+          compileDirectory(path("."))));
 
       program(identifier("main"), module)
           .run(input(System.in), output(System.out));
