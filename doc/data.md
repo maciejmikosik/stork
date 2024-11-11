@@ -30,7 +30,11 @@ and using it in main
 
 prints `yes`.
 
-The order of evaluation is `yesOrNo(true)` -> `true("yes")("no")` -> `"yes"`
+Computation:
+
+    yesOrNo(true)
+    true("yes")("no")
+    "yes"
 
 Since boolean enum has 2 constants, each constants is a function that has 2 parameters called visitors. In case with more constants, we need to provide as many visitors.
 
@@ -52,6 +56,14 @@ Let's implement `TrafficLight` enum with 3 constants: `red`, `yellow` and `green
     }
 
 prints `no`.
+
+Computation:
+
+    yesOrNo(canGoOn(yellow))
+    yesOrNo(yellow(false)(false)(true))
+    yesOrNo(false)
+    false("yes")("no")
+    "no"
 
 ### Structures with fields ###
 
@@ -76,6 +88,16 @@ Let's implement functions that checks if given person is an adult.
     }
 
 prints `yes`.
+
+Computation:
+
+    yesOrNo(isAdult(person("John")(23)))
+    yesOrNo(person("John")(23)((name)(age) { atLeast(18)(age) }))
+    yesOrNo((name)(age){ atLeast(18)(age) }("John")(23))
+    yesOrNo((age) { atLeast(18)(age) }(23))
+    yesOrNo(atLeast(18)(23))
+    yesOrNo(true)
+    "yes"
 
 It takes a person structure and invokes it like a function by providing visitor. In this case visitor is provided as anonymous function that takes fields as arguments. `(name)(age) { atLeast(18)(age) }`.
 
