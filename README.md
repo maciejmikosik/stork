@@ -4,9 +4,9 @@ Stork is functional programming language with minimalistic syntax. It has no key
       "Hello World!"
     }
 
-### keywords as functions
+# boolean logic #
 
-There are no keywords like `if`, `else`, `true` or `false`. Bool values are just ordinary functions in core library. They use [Church encodings](https://en.wikipedia.org/wiki/Church_encoding#Church_Booleans).
+There are no keywords like `if`, `else`, `true` or `false`. Boolean values are just ordinary functions in core library. They use [Church encodings](https://en.wikipedia.org/wiki/Church_encoding#Church_Booleans).
 
     true(a)(b) { a }
     false(a)(b) { b }
@@ -31,7 +31,29 @@ and using it in main
 
 prints `yes`.
 
-### lambdas and currying
+# data as function #
+
+Structures are encoded using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding)
+
+    something(element)(vSomething)(vNothing) {
+      vSomething(element)
+    }
+
+    nothing(vSomething)(vNothing) {
+      vNothing
+    }
+
+    valueOf(maybeInteger) {
+      maybeInteger
+        ((value){ value })
+        (0)
+    }
+
+`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
+
+More about encoding data as functions in [documentation](doc/data.md).
+
+# lambdas and currying #
 
 Stork supports [currying](https://en.wikipedia.org/wiki/Currying) and [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
 
@@ -60,65 +82,8 @@ Syntax is designed so putting name before lambda turns it into function definiti
        (x) { add(1)(x) }
     inc(x) { add(1)(x) } 
 
-### Data structures as functions
 
-Other data structures are represented using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding). To get data from "fields" you need to provide visitor (one for each constructor variant) which is a function that takes "fields" as parameters.
-
-**Structure with fields**
-
-Structure with fields can be represented by implementing single constructor function (`person(name)(age)`) with parameters of fields (`name`, `age`) and then taking visitor function as next parameter (`visitor`). Visitor function is invoked and constructor fields are passed as arguments.
-
-    person(name)(age)(visitor) {
-      visitor(name)(age)
-    }
-
-Visitor anonymous function (`(name)(age) { atLeast(18)(age) }`) takes fields as parameters.
-
-    isAdult(person) {
-      person((name)(age) {
-        atLeast(18)(age)
-      })
-    }
-
-
-    main(stdin) {
-      yesOrNo(isAdult(person("John")(23)))
-    }
-
-prints `yes`.
-
-Reuse of words `person`, `name`, `age` as lambda parameters is just a convention and does no interfere with `person(name)(age)` constructor definition. It could just as well be
-
-    isAdult(p) {
-      p((n)(a) {
-        atLeast(18)(a)
-      })
-    }
-
-**Multiple constructors**
-
-There can be many constructors (`something(element)`, `nothing`) with different parameters (`element`, none). You just need to provide that many visitors (`vSomething`, `vNothing`) as number of constructors, each taking as many parameters as given constructor have. Example of maybe/optional would be
-
-
-    something(element)(vSomething)(vNothing) {
-      vSomething(element)
-    }
-
-    nothing(vSomething)(vNothing) {
-      vNothing
-    }
-
-Function that returns integer from `something` or else `0` (if `nothing`) looks like this
-
-    valueOf(maybeInteger) {
-      maybeInteger
-        ((value){ value })
-        (0)
-    }
-
-`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
-
-### namespaces
+# namespaces #
 
 Source code file is always named `source`. Directory path defines namespace of all functions defined inside. Using functions from other namespace require imports. Imports are in separate file named `import`. By default main function is named `main` and is in root directory/namespace.
 
@@ -135,7 +100,7 @@ file: import
     lang.stream.limit
     lang.stream.reverse
 
-### Quick start
+# quick start #
 
 Clone project.
 
