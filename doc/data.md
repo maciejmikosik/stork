@@ -101,7 +101,7 @@ Computation:
 
 It takes a person structure and invokes it like a function by providing visitor. In this case visitor is provided as anonymous function that takes fields as arguments. `(name)(age) { atLeast(18)(age) }`.
 
-Reuse of words `person`, `name`, `age` as lambda parameters is just a convention and does no interfere with `person(name)(age)` constructor definition. It could just as well be
+Reuse of words `person`, `name`, `age` as lambda parameters is just a convention and does not interfere with `person(name)(age)` constructor definition. It could just as well be
 
     isAdult(p) {
       p((n)(a) {
