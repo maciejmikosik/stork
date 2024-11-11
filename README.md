@@ -53,6 +53,16 @@ Structures are encoded using [Mogensen-Scott encoding](https://en.wikipedia.org/
 
 More about encoding data as functions in [documentation](doc/data.md).
 
+# big integers #
+
+Integers can be arbitrarily big.
+
+    main(stdin) {
+        format(-123456789012345678901234567890)
+    }
+
+prints `-123456789012345678901234567890`.
+
 # lambdas and currying #
 
 Stork supports [currying](https://en.wikipedia.org/wiki/Currying) and [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
@@ -119,5 +129,3 @@ Run stork (update path if you moved binary from home directory)
 # documentation #
 
 [Documentation](doc/stork.md)
-
-Core libraries are available in `core_library` directory.
