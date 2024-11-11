@@ -119,5 +119,3 @@ Run stork (update path if you moved binary from home directory)
 # documentation #
 
 [Documentation](doc/stork.md)
-
-Core libraries are available in `core_library` directory.
