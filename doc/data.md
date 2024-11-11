@@ -1,6 +1,6 @@
-# Data as function #
+# Data #
 
-In stork, data is encoded as functions. This includes everything: enums, structures with fields, collections etc.
+Data structures are encoded as functions. This includes: enums, structures with fields, collections etc.
 
 ### Enums ###
 
