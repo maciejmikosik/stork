@@ -34,6 +34,10 @@ zip \
   "${BIN}/core.star" \
   ./*
 
+########## ERASE TIMESTAMPS ##########
+
+find "${BIN}" | xargs touch --date=@0
+
 ########## ZIP BIN TO JAR ##########
 
 cd "${BIN}"
@@ -61,3 +65,4 @@ rm "${BUILDING}" -rf
 ########## REPORT ##########
 
 echo "created ${DESTINATION}/stork"
+sha1sum "${DESTINATION}/stork"
