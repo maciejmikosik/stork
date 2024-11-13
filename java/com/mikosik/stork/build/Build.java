@@ -43,11 +43,12 @@ public class Build {
   public static void main(String... args) throws Exception {
     var thisFile = sourceFileOf(Build.class);
     out("building stork shebang binary by running script\n  %s", thisFile);
-
-    // TODO find better way of locating java source directory
     var javaSourceDirectory = thisFile
         .getParent().getParent().getParent().getParent().getParent();
     out("java source directory: %s", javaSourceDirectory);
+    var coreLibraryDirectory = javaSourceDirectory.getParent().resolve("core_library");
+    out("core library directory: %s", coreLibraryDirectory);
+
     var buildDirectory = newTempDirectory("stork_build_");
     out("created build directory: %s", buildDirectory);
     var jarDirectory = createDirectories(buildDirectory.resolve("assembling_jar"));
@@ -67,6 +68,14 @@ public class Build {
         createDirectories(jarDirectory.resolve("META-INF")).resolve("MANIFEST.MF"),
         "Main-Class: %s\n".formatted(Stork.class.getName()),
         UTF_8);
+
+    // add core.star to jar
+    exitCode = new Zip()
+        .sourceDirectory(coreLibraryDirectory)
+        .destinationFile(jarDirectory.resolve("core.star"))
+        .start()
+        .waitFor();
+    checkExitCode(exitCode);
 
     // zip everything to jar file
     var jarFile = buildDirectory.resolve("stork.jar");
@@ -104,7 +113,7 @@ public class Build {
   private static Path newTempDirectory(String prefix) {
     var directory = createTempDirectory(prefix);
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      walkBottomToTop(directory).forEach(Build::delete);
+      // walkBottomToTop(directory).forEach(Build::delete);
     }));
     return directory;
   }
