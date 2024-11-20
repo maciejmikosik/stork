@@ -22,12 +22,12 @@ public class Collections {
         parallel);
   }
 
-  public static <E> Stream<E> stream(Iterable<? extends E> iterable) {
+  public static <E> Stream<E> stream(Iterable<E> iterable) {
     return stream(iterable.spliterator());
   }
 
-  private static <E> Stream<E> stream(Spliterator<? extends E> spliterator) {
-    return (Stream<E>) StreamSupport.stream(spliterator, false);
+  private static <E> Stream<E> stream(Spliterator<E> spliterator) {
+    return StreamSupport.stream(spliterator, false);
   }
 
   public static <A, B> Function<A, Stream<B>> instanceOf(Class<B> clazz) {
@@ -44,7 +44,11 @@ public class Collections {
 
   public static <E> List<E> flatten(Iterable<? extends Iterable<? extends E>> iterables) {
     return stream(iterables)
-        .flatMap(Collections::stream)
+        /*
+         * TODO report eclipse bug: eclipse (but not java) gives compiler error
+         * when using method reference Collections::stream
+         */
+        .flatMap((Iterable<? extends E> iter) -> stream(iter))
         .collect(toSequence());
   }
 }
