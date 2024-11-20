@@ -49,15 +49,15 @@ public class Expectations {
     this.stdout = stdout;
   }
 
-  public void actualCompileProblems(List<Problem> actualProblems) {
+  public void actualCompileProblems(List<? extends Problem> actualProblems) {
     actualProblems(CANNOT_COMPILE, actualProblems);
   }
 
-  public void actualComputeProblems(List<Problem> actualProblems) {
+  public void actualComputeProblems(List<? extends Problem> actualProblems) {
     actualProblems(CANNOT_COMPUTE, actualProblems);
   }
 
-  private void actualProblems(Type type, List<Problem> actualProblems) {
+  private void actualProblems(Type type, List<? extends Problem> actualProblems) {
     var actual = descriptions(actualProblems);
     var expected = descriptions(expectedProblems(type));
     var common = intersection(actual, expected);

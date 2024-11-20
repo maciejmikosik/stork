@@ -6,13 +6,13 @@ import static java.util.stream.Collectors.joining;
 import java.util.List;
 
 public class ProblemException extends RuntimeException {
-  public final List<Problem> problems;
+  public final List<? extends Problem> problems;
 
-  private ProblemException(List<Problem> problems) {
+  private ProblemException(List<? extends Problem> problems) {
     this.problems = problems;
   }
 
-  public static ProblemException exception(List<Problem> problems) {
+  public static ProblemException exception(List<? extends Problem> problems) {
     return new ProblemException(problems);
   }
 
@@ -20,7 +20,7 @@ public class ProblemException extends RuntimeException {
     return exception(asList(problem));
   }
 
-  public static void report(List<Problem> problems) {
+  public static void report(List<? extends Problem> problems) {
     if (!problems.isEmpty()) {
       throw exception(problems);
     }
