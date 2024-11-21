@@ -18,6 +18,7 @@ public class Sequence {
     return singletonList(element);
   }
 
+  @SafeVarargs
   public static <E> List<E> sequence(E... elements) {
     return unmodifiableList(Arrays.asList(elements));
   }
