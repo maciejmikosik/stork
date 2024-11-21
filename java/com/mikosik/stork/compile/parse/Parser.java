@@ -134,7 +134,7 @@ public class Parser {
   private static <T extends Token> T next(Class<T> type, Peekerator<Token> input) {
     Token token = input.next();
     return type.isInstance(token)
-        ? (T) token
+        ? type.cast(token)
         : failUnexpected(token);
   }
 
