@@ -30,9 +30,9 @@ public class Collections {
     return StreamSupport.stream(spliterator, false);
   }
 
-  public static <A, B> Function<A, Stream<B>> instanceOf(Class<B> clazz) {
+  public static <A, B> Function<A, Stream<B>> filter(Class<B> clazz) {
     return element -> clazz.isInstance(element)
-        ? Stream.of((B) element)
+        ? Stream.of(clazz.cast(element))
         : Stream.empty();
   }
 

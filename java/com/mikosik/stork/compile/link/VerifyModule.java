@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile.link;
 
+import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.Collections.flatten;
-import static com.mikosik.stork.common.Collections.instanceOf;
 import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.change.Changes.walk;
@@ -35,7 +35,7 @@ public class VerifyModule {
   private static List<UndefinedVariable> undefinedVariables(Module module) {
     return module.definitions.stream()
         .flatMap(definition -> walk(definition.body)
-            .flatMap(instanceOf(Variable.class))
+            .flatMap(filter(Variable.class))
             .map(variable -> undefinedVariable(definition, variable)))
         .collect(toList());
   }
@@ -46,7 +46,7 @@ public class VerifyModule {
         .collect(toSet());
     return module.definitions.stream()
         .flatMap(definition -> walk(definition.body)
-            .flatMap(instanceOf(Identifier.class))
+            .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
             .map(identifier -> undefinedImport(definition, identifier)))
         .collect(toList());
