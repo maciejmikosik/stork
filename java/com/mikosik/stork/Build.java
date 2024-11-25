@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Build.out;
-import static com.mikosik.stork.Build.path;
+import static com.mikosik.stork.Project.project;
 import static java.lang.String.format;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -16,9 +16,9 @@ import static java.util.Comparator.reverseOrder;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,9 +30,8 @@ import com.mikosik.stork.common.io.InputOutput;
  * directory. At runtime it's hard to get access to java source files from
  * there.
  *
- * This is build of stork compiler. It is single script file (JEP-330). It can't
- * reference other files because it is compatible with java 21. Using external
- * classes requires java 22 (JEP-458).
+ * This is build of stork compiler. It is multi-file source-code program
+ * (<a href="https://openjdk.org/jeps/458">JEP-458</a>). It requires java 22.
  *
  * TODO use {@link StandardOutput#out}
  *
@@ -40,14 +39,13 @@ import com.mikosik.stork.common.io.InputOutput;
  */
 public class Build {
   public static void main(String... args) throws Exception {
-    var thisFile = sourceFileOf(Build.class);
+    var fileSystem = FileSystems.getDefault();
+    var project = project(fileSystem);
+
     out("building stork binary");
-    out("script: %s", thisFile);
-    var javaSourceDirectory = thisFile
-        .getParent().getParent().getParent().getParent();
-    out("java source directory: %s", javaSourceDirectory);
-    var coreLibraryDirectory = javaSourceDirectory.getParent().resolve("core_library");
-    out("core library directory: %s", coreLibraryDirectory);
+    out("script: %s", project.sourceFileOf(Build.class));
+    out("java source directory: %s", project.javaSourceDirectory);
+    out("core library directory: %s", project.coreLibraryDirectory);
 
     var buildDirectory = newTempDirectory("stork_build_");
     out("temp build directory: %s", buildDirectory);
@@ -55,10 +53,10 @@ public class Build {
 
     // compile sources
     var exitCode = new Javac()
-        .workingDirectory(javaSourceDirectory)
-        .sourcepath(".")
+        .workingDirectory(project.javaSourceDirectory)
+        .sourcepath(fileSystem.getPath("."))
         .destination(jarDirectory)
-        .sourcefile(sourceFileOf(Stork.class))
+        .sourcefile(project.sourceFileOf(Stork.class))
         .start()
         .waitFor();
     checkExitCode(exitCode);
@@ -71,7 +69,7 @@ public class Build {
 
     // add core.star to jar
     exitCode = new Zip()
-        .sourceDirectory(coreLibraryDirectory)
+        .sourceDirectory(project.coreLibraryDirectory)
         .destinationFile(jarDirectory.resolve("core.star"))
         .start()
         .waitFor();
@@ -97,23 +95,12 @@ public class Build {
     Files.setPosixFilePermissions(storkBinaryFile, permissions);
 
     // move stork product to home directory
-    var productFile = path(System.getProperty("user.home") + "/stork");
+    var productFile = fileSystem.getPath(System.getProperty("user.home"), "stork");
     var productAction = Files.exists(productFile)
         ? " (overwritten)"
         : "";
-    out("created%s stork binary: %s".formatted(productAction, productFile));
     Files.move(storkBinaryFile, productFile, REPLACE_EXISTING);
-
-    out("done");
-  }
-
-  public static Path path(String name) {
-    return Paths.get(name);
-  }
-
-  private static Path sourceFileOf(Class<?> type) {
-    String sourceFileName = type.getSimpleName() + ".java";
-    return path(type.getResource(sourceFileName).getFile());
+    out("created%s stork binary: %s".formatted(productAction, productFile));
   }
 
   private static Path newTempDirectory(String prefix) {
@@ -176,17 +163,9 @@ class Javac {
     return this;
   }
 
-  public Javac workingDirectory(String workingDirectory) {
-    return workingDirectory(path(workingDirectory));
-  }
-
   public Javac sourcepath(Path sourcepath) {
     this.sourcepath = sourcepath;
     return this;
-  }
-
-  public Javac sourcepath(String sourcepath) {
-    return sourcepath(path(sourcepath));
   }
 
   public Javac destination(Path destination) {
@@ -194,17 +173,9 @@ class Javac {
     return this;
   }
 
-  public Javac destination(String destination) {
-    return destination(path(destination));
-  }
-
   public Javac sourcefile(Path sourcefile) {
     this.sourcefile = sourcefile;
     return this;
-  }
-
-  public Javac sourcefile(String sourcefile) {
-    return sourcefile(path(sourcefile));
   }
 
   public Process start() throws IOException {
@@ -235,17 +206,9 @@ class Zip {
     return this;
   }
 
-  public Zip sourceDirectory(String sourceDirectory) {
-    return sourceDirectory(path(sourceDirectory));
-  }
-
   public Zip destinationFile(Path destinationFile) {
     this.destinationFile = destinationFile;
     return this;
-  }
-
-  public Zip destinationFile(String destinationFile) {
-    return destinationFile(path(destinationFile));
   }
 
   public Process start() throws IOException, InterruptedException {
