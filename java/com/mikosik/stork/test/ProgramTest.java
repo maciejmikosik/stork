@@ -76,7 +76,15 @@ public class ProgramTest implements Test {
 
   public <R> R visit(BiFunction<String, Body, R> caseHandler,
       BiFunction<String, List<Test>, R> suiteHandler) {
-    return caseHandler.apply(name, this::run);
+    return caseHandler.apply(name, this::tryRun);
+  }
+
+  private void tryRun() {
+    try {
+      run();
+    } finally {
+      fsBuilder.delete();
+    }
   }
 
   private void run() {
