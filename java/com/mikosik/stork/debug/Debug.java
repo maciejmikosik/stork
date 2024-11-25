@@ -1,5 +1,6 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.debug.ClassLoadingDecorator.classLoading;
 import static org.logbuddy.decorator.InvocationDecorator.invocationDecorator;
 import static org.logbuddy.decorator.Rich.traversing;
 import static org.logbuddy.logger.InvocationDepthLogger.invocationDepth;
@@ -18,7 +19,8 @@ public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
     Renderer<String> renderer = new StorkTextRenderer();
     Logger logger = invocationDepth(fileLogger(logFile, renderer));
-    return traversing(filteringTypes(invocationDecorator(logger)));
+    var classLoader = new ClassLoader(Debug.class.getClassLoader()) {};
+    return classLoading(classLoader, traversing(filteringTypes(invocationDecorator(logger))));
   }
 
   private static Decorator filteringTypes(Decorator decorator) {
