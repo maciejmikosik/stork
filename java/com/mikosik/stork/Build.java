@@ -1,8 +1,8 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.common.io.Directories.homeDirectory;
 import static com.mikosik.stork.common.io.Directories.newTemporaryDirectory;
-import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.proc.Javac.javac;
 import static com.mikosik.stork.common.proc.Zip.zip;
 import static java.lang.String.format;
@@ -24,7 +24,7 @@ public class Build {
   public static void main(String... args) throws Exception {
     var fileSystem = FileSystems.getDefault();
     var project = project(fileSystem);
-    var homeDirectory = directory(fileSystem.getPath(System.getProperty("user.home")));
+    var homeDirectory = homeDirectory();
     var buildDirectory = newTemporaryDirectory("stork_build_");
 
     out("building stork binary");
