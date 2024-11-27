@@ -6,6 +6,7 @@ import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class Directory {
   public final Path path;
@@ -31,6 +32,26 @@ public class Directory {
     return directory(path.getParent());
   }
 
+  public Stream<Directory> directories() {
+    return list()
+        .filter(Files::isDirectory)
+        .map(Directory::directory);
+  }
+
+  public Stream<File> files() {
+    return list()
+        .filter(Files::isRegularFile)
+        .map(File::file);
+  }
+
+  private Stream<Path> list() {
+    try {
+      return Files.list(path);
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
   public boolean exists() {
     return Files.isDirectory(path);
   }
@@ -42,6 +63,22 @@ public class Directory {
     } catch (IOException e) {
       throw unchecked(e);
     }
+  }
+
+  public Directory delete() {
+    try {
+      Files.delete(path);
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+    return this;
+  }
+
+  public Directory deleteRecursively() {
+    directories().forEach(Directory::deleteRecursively);
+    files().forEach(File::delete);
+    delete();
+    return this;
   }
 
   public String toString() {
