@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class Javac {
-  private Path workingDirectory;
   private Path sourcepath;
   private Path destination;
   private Path sourcefile;
@@ -16,11 +15,6 @@ public class Javac {
 
   public static Javac javac() {
     return new Javac();
-  }
-
-  public Javac workingDirectory(Path workingDirectory) {
-    this.workingDirectory = workingDirectory;
-    return this;
   }
 
   public Javac sourcepath(Path sourcepath) {
@@ -45,7 +39,6 @@ public class Javac {
               "-sourcepath", sourcepath.toString(),
               "-d", destination.toString(),
               sourcefile.toString())
-          .directory(workingDirectory.toFile())
           .inheritIO()
           .start()
           .waitFor();

@@ -51,8 +51,7 @@ public class Build {
 
     // compile sources
     javac()
-        .workingDirectory(project.javaSourceDirectory)
-        .sourcepath(fileSystem.getPath("."))
+        .sourcepath(project.javaSourceDirectory)
         .destination(jarDirectory)
         .sourcefile(project.sourceFileOf(Stork.class))
         .execute();
