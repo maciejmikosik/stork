@@ -1,9 +1,9 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.Build.out;
 import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.common.proc.Javac.javac;
+import static com.mikosik.stork.common.proc.Zip.zip;
 import static java.lang.String.format;
-import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.writeString;
@@ -11,7 +11,6 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
-import static java.util.Arrays.asList;
 import static java.util.Comparator.reverseOrder;
 
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.io.UncheckedIOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.stream.Stream;
 
 import com.mikosik.stork.common.StandardOutput;
@@ -52,14 +50,12 @@ public class Build {
     var jarDirectory = createDirectories(buildDirectory.resolve("assembling_jar"));
 
     // compile sources
-    var exitCode = new Javac()
+    javac()
         .workingDirectory(project.javaSourceDirectory)
         .sourcepath(fileSystem.getPath("."))
         .destination(jarDirectory)
         .sourcefile(project.sourceFileOf(Stork.class))
-        .start()
-        .waitFor();
-    checkExitCode(exitCode);
+        .execute();
 
     // create manifest file
     writeString(
@@ -68,21 +64,17 @@ public class Build {
         UTF_8);
 
     // add core.star to jar
-    exitCode = new Zip()
+    zip()
         .sourceDirectory(project.coreLibraryDirectory)
         .destinationFile(jarDirectory.resolve("core.star"))
-        .start()
-        .waitFor();
-    checkExitCode(exitCode);
+        .execute();
 
     // zip everything to jar file
     var jarFile = buildDirectory.resolve("stork.jar");
-    exitCode = new Zip()
+    zip()
         .sourceDirectory(jarDirectory)
         .destinationFile(jarFile)
-        .start()
-        .waitFor();
-    checkExitCode(exitCode);
+        .execute();
 
     // add shebang header
     var storkBinaryFile = buildDirectory.resolve("stork");
@@ -142,87 +134,5 @@ public class Build {
 
   public static void out(String template, Object... items) {
     System.out.println(format(template, items));
-  }
-
-  public static void checkExitCode(int exitValue) {
-    if (exitValue > 0) {
-      out("exit value: %s", exitValue);
-      System.exit(exitValue);
-    }
-  }
-}
-
-class Javac {
-  private Path workingDirectory;
-  private Path sourcepath;
-  private Path destination;
-  private Path sourcefile;
-
-  public Javac workingDirectory(Path workingDirectory) {
-    this.workingDirectory = workingDirectory;
-    return this;
-  }
-
-  public Javac sourcepath(Path sourcepath) {
-    this.sourcepath = sourcepath;
-    return this;
-  }
-
-  public Javac destination(Path destination) {
-    this.destination = destination;
-    return this;
-  }
-
-  public Javac sourcefile(Path sourcefile) {
-    this.sourcefile = sourcefile;
-    return this;
-  }
-
-  public Process start() throws IOException {
-    return new ProcessBuilder()
-        .command("javac",
-            "-sourcepath", sourcepath.toString(),
-            "-d", destination.toString(),
-            sourcefile.toString())
-        .directory(workingDirectory.toFile())
-        .inheritIO()
-        .start();
-  }
-
-  public void dryRun() {
-    out("dry run: javac -sourcepath %s -d %s %s",
-        sourcepath.toString(),
-        destination.toString(),
-        sourcefile.toString());
-  }
-}
-
-class Zip {
-  private Path sourceDirectory;
-  private Path destinationFile;
-
-  public Zip sourceDirectory(Path sourceDirectory) {
-    this.sourceDirectory = sourceDirectory;
-    return this;
-  }
-
-  public Zip destinationFile(Path destinationFile) {
-    this.destinationFile = destinationFile;
-    return this;
-  }
-
-  public Process start() throws IOException, InterruptedException {
-    return new ProcessBuilder()
-        .command(shellExpansion(
-            "zip",
-            "--quiet", "-X", "--recurse-paths",
-            destinationFile.toString(), "./*"))
-        .directory(sourceDirectory.toFile())
-        .inheritIO()
-        .start();
-  }
-
-  private static List<String> shellExpansion(String... command) {
-    return asList("sh", "-c", join(" ", command));
   }
 }
