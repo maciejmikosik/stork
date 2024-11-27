@@ -1,41 +1,47 @@
 package com.mikosik.stork;
 
-import static java.nio.file.Files.isDirectory;
+import static com.mikosik.stork.common.io.Directory.directory;
+import static com.mikosik.stork.common.io.File.file;
+import static java.lang.String.format;
 
 import java.nio.file.FileSystem;
-import java.nio.file.Path;
+import java.nio.file.FileSystems;
+
+import com.mikosik.stork.common.io.Directory;
+import com.mikosik.stork.common.io.File;
 
 public class Project {
-  public final Path root;
-  public final Path javaSourceDirectory;
-  public final Path coreLibraryDirectory;
+  public final FileSystem fileSystem;
+  public final Directory root;
+  public final Directory javaSourceDirectory;
+  public final Directory coreLibraryDirectory;
 
-  private Project(Path root, Path javaSourceDirectory, Path coreLibraryDirectory) {
+  private Project(FileSystem fileSystem, Directory root) {
+    this.fileSystem = fileSystem;
     this.root = root;
-    this.javaSourceDirectory = javaSourceDirectory;
-    this.coreLibraryDirectory = coreLibraryDirectory;
+    this.javaSourceDirectory = root.directory("java");
+    this.coreLibraryDirectory = root.directory("core_library");
   }
 
-  public static Project project(FileSystem fileSystem) {
-    var thisFileName = Project.class.getSimpleName() + ".java";
-    var thisFile = fileSystem.getPath(Project.class.getResource(thisFileName).getFile());
-    var root = findRoot(thisFile);
-    var javaSourceDirectory = root.resolve("java");
-    var coreLibraryDirectory = root.resolve("core_library");
-    return new Project(root, javaSourceDirectory, coreLibraryDirectory);
+  public static Project project() {
+    var fileSystem = FileSystems.getDefault();
+    var classLoaderPath = Project.class.getClassLoader().getResource("").getPath();
+    var classOrSourcePath = directory(fileSystem.getPath(classLoaderPath));
+    var root = findRoot(classOrSourcePath);
+    return new Project(fileSystem, root);
   }
 
-  private static Path findRoot(Path path) {
-    var root = path.getParent();
-    while (!isDirectory(root.resolve(".git"))) {
-      root = root.getParent();
+  private static Directory findRoot(Directory directory) {
+    while (!directory.directory(".git").exists()) {
+      directory = directory.parent();
     }
-    return root;
+    return directory;
   }
 
-  public Path sourceFileOf(Class<?> type) {
-    var sourceFileName = type.getSimpleName() + ".java";
-    var file = type.getResource(sourceFileName).getFile();
-    return root.getFileSystem().getPath(file);
+  public File sourceFileOf(Class<?> type) {
+    var path = format("%s/%s.java",
+        javaSourceDirectory,
+        type.getName().replace('.', '/'));
+    return file(fileSystem.getPath(path));
   }
 }
