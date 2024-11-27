@@ -1,24 +1,20 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.common.StandardOutput.out;
 import static com.mikosik.stork.common.io.Directories.homeDirectory;
 import static com.mikosik.stork.common.io.Directories.newTemporaryDirectory;
 import static com.mikosik.stork.common.proc.Javac.javac;
 import static com.mikosik.stork.common.proc.Zip.zip;
-import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
 
 import java.nio.file.FileSystems;
 
-import com.mikosik.stork.common.StandardOutput;
-
 /**
  * This is build of stork compiler. It can be run as multi-file source-code
  * program (<a href="https://openjdk.org/jeps/458">JEP-458</a>) (requires java
  * 22) or from Eclipse IDE.
- *
- * TODO use {@link StandardOutput#out}
  */
 public class Build {
   public static void main(String... args) throws Exception {
@@ -73,9 +69,5 @@ public class Build {
 
     out("");
     out("created stork binary: %s".formatted(storkBinaryFile));
-  }
-
-  public static void out(String template, Object... items) {
-    System.out.println(format(template, items));
   }
 }
