@@ -12,8 +12,8 @@ import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.common.io.File;
 
 public class Zip {
-  private Directory sourceDirectory;
-  private File destinationFile;
+  private Directory source;
+  private File destination;
 
   private Zip() {}
 
@@ -21,13 +21,13 @@ public class Zip {
     return new Zip();
   }
 
-  public Zip sourceDirectory(Directory sourceDirectory) {
-    this.sourceDirectory = sourceDirectory;
+  public Zip source(Directory source) {
+    this.source = source;
     return this;
   }
 
-  public Zip destinationFile(File destinationFile) {
-    this.destinationFile = destinationFile;
+  public Zip destination(File destination) {
+    this.destination = destination;
     return this;
   }
 
@@ -37,8 +37,8 @@ public class Zip {
           .command(shellExpansion(
               "zip",
               "--quiet", "-X", "--recurse-paths",
-              destinationFile.toString(), "./*"))
-          .directory(sourceDirectory.path.toFile())
+              destination.toString(), "./*"))
+          .directory(source.path.toFile())
           .inheritIO()
           .start()
           .waitFor();

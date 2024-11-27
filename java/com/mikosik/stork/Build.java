@@ -30,17 +30,17 @@ public class Build {
     out("core library directory: %s", project.coreLibraryDirectory);
     out("temp build directory: %s", buildDirectory);
 
-    var jarDirectory = buildDirectory
-        .directory("assembling_jar")
+    var stageDirectory = buildDirectory
+        .directory("stage")
         .create();
 
     javac()
-        .sourcepath(project.javaSourceDirectory)
-        .destination(jarDirectory)
-        .sourcefile(project.sourceFileOf(Stork.class))
+        .source(project.javaSourceDirectory)
+        .destination(stageDirectory)
+        .seed(project.sourceFileOf(Stork.class))
         .execute();
 
-    jarDirectory
+    stageDirectory
         .directory("META-INF")
         .create()
         .file("MANIFEST.MF")
@@ -50,24 +50,24 @@ public class Build {
             .getBytes(US_ASCII));
 
     zip()
-        .sourceDirectory(project.coreLibraryDirectory)
-        .destinationFile(jarDirectory.file("core.star"))
+        .source(project.coreLibraryDirectory)
+        .destination(stageDirectory.file("core.star"))
         .execute();
 
-    var jarFile = buildDirectory.file("stork.jar");
+    var storkJarFile = buildDirectory.file("stork.jar");
     zip()
-        .sourceDirectory(jarDirectory)
-        .destinationFile(jarFile)
+        .source(stageDirectory)
+        .destination(storkJarFile)
         .execute();
 
-    var storkBinaryFile = buildDirectory.file("stork")
+    var storkShebangFile = buildDirectory.file("stork")
         .create()
         .append("#!/usr/bin/java -jar\n".getBytes(US_ASCII))
-        .append(jarFile)
+        .append(storkJarFile)
         .addPermission(OWNER_EXECUTE)
         .move(homeDirectory);
 
     out("");
-    out("created stork binary: %s".formatted(storkBinaryFile));
+    out("created stork binary: %s".formatted(storkShebangFile));
   }
 }

@@ -9,9 +9,9 @@ import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.common.io.File;
 
 public class Javac {
-  private Directory sourcepath;
+  private Directory source;
   private Directory destination;
-  private File sourcefile;
+  private File seed;
 
   private Javac() {}
 
@@ -19,8 +19,8 @@ public class Javac {
     return new Javac();
   }
 
-  public Javac sourcepath(Directory sourcepath) {
-    this.sourcepath = sourcepath;
+  public Javac source(Directory source) {
+    this.source = source;
     return this;
   }
 
@@ -29,8 +29,8 @@ public class Javac {
     return this;
   }
 
-  public Javac sourcefile(File sourcefile) {
-    this.sourcefile = sourcefile;
+  public Javac seed(File seed) {
+    this.seed = seed;
     return this;
   }
 
@@ -38,9 +38,9 @@ public class Javac {
     try {
       int exitValue = new ProcessBuilder()
           .command("javac",
-              "-sourcepath", sourcepath.toString(),
+              "-sourcepath", source.toString(),
               "-d", destination.toString(),
-              sourcefile.toString())
+              seed.toString())
           .inheritIO()
           .start()
           .waitFor();
