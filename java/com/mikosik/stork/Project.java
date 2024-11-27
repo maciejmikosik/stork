@@ -5,26 +5,30 @@ import static com.mikosik.stork.common.io.File.file;
 import static java.lang.String.format;
 
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.common.io.File;
 
 public class Project {
+  public final FileSystem fileSystem;
   public final Directory root;
   public final Directory javaSourceDirectory;
   public final Directory coreLibraryDirectory;
 
-  private Project(Directory root) {
+  private Project(FileSystem fileSystem, Directory root) {
+    this.fileSystem = fileSystem;
     this.root = root;
     this.javaSourceDirectory = root.directory("java");
     this.coreLibraryDirectory = root.directory("core_library");
   }
 
-  public static Project project(FileSystem fileSystem) {
+  public static Project project() {
+    var fileSystem = FileSystems.getDefault();
     var classLoaderPath = Project.class.getClassLoader().getResource("").getPath();
     var classOrSourcePath = directory(fileSystem.getPath(classLoaderPath));
     var root = findRoot(classOrSourcePath);
-    return new Project(root);
+    return new Project(fileSystem, root);
   }
 
   private static Directory findRoot(Directory directory) {
@@ -35,7 +39,6 @@ public class Project {
   }
 
   public File sourceFileOf(Class<?> type) {
-    var fileSystem = root.path.getFileSystem();
     var path = format("%s/%s.java",
         javaSourceDirectory,
         type.getName().replace('.', '/'));

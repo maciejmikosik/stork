@@ -9,8 +9,6 @@ import static com.mikosik.stork.common.proc.Zip.zip;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
 
-import java.nio.file.FileSystems;
-
 /**
  * This is build of stork compiler. It can be run as multi-file source-code
  * program (<a href="https://openjdk.org/jeps/458">JEP-458</a>) (requires java
@@ -18,8 +16,7 @@ import java.nio.file.FileSystems;
  */
 public class Build {
   public static void main(String... args) throws Exception {
-    var fileSystem = FileSystems.getDefault();
-    var project = project(fileSystem);
+    var project = project();
     var homeDirectory = homeDirectory();
     var buildDirectory = newTemporaryDirectory("stork_build_");
 
