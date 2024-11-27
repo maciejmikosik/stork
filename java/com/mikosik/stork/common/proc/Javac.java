@@ -4,12 +4,14 @@ import static com.mikosik.stork.common.UncheckedInterruptedException.unchecked;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
 import java.io.IOException;
-import java.nio.file.Path;
+
+import com.mikosik.stork.common.io.Directory;
+import com.mikosik.stork.common.io.File;
 
 public class Javac {
-  private Path sourcepath;
-  private Path destination;
-  private Path sourcefile;
+  private Directory sourcepath;
+  private Directory destination;
+  private File sourcefile;
 
   private Javac() {}
 
@@ -17,17 +19,17 @@ public class Javac {
     return new Javac();
   }
 
-  public Javac sourcepath(Path sourcepath) {
+  public Javac sourcepath(Directory sourcepath) {
     this.sourcepath = sourcepath;
     return this;
   }
 
-  public Javac destination(Path destination) {
+  public Javac destination(Directory destination) {
     this.destination = destination;
     return this;
   }
 
-  public Javac sourcefile(Path sourcefile) {
+  public Javac sourcefile(File sourcefile) {
     this.sourcefile = sourcefile;
     return this;
   }

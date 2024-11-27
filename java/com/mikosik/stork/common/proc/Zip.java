@@ -6,12 +6,14 @@ import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
+import com.mikosik.stork.common.io.Directory;
+import com.mikosik.stork.common.io.File;
+
 public class Zip {
-  private Path sourceDirectory;
-  private Path destinationFile;
+  private Directory sourceDirectory;
+  private File destinationFile;
 
   private Zip() {}
 
@@ -19,12 +21,12 @@ public class Zip {
     return new Zip();
   }
 
-  public Zip sourceDirectory(Path sourceDirectory) {
+  public Zip sourceDirectory(Directory sourceDirectory) {
     this.sourceDirectory = sourceDirectory;
     return this;
   }
 
-  public Zip destinationFile(Path destinationFile) {
+  public Zip destinationFile(File destinationFile) {
     this.destinationFile = destinationFile;
     return this;
   }
@@ -36,7 +38,7 @@ public class Zip {
               "zip",
               "--quiet", "-X", "--recurse-paths",
               destinationFile.toString(), "./*"))
-          .directory(sourceDirectory.toFile())
+          .directory(sourceDirectory.path.toFile())
           .inheritIO()
           .start()
           .waitFor();

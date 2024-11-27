@@ -1,15 +1,11 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.proc.Javac.javac;
 import static com.mikosik.stork.common.proc.Zip.zip;
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.Files.createDirectories;
-import static java.nio.file.Files.writeString;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
 import static java.util.Comparator.reverseOrder;
 
@@ -24,12 +20,9 @@ import com.mikosik.stork.common.StandardOutput;
 import com.mikosik.stork.common.io.InputOutput;
 
 /**
- * Don't run this script using Eclipse. Eclipse puts compiled class files to bin
- * directory. At runtime it's hard to get access to java source files from
- * there.
- *
- * This is build of stork compiler. It is multi-file source-code program
- * (<a href="https://openjdk.org/jeps/458">JEP-458</a>). It requires java 22.
+ * This is build of stork compiler. It can be run as multi-file source-code
+ * program (<a href="https://openjdk.org/jeps/458">JEP-458</a>) (requires java
+ * 22) or from Eclipse IDE.
  *
  * TODO use {@link StandardOutput#out}
  *
@@ -39,59 +32,55 @@ public class Build {
   public static void main(String... args) throws Exception {
     var fileSystem = FileSystems.getDefault();
     var project = project(fileSystem);
+    var homeDirectory = directory(fileSystem.getPath(System.getProperty("user.home")));
+    var buildDirectory = directory(newTempDirectory("stork_build_"));
 
     out("building stork binary");
+    out("project: %s", project.root);
     out("script: %s", project.sourceFileOf(Build.class));
     out("java source directory: %s", project.javaSourceDirectory);
     out("core library directory: %s", project.coreLibraryDirectory);
-
-    var buildDirectory = newTempDirectory("stork_build_");
     out("temp build directory: %s", buildDirectory);
-    var jarDirectory = createDirectories(buildDirectory.resolve("assembling_jar"));
 
-    // compile sources
+    var jarDirectory = buildDirectory
+        .directory("assembling_jar")
+        .create();
+
     javac()
         .sourcepath(project.javaSourceDirectory)
         .destination(jarDirectory)
         .sourcefile(project.sourceFileOf(Stork.class))
         .execute();
 
-    // create manifest file
-    writeString(
-        createDirectories(jarDirectory.resolve("META-INF")).resolve("MANIFEST.MF"),
-        "Main-Class: %s\n".formatted(Stork.class.getName()),
-        UTF_8);
+    jarDirectory
+        .directory("META-INF")
+        .create()
+        .file("MANIFEST.MF")
+        .create()
+        .append("Main-Class: %s\n"
+            .formatted(Stork.class.getName())
+            .getBytes(US_ASCII));
 
-    // add core.star to jar
     zip()
         .sourceDirectory(project.coreLibraryDirectory)
-        .destinationFile(jarDirectory.resolve("core.star"))
+        .destinationFile(jarDirectory.file("core.star"))
         .execute();
 
-    // zip everything to jar file
-    var jarFile = buildDirectory.resolve("stork.jar");
+    var jarFile = buildDirectory.file("stork.jar");
     zip()
         .sourceDirectory(jarDirectory)
         .destinationFile(jarFile)
         .execute();
 
-    // add shebang header
-    var storkBinaryFile = buildDirectory.resolve("stork");
-    writeString(storkBinaryFile, "#!/usr/bin/java -jar\n", UTF_8);
-    Files.write(storkBinaryFile, Files.readAllBytes(jarFile), CREATE, APPEND);
+    var storkBinaryFile = buildDirectory.file("stork")
+        .create()
+        .append("#!/usr/bin/java -jar\n".getBytes(US_ASCII))
+        .append(jarFile)
+        .addPermission(OWNER_EXECUTE)
+        .move(homeDirectory);
 
-    // make file executable
-    var permissions = Files.getPosixFilePermissions(storkBinaryFile);
-    permissions.add(OWNER_EXECUTE);
-    Files.setPosixFilePermissions(storkBinaryFile, permissions);
-
-    // move stork product to home directory
-    var productFile = fileSystem.getPath(System.getProperty("user.home"), "stork");
-    var productAction = Files.exists(productFile)
-        ? " (overwritten)"
-        : "";
-    Files.move(storkBinaryFile, productFile, REPLACE_EXISTING);
-    out("created%s stork binary: %s".formatted(productAction, productFile));
+    out("");
+    out("created stork binary: %s".formatted(storkBinaryFile));
   }
 
   private static Path newTempDirectory(String prefix) {
