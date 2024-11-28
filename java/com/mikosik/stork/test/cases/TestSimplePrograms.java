@@ -7,9 +7,9 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestProgram {
-  public static Test testProgram() {
-    return suite("program")
+public class TestSimplePrograms {
+  public static Test testSimplePrograms() {
+    return suite("simple programs")
         .add(suite("function")
             .add(functionReturnsArgument())
             .add(functionReturnsConstant())

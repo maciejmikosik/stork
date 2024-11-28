@@ -8,11 +8,21 @@ import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
-import static com.mikosik.stork.test.cases.TestEverything.testEverything;
+import static com.mikosik.stork.test.cases.TestCompilerProblems.testCompilerProblems;
+import static com.mikosik.stork.test.cases.TestComputers.testComputers;
+import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
+import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
+import static com.mikosik.stork.test.cases.TestInstructions.testInstructions;
+import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDecorator;
+import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
 import static java.lang.System.exit;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
 import static org.quackery.Case.newCase;
+import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
+import static org.quackery.run.Runners.timeout;
 
 import org.quackery.Test;
 
@@ -31,8 +41,25 @@ import org.quackery.Test;
 @SuppressWarnings("javadoc")
 public class RunTests {
   public static void main(String[] args) {
-    runAndReport(coreLibraryHasNoProblems());
-    runAndReport(testEverything());
+    runAndReport(suite("unit tests")
+        .add(fast(testComputers()))
+        .add(suite("debug tools")
+            .add(fast(testDecompiler()))
+            .add(slow(testLogbuddyDecorator()))));
+    runAndReport(slow(coreLibraryHasNoProblems()));
+    runAndReport(fast(suite("programs")
+        .add(testSimplePrograms())
+        .add(testCompilerProblems())
+        .add(testInstructions())
+        .add(testCoreLibrary())));
+  }
+
+  private static Test fast(Test test) {
+    return timeout(ofMillis(100), test);
+  }
+
+  private static Test slow(Test test) {
+    return timeout(ofSeconds(3), test);
   }
 
   private static void runAndReport(Test test) {

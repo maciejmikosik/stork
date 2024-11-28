@@ -17,12 +17,12 @@ import org.quackery.Test;
 
 import com.mikosik.stork.model.Expression;
 
-public class TestCompiler {
-  private static Expression body = identifier("body");
+public class TestCompilerProblems {
+  private final static Expression body = identifier("body");
 
-  public static Test testCompiler() {
-    return suite("compiler reports")
-        .add(suite("during tokenizing")
+  public static Test testCompilerProblems() {
+    return suite("compiler reports problems when")
+        .add(suite("tokenizing")
             .add(suite("illegal code in string literal")
                 .add(suite("ascii")
                     .add(reportsIllegalAsciiCodeInStringLiteral(0, 31))
@@ -31,7 +31,7 @@ public class TestCompiler {
             .add(suite("illegal code anywhere")
                 .add(reportsIllegalAsciiCodeAnywhere())
                 .add(reportsNonAsciiCodeAnywhere())))
-        .add(suite("during linking")
+        .add(suite("linking")
             .add(reportsUndefinedVariable())
             .add(reportsUndefinedImport())
             .add(reportsDuplicatedDefinition()));
@@ -49,7 +49,7 @@ public class TestCompiler {
     return suite("range <%d, %d>".formatted(firstCode, lastCode))
         .addAll(range(firstCode, lastCode + 1)
             .mapToObj(value -> Byte.valueOf((byte) value))
-            .map(TestCompiler::reportsIllegalAsciiCodeInStringLiteral)
+            .map(TestCompilerProblems::reportsIllegalAsciiCodeInStringLiteral)
             .toList());
   }
 
