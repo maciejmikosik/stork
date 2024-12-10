@@ -56,23 +56,19 @@ public class ProgramTest implements Test {
   }
 
   public ProgramTest sourceFile(String content) {
-    file("source", content);
-    return this;
+    return file("source", content);
   }
 
   public ProgramTest sourceFile(String directory, String content) {
-    file(directory + "/source", content);
-    return this;
+    return file(directory + "/source", content);
   }
 
   public ProgramTest importFile(String content) {
-    file("import", content);
-    return this;
+    return file("import", content);
   }
 
   public ProgramTest importFile(String directory, String content) {
-    file(directory + "/import", content);
-    return this;
+    return file(directory + "/import", content);
   }
 
   public ProgramTest stdin(String stdin) {
