@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
@@ -10,10 +11,10 @@ import static com.mikosik.stork.compile.link.VerifyModule.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
-import static com.mikosik.stork.test.Expectations.expectations;
+import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
+import static com.mikosik.stork.test.ExpectedStdout.expectedStdout;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyList;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -21,16 +22,23 @@ import java.util.function.BiFunction;
 import org.quackery.Body;
 import org.quackery.Test;
 
+import com.mikosik.stork.common.Reserver;
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
+import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
   private final String name;
   private final FsBuilder fsBuilder;
   private byte[] stdin = new byte[0];
-  private final Expectations expectations = expectations();
+
+  public final Reserver expectedType = reserver();
+  public final ExpectedProblems expectedCannotCompile = expectedProblems();
+  public final ExpectedProblems expectedCannotCompute = expectedProblems();
+  public final ExpectedStdout expectedStdout = expectedStdout();
 
   private ProgramTest(String name, Directory directory) {
     this.name = name;
@@ -72,13 +80,24 @@ public class ProgramTest implements Test {
     return this;
   }
 
-  public ProgramTest stdout(String expectedStdout) {
-    expectations.stdout(bytes(expectedStdout));
+  public ProgramTest stdout(String stdout) {
+    expectedType.reserve("stdout");
+    expectedStdout.expect(bytes(stdout));
     return this;
   }
 
   public ProgramTest expect(Problem problem) {
-    expectations.expect(problem);
+    switch (problem) {
+      case CannotCompile p -> {
+        expectedType.reserve("cannot compile");
+        expectedCannotCompile.expect(problem);
+      }
+      case CannotCompute p -> {
+        expectedType.reserve("cannot compute");
+        expectedCannotCompute.expect(problem);
+      }
+      default -> throw new RuntimeException();
+    }
     return this;
   }
 
@@ -102,10 +121,10 @@ public class ProgramTest implements Test {
           compileDirectory(fsBuilder.directory.path),
           CORE_LIBRARY));
     } catch (ProblemException exception) {
-      expectations.actualCompileProblems(exception.problems);
+      expectedCannotCompile.verify(exception.problems);
       return;
     }
-    expectations.actualCompileProblems(emptyList());
+    expectedCannotCompile.verify();
 
     var program = program(identifier("main"), module);
     var buffer = newBuffer();
@@ -114,13 +133,13 @@ public class ProgramTest implements Test {
     try {
       program.run(input, output);
     } catch (ProblemException exception) {
-      expectations.actualComputeProblems(exception.problems);
+      expectedCannotCompute.verify(exception.problems);
       return;
     }
-    expectations.actualComputeProblems(emptyList());
+    expectedCannotCompute.verify();
 
     byte[] actualStdout = buffer.bytes();
-    expectations.actualStdout(actualStdout);
+    expectedStdout.verify(actualStdout);
   }
 
   private byte[] bytes(String string) {
