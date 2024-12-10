@@ -9,22 +9,23 @@ import org.quackery.Test;
 
 import com.mikosik.stork.model.Identifier;
 
-public class TestCompute {
+public class TestInstructions {
   private static final Identifier mock = identifier("mock");
 
-  public static Test testCompute() {
-    return suite("requires integer arguments")
-        .add(requiresTwoIntegers("equal"))
-        .add(requiresTwoIntegers("moreThan"))
-        .add(requiresInteger("negate"))
-        .add(requiresTwoIntegers("add"))
-        .add(requiresTwoIntegers("multiply"))
-        .add(requiresTwoIntegers("divideBy"));
+  public static Test testInstructions() {
+    return suite("instructions validate argument types")
+        .add(suite("requires integer arguments")
+            .add(requiresTwoIntegers("equal"))
+            .add(requiresTwoIntegers("moreThan"))
+            .add(requiresInteger("negate"))
+            .add(requiresTwoIntegers("add"))
+            .add(requiresTwoIntegers("multiply"))
+            .add(requiresTwoIntegers("divideBy")));
   }
 
   private static Test requiresTwoIntegers(String function) {
     return suite("%s".formatted(function))
-        .add(programTest("first argument".formatted(function))
+        .add(programTest("first argument")
             .importFile("lang.integer.%s".formatted(function))
             .sourceFile("""
                 mock { mock }
