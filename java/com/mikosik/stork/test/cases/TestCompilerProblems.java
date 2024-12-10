@@ -120,7 +120,7 @@ public class TestCompilerProblems {
                 """)
             .expect(duplicatedDefinition(identifier("function"))))
         .add(programTest("with core function")
-            .file("lang/stream/source", """
+            .sourceFile("lang/stream", """
                 length { 1 }
                 """)
             .expect(duplicatedDefinition(identifier("lang.stream.length"))));

@@ -52,8 +52,18 @@ public class ProgramTest implements Test {
     return this;
   }
 
+  public ProgramTest sourceFile(String directory, String content) {
+    file(directory + "/source", content);
+    return this;
+  }
+
   public ProgramTest importFile(String content) {
     file("import", content);
+    return this;
+  }
+
+  public ProgramTest importFile(String directory, String content) {
+    file(directory + "/import", content);
     return this;
   }
 
