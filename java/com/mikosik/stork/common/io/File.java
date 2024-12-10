@@ -46,6 +46,16 @@ public class File {
     }
   }
 
+  public File createDeep() {
+    try {
+      Files.createDirectories(path.getParent());
+      Files.createFile(path);
+      return this;
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
   public File append(byte[] bytes) {
     try {
       Files.write(path, bytes, APPEND);

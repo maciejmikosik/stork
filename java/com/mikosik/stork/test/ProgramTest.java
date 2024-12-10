@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.compile.Compiler.compileDirectory;
@@ -14,13 +15,13 @@ import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyList;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.function.BiFunction;
 
 import org.quackery.Body;
 import org.quackery.Test;
 
+import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
@@ -31,27 +32,28 @@ public class ProgramTest implements Test {
   private byte[] stdin = new byte[0];
   private final Expectations expectations = expectations();
 
-  private ProgramTest(String name, Path directory) {
+  private ProgramTest(String name, Directory directory) {
     this.name = name;
     this.fsBuilder = fsBuilder(directory);
   }
 
   public static ProgramTest programTest(String name) {
-    return new ProgramTest(name, createTempDirectory("stork_test_program_"));
+    var directory = directory(createTempDirectory("stork_test_program_"));
+    return new ProgramTest(name, directory);
   }
 
   public ProgramTest file(String path, String content) {
-    fsBuilder.file(path, content);
+    fsBuilder.file(path, bytes(content));
     return this;
   }
 
   public ProgramTest sourceFile(String content) {
-    fsBuilder.sourceFile(content);
+    file("source", content);
     return this;
   }
 
   public ProgramTest importFile(String content) {
-    fsBuilder.importFile(content);
+    file("import", content);
     return this;
   }
 
@@ -87,7 +89,7 @@ public class ProgramTest implements Test {
     Module module;
     try {
       module = verify(join(
-          compileDirectory(fsBuilder.directory),
+          compileDirectory(fsBuilder.directory.path),
           CORE_LIBRARY));
     } catch (ProblemException exception) {
       expectations.actualCompileProblems(exception.problems);
