@@ -3,7 +3,6 @@ package com.mikosik.stork.common.io;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static com.mikosik.stork.common.io.MaybeByte.maybeByte;
-import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -32,10 +31,6 @@ public class Input implements AutoCloseable {
 
   public static Input input(byte[] bytes) {
     return input(new ByteArrayInputStream(bytes));
-  }
-
-  public static Input input(String string) {
-    return input(string.getBytes(US_ASCII));
   }
 
   public static Input input(Path file) {
