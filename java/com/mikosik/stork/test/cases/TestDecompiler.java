@@ -173,11 +173,12 @@ public class TestDecompiler {
     return newCase(expected, () -> {
       String actual = ascii(decompiler.apply(model));
       if (!expected.equals(actual)) {
-        throw assertException(""
-            + "expected\n"
-            + "  %s\n"
-            + "but was\n"
-            + "  %s\n",
+        throw assertException("""
+            expected
+              %s
+            but was
+              %s
+            """,
             expected,
             actual);
       }
