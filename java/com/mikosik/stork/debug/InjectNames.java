@@ -19,20 +19,15 @@ public class InjectNames {
 
   private static Definition injectName(Definition definition) {
     var identifier = definition.identifier;
-    var body = definition.body;
-
-    if (body instanceof EagerInstruction eager) {
-      return definition(
+    return switch (definition.body) {
+      case EagerInstruction eager -> definition(
           identifier,
           eager(name(identifier, eager.instruction)));
-    } else if (body instanceof NamedInstruction) {
-      return definition;
-    } else if (body instanceof Instruction instruction) {
-      return definition(
+      case NamedInstruction instruction -> definition;
+      case Instruction instruction -> definition(
           identifier,
           name(identifier, instruction));
-    } else {
-      return definition;
-    }
+      default -> definition;
+    };
   }
 }

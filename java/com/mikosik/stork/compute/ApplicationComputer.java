@@ -12,10 +12,11 @@ public class ApplicationComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Application application
-        ? computation(
-            application.function,
-            computation.stack.pushArgument(application.argument))
-        : computation;
+    return switch (computation.expression) {
+      case Application application -> computation(
+          application.function,
+          computation.stack.pushArgument(application.argument));
+      default -> computation;
+    };
   }
 }

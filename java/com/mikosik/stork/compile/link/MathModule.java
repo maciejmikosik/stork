@@ -69,10 +69,9 @@ public class MathModule {
   }
 
   public static BigInteger javaInteger(Expression expression) {
-    if (expression instanceof Integer integer) {
-      return integer.value;
-    } else {
-      throw exception(expectedInteger(expression));
-    }
+    return switch (expression) {
+      case Integer integer -> integer.value;
+      default -> throw exception(expectedInteger(expression));
+    };
   }
 }

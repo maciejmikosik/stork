@@ -55,43 +55,47 @@ public class Changes {
 
   public static Function<Expression, Expression> deep(
       Function<? super Expression, ? extends Expression> change) {
-    return expression -> expression instanceof Lambda lambda
-        ? change.apply(lambda(
-            (Parameter) change.apply(lambda.parameter),
-            deep(change).apply(lambda.body)))
-        : expression instanceof Application application
-            ? change.apply(application(
-                deep(change).apply(application.function),
-                deep(change).apply(application.argument)))
-            : change.apply(expression);
+    return expression -> switch (expression) {
+      case Lambda lambda -> change.apply(lambda(
+          (Parameter) change.apply(lambda.parameter),
+          deep(change).apply(lambda.body)));
+      case Application application -> change.apply(application(
+          deep(change).apply(application.function),
+          deep(change).apply(application.argument)));
+      default -> change.apply(expression);
+    };
   }
 
   public static Function<Expression, Expression> ifIdentifier(
       Function<? super Identifier, ? extends Expression> change) {
-    return expression -> expression instanceof Identifier identifier
-        ? change.apply(identifier)
-        : expression;
+    return expression -> switch (expression) {
+      case Identifier identifier -> change.apply(identifier);
+      default -> expression;
+    };
   }
 
   public static Function<Expression, Expression> ifVariable(
       Function<? super Variable, ? extends Expression> change) {
-    return expression -> expression instanceof Variable variable
-        ? change.apply(variable)
-        : expression;
+    return expression -> switch (expression) {
+      case Variable variable -> change.apply(variable);
+      default -> expression;
+    };
   }
 
   public static Function<Expression, Expression> ifLambda(
       Function<? super Lambda, ? extends Expression> change) {
-    return expression -> expression instanceof Lambda lambda
-        ? change.apply(lambda)
-        : expression;
+    return expression -> switch (expression) {
+      case Lambda lambda -> change.apply(lambda);
+      default -> expression;
+    };
   }
 
   public static Function<Expression, Expression> ifQuote(
       Function<? super Quote, ? extends Expression> change) {
-    return expression -> expression instanceof Quote quote
-        ? change.apply(quote)
-        : expression;
+    return expression -> switch (expression) {
+      case Quote quote -> change.apply(quote);
+      default -> expression;
+    };
   }
 
   public static Stream<Expression> walk(Expression expression) {
@@ -101,24 +105,20 @@ public class Changes {
   }
 
   private static Stream<Expression> walkChildren(Expression expression) {
-    if (expression instanceof Lambda lambda) {
-      return concat(
+    return switch (expression) {
+      case Lambda lambda -> concat(
           Stream.of(lambda.parameter),
           walk(lambda.body));
-    } else if (expression instanceof Application application) {
-      return concat(
+      case Application application -> concat(
           walk(application.function),
           walk(application.argument));
-    } else if (expression instanceof EagerInstruction instruction) {
-      return concat(
+      case EagerInstruction instruction -> concat(
           walk(instruction.instruction),
           Stream.of(instruction));
-    } else if (expression instanceof NamedInstruction instruction) {
-      return concat(
+      case NamedInstruction instruction -> concat(
           walk(instruction.instruction),
           Stream.of(instruction));
-    } else {
-      return Stream.of();
-    }
+      default -> Stream.of();
+    };
   }
 }

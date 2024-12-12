@@ -22,8 +22,9 @@ public class EagerInstruction implements Instruction {
   }
 
   private static Expression eagerIfInstruction(Expression expression) {
-    return expression instanceof Instruction instruction
-        ? eager(instruction)
-        : expression;
+    return switch (expression) {
+      case Instruction instruction -> eager(instruction);
+      default -> expression;
+    };
   }
 }

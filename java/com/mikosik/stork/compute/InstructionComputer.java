@@ -14,18 +14,17 @@ public class InstructionComputer implements Computer {
 
   public Computation compute(Computation computation) {
     Stack stack = computation.stack;
-    if (!stack.hasArgument()) {
-      return computation;
-    } else if (computation.expression instanceof EagerInstruction eager && !eager.visited) {
-      return computation(
-          stack.argument(),
-          stack.pop().pushFunction(eager.visit()));
-    } else if (computation.expression instanceof Instruction instruction) {
-      return computation(
-          instruction.apply(stack.argument()),
-          stack.pop());
-    } else {
-      return computation;
-    }
+    // TODO create requireArgument Computer
+    return !stack.hasArgument()
+        ? computation
+        : switch (computation.expression) {
+          case EagerInstruction eager when !eager.visited -> computation(
+              stack.argument(),
+              stack.pop().pushFunction(eager.visit()));
+          case Instruction instruction -> computation(
+              instruction.apply(stack.argument()),
+              stack.pop());
+          default -> computation;
+        };
   }
 }
