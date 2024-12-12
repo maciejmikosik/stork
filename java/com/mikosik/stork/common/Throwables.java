@@ -1,7 +1,7 @@
 package com.mikosik.stork.common;
 
-import static com.mikosik.stork.common.io.Buffer.newBuffer;
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class Throwables {
   public static RuntimeException runtimeException(String format, Object... args) {
@@ -18,10 +18,9 @@ public class Throwables {
   }
 
   public static String stackTraceOf(Throwable throwable) {
-    var charset = UTF_8;
-    var buffer = newBuffer();
-    throwable.printStackTrace(buffer.asOutput().asPrintStream(charset));
-    return new String(buffer.bytes(), charset);
+    var buffer = new StringWriter();
+    throwable.printStackTrace(new PrintWriter(buffer));
+    return buffer.toString();
   }
 
   public static void check(boolean condition) {
