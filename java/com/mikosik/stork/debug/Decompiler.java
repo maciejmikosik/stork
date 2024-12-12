@@ -44,36 +44,25 @@ public class Decompiler {
       case Variable variable -> serializable(variable.name);
       case Identifier identifier -> serializable(identifier.name());
       case Integer integer -> serializable(integer.value.toString());
-      case Quote quote -> join(
-          serializable('\"'),
-          serializable(quote.string),
-          serializable('\"'));
+      case Quote quote -> quoteBrackets(serializable(quote.string));
       case EagerInstruction eager -> join(
           serializable(eager.visited
-              ? "eagerVisited("
-              : "eager("),
-          decompile(eager.instruction),
-          serializable(')'));
+              ? "eagerVisited"
+              : "eager"),
+          roundBrackets(decompile(eager.instruction)));
       case NamedInstruction instruction -> join(
-          serializable('<'),
-          decompile(instruction.name),
-          serializable('>'));
-      case Instruction instruction -> serializable("<>");
+          angleBrackets(decompile(instruction.name)));
+      case Instruction instruction -> angleBrackets(serializable(""));
       case Parameter parameter -> serializable(parameter.name);
       case Lambda lambda -> join(
-          serializable('('),
-          serializable(lambda.parameter.name),
-          serializable(')'),
+          roundBrackets(serializable(lambda.parameter.name)),
           decompileBody(lambda.body));
       case Application application -> join(
           decompile(application.function),
-          serializable('('),
-          decompile(application.argument),
-          serializable(')'));
+          roundBrackets(decompile(application.argument)));
       case Stdin stdin -> join(
-          serializable("stdin("),
-          serializable("" + stdin.index),
-          serializable(')'));
+          serializable("stdin"),
+          roundBrackets(serializable("" + stdin.index)));
       case Stdout stdout -> serializable("stdout");
       default -> throw new RuntimeException(format("unknown expression: %s", expression));
     };
@@ -82,10 +71,33 @@ public class Decompiler {
   private static Serializable decompileBody(Expression body) {
     return switch (body) {
       case Lambda lambda -> decompile(body);
-      default -> join(
-          serializable('{'),
-          decompile(body),
-          serializable('}'));
+      default -> curlyBrackets(decompile(body));
     };
+  }
+
+  private static Serializable roundBrackets(Serializable serializable) {
+    return brackets('(', ')', serializable);
+  }
+
+  private static Serializable curlyBrackets(Serializable serializable) {
+    return brackets('{', '}', serializable);
+  }
+
+  private static Serializable angleBrackets(Serializable serializable) {
+    return brackets('<', '>', serializable);
+  }
+
+  private static Serializable quoteBrackets(Serializable serializable) {
+    return brackets('\"', '\"', serializable);
+  }
+
+  private static Serializable brackets(
+      char opening,
+      char closing,
+      Serializable serializable) {
+    return join(
+        serializable(opening),
+        serializable,
+        serializable(closing));
   }
 }
