@@ -64,6 +64,7 @@ public class TestDecompiler {
         .add(suite("expression")
             .add(suite("integer")
                 .add(test("0", integer(BigInteger.ZERO)))
+                // TODO Use Bridge method.
                 .add(test("123", integer(123)))
                 .add(test("-123", integer(-123))))
             .add(suite("quote")

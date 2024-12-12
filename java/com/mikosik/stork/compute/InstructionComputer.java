@@ -14,6 +14,7 @@ public class InstructionComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
+    // TODO use simpler eager in combination with flip
     var stack = computation.stack;
     return switch (computation.expression) {
       case EagerInstruction eager when !eager.visited -> computation(

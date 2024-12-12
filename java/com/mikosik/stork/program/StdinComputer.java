@@ -39,6 +39,7 @@ public class StdinComputer implements Computer {
     MaybeByte maybeByte = head(stdin);
     return maybeByte.hasByte()
         ? some(
+            // TODO Use Bridge method.
             integer(maybeByte.getByte()),
             tail(stdin))
         : NONE;

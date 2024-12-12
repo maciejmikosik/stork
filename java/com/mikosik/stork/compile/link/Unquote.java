@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import com.mikosik.stork.model.Expression;
 
+// TODO Create QuoteComputer that handles unquoting lazily.
 public class Unquote {
   public static final Function<Expression, Expression> unquote = ifQuote(
       quote -> stork(quote.string));

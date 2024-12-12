@@ -24,7 +24,9 @@ import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
+// TODO replace lang.native by undefine functions
 public class MathModule {
+  // TODO inline all constants into mathModule method
   public static final Namespace NAMESPACE = namespaceOf("lang", "native", "integer");
 
   public static final Identifier EQUAL = id("equal");

@@ -4,6 +4,7 @@ import static com.mikosik.stork.common.Sequence.sequenceOf;
 
 import com.mikosik.stork.common.Sequence;
 
+// TODO rename to library
 public class Module {
   public final Sequence<Definition> definitions;
 

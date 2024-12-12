@@ -20,6 +20,7 @@ public class InjectNames {
   private static Definition injectName(Definition definition) {
     var identifier = definition.identifier;
     return switch (definition.body) {
+      // TODO this case is can be handled by instaceof Instruction
       case EagerInstruction eager -> definition(
           identifier,
           eager(name(identifier, eager.instruction)));

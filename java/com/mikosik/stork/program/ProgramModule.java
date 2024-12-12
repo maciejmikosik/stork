@@ -21,6 +21,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 
+//TODO why @snippet gives warning? Must be suppressed for now.
 @SuppressWarnings("javadoc")
 public class ProgramModule {
   public static final Namespace NAMESPACE = namespaceOf("lang", "native", "program");
@@ -98,8 +99,10 @@ public class ProgramModule {
    * }
    */
   private static Expression writeByte() {
+    // TODO argStdout doesn't have to be eager, only argByte. Change order.
     return eager(instruction((argStdout, argByte) -> {
       Stdout stdout = (Stdout) argStdout;
+      // TODO Generate error message when writing not byte
       int oneByte = javaInteger(argByte).intValueExact();
       check(0 <= oneByte && oneByte <= 255);
       stdout.output.write((byte) oneByte);
