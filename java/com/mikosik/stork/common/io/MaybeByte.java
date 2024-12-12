@@ -1,5 +1,6 @@
 package com.mikosik.stork.common.io;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 
@@ -37,7 +38,7 @@ public class MaybeByte {
 
   public byte getByte() {
     if (this == BYTES[0]) {
-      throw new RuntimeException("NO_BYTE");
+      throw runtimeException("NO_BYTE");
     } else {
       return value;
     }

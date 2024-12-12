@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile.link;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.CombinatoryModule.B;
 import static com.mikosik.stork.compile.link.CombinatoryModule.C;
 import static com.mikosik.stork.compile.link.CombinatoryModule.I;
@@ -41,7 +42,7 @@ public class Unlambda {
     } else if (body instanceof Application application) {
       return transform(parameter, application);
     } else {
-      throw new RuntimeException();
+      throw runtimeException("internal");
     }
   }
 
@@ -65,7 +66,7 @@ public class Unlambda {
       // 8. T[λx.(E₁ E₂)] ⇒ (B T[E₁] T[λx.E₂])
       return application(B, body.function, transform(parameter, body.argument));
     }
-    throw new RuntimeException();
+    throw runtimeException("internal");
   }
 
   private static boolean occurs(Parameter parameter, Expression expression) {

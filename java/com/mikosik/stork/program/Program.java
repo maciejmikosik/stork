@@ -1,6 +1,6 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.ChainedComputer.chained;

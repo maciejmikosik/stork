@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.compute.Stack.Type.ARGUMENT;
 import static com.mikosik.stork.compute.Stack.Type.EMPTY;
 import static com.mikosik.stork.compute.Stack.Type.FUNCTION;

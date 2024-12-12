@@ -1,6 +1,6 @@
 package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.Check.check;
+import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile.tokenize;
 
-import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
+import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;

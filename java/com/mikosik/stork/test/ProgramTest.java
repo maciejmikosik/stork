@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Reserver.reserver;
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
@@ -92,7 +93,7 @@ public class ProgramTest implements Test {
         expectedType.reserve("cannot compute");
         expectedCannotCompute.expect(problem);
       }
-      default -> throw new RuntimeException();
+      default -> throw runtimeException("unknown problem");
     }
     return this;
   }

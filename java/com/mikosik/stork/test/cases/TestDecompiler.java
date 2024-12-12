@@ -36,7 +36,7 @@ import static com.mikosik.stork.program.ProgramModule.WRITE_BYTE;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.stdout;
-import static java.lang.String.format;
+import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.util.Collections.emptyList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -47,7 +47,6 @@ import java.util.function.Function;
 
 import org.quackery.Suite;
 import org.quackery.Test;
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.common.io.Serializable;
 import com.mikosik.stork.debug.Decompiler;
@@ -174,13 +173,13 @@ public class TestDecompiler {
     return newCase(expected, () -> {
       String actual = ascii(decompiler.apply(model));
       if (!expected.equals(actual)) {
-        throw new AssertException(format(""
+        throw assertException(""
             + "expected\n"
             + "  %s\n"
             + "but was\n"
             + "  %s\n",
             expected,
-            actual));
+            actual);
       }
     });
   }

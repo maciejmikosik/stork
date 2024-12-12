@@ -1,8 +1,8 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Serializables.join;
 import static com.mikosik.stork.common.io.Serializables.serializable;
-import static java.lang.String.format;
 
 import java.util.stream.Stream;
 
@@ -64,7 +64,7 @@ public class Decompiler {
           serializable("stdin"),
           roundBrackets(serializable("" + stdin.index)));
       case Stdout stdout -> serializable("stdout");
-      default -> throw new RuntimeException(format("unknown expression: %s", expression));
+      default -> throw runtimeException("unknown expression: %s", expression);
     };
   }
 

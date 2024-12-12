@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Collections.intersection;
+import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toCollection;
 
@@ -8,8 +9,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import org.quackery.report.AssertException;
 
 import com.mikosik.stork.problem.Problem;
 
@@ -39,7 +38,7 @@ public class ExpectedProblems {
     actual.removeAll(common);
     expected.removeAll(common);
     if (!expected.isEmpty() || !actual.isEmpty()) {
-      throw new AssertException(formatMessage(actual, expected));
+      throw assertException(formatMessage(actual, expected));
     }
   }
 

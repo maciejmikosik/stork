@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Input.tryInput;
 import static com.mikosik.stork.common.io.InputOutput.components;
 import static com.mikosik.stork.common.io.InputOutput.walk;
@@ -102,7 +103,7 @@ public class Compiler {
     } else if (split.length == 2) {
       return link(identifier(split[0]), variable(split[1]));
     } else {
-      throw new RuntimeException();
+      throw runtimeException("illegal import line: %s", line);
     }
   }
 
