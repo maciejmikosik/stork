@@ -1,6 +1,6 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Sequence.sequence;
+import static com.mikosik.stork.common.Collections.immutable;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class Namespace {
   }
 
   public static Namespace namespace(List<String> path) {
-    return new Namespace(sequence(path));
+    return new Namespace(immutable(path));
   }
 
   public boolean equals(Object object) {

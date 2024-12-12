@@ -3,7 +3,6 @@ package com.mikosik.stork.debug;
 import static com.mikosik.stork.common.io.Serializables.join;
 import static com.mikosik.stork.common.io.Serializables.serializable;
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 
 import java.util.stream.Stream;
 
@@ -31,7 +30,7 @@ public class Decompiler {
             serializable(' '),
             decompile(definition)))
         .skip(1)
-        .collect(toList()));
+        .toList());
   }
 
   public static Serializable decompile(Definition definition) {

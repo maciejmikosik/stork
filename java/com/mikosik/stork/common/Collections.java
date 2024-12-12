@@ -1,10 +1,10 @@
 package com.mikosik.stork.common;
 
-import static com.mikosik.stork.common.Sequence.toSequence;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -42,13 +42,13 @@ public class Collections {
     return unmodifiableSet(result);
   }
 
-  public static <E> List<E> flatten(Iterable<? extends Iterable<? extends E>> iterables) {
+  public static <E> List<E> flatten(Iterable<? extends Iterable<E>> iterables) {
     return stream(iterables)
-        /*
-         * TODO report eclipse bug: eclipse (but not java) gives compiler error
-         * when using method reference Collections::stream
-         */
-        .flatMap((Iterable<? extends E> iter) -> stream(iter))
-        .collect(toSequence());
+        .flatMap(Collections::stream)
+        .toList();
+  }
+
+  public static <E> List<E> immutable(List<? extends E> original) {
+    return java.util.Collections.unmodifiableList(new ArrayList<>(original));
   }
 }

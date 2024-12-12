@@ -1,7 +1,6 @@
 package com.mikosik.stork.common.io;
 
 import static com.mikosik.stork.common.Collections.stream;
-import static com.mikosik.stork.common.Sequence.toSequence;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -78,6 +77,6 @@ public class InputOutput {
   public static List<String> components(Path path) {
     return stream(path)
         .map(Path::toString)
-        .collect(toSequence());
+        .toList();
   }
 }

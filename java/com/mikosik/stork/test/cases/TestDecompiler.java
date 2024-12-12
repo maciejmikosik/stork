@@ -1,6 +1,5 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Serializables.ascii;
@@ -38,10 +37,12 @@ import static com.mikosik.stork.program.ProgramModule.programModule;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.stdout;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.function.Function;
 
 import org.quackery.Suite;
@@ -95,10 +96,10 @@ public class TestDecompiler {
             .add(test("f(x)(y){x}", definition("f", lambda(x, y, x))))
             .add(test("f{g}", definition("f", identifier("g")))))
         .add(suite("module")
-            .add(test("", module(sequence())))
-            .add(test("f{x}", module(sequence(
+            .add(test("", module(emptyList())))
+            .add(test("f{x}", module(List.of(
                 definition("f", identifier("x"))))))
-            .add(test("f{x} g{y}", module(sequence(
+            .add(test("f{x} g{y}", module(List.of(
                 definition("f", identifier("x")),
                 definition("g", identifier("y")))))))
         .add(suite("local")
