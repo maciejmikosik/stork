@@ -3,8 +3,8 @@ package com.mikosik.stork.common.io;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 public class Ascii {
-  public static byte SINGLE_QUOTE = '\'';
-  public static byte DOUBLE_QUOTE = '\"';
+  public static final byte SINGLE_QUOTE = '\'';
+  public static final byte DOUBLE_QUOTE = '\"';
 
   public static boolean isAscii(byte character) {
     return 0 <= character;
