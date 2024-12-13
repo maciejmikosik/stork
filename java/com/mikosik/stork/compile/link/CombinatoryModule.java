@@ -5,10 +5,8 @@ import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.moduleOf;
-import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Variable.variable;
-
-import java.util.List;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -16,7 +14,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class CombinatoryModule {
-  public static final Namespace NAMESPACE = namespace(List.of("lang", "native", "combinator"));
+  public static final Namespace NAMESPACE = namespaceOf("lang", "native", "combinator");
 
   public static final Identifier I = id("i");
   public static final Identifier Y = id("y");
