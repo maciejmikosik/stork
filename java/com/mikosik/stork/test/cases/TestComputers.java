@@ -7,9 +7,8 @@ import static com.mikosik.stork.compute.ModulingComputer.modulingComputer;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Module.moduleOf;
 import static com.mikosik.stork.model.Variable.variable;
-import static java.util.Arrays.asList;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.AssertException.assertTrue;
@@ -44,8 +43,8 @@ public class TestComputers {
             }))
             .add(newCase("moduling computer", () -> {
               var identifier = identifier("mock");
-              var computer = modulingComputer(module(asList(
-                  definition(identifier, identifier))));
+              var computer = modulingComputer(moduleOf(
+                  definition(identifier, identifier)));
               var computation = computation(identifier);
               assertUncloning(computer, computation);
             })));

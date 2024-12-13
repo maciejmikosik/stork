@@ -6,7 +6,7 @@ import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Module.moduleOf;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.ProblemException.exception;
@@ -40,13 +40,13 @@ public class MathModule {
   }
 
   public static Module mathModule() {
-    return module(List.of(
+    return moduleOf(
         define(EQUAL, instructionIIB(BigInteger::equals)),
         define(MORE_THAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),
         define(ADD, instructionIII(BigInteger::add)),
         define(MULTIPLY, instructionIII(BigInteger::multiply)),
-        define(DIVIDE_BY, instructionIII(flip(BigInteger::divide)))));
+        define(DIVIDE_BY, instructionIII(flip(BigInteger::divide))));
   }
 
   private static Definition define(Identifier name, Instruction instruction) {

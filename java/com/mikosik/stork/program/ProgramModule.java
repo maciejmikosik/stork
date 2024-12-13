@@ -10,7 +10,7 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Module.moduleOf;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
@@ -36,12 +36,12 @@ public class ProgramModule {
   }
 
   public static Module programModule() {
-    return module(List.of(
+    return moduleOf(
         definition(WRITE_STREAM, writeStream()),
         definition(WRITE_BYTE, writeByte()),
         definition(CLOSE_STREAM, instruction(argument -> {
           throw runtimeException("not applicable");
-        }))));
+        })));
   }
 
   /**
