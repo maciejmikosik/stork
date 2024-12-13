@@ -5,7 +5,6 @@ import static java.util.Collections.unmodifiableSet;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -53,16 +52,6 @@ public class Collections {
     var result = new HashSet<>(a);
     result.retainAll(b);
     return unmodifiableSet(result);
-  }
-
-  public static <E> List<E> flatten(Iterable<? extends Iterable<E>> iterables) {
-    return stream(iterables)
-        .flatMap(Collections::stream)
-        .toList();
-  }
-
-  public static <E> List<E> immutable(List<? extends E> original) {
-    return java.util.Collections.unmodifiableList(new ArrayList<>(original));
   }
 
   public static <T, R> Collector<T, List<T>, R> toLinkedListThen(
