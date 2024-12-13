@@ -1,5 +1,6 @@
 package com.mikosik.stork.common;
 
+import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
@@ -7,14 +8,26 @@ import static java.util.Spliterators.spliteratorUnknownSize;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Collections {
+  public static void checkSuchElement(boolean condition) {
+    if (!condition) {
+      throw new NoSuchElementException();
+    }
+  }
+
   public static <E> Stream<E> stream(Iterator<E> iterator) {
     boolean parallel = false;
     return StreamSupport.stream(
@@ -50,5 +63,33 @@ public class Collections {
 
   public static <E> List<E> immutable(List<? extends E> original) {
     return java.util.Collections.unmodifiableList(new ArrayList<>(original));
+  }
+
+  public static <T, R> Collector<T, List<T>, R> toLinkedListThen(
+      Function<List<T>, R> finisher) {
+    return new Collector<T, List<T>, R>() {
+      public Supplier<List<T>> supplier() {
+        return LinkedList<T>::new;
+      }
+
+      public BiConsumer<List<T>, T> accumulator() {
+        return (list, element) -> list.add(element);
+      }
+
+      public BinaryOperator<List<T>> combiner() {
+        return (listA, listB) -> {
+          listA.addAll(listB);
+          return listA;
+        };
+      }
+
+      public Function<List<T>, R> finisher() {
+        return finisher;
+      }
+
+      public Set<Characteristics> characteristics() {
+        return emptySet();
+      }
+    };
   }
 }

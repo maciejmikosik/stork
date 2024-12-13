@@ -14,6 +14,7 @@ import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.TestInstructions.testInstructions;
 import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDecorator;
+import static com.mikosik.stork.test.cases.TestSequence.testSequence;
 import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
 import static java.lang.System.exit;
 import static java.time.Duration.ofMillis;
@@ -42,6 +43,7 @@ import org.quackery.Test;
 public class RunTests {
   public static void main(String[] args) {
     runAndReport(suite("unit tests")
+        .add(fast(testSequence()))
         .add(fast(testComputers()))
         .add(suite("debug tools")
             .add(fast(testDecompiler()))
