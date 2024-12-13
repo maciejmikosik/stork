@@ -1,17 +1,15 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Collections.immutable;
-
-import java.util.List;
+import com.mikosik.stork.common.Sequence;
 
 public class Linkage {
-  public final List<Link> links;
+  public final Sequence<Link> links;
 
-  private Linkage(List<Link> links) {
+  private Linkage(Sequence<Link> links) {
     this.links = links;
   }
 
-  public static Linkage linkage(List<Link> links) {
-    return new Linkage(immutable(links));
+  public static Linkage linkage(Sequence<Link> links) {
+    return new Linkage(links);
   }
 }

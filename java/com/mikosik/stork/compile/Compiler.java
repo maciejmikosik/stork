@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Input.tryInput;
 import static com.mikosik.stork.common.io.InputOutput.components;
@@ -93,7 +94,7 @@ public class Compiler {
   private static Linkage linkageFrom(Input input) {
     return linkage(input.bufferedReader(US_ASCII).lines()
         .map(Compiler::linkFrom)
-        .toList());
+        .collect(toSequence()));
   }
 
   private static Link linkFrom(String line) {
