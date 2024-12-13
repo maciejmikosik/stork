@@ -10,12 +10,10 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Module.moduleOf;
+import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
-
-import java.util.List;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -25,7 +23,7 @@ import com.mikosik.stork.model.Parameter;
 
 @SuppressWarnings("javadoc")
 public class ProgramModule {
-  public static final Namespace NAMESPACE = namespace(List.of("lang", "native", "program"));
+  public static final Namespace NAMESPACE = namespaceOf("lang", "native", "program");
 
   public static final Identifier WRITE_STREAM = id("writeStream");
   public static final Identifier WRITE_BYTE = id("writeByte");
@@ -36,12 +34,12 @@ public class ProgramModule {
   }
 
   public static Module programModule() {
-    return module(List.of(
+    return moduleOf(
         definition(WRITE_STREAM, writeStream()),
         definition(WRITE_BYTE, writeByte()),
         definition(CLOSE_STREAM, instruction(argument -> {
           throw runtimeException("not applicable");
-        }))));
+        })));
   }
 
   /**

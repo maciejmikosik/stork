@@ -6,14 +6,13 @@ import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Module.moduleOf;
+import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compute.ExpectedInteger.expectedInteger;
 
 import java.math.BigInteger;
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -26,7 +25,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class MathModule {
-  public static final Namespace NAMESPACE = namespace(List.of("lang", "native", "integer"));
+  public static final Namespace NAMESPACE = namespaceOf("lang", "native", "integer");
 
   public static final Identifier EQUAL = id("equal");
   public static final Identifier MORE_THAN = id("moreThan");
@@ -40,13 +39,13 @@ public class MathModule {
   }
 
   public static Module mathModule() {
-    return module(List.of(
+    return moduleOf(
         define(EQUAL, instructionIIB(BigInteger::equals)),
         define(MORE_THAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),
         define(ADD, instructionIII(BigInteger::add)),
         define(MULTIPLY, instructionIII(BigInteger::multiply)),
-        define(DIVIDE_BY, instructionIII(flip(BigInteger::divide)))));
+        define(DIVIDE_BY, instructionIII(flip(BigInteger::divide))));
   }
 
   private static Definition define(Identifier name, Instruction instruction) {

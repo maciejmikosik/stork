@@ -1,6 +1,8 @@
 package com.mikosik.stork.compile.parse;
 
+import static com.mikosik.stork.common.Collections.checkSuchElement;
 import static com.mikosik.stork.common.Peekerator.peekerator;
+import static com.mikosik.stork.common.Sequence.sequenceFrom;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.stork;
@@ -15,7 +17,6 @@ import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import com.mikosik.stork.common.Peekerator;
@@ -35,11 +36,20 @@ public class Parser {
   }
 
   private static Module parse(Peekerator<Token> input) {
-    var definitions = new LinkedList<Definition>();
-    while (input.hasNext()) {
-      definitions.add(parseDefinition(input));
-    }
-    return module(definitions);
+    return module(sequenceFrom(parseDefinitions(input)));
+  }
+
+  private static Iterator<Definition> parseDefinitions(Peekerator<Token> input) {
+    return new Iterator<>() {
+      public boolean hasNext() {
+        return input.hasNext();
+      }
+
+      public Definition next() {
+        checkSuchElement(hasNext());
+        return parseDefinition(input);
+      }
+    };
   }
 
   private static Definition parseDefinition(Peekerator<Token> input) {

@@ -1,18 +1,22 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Collections.immutable;
+import static com.mikosik.stork.common.Sequence.sequenceOf;
 
-import java.util.List;
+import com.mikosik.stork.common.Sequence;
 
 public class Namespace {
-  public final List<String> path;
+  public final Sequence<String> path;
 
-  private Namespace(List<String> path) {
+  private Namespace(Sequence<String> path) {
     this.path = path;
   }
 
-  public static Namespace namespace(List<String> path) {
-    return new Namespace(immutable(path));
+  public static Namespace namespaceOf(String... path) {
+    return namespace(sequenceOf(path));
+  }
+
+  public static Namespace namespace(Sequence<String> path) {
+    return new Namespace(path);
   }
 
   public boolean equals(Object object) {

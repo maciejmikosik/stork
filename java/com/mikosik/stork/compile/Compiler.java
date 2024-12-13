@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Input.tryInput;
 import static com.mikosik.stork.common.io.InputOutput.components;
@@ -18,6 +19,7 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Unit.unit;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.deep;
@@ -26,7 +28,6 @@ import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
-import static java.util.Collections.emptyList;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -93,7 +94,7 @@ public class Compiler {
   private static Linkage linkageFrom(Input input) {
     return linkage(input.bufferedReader(US_ASCII).lines()
         .map(Compiler::linkFrom)
-        .toList());
+        .collect(toSequence()));
   }
 
   private static Link linkFrom(String line) {
@@ -109,7 +110,7 @@ public class Compiler {
 
   private static Namespace relative(Path rootDirectory, Path directory) {
     return rootDirectory.equals(directory)
-        ? namespace(emptyList())
+        ? namespaceOf()
         : namespace(components(rootDirectory.relativize(directory)));
   }
 }

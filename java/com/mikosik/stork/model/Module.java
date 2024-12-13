@@ -1,17 +1,21 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Collections.immutable;
+import static com.mikosik.stork.common.Sequence.sequenceOf;
 
-import java.util.List;
+import com.mikosik.stork.common.Sequence;
 
 public class Module {
-  public final List<Definition> definitions;
+  public final Sequence<Definition> definitions;
 
-  private Module(List<Definition> definitions) {
+  private Module(Sequence<Definition> definitions) {
     this.definitions = definitions;
   }
 
-  public static Module module(List<? extends Definition> definitions) {
-    return new Module(immutable(definitions));
+  public static Module module(Sequence<Definition> definitions) {
+    return new Module(definitions);
+  }
+
+  public static Module moduleOf(Definition... definitions) {
+    return module(sequenceOf(definitions));
   }
 }

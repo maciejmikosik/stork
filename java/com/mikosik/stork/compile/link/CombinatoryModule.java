@@ -4,11 +4,9 @@ import static com.mikosik.stork.compile.link.Bridge.instruction;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.module;
-import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Module.moduleOf;
+import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Variable.variable;
-
-import java.util.List;
 
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -16,7 +14,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class CombinatoryModule {
-  public static final Namespace NAMESPACE = namespace(List.of("lang", "native", "combinator"));
+  public static final Namespace NAMESPACE = namespaceOf("lang", "native", "combinator");
 
   public static final Identifier I = id("i");
   public static final Identifier Y = id("y");
@@ -30,7 +28,7 @@ public class CombinatoryModule {
   }
 
   public static Module combinatoryModule() {
-    return module(List.of(
+    return moduleOf(
         /** I(x) = x */
         definition(I, instruction(x -> x)),
 
@@ -47,7 +45,7 @@ public class CombinatoryModule {
         definition(C, instruction((x, y, z) -> ap(ap(x, z), y))),
 
         /** B(x)(y)(z) = x(y(z)) */
-        definition(B, instruction((x, y, z) -> ap(x, ap(y, z))))));
+        definition(B, instruction((x, y, z) -> ap(x, ap(y, z)))));
   }
 
   private static Expression ap(Expression function, Expression argument) {

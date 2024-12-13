@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile.link;
 
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Module.module;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ public class Modules {
   public static Module join(List<Module> modules) {
     return module(modules.stream()
         .flatMap(module -> module.definitions.stream())
-        .toList());
+        .collect(toSequence()));
   }
 
   public static Module join(Module... modules) {

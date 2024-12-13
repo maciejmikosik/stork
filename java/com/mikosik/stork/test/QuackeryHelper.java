@@ -77,6 +77,19 @@ public class QuackeryHelper {
         (name, children) -> name);
   }
 
+  public static void assertSame(Object actual, Object expected) {
+    if (actual != expected) {
+      throw assertException("""
+          expected
+            %s
+          but was
+            %s
+          """,
+          expected,
+          actual);
+    }
+  }
+
   public static AssertException assertException(String format, Object... args) {
     return new AssertException(format.formatted(args));
   }
