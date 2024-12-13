@@ -4,9 +4,6 @@ import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -61,14 +58,6 @@ public class Output implements AutoCloseable {
     try {
       output.close();
     } catch (IOException e) {
-      throw unchecked(e);
-    }
-  }
-
-  public PrintStream asPrintStream(Charset charset) {
-    try {
-      return new PrintStream(output, false, charset.name());
-    } catch (UnsupportedEncodingException e) {
       throw unchecked(e);
     }
   }

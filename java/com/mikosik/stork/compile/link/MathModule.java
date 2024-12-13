@@ -1,7 +1,6 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Logic.flip;
-import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.compile.link.Bridge.instruction;
 import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
@@ -14,6 +13,7 @@ import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compute.ExpectedInteger.expectedInteger;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -26,7 +26,7 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 
 public class MathModule {
-  public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "integer"));
+  public static final Namespace NAMESPACE = namespace(List.of("lang", "native", "integer"));
 
   public static final Identifier EQUAL = id("equal");
   public static final Identifier MORE_THAN = id("moreThan");
@@ -40,7 +40,7 @@ public class MathModule {
   }
 
   public static Module mathModule() {
-    return module(sequence(
+    return module(List.of(
         define(EQUAL, instructionIIB(BigInteger::equals)),
         define(MORE_THAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
         define(NEGATE, instructionII(BigInteger::negate)),
@@ -69,10 +69,9 @@ public class MathModule {
   }
 
   public static BigInteger javaInteger(Expression expression) {
-    if (expression instanceof Integer integer) {
-      return integer.value;
-    } else {
-      throw exception(expectedInteger(expression));
-    }
+    return switch (expression) {
+      case Integer integer -> integer.value;
+      default -> throw exception(expectedInteger(expression));
+    };
   }
 }

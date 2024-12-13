@@ -27,6 +27,10 @@ public class UncheckedInterruptedException extends RuntimeException {
     super(cause);
   }
 
+  public static UncheckedInterruptedException uncheckedInterruptedException() {
+    return new UncheckedInterruptedException();
+  }
+
   public static UncheckedInterruptedException unchecked(InterruptedException e) {
     return new UncheckedInterruptedException(e);
   }

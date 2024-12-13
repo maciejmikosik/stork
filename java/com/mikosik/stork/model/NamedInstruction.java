@@ -22,10 +22,10 @@ public class NamedInstruction implements Instruction {
 
   public Expression apply(Expression argument) {
     Expression applied = instruction.apply(argument);
-    return applied instanceof Instruction appliedInstruction
-        && !(applied instanceof NamedInstruction)
-            ? name(application(name, argument), appliedInstruction)
-            : applied;
+    return switch (applied) {
+      case NamedInstruction instruction -> instruction;
+      case Instruction instruction -> name(application(name, argument), instruction);
+      default -> applied;
+    };
   }
-
 }

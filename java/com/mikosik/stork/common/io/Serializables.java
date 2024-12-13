@@ -1,8 +1,8 @@
 package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.common.io.Ascii.bytes;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static java.util.Arrays.asList;
 
 public class Serializables {
   public static Serializable serializable(byte[] bytes) {
@@ -22,7 +22,7 @@ public class Serializables {
   }
 
   public static Serializable join(Serializable... serializables) {
-    return join(sequence(serializables));
+    return join(asList(serializables));
   }
 
   public static Serializable join(Iterable<Serializable> serializables) {

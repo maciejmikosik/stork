@@ -1,9 +1,8 @@
 package com.mikosik.stork.debug;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Serializables.join;
 import static com.mikosik.stork.common.io.Serializables.serializable;
-import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 
 import java.util.stream.Stream;
 
@@ -31,7 +30,7 @@ public class Decompiler {
             serializable(' '),
             decompile(definition)))
         .skip(1)
-        .collect(toList()));
+        .toList());
   }
 
   public static Serializable decompile(Definition definition) {
@@ -41,63 +40,64 @@ public class Decompiler {
   }
 
   public static Serializable decompile(Expression expression) {
-    if (expression instanceof Variable variable) {
-      return serializable(variable.name);
-    } else if (expression instanceof Identifier identifier) {
-      return serializable(identifier.name());
-    } else if (expression instanceof Integer integer) {
-      return serializable(integer.value.toString());
-    } else if (expression instanceof Quote quote) {
-      return join(
-          serializable('\"'),
-          serializable(quote.string),
-          serializable('\"'));
-    } else if (expression instanceof EagerInstruction eager) {
-      return join(
+    return switch (expression) {
+      case Variable variable -> serializable(variable.name);
+      case Identifier identifier -> serializable(identifier.name());
+      case Integer integer -> serializable(integer.value.toString());
+      case Quote quote -> quoteBrackets(serializable(quote.string));
+      case EagerInstruction eager -> join(
           serializable(eager.visited
-              ? "eagerVisited("
-              : "eager("),
-          decompile(eager.instruction),
-          serializable(')'));
-    } else if (expression instanceof NamedInstruction instruction) {
-      return join(
-          serializable('<'),
-          decompile(instruction.name),
-          serializable('>'));
-    } else if (expression instanceof Instruction) {
-      return serializable("<>");
-    } else if (expression instanceof Parameter parameter) {
-      return serializable(parameter.name);
-    } else if (expression instanceof Lambda lambda) {
-      return join(
-          serializable('('),
-          serializable(lambda.parameter.name),
-          serializable(')'),
+              ? "eagerVisited"
+              : "eager"),
+          roundBrackets(decompile(eager.instruction)));
+      case NamedInstruction instruction -> join(
+          angleBrackets(decompile(instruction.name)));
+      case Instruction instruction -> angleBrackets(serializable(""));
+      case Parameter parameter -> serializable(parameter.name);
+      case Lambda lambda -> join(
+          roundBrackets(serializable(lambda.parameter.name)),
           decompileBody(lambda.body));
-    } else if (expression instanceof Application application) {
-      return join(
+      case Application application -> join(
           decompile(application.function),
-          serializable('('),
-          decompile(application.argument),
-          serializable(')'));
-    } else if (expression instanceof Stdin stdin) {
-      return join(
-          serializable("stdin("),
-          serializable("" + stdin.index),
-          serializable(')'));
-    } else if (expression instanceof Stdout) {
-      return serializable("stdout");
-    } else {
-      throw new RuntimeException(format("unknown expression: %s", expression));
-    }
+          roundBrackets(decompile(application.argument)));
+      case Stdin stdin -> join(
+          serializable("stdin"),
+          roundBrackets(serializable("" + stdin.index)));
+      case Stdout stdout -> serializable("stdout");
+      default -> throw runtimeException("unknown expression: %s", expression);
+    };
   }
 
   private static Serializable decompileBody(Expression body) {
-    return body instanceof Lambda
-        ? decompile(body)
-        : join(
-            serializable('{'),
-            decompile(body),
-            serializable('}'));
+    return switch (body) {
+      case Lambda lambda -> decompile(body);
+      default -> curlyBrackets(decompile(body));
+    };
+  }
+
+  private static Serializable roundBrackets(Serializable serializable) {
+    return brackets('(', ')', serializable);
+  }
+
+  private static Serializable curlyBrackets(Serializable serializable) {
+    return brackets('{', '}', serializable);
+  }
+
+  private static Serializable angleBrackets(Serializable serializable) {
+    return brackets('<', '>', serializable);
+  }
+
+  private static Serializable quoteBrackets(Serializable serializable) {
+    return brackets('\"', '\"', serializable);
+  }
+
+  private static Serializable brackets(
+      char opening,
+      char closing,
+      Serializable serializable) {
+    return join(
+        serializable(opening),
+        serializable,
+        serializable(closing));
   }
 }

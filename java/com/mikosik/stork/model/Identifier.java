@@ -1,9 +1,10 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Sequence.sequence;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.lang.String.join;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.hash;
 
 import java.util.LinkedList;
@@ -23,11 +24,11 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(Variable variable) {
-    return new Identifier(namespace(sequence()), variable);
+    return new Identifier(namespace(emptyList()), variable);
   }
 
   public static Identifier identifier(String name) {
-    List<String> path = sequence(name.split("\\."));
+    List<String> path = asList(name.split("\\."));
     return identifier(
         namespace(path.subList(0, path.size() - 1)),
         variable(path.get(path.size() - 1)));

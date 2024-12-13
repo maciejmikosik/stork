@@ -1,7 +1,8 @@
 package com.mikosik.stork.compile.parse;
 
-import static com.mikosik.stork.common.Check.check;
 import static com.mikosik.stork.common.Peekerator.peekerator;
+import static com.mikosik.stork.common.Throwables.check;
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -152,7 +153,7 @@ public class Parser {
         try {
           return iterator.next();
         } catch (NoSuchElementException e) {
-          throw new RuntimeException("unexpected end of file");
+          throw runtimeException("unexpected end of file");
         }
       }
     };

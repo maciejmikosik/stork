@@ -1,5 +1,6 @@
 package com.mikosik.stork;
 
+import static com.mikosik.stork.common.Throwables.linkageError;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
@@ -44,7 +45,7 @@ public class Stork {
       var coreStarFileSystem = newFileSystem(jarFileSystem.getPath("/core.star"));
       return coreStarFileSystem.getPath(".");
     } catch (URISyntaxException | IOException e) {
-      throw new LinkageError("", e);
+      throw linkageError(e);
     }
   }
 }

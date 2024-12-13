@@ -27,11 +27,11 @@ public class ModulingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Identifier identifier
-        && table.containsKey(identifier)
-            ? computation(
-                table.get(identifier),
-                computation.stack)
-            : computation;
+    return switch (computation.expression) {
+      case Identifier identifier when table.containsKey(identifier) -> computation(
+          table.get(identifier),
+          computation.stack);
+      default -> computation;
+    };
   }
 }

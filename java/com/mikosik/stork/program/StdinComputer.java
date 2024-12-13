@@ -23,11 +23,12 @@ public class StdinComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.expression instanceof Stdin stdin
-        ? computation(
-            computeIfAbsent(stdin),
-            computation.stack)
-        : computation;
+    return switch (computation.expression) {
+      case Stdin stdin -> computation(
+          computeIfAbsent(stdin),
+          computation.stack);
+      default -> computation;
+    };
   }
 
   private Expression computeIfAbsent(Stdin stdin) {

@@ -1,6 +1,6 @@
 package com.mikosik.stork.common;
 
-import static com.mikosik.stork.common.Throwables.fail;
+import static com.mikosik.stork.common.Throwables.runtimeException;
 
 public class Reserver {
   private Object type;
@@ -13,7 +13,7 @@ public class Reserver {
 
   public void reserve(Object type) {
     if (!isLegal(type)) {
-      fail("'%s' -> '%s'".formatted(this.type, type));
+      throw runtimeException("'%s' -> '%s'", this.type, type);
     }
     this.type = type;
   }

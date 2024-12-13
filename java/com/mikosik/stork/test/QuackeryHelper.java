@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import org.quackery.Body;
 import org.quackery.Test;
+import org.quackery.report.AssertException;
 
 // TODO implement those functions in quackery
 public class QuackeryHelper {
@@ -74,5 +75,9 @@ public class QuackeryHelper {
     return test.visit(
         (name, body) -> name,
         (name, children) -> name);
+  }
+
+  public static AssertException assertException(String format, Object... args) {
+    return new AssertException(format.formatted(args));
   }
 }

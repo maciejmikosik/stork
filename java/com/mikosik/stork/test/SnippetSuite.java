@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 
 import java.math.BigInteger;
@@ -73,14 +74,12 @@ public class SnippetSuite implements Test {
   }
 
   private static ExpectedType typeOf(Object expected) {
-    if (expected instanceof Integer || expected instanceof BigInteger) {
-      return ExpectedType.INTEGER;
-    } else if (expected instanceof Boolean) {
-      return ExpectedType.BOOLEAN;
-    } else if (expected instanceof String) {
-      return ExpectedType.STRING;
-    } else {
-      throw new RuntimeException(String.valueOf(expected));
-    }
+    return switch (expected) {
+      case Integer i -> ExpectedType.INTEGER;
+      case BigInteger i -> ExpectedType.INTEGER;
+      case Boolean b -> ExpectedType.BOOLEAN;
+      case String s -> ExpectedType.STRING;
+      default -> throw runtimeException("unknown type: %s", expected);
+    };
   }
 }

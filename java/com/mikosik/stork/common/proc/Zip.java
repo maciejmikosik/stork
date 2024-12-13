@@ -1,5 +1,6 @@
 package com.mikosik.stork.common.proc;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.UncheckedInterruptedException.unchecked;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static java.lang.String.join;
@@ -56,7 +57,7 @@ public class Zip {
 
   public static void check(int exitValue) {
     if (exitValue != 0) {
-      throw new RuntimeException("code: " + exitValue);
+      throw runtimeException("code: %d", exitValue);
     }
   }
 }

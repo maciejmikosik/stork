@@ -7,7 +7,7 @@ public class Slot<E> {
     this.value = value;
   }
 
-  public static <V> Slot<V> slot(V value) {
-    return new Slot<V>(value);
+  public static <E> Slot<E> slot(E value) {
+    return new Slot<E>(value);
   }
 }

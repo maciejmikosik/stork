@@ -1,7 +1,7 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Check.check;
-import static com.mikosik.stork.common.Sequence.sequence;
+import static com.mikosik.stork.common.Throwables.check;
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.instruction;
 import static com.mikosik.stork.compile.link.Bridge.javaInteger;
 import static com.mikosik.stork.compile.link.CombinatoryModule.I;
@@ -15,6 +15,8 @@ import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Variable.variable;
 
+import java.util.List;
+
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
@@ -23,7 +25,7 @@ import com.mikosik.stork.model.Parameter;
 
 @SuppressWarnings("javadoc")
 public class ProgramModule {
-  public static final Namespace NAMESPACE = namespace(sequence("lang", "native", "program"));
+  public static final Namespace NAMESPACE = namespace(List.of("lang", "native", "program"));
 
   public static final Identifier WRITE_STREAM = id("writeStream");
   public static final Identifier WRITE_BYTE = id("writeByte");
@@ -34,11 +36,11 @@ public class ProgramModule {
   }
 
   public static Module programModule() {
-    return module(sequence(
+    return module(List.of(
         definition(WRITE_STREAM, writeStream()),
         definition(WRITE_BYTE, writeByte()),
         definition(CLOSE_STREAM, instruction(argument -> {
-          throw new RuntimeException("not applicable");
+          throw runtimeException("not applicable");
         }))));
   }
 

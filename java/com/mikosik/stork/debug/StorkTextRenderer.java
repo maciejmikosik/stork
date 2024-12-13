@@ -19,43 +19,24 @@ import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.model.Expression;
 
+// TODO Decompiler is tested but renderer is not.
 public final class StorkTextRenderer extends TextRenderer {
   private final Map<Stack, Integer> stackDepth = new WeakHashMap<>();
 
   protected StorkTextRenderer() {}
 
   public String render(Object model) {
-    if (model instanceof Computer computer) {
-      return render(computer);
-    } else if (model instanceof Computation computation) {
-      return render(computation);
-    } else if (model instanceof Expression expression) {
-      return render(expression);
-    } else if (model instanceof Stack stack) {
-      return render(stack);
-    } else if (model instanceof Map) {
-      return "Map";
-    } else {
-      return super.render(model);
-    }
+    return switch (model) {
+      case Computer computer -> computer.getClass().getSimpleName();
+      case Computation computation -> render(asExpression(computation));
+      case Expression expression -> ascii(decompile(removeNamespaces(expression)));
+      case Stack stack -> format("stack(%s)", depthOf(stack));
+      case Map<?, ?> map -> "Map";
+      default -> super.render(model);
+    };
   }
 
-  private String render(Computer computer) {
-    return computer.getClass().getSimpleName();
-  }
-
-  private String render(Computation computation) {
-    return render(asExpression(computation));
-  }
-
-  private String render(Expression expression) {
-    return ascii(decompile(removeNamespaces(expression)));
-  }
-
-  private String render(Stack stack) {
-    return format("stack(%s)", depthOf(stack));
-  }
-
+  // TODO separate class for caching stack depth
   private int depthOf(Stack stack) {
     return stackDepth.computeIfAbsent(stack, this::computeDepthOf);
   }
