@@ -1,17 +1,17 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
-import static com.mikosik.stork.compile.Compiler.compileDirectory;
-import static com.mikosik.stork.compile.link.Modules.join;
-import static com.mikosik.stork.compile.link.VerifyModule.verify;
+import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
-import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
 import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
 import static com.mikosik.stork.test.ExpectedStdout.expectedStdout;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
@@ -32,6 +32,10 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
+  private static final Module CORE_LIBRARY = compile(compilation()
+      .source(project().coreLibraryDirectory)
+      .library(nativeModule()));
+
   private final String name;
   private final FsBuilder fsBuilder;
   private byte[] stdin = new byte[0];
@@ -114,9 +118,9 @@ public class ProgramTest implements Test {
   private void run() {
     Module module;
     try {
-      module = verify(join(
-          compileDirectory(fsBuilder.directory),
-          CORE_LIBRARY));
+      module = compile(compilation()
+          .source(fsBuilder.directory)
+          .library(CORE_LIBRARY));
     } catch (ProblemException exception) {
       expectedCannotCompile.verify(exception.problems);
       return;

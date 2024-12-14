@@ -11,6 +11,7 @@ import static com.mikosik.stork.compile.link.MathModule.mathModule;
 import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
+import static com.mikosik.stork.compile.link.VerifyModule.verify;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -37,9 +38,18 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
 
 public class Compiler {
-  public static Module compileCoreLibrary(Directory directory) {
+  public static Module compile(Compilation compilation) {
+    var compiledSources = compilation.sources.stream()
+        .map(Compiler::compileTree)
+        .collect(toSequenceThen(Modules::join));
+    var dependencies = join(compilation.libraries);
+    return verify(join(
+        makeComputable(compiledSources),
+        dependencies));
+  }
+
+  public static Module nativeModule() {
     return join(
-        compileDirectory(directory),
         combinatoryModule(),
         mathModule(),
         makeComputable(programModule()));
@@ -51,8 +61,8 @@ public class Compiler {
         .apply(module);
   }
 
-  public static Module compileDirectory(Directory rootDirectory) {
-    return makeComputable(compileTree(namespaceOf(), rootDirectory));
+  private static Module compileTree(Directory rootDirectory) {
+    return compileTree(namespaceOf(), rootDirectory);
   }
 
   private static Module compileTree(Namespace namespace, Directory directory) {

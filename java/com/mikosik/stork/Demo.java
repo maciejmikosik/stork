@@ -3,10 +3,9 @@ package com.mikosik.stork;
 import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compiler.compileCoreLibrary;
-import static com.mikosik.stork.compile.Compiler.compileDirectory;
-import static com.mikosik.stork.compile.link.Modules.join;
-import static com.mikosik.stork.compile.link.VerifyModule.verify;
+import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.debug.Debug.configuredDecorator;
 import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -22,9 +21,10 @@ public class Demo {
 
   public static void main(String[] args) {
     var project = project();
-    var module = verify(join(
-        compileDirectory(project.demoDirectory),
-        maybeInjectNames(compileCoreLibrary(project.coreLibraryDirectory))));
+    var module = maybeInjectNames(compile(compilation()
+        .source(project.demoDirectory)
+        .source(project.coreLibraryDirectory)
+        .library(nativeModule())));
 
     var decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))

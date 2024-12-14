@@ -5,10 +5,9 @@ import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compiler.compileCoreLibrary;
-import static com.mikosik.stork.compile.Compiler.compileDirectory;
-import static com.mikosik.stork.compile.link.Modules.join;
-import static com.mikosik.stork.compile.link.VerifyModule.verify;
+import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static java.nio.file.FileSystems.newFileSystem;
@@ -24,9 +23,10 @@ import com.mikosik.stork.problem.ProblemException;
 public class Stork {
   public static void main(String[] args) {
     try {
-      var module = verify(join(
-          compileCoreLibrary(pathToCoreLibraryInsideJar()),
-          compileDirectory(workingDirectory())));
+      var module = compile(compilation()
+          .source(workingDirectory())
+          .source(coreLibraryDirectoryInZipFileInJarFile())
+          .library(nativeModule()));
 
       program(identifier("main"), module)
           .run(input(System.in), output(System.out));
@@ -37,7 +37,8 @@ public class Stork {
     }
   }
 
-  private static Directory pathToCoreLibraryInsideJar() {
+  // TODO simplify to directory inside jar
+  private static Directory coreLibraryDirectoryInZipFileInJarFile() {
     try {
       // TODO why jar fs needs "core.star"?
       var jarFileSystem = newFileSystem(
