@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collector;
 
 // TODO implement methods directly instead of delegating
@@ -54,5 +55,10 @@ public class Sequence<E> extends AbstractList<E> {
 
   public static <E> Collector<E, List<E>, Sequence<E>> toSequence() {
     return toLinkedListThen(Sequence::asSequence);
+  }
+
+  public static <E, X> Collector<E, List<E>, X> toSequenceThen(
+      Function<Sequence<E>, X> extraFinisher) {
+    return toLinkedListThen(extraFinisher.compose(Sequence::asSequence));
   }
 }
