@@ -1,9 +1,9 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Throwables.linkageError;
+import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Compiler.compileCoreLibrary;
 import static com.mikosik.stork.compile.Compiler.compileDirectory;
@@ -26,7 +26,7 @@ public class Stork {
     try {
       var module = verify(join(
           compileCoreLibrary(pathToCoreLibraryInsideJar()),
-          compileDirectory(directory(path(".").toAbsolutePath()))));
+          compileDirectory(workingDirectory())));
 
       program(identifier("main"), module)
           .run(input(System.in), output(System.out));

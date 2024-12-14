@@ -28,4 +28,10 @@ public class Directories {
     var userHome = System.getProperty("user.home");
     return directory(fileSystem.getPath(userHome));
   }
+
+  public static Directory workingDirectory() {
+    var fileSystem = FileSystems.getDefault();
+    var path = fileSystem.getPath(".").toAbsolutePath();
+    return directory(path);
+  }
 }
