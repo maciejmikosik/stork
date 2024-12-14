@@ -115,7 +115,7 @@ public class ProgramTest implements Test {
     Module module;
     try {
       module = verify(join(
-          compileDirectory(fsBuilder.directory.path),
+          compileDirectory(fsBuilder.directory),
           CORE_LIBRARY));
     } catch (ProblemException exception) {
       expectedCannotCompile.verify(exception.problems);

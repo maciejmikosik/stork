@@ -1,5 +1,6 @@
 package com.mikosik.stork.model;
 
+import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.Sequence.sequenceOf;
 
 import com.mikosik.stork.common.Sequence;
@@ -17,6 +18,10 @@ public class Namespace {
 
   public static Namespace namespace(Sequence<String> path) {
     return new Namespace(path);
+  }
+
+  public Namespace add(String component) {
+    return namespace(flatten(path, sequenceOf(component)));
   }
 
   public boolean equals(Object object) {

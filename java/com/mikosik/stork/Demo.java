@@ -1,5 +1,6 @@
 package com.mikosik.stork;
 
+import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
@@ -24,8 +25,8 @@ public class Demo {
 
   public static void main(String[] args) {
     Module module = verify(join(
-        compileDirectory(path("demo")),
-        maybeInjectNames(compileCoreLibrary(Paths.get("core_library")))));
+        compileDirectory(directory(path("demo"))),
+        maybeInjectNames(compileCoreLibrary(directory(Paths.get("core_library"))))));
 
     Decorator decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))
