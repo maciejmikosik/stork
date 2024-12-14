@@ -100,6 +100,20 @@ public class File {
     }
   }
 
+  public Input input() {
+    try {
+      return Input.input(Files.newInputStream(path));
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
+  public Input tryInput() {
+    return exists()
+        ? Input.input(path)
+        : Input.input(new byte[0]);
+  }
+
   public String toString() {
     return path.toString();
   }

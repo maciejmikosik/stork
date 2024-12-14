@@ -20,6 +20,10 @@ public class Directory {
     return new Directory(path);
   }
 
+  public String name() {
+    return path.getFileName().toString();
+  }
+
   public Directory directory(String name) {
     return directory(path.resolve(name));
   }

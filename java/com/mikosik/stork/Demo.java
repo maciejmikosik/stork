@@ -1,12 +1,11 @@
 package com.mikosik.stork;
 
+import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compiler.compileCoreLibrary;
-import static com.mikosik.stork.compile.Compiler.compileDirectory;
-import static com.mikosik.stork.compile.link.Modules.join;
-import static com.mikosik.stork.compile.link.VerifyModule.verify;
+import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.debug.Debug.configuredDecorator;
 import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -15,19 +14,19 @@ import static org.logbuddy.decorator.NoDecorator.noDecorator;
 
 import java.nio.file.Paths;
 
-import org.logbuddy.Decorator;
-
 import com.mikosik.stork.model.Module;
 
 public class Demo {
   private final static boolean isLogging = false;
 
   public static void main(String[] args) {
-    Module module = verify(join(
-        compileDirectory(path("demo")),
-        maybeInjectNames(compileCoreLibrary(Paths.get("core_library")))));
+    var project = project();
+    var module = maybeInjectNames(compile(compilation()
+        .source(project.demoDirectory)
+        .source(project.coreLibraryDirectory)
+        .library(nativeModule())));
 
-    Decorator decorator = isLogging
+    var decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))
         : noDecorator();
 

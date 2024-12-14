@@ -1,10 +1,8 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Sequence.toSequence;
+import static com.mikosik.stork.common.Sequence.toSequenceThen;
 import static com.mikosik.stork.common.Throwables.runtimeException;
-import static com.mikosik.stork.common.io.Input.tryInput;
-import static com.mikosik.stork.common.io.InputOutput.components;
-import static com.mikosik.stork.common.io.InputOutput.walk;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
@@ -13,12 +11,12 @@ import static com.mikosik.stork.compile.link.MathModule.mathModule;
 import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
+import static com.mikosik.stork.compile.link.VerifyModule.verify;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
-import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Unit.unit;
 import static com.mikosik.stork.model.Variable.variable;
@@ -29,10 +27,10 @@ import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.program.ProgramModule.programModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
+import com.mikosik.stork.common.io.Directory;
+import com.mikosik.stork.common.io.File;
 import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.compile.link.Modules;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Module;
@@ -40,9 +38,18 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
 
 public class Compiler {
-  public static Module compileCoreLibrary(Path directory) {
+  public static Module compile(Compilation compilation) {
+    var compiledSources = compilation.sources.stream()
+        .map(Compiler::compileTree)
+        .collect(toSequenceThen(Modules::join));
+    var dependencies = join(compilation.libraries);
+    return verify(join(
+        makeComputable(compiledSources),
+        dependencies));
+  }
+
+  public static Module nativeModule() {
     return join(
-        compileDirectory(directory),
         combinatoryModule(),
         mathModule(),
         makeComputable(programModule()));
@@ -54,15 +61,22 @@ public class Compiler {
         .apply(module);
   }
 
-  public static Module compileDirectory(Path rootDirectory) {
-    return makeComputable(join(walk(rootDirectory)
-        .filter(Files::isDirectory)
-        .map(directory -> compileSubDirectory(rootDirectory, directory))
-        .toList()));
+  private static Module compileTree(Directory rootDirectory) {
+    return compileTree(namespaceOf(), rootDirectory);
   }
 
-  private static Module compileSubDirectory(Path rootDirectory, Path directory) {
-    return selfBuild(unitFrom(rootDirectory, directory));
+  private static Module compileTree(Namespace namespace, Directory directory) {
+    var moduleFromThisDirectory = compileDirectory(namespace, directory);
+    var moduleFromSubDirectories = directory.directories()
+        .map(subDirectory -> compileTree(namespace.add(subDirectory.name()), subDirectory))
+        .collect(toSequenceThen(Modules::join));
+    return join(
+        moduleFromThisDirectory,
+        moduleFromSubDirectories);
+  }
+
+  private static Module compileDirectory(Namespace namespace, Directory directory) {
+    return selfBuild(unitFrom(namespace, directory));
   }
 
   private static Module selfBuild(Unit unit) {
@@ -72,21 +86,21 @@ public class Compiler {
         .apply(unit.module);
   }
 
-  private static Unit unitFrom(Path rootDirectory, Path directory) {
+  private static Unit unitFrom(Namespace namespace, Directory directory) {
     return unit(
-        relative(rootDirectory, directory),
-        compileFile(directory.resolve("source")),
-        linkageFrom(directory.resolve("import")));
+        namespace,
+        compileFile(directory.file("source")),
+        linkageFrom(directory.file("import")));
   }
 
-  private static Module compileFile(Path file) {
-    try (Input input = tryInput(file).buffered()) {
+  private static Module compileFile(File file) {
+    try (Input input = file.tryInput().buffered()) {
       return parse(tokenize(input.iterator()));
     }
   }
 
-  private static Linkage linkageFrom(Path file) {
-    try (Input input = tryInput(file).buffered()) {
+  private static Linkage linkageFrom(File file) {
+    try (Input input = file.tryInput().buffered()) {
       return linkageFrom(input);
     }
   }
@@ -106,11 +120,5 @@ public class Compiler {
     } else {
       throw runtimeException("illegal import line: %s", line);
     }
-  }
-
-  private static Namespace relative(Path rootDirectory, Path directory) {
-    return rootDirectory.equals(directory)
-        ? namespaceOf()
-        : namespace(components(rootDirectory.relativize(directory)));
   }
 }

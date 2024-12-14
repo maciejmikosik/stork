@@ -1,31 +1,32 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.common.Throwables.linkageError;
+import static com.mikosik.stork.common.io.Directories.workingDirectory;
+import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.InputOutput.path;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compiler.compileCoreLibrary;
-import static com.mikosik.stork.compile.Compiler.compileDirectory;
-import static com.mikosik.stork.compile.link.Modules.join;
-import static com.mikosik.stork.compile.link.VerifyModule.verify;
+import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static java.nio.file.FileSystems.newFileSystem;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.Map;
 
+import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
 
 public class Stork {
   public static void main(String[] args) {
     try {
-      var module = verify(join(
-          compileCoreLibrary(pathToCoreLibraryInsideJar()),
-          compileDirectory(path("."))));
+      var module = compile(compilation()
+          .source(workingDirectory())
+          .source(coreLibraryDirectoryInZipFileInJarFile())
+          .library(nativeModule()));
 
       program(identifier("main"), module)
           .run(input(System.in), output(System.out));
@@ -36,14 +37,15 @@ public class Stork {
     }
   }
 
-  private static Path pathToCoreLibraryInsideJar() {
+  // TODO simplify to directory inside jar
+  private static Directory coreLibraryDirectoryInZipFileInJarFile() {
     try {
       // TODO why jar fs needs "core.star"?
       var jarFileSystem = newFileSystem(
           Stork.class.getClassLoader().getResource("core.star").toURI(),
           Map.of("create", "false"));
       var coreStarFileSystem = newFileSystem(jarFileSystem.getPath("/core.star"));
-      return coreStarFileSystem.getPath(".");
+      return directory(coreStarFileSystem.getPath("/"));
     } catch (URISyntaxException | IOException e) {
       throw linkageError(e);
     }

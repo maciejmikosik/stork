@@ -1,9 +1,11 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
-import static com.mikosik.stork.compile.link.VerifyModule.verify;
-import static com.mikosik.stork.test.CoreLibrary.CORE_LIBRARY;
+import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
@@ -48,7 +50,7 @@ public class RunTests {
         .add(suite("debug tools")
             .add(fast(testDecompiler()))
             .add(slow(testLogbuddyDecorator()))));
-    runAndReport(slow(coreLibraryHasNoProblems()));
+    runAndReport(slow(compilerCanCompileCoreLibrary()));
     runAndReport(fast(suite("programs")
         .add(testSimplePrograms())
         .add(testCompilerProblems())
@@ -89,9 +91,12 @@ public class RunTests {
     }
   }
 
-  private static Test coreLibraryHasNoProblems() {
-    return newCase("core library has no problems", () -> {
-      verify(CORE_LIBRARY);
+  private static Test compilerCanCompileCoreLibrary() {
+    return newCase("compiler can compile core library", () -> {
+      var project = project();
+      compile(compilation()
+          .source(project.coreLibraryDirectory)
+          .library(nativeModule()));
     });
   }
 }
