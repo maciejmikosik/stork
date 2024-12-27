@@ -18,7 +18,7 @@ import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 
 public final class StorkTextRenderer extends TextRenderer {
   public StorkTextRenderer() {}
@@ -29,7 +29,7 @@ public final class StorkTextRenderer extends TextRenderer {
       case Computation computation -> render(asExpression(computation));
       case Expression expression -> ascii(decompile(expression));
       case Definition definition -> ascii(decompile(definition));
-      case Module module -> ascii(decompile(module));
+      case Library module -> ascii(decompile(module));
       case Stack stack -> format("stack(%s)", depthOf(stack));
       case Map<?, ?> map -> "Map";
       default -> super.render(model);

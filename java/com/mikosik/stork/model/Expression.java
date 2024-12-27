@@ -1,3 +1,5 @@
 package com.mikosik.stork.model;
 
-public interface Expression {}
+import java.io.Serializable;
+
+public interface Expression extends Serializable {}
