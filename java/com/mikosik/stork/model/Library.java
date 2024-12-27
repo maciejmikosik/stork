@@ -4,11 +4,12 @@ import static com.mikosik.stork.common.Sequence.sequenceOf;
 import static com.mikosik.stork.common.Sequence.toSequenceThen;
 import static java.util.Arrays.asList;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.mikosik.stork.common.Sequence;
 
-public class Library {
+public class Library implements Serializable {
   public final Sequence<Definition> definitions;
 
   private Library(Sequence<Definition> definitions) {

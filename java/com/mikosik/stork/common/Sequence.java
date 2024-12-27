@@ -3,6 +3,7 @@ package com.mikosik.stork.common;
 import static com.mikosik.stork.common.Collections.toLinkedListThen;
 import static java.util.Arrays.asList;
 
+import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 
 // TODO implement methods directly instead of delegating
-public class Sequence<E> extends AbstractList<E> {
+public class Sequence<E> extends AbstractList<E> implements Serializable {
   private final List<E> elements;
 
   private Sequence(List<E> elements) {
@@ -50,7 +51,7 @@ public class Sequence<E> extends AbstractList<E> {
   }
 
   public Sequence<E> subList(int fromIndex, int toIndex) {
-    return new Sequence<>(elements.subList(fromIndex, toIndex));
+    return new Sequence<>(new ArrayList<E>(elements.subList(fromIndex, toIndex)));
   }
 
   public static <E> Collector<E, List<E>, Sequence<E>> toSequence() {

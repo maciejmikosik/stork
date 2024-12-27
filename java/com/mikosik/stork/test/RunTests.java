@@ -29,6 +29,8 @@ import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 import static org.quackery.run.Runners.timeout;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -59,6 +61,7 @@ public class RunTests {
             .add(testLogbuddyDecorator())));
     runAndReport(testLanguage());
     runAndReport(compilerCanCompileCoreLibrary());
+    runAndReport(coreLibraryIsSerializable());
     runAndReport(suite("programs")
         .add(testSimplePrograms())
         .add(ignore(testInstructions()))
@@ -119,6 +122,15 @@ public class RunTests {
   private static Test compilerCanCompileCoreLibrary() {
     return newCase("compiler can compile core library", () -> {
       core(DEVELOPMENT);
+    });
+  }
+
+  private static Test coreLibraryIsSerializable() {
+    return newCase("core library is serializable", () -> {
+      var coreLibrary = core(DEVELOPMENT);
+      var output = new ObjectOutputStream(new ByteArrayOutputStream());
+      output.writeObject(coreLibrary);
+      output.close();
     });
   }
 }

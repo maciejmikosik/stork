@@ -2,7 +2,9 @@ package com.mikosik.stork.model;
 
 import static com.mikosik.stork.model.Identifier.identifier;
 
-public class Definition {
+import java.io.Serializable;
+
+public class Definition implements Serializable {
   public final Identifier identifier;
   public final Expression body;
 

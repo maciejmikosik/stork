@@ -3,9 +3,11 @@ package com.mikosik.stork.model;
 import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.Sequence.sequenceOf;
 
+import java.io.Serializable;
+
 import com.mikosik.stork.common.Sequence;
 
-public class Namespace {
+public class Namespace implements Serializable {
   public final Sequence<String> path;
 
   private Namespace(Sequence<String> path) {
