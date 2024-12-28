@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Integer;
 
+// TODO used sealed hierarchy with permit keyword
 public class Stack {
   private final Type type;
   private final Expression expression;

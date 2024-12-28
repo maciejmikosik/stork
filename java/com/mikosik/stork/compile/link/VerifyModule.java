@@ -37,6 +37,7 @@ public class VerifyModule {
         .collect(toSequence());
   }
 
+  // TODO correct name to undefinedImports
   private static Sequence<UndefinedImport> undefinedIdentifiers(Module module) {
     var definedIdentifiers = module.definitions.stream()
         .map(definition -> definition.identifier)
