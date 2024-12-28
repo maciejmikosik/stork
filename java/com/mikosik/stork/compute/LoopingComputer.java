@@ -1,5 +1,7 @@
 package com.mikosik.stork.compute;
 
+import static com.mikosik.stork.common.Logic.untilIdempotent;
+
 public class LoopingComputer implements Computer {
   private final Computer computer;
 
@@ -12,11 +14,7 @@ public class LoopingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    Computation previous = null;
-    do {
-      previous = computation;
-      computation = computer.compute(computation);
-    } while (computation != previous);
-    return computation;
+    return untilIdempotent(computer::compute)
+        .apply(computation);
   }
 }
