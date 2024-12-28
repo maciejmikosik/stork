@@ -1,78 +1,74 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.Throwables.check;
-import static com.mikosik.stork.compute.Stack.Type.ARGUMENT;
-import static com.mikosik.stork.compute.Stack.Type.EMPTY;
-import static com.mikosik.stork.compute.Stack.Type.FUNCTION;
-
-import java.math.BigInteger;
-
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Integer;
 
-public class Stack {
-  private final Type type;
-  private final Expression expression;
-  private final Stack previous;
-
-  private Stack(Type type, Expression expression, Stack previous) {
-    this.type = type;
-    this.expression = expression;
-    this.previous = previous;
-  }
-
+public abstract sealed class Stack {
   public static Stack stack() {
-    return new Stack(EMPTY, null, null);
-  }
-
-  private boolean isType(Type type) {
-    return this.type == type;
+    return new Empty();
   }
 
   public boolean isEmpty() {
-    return isType(EMPTY);
+    return this instanceof Empty;
   }
 
   public boolean hasArgument() {
-    return isType(ARGUMENT);
+    return this instanceof Argument;
   }
 
   public Expression argument() {
-    check(hasArgument());
-    return expression;
-  }
-
-  public Integer argumentInteger() {
-    return (Integer) argument();
-  }
-
-  public BigInteger argumentIntegerJava() {
-    return argumentInteger().value;
+    return switch (this) {
+      case Argument argument -> argument.expression;
+      default -> throw new RuntimeException();
+    };
   }
 
   public Stack pushArgument(Expression argument) {
-    return new Stack(ARGUMENT, argument, this);
+    return new Argument(argument, this);
   }
 
   public boolean hasFunction() {
-    return isType(FUNCTION);
+    return this instanceof Function;
   }
 
   public Expression function() {
-    check(hasFunction());
-    return expression;
+    return switch (this) {
+      case Function function -> function.expression;
+      default -> throw new RuntimeException();
+    };
   }
 
   public Stack pushFunction(Expression function) {
-    return new Stack(FUNCTION, function, this);
+    return new Function(function, this);
   }
 
   public Stack pop() {
-    check(!isEmpty());
-    return previous;
+    return switch (this) {
+      case Frame frame -> frame.previous;
+      default -> throw new RuntimeException();
+    };
   }
 
-  static enum Type {
-    EMPTY, ARGUMENT, FUNCTION
+  public static final class Empty extends Stack {}
+
+  public static sealed class Frame extends Stack {
+    public final Expression expression;
+    public final Stack previous;
+
+    private Frame(Expression expression, Stack previous) {
+      this.expression = expression;
+      this.previous = previous;
+    }
+  }
+
+  public static final class Argument extends Frame {
+    private Argument(Expression expression, Stack previous) {
+      super(expression, previous);
+    }
+  }
+
+  public static final class Function extends Frame {
+    private Function(Expression expression, Stack previous) {
+      super(expression, previous);
+    }
   }
 }
