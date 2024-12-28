@@ -16,4 +16,17 @@ public class Logic {
   public static <E> Function<Object, E> constant(E value) {
     return argument -> value;
   }
+
+  public static <E> Function<E, E> untilIdempotent(Function<E, E> function) {
+    return new Function<E, E>() {
+      public E apply(E current) {
+        var next = function.apply(current);
+        while (next != current) {
+          current = next;
+          next = function.apply(current);
+        }
+        return next;
+      }
+    };
+  }
 }
