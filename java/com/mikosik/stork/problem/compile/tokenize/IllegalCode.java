@@ -34,19 +34,16 @@ public class IllegalCode implements CannotTokenize {
         isAscii(code)
             ? "illegal ascii"
             : "non-ascii",
-        location.name,
+        switch (location) {
+          case ANYWHERE -> "";
+          case IN_STRING_LITERAL -> "in string literal";
+        },
         unsigned,
         unsigned,
         isPrintable(code) ? code : ' ');
   }
 
   public enum Location {
-    ANYWHERE(""), IN_STRING_LITERAL("in string literal");
-
-    private final String name;
-
-    Location(String name) {
-      this.name = name;
-    }
+    ANYWHERE, IN_STRING_LITERAL;
   }
 }
