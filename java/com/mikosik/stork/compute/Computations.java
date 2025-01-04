@@ -1,7 +1,12 @@
 package com.mikosik.stork.compute;
 
+import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
 
+import com.mikosik.stork.compute.Stack.Argument;
+import com.mikosik.stork.compute.Stack.Frame;
+import com.mikosik.stork.compute.Stack.Function;
 import com.mikosik.stork.model.Expression;
 
 public class Computations {
@@ -11,18 +16,17 @@ public class Computations {
   }
 
   public static Expression abort(Computation computation) {
-    Expression expression = computation.expression;
-    Stack stack = computation.stack;
-    while (true) {
-      if (stack.hasArgument()) {
-        expression = application(expression, stack.argument());
-      } else if (stack.hasFunction()) {
-        expression = application(stack.function(), expression);
-      } else {
-        break;
-      }
-      stack = stack.pop();
+    while (computation.stack instanceof Frame frame) {
+      computation = switch (frame) {
+        case Argument argument -> computation(
+            application(computation.expression, argument.expression),
+            argument.previous);
+        case Function function -> computation(
+            application(function.expression, computation.expression),
+            function.previous);
+        default -> throw runtimeException("unknown frame %s", frame);
+      };
     }
-    return expression;
+    return computation.expression;
   }
 }

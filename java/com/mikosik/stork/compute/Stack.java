@@ -7,45 +7,12 @@ public abstract sealed class Stack {
     return new Empty();
   }
 
-  public boolean isEmpty() {
-    return this instanceof Empty;
-  }
-
-  public boolean hasArgument() {
-    return this instanceof Argument;
-  }
-
-  public Expression argument() {
-    return switch (this) {
-      case Argument argument -> argument.expression;
-      default -> throw new RuntimeException();
-    };
-  }
-
   public Stack pushArgument(Expression argument) {
     return new Argument(argument, this);
   }
 
-  public boolean hasFunction() {
-    return this instanceof Function;
-  }
-
-  public Expression function() {
-    return switch (this) {
-      case Function function -> function.expression;
-      default -> throw new RuntimeException();
-    };
-  }
-
   public Stack pushFunction(Expression function) {
     return new Function(function, this);
-  }
-
-  public Stack pop() {
-    return switch (this) {
-      case Frame frame -> frame.previous;
-      default -> throw new RuntimeException();
-    };
   }
 
   public static final class Empty extends Stack {}

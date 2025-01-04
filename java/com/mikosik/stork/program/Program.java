@@ -20,6 +20,7 @@ import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
+import com.mikosik.stork.compute.Stack.Empty;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Module;
@@ -55,6 +56,6 @@ public class Program {
 
     Computation computed = computer.compute(computation);
     output.close();
-    check(computed.stack.isEmpty());
+    check(computed.stack instanceof Empty);
   }
 }

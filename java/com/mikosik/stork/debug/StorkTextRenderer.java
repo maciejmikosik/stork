@@ -17,6 +17,8 @@ import org.logbuddy.renderer.TextRenderer;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack;
+import com.mikosik.stork.compute.Stack.Empty;
+import com.mikosik.stork.compute.Stack.Frame;
 import com.mikosik.stork.model.Expression;
 
 // TODO Decompiler is tested but renderer is not.
@@ -42,9 +44,10 @@ public final class StorkTextRenderer extends TextRenderer {
   }
 
   private int computeDepthOf(Stack stack) {
-    return stack.isEmpty()
-        ? 0
-        : depthOf(stack.pop()) + 1;
+    return switch (stack) {
+      case Empty empty -> 0;
+      case Frame frame -> depthOf(frame.previous) + 1;
+    };
   }
 
   private static Expression asExpression(Computation computation) {
