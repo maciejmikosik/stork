@@ -1,5 +1,7 @@
 package com.mikosik.stork.compute;
 
+import com.mikosik.stork.compute.Stack.Argument;
+
 public class RequiringArgument implements Computer {
   private final Computer computer;
 
@@ -12,8 +14,9 @@ public class RequiringArgument implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    return computation.stack.hasArgument()
-        ? computer.compute(computation)
-        : computation;
+    return switch (computation.stack) {
+      case Argument argument -> computer.compute(computation);
+      default -> computation;
+    };
   }
 }
