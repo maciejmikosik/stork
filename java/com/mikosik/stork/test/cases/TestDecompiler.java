@@ -1,7 +1,6 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.link.Bind.removeNamespaces;
 import static com.mikosik.stork.compile.link.Combinator.B;
 import static com.mikosik.stork.compile.link.Combinator.C;
@@ -41,6 +40,7 @@ import com.mikosik.stork.common.io.Serializable;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.debug.Decompiler;
+import com.mikosik.stork.debug.StorkTextRenderer;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Library;
@@ -134,7 +134,7 @@ public class TestDecompiler {
 
   private static <M> Test test(String expected, M model, Function<M, Serializable> decompiler) {
     return newCase(expected, () -> {
-      String actual = ascii(decompiler.apply(model));
+      var actual = new StorkTextRenderer().render(model);
       if (!expected.equals(actual)) {
         throw assertException("""
             expected
