@@ -18,6 +18,7 @@ import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDec
 import static com.mikosik.stork.test.cases.TestSequence.testSequence;
 import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
 import static java.lang.System.exit;
+import static java.time.Duration.between;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static org.quackery.Case.newCase;
@@ -25,6 +26,9 @@ import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 import static org.quackery.run.Runners.timeout;
+
+import java.time.Duration;
+import java.time.Instant;
 
 import org.quackery.Test;
 
@@ -66,16 +70,20 @@ public class RunTests {
   }
 
   private static void runAndReport(Test test) {
+    var started = Instant.now();
     var report = run(test);
+    var duration = between(started, Instant.now());
     var failed = filterFailed(report);
     if (count(failed) > 0) {
       err("""
           suite  : %s
           cases  : %d
+          time   : %.3fs
           failed : %d
           """,
           nameOf(test),
           count(report),
+          inSeconds(duration),
           count(failed));
       err(format(failed));
       err(formatExceptions(failed));
@@ -84,10 +92,16 @@ public class RunTests {
       out("""
           suite  : %s
           cases  : %d
+          time   : %.3fs
           """,
           nameOf(test),
-          count(report));
+          count(report),
+          inSeconds(duration));
     }
+  }
+
+  public static float inSeconds(Duration duration) {
+    return duration.getSeconds() + duration.getNano() * 1E-9f;
   }
 
   private static Test compilerCanCompileCoreLibrary() {
