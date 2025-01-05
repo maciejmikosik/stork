@@ -1,7 +1,6 @@
 package com.mikosik.stork.debug;
 
 import static com.mikosik.stork.common.io.Serializables.ascii;
-import static com.mikosik.stork.compile.link.Bind.removeNamespaces;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.compute.Computations.depthOf;
@@ -17,17 +16,20 @@ import org.logbuddy.renderer.TextRenderer;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Module;
 
-// TODO Decompiler is tested but renderer is not.
 public final class StorkTextRenderer extends TextRenderer {
-  protected StorkTextRenderer() {}
+  public StorkTextRenderer() {}
 
   public String render(Object model) {
     return switch (model) {
       case Computer computer -> computer.getClass().getSimpleName();
       case Computation computation -> render(asExpression(computation));
-      case Expression expression -> ascii(decompile(removeNamespaces(expression)));
+      case Expression expression -> ascii(decompile(expression));
+      case Definition definition -> ascii(decompile(definition));
+      case Module module -> ascii(decompile(module));
       case Stack stack -> format("stack(%s)", depthOf(stack));
       case Map<?, ?> map -> "Map";
       default -> super.render(model);
