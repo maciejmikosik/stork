@@ -1,10 +1,10 @@
 lang.op.eager
-lang.native.integer.equal nativeEqual
-lang.native.integer.moreThan nativeMoreThan
-lang.native.integer.add nativeAdd
-lang.native.integer.negate nativeNegate
-lang.native.integer.multiply nativeMultiply
-lang.native.integer.divideBy nativeDivideBy
+lang.op.equal opEqual
+lang.op.compare opCompare
+lang.op.negate opNegate
+lang.op.add opAdd
+lang.op.multiply opMultiply
+lang.op.divide opDivide
 lang.function.if
 lang.function.constant
 lang.function.flip

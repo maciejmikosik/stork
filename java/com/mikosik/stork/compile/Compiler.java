@@ -7,7 +7,6 @@ import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
 import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.link.MathModule.mathModule;
 import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.compile.link.OperatorModule.operatorModule;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
@@ -53,7 +52,6 @@ public class Compiler {
     return join(
         operatorModule(),
         combinatoryModule(),
-        mathModule(),
         makeComputable(programModule()));
   }
 

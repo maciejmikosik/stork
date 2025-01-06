@@ -1,6 +1,7 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Sequence.toSequenceThen;
+import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
@@ -13,7 +14,9 @@ import com.mikosik.stork.model.Operator;
 
 public class OperatorModule {
   public static Module operatorModule() {
-    return asModule(Manipulator.class);
+    return join(
+        asModule(Manipulator.class),
+        asModule(MathOperator.class));
   }
 
   private static Module asModule(Class<? extends Operator> enumClass) {

@@ -12,13 +12,12 @@ import static com.mikosik.stork.compile.link.CombinatoryModule.S;
 import static com.mikosik.stork.compile.link.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.link.Manipulator.EAGER;
-import static com.mikosik.stork.compile.link.MathModule.ADD;
-import static com.mikosik.stork.compile.link.MathModule.DIVIDE_BY;
-import static com.mikosik.stork.compile.link.MathModule.EQUAL;
-import static com.mikosik.stork.compile.link.MathModule.MORE_THAN;
-import static com.mikosik.stork.compile.link.MathModule.MULTIPLY;
-import static com.mikosik.stork.compile.link.MathModule.NEGATE;
-import static com.mikosik.stork.compile.link.MathModule.mathModule;
+import static com.mikosik.stork.compile.link.MathOperator.ADD;
+import static com.mikosik.stork.compile.link.MathOperator.COMPARE;
+import static com.mikosik.stork.compile.link.MathOperator.DIVIDE;
+import static com.mikosik.stork.compile.link.MathOperator.EQUAL;
+import static com.mikosik.stork.compile.link.MathOperator.MULTIPLY;
+import static com.mikosik.stork.compile.link.MathOperator.NEGATE;
 import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Application.application;
@@ -89,7 +88,15 @@ public class TestDecompiler {
                     return "OPERATOR";
                   }
                 }))
-                .add(test("$EAGER", EAGER)))
+                .add(suite("manipulators")
+                    .add(test("$EAGER", EAGER)))
+                .add(suite("math")
+                    .add(test("$EQUAL", EQUAL))
+                    .add(test("$COMPARE", COMPARE))
+                    .add(test("$NEGATE", NEGATE))
+                    .add(test("$ADD", ADD))
+                    .add(test("$MULTIPLY", MULTIPLY))
+                    .add(test("$DIVIDE", DIVIDE))))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
@@ -159,13 +166,6 @@ public class TestDecompiler {
             .add(test("<lang.native.combinator.b(x)(y)>", apply(inst(B), x, y)))
             .add(test("<lang.native.combinator.y>", inst(Y)))
             .add(test("x(lang.native.combinator.y(x))", apply(inst(Y), x))))
-        .add(suite("math")
-            .add(test("<lang.native.integer.equal>", inst(EQUAL)))
-            .add(test("<lang.native.integer.moreThan>", inst(MORE_THAN)))
-            .add(test("<lang.native.integer.negate>", inst(NEGATE)))
-            .add(test("<lang.native.integer.add>", inst(ADD)))
-            .add(test("<lang.native.integer.multiply>", inst(MULTIPLY)))
-            .add(test("<lang.native.integer.divideBy>", inst(DIVIDE_BY))))
         .add(suite("program")
             .add(test("<lang.native.program.writeByte>", inst(WRITE_BYTE)))
             .add(test("<lang.native.program.closeStream>", inst(CLOSE_STREAM))));
@@ -220,7 +220,6 @@ public class TestDecompiler {
   }
 
   private static final Module instructionsModule = injectNames(join(
-      mathModule(),
       combinatoryModule(),
       programModule()));
 }
