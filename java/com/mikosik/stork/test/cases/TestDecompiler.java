@@ -4,13 +4,11 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.link.Bind.removeNamespaces;
-import static com.mikosik.stork.compile.link.CombinatoryModule.B;
-import static com.mikosik.stork.compile.link.CombinatoryModule.C;
-import static com.mikosik.stork.compile.link.CombinatoryModule.I;
-import static com.mikosik.stork.compile.link.CombinatoryModule.K;
-import static com.mikosik.stork.compile.link.CombinatoryModule.S;
-import static com.mikosik.stork.compile.link.CombinatoryModule.Y;
-import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.compile.link.Combinator.B;
+import static com.mikosik.stork.compile.link.Combinator.C;
+import static com.mikosik.stork.compile.link.Combinator.I;
+import static com.mikosik.stork.compile.link.Combinator.K;
+import static com.mikosik.stork.compile.link.Combinator.S;
 import static com.mikosik.stork.compile.link.MathOperator.ADD;
 import static com.mikosik.stork.compile.link.MathOperator.COMPARE;
 import static com.mikosik.stork.compile.link.MathOperator.DIVIDE;
@@ -96,7 +94,13 @@ public class TestDecompiler {
                     .add(test("$NEGATE", NEGATE))
                     .add(test("$ADD", ADD))
                     .add(test("$MULTIPLY", MULTIPLY))
-                    .add(test("$DIVIDE", DIVIDE))))
+                    .add(test("$DIVIDE", DIVIDE)))
+                .add(suite("combinator")
+                    .add(test("$I", I))
+                    .add(test("$K", K))
+                    .add(test("$S", S))
+                    .add(test("$C", C))
+                    .add(test("$B", B))))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
@@ -151,21 +155,6 @@ public class TestDecompiler {
             .add(suite("detects returning other named instruction")
                 .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
                 .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
-        .add(suite("combinators")
-            .add(test("<lang.native.combinator.s>", inst(S)))
-            .add(test("<lang.native.combinator.s(x)>", apply(inst(S), x)))
-            .add(test("<lang.native.combinator.s(x)(y)>", apply(inst(S), x, y)))
-            .add(test("<lang.native.combinator.k>", inst(K)))
-            .add(test("<lang.native.combinator.k(x)>", apply(inst(K), x)))
-            .add(test("<lang.native.combinator.i>", inst(I)))
-            .add(test("<lang.native.combinator.c>", inst(C)))
-            .add(test("<lang.native.combinator.c(x)>", apply(inst(C), x)))
-            .add(test("<lang.native.combinator.c(x)(y)>", apply(inst(C), x, y)))
-            .add(test("<lang.native.combinator.b>", inst(B)))
-            .add(test("<lang.native.combinator.b(x)>", apply(inst(B), x)))
-            .add(test("<lang.native.combinator.b(x)(y)>", apply(inst(B), x, y)))
-            .add(test("<lang.native.combinator.y>", inst(Y)))
-            .add(test("x(lang.native.combinator.y(x))", apply(inst(Y), x))))
         .add(suite("program")
             .add(test("<lang.native.program.writeByte>", inst(WRITE_BYTE)))
             .add(test("<lang.native.program.closeStream>", inst(CLOSE_STREAM))));
@@ -220,6 +209,5 @@ public class TestDecompiler {
   }
 
   private static final Module instructionsModule = injectNames(join(
-      combinatoryModule(),
       programModule()));
 }

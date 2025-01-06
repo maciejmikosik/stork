@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
-import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
 import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.compile.link.OperatorModule.operatorModule;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
@@ -51,7 +50,6 @@ public class Compiler {
   public static Module nativeModule() {
     return join(
         operatorModule(),
-        combinatoryModule(),
         makeComputable(programModule()));
   }
 

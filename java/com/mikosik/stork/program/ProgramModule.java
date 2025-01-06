@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.instruction;
 import static com.mikosik.stork.compile.link.Bridge.javaInteger;
-import static com.mikosik.stork.compile.link.CombinatoryModule.I;
+import static com.mikosik.stork.compile.link.Combinator.I;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
