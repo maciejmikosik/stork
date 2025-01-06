@@ -10,7 +10,7 @@ import com.mikosik.stork.compute.Stack.Argument;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Operator;
 
-public enum Manipulator implements Operator {
+public enum StackOperator implements Operator {
   EAGER {
     public Optional<Computation> compute(Stack stack) {
       return stack instanceof Argument argumentA

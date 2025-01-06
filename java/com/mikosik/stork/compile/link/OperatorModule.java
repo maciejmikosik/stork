@@ -15,7 +15,7 @@ import com.mikosik.stork.model.Operator;
 public class OperatorModule {
   public static Module operatorModule() {
     return join(
-        asModule(Manipulator.class),
+        asModule(StackOperator.class),
         asModule(MathOperator.class));
   }
 

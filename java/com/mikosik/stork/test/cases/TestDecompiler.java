@@ -11,7 +11,6 @@ import static com.mikosik.stork.compile.link.CombinatoryModule.K;
 import static com.mikosik.stork.compile.link.CombinatoryModule.S;
 import static com.mikosik.stork.compile.link.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.link.Manipulator.EAGER;
 import static com.mikosik.stork.compile.link.MathOperator.ADD;
 import static com.mikosik.stork.compile.link.MathOperator.COMPARE;
 import static com.mikosik.stork.compile.link.MathOperator.DIVIDE;
@@ -19,6 +18,7 @@ import static com.mikosik.stork.compile.link.MathOperator.EQUAL;
 import static com.mikosik.stork.compile.link.MathOperator.MULTIPLY;
 import static com.mikosik.stork.compile.link.MathOperator.NEGATE;
 import static com.mikosik.stork.compile.link.Modules.join;
+import static com.mikosik.stork.compile.link.StackOperator.EAGER;
 import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
@@ -88,7 +88,7 @@ public class TestDecompiler {
                     return "OPERATOR";
                   }
                 }))
-                .add(suite("manipulators")
+                .add(suite("stack")
                     .add(test("$EAGER", EAGER)))
                 .add(suite("math")
                     .add(test("$EQUAL", EQUAL))
