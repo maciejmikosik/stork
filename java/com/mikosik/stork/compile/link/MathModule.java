@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.Logic.flip;
 import static com.mikosik.stork.compile.link.Bridge.instruction;
 import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Module.moduleOf;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
@@ -16,7 +15,6 @@ import java.math.BigInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
@@ -40,16 +38,12 @@ public class MathModule {
 
   public static Module mathModule() {
     return moduleOf(
-        define(EQUAL, instructionIIB(BigInteger::equals)),
-        define(MORE_THAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
-        define(NEGATE, instructionII(BigInteger::negate)),
-        define(ADD, instructionIII(BigInteger::add)),
-        define(MULTIPLY, instructionIII(BigInteger::multiply)),
-        define(DIVIDE_BY, instructionIII(flip(BigInteger::divide))));
-  }
-
-  private static Definition define(Identifier name, Instruction instruction) {
-    return definition(name, eager(instruction));
+        definition(EQUAL, instructionIIB(BigInteger::equals)),
+        definition(MORE_THAN, instructionIIB((x, y) -> x.compareTo(y) < 0)),
+        definition(NEGATE, instructionII(BigInteger::negate)),
+        definition(ADD, instructionIII(BigInteger::add)),
+        definition(MULTIPLY, instructionIII(BigInteger::multiply)),
+        definition(DIVIDE_BY, instructionIII(flip(BigInteger::divide))));
   }
 
   private static Instruction instructionII(

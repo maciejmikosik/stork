@@ -1,3 +1,4 @@
+lang.op.eager
 lang.native.integer.equal nativeEqual
 lang.native.integer.moreThan nativeMoreThan
 lang.native.integer.add nativeAdd
@@ -7,6 +8,7 @@ lang.native.integer.divideBy nativeDivideBy
 lang.function.if
 lang.function.constant
 lang.function.flip
+lang.function.doubly
 lang.function.compose
 lang.boolean.not
 lang.boolean.and
