@@ -1,10 +1,10 @@
 
   equal {
-    doubly(eager)(opEqual)
+    doubly(EAGER)(EQUAL)
   }
 
   moreThan {
-    doubly(eager)(opCompare)
+    doubly(EAGER)(COMPARE)
   }
 
   lessThan {
@@ -26,11 +26,11 @@
   }
 
   negate {
-    eager(opNegate)
+    EAGER(NEGATE)
   }
 
   add {
-    doubly(eager)(opAdd)
+    doubly(EAGER)(ADD)
   }
 
   subtract(x) {
@@ -46,11 +46,11 @@
   }
 
   multiply {
-    doubly(eager)(opMultiply)
+    doubly(EAGER)(MULTIPLY)
   }
 
   divideBy {
-    doubly(eager)(flip(opDivide))
+    doubly(EAGER)(flip(DIVIDE))
   }
 
   modulo(divisor)(dividend) {

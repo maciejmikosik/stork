@@ -1,10 +1,10 @@
-lang.op.eager
-lang.op.equal opEqual
-lang.op.compare opCompare
-lang.op.negate opNegate
-lang.op.add opAdd
-lang.op.multiply opMultiply
-lang.op.divide opDivide
+lang.op.EAGER
+lang.op.EQUAL
+lang.op.COMPARE
+lang.op.NEGATE
+lang.op.ADD
+lang.op.MULTIPLY
+lang.op.DIVIDE
 lang.function.if
 lang.function.constant
 lang.function.flip

@@ -22,7 +22,7 @@ public class OperatorModule {
   private static Module asModule(Class<? extends Operator> enumClass) {
     return stream(enumClass.getEnumConstants())
         .map(operator -> definition(
-            identifier(NAMESPACE, variable(operator.toString().toLowerCase())),
+            identifier(NAMESPACE, variable(operator.toString())),
             operator))
         .collect(toSequenceThen(Module::module));
   }
