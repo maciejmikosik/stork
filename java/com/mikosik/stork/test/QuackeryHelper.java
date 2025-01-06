@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
 import static org.quackery.Suite.suite;
+import static org.quackery.help.Helpers.successfulCase;
 import static org.quackery.help.Helpers.thrownBy;
 
 import java.util.List;
@@ -92,5 +93,10 @@ public class QuackeryHelper {
 
   public static AssertException assertException(String format, Object... args) {
     return new AssertException(format.formatted(args));
+  }
+
+  public static Test ignore(Test test) {
+    return deep(ifCase((name, body) -> successfulCase("[ignored] " + name)))
+        .apply(test);
   }
 }

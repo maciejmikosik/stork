@@ -9,6 +9,7 @@ import org.quackery.Test;
 
 import com.mikosik.stork.model.Identifier;
 
+// TODO rewrite tests for eager operators
 public class TestInstructions {
   private static final Identifier mock = identifier("mock");
 
