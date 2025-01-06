@@ -11,6 +11,7 @@ import static com.mikosik.stork.compile.link.CombinatoryModule.K;
 import static com.mikosik.stork.compile.link.CombinatoryModule.S;
 import static com.mikosik.stork.compile.link.CombinatoryModule.Y;
 import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
+import static com.mikosik.stork.compile.link.Manipulator.EAGER;
 import static com.mikosik.stork.compile.link.MathModule.ADD;
 import static com.mikosik.stork.compile.link.MathModule.DIVIDE_BY;
 import static com.mikosik.stork.compile.link.MathModule.EQUAL;
@@ -87,7 +88,8 @@ public class TestDecompiler {
                   public String toString() {
                     return "OPERATOR";
                   }
-                })))
+                }))
+                .add(test("$EAGER", EAGER)))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
