@@ -17,6 +17,7 @@ import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.NamedInstruction;
+import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
@@ -52,6 +53,9 @@ public class Decompiler {
           roundBrackets(decompile(eager.instruction)));
       case NamedInstruction instruction -> join(
           angleBrackets(decompile(instruction.name)));
+      case Operator operator -> join(
+          serializable("$"),
+          serializable(operator));
       case Instruction instruction -> angleBrackets(serializable(""));
       case Parameter parameter -> serializable(parameter.name);
       case Lambda lambda -> join(

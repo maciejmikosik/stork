@@ -6,6 +6,7 @@ import static com.mikosik.stork.compute.RequiringArgument.requiringArgument;
 import com.mikosik.stork.compute.Stack.Argument;
 import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Instruction;
+import com.mikosik.stork.model.Operator;
 
 public class InstructionComputer implements Computer {
   private InstructionComputer() {}
@@ -17,6 +18,9 @@ public class InstructionComputer implements Computer {
   public Computation compute(Computation computation) {
     var stack = computation.stack;
     return switch (computation.expression) {
+      case Operator operator -> operator
+          .compute(computation.stack)
+          .orElse(computation);
       case EagerInstruction eager when !eager.visited -> switch (stack) {
         case Argument argument -> computation(
             argument.expression,

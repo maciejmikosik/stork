@@ -41,12 +41,15 @@ import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.quackery.Suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.common.io.Serializable;
+import com.mikosik.stork.compute.Computation;
+import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.debug.Decompiler;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.EagerInstruction;
@@ -54,6 +57,7 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 
 public class TestDecompiler {
@@ -74,6 +78,16 @@ public class TestDecompiler {
                 .add(test("stdin(0)", stdin(input(new byte[0])))))
             .add(suite("stdout")
                 .add(test("stdout", stdout(noOutput()))))
+            .add(suite("operators")
+                .add(test("$OPERATOR", new Operator() {
+                  public Optional<Computation> compute(Stack stack) {
+                    return Optional.empty();
+                  }
+
+                  public String toString() {
+                    return "OPERATOR";
+                  }
+                })))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
