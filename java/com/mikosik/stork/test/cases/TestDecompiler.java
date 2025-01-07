@@ -1,7 +1,6 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.link.Bind.removeNamespaces;
 import static com.mikosik.stork.compile.link.Combinator.B;
@@ -30,7 +29,6 @@ import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.CLOSE_STREAM;
 import static com.mikosik.stork.program.Program.writeByteTo;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.program.Stdout.stdout;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -70,8 +68,6 @@ public class TestDecompiler {
             .add(suite("stdin")
                 .add(test("stdin(7)", stdin(input(new byte[0]), 7)))
                 .add(test("stdin(0)", stdin(input(new byte[0])))))
-            .add(suite("stdout")
-                .add(test("stdout", stdout(noOutput()))))
             .add(suite("operators")
                 .add(test("$OPERATOR", new Operator() {
                   public Optional<Computation> compute(Stack stack) {
