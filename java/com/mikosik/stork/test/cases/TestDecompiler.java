@@ -15,9 +15,7 @@ import static com.mikosik.stork.compile.link.MathOperator.DIVIDE;
 import static com.mikosik.stork.compile.link.MathOperator.EQUAL;
 import static com.mikosik.stork.compile.link.MathOperator.MULTIPLY;
 import static com.mikosik.stork.compile.link.MathOperator.NEGATE;
-import static com.mikosik.stork.compile.link.Modules.join;
 import static com.mikosik.stork.compile.link.StackOperator.EAGER;
-import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.EagerInstruction.eager;
@@ -29,9 +27,8 @@ import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.program.ProgramModule.CLOSE_STREAM;
-import static com.mikosik.stork.program.ProgramModule.WRITE_BYTE;
-import static com.mikosik.stork.program.ProgramModule.programModule;
+import static com.mikosik.stork.program.Program.CLOSE_STREAM;
+import static com.mikosik.stork.program.Program.writeByteTo;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.stdout;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
@@ -50,7 +47,6 @@ import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.debug.Decompiler;
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Instruction;
@@ -100,7 +96,10 @@ public class TestDecompiler {
                     .add(test("$K", K))
                     .add(test("$S", S))
                     .add(test("$C", C))
-                    .add(test("$B", B))))
+                    .add(test("$B", B)))
+                .add(suite("program")
+                    .add(test("$WRITE", writeByteTo(null)))
+                    .add(test("$CLOSE", CLOSE_STREAM))))
             .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
@@ -154,10 +153,7 @@ public class TestDecompiler {
             .add(test("eagerVisited(<f>)", eager(f).visit()))
             .add(suite("detects returning other named instruction")
                 .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
-                .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))))
-        .add(suite("program")
-            .add(test("<lang.native.program.writeByte>", inst(WRITE_BYTE)))
-            .add(test("<lang.native.program.closeStream>", inst(CLOSE_STREAM))));
+                .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))));
   }
 
   private static Test test(String expected, Expression expression) {
@@ -195,19 +191,4 @@ public class TestDecompiler {
     }
     return result;
   }
-
-  private static Instruction inst(Identifier identifier) {
-    return instructionsModule.definitions.stream()
-        .filter(definition -> definition.identifier.equals(identifier))
-        .map(definition -> definition.body)
-        .map(body -> body instanceof EagerInstruction eager
-            ? eager.instruction
-            : body)
-        .map(body -> (Instruction) body)
-        .findFirst()
-        .orElseThrow();
-  }
-
-  private static final Module instructionsModule = injectNames(join(
-      programModule()));
 }

@@ -23,7 +23,6 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
-import static com.mikosik.stork.program.ProgramModule.programModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.io.Directory;
@@ -48,9 +47,7 @@ public class Compiler {
   }
 
   public static Module nativeModule() {
-    return join(
-        operatorModule(),
-        makeComputable(programModule()));
+    return operatorModule();
   }
 
   private static Module makeComputable(Module module) {
