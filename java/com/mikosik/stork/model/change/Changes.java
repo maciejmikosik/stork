@@ -13,12 +13,10 @@ import java.util.stream.Stream;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
@@ -112,12 +110,6 @@ public class Changes {
       case Application application -> concat(
           walk(application.function),
           walk(application.argument));
-      case EagerInstruction instruction -> concat(
-          walk(instruction.instruction),
-          Stream.of(instruction));
-      case NamedInstruction instruction -> concat(
-          walk(instruction.instruction),
-          Stream.of(instruction));
       default -> Stream.of();
     };
   }

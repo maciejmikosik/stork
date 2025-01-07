@@ -6,9 +6,8 @@ import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
-import static com.mikosik.stork.compile.link.CombinatoryModule.combinatoryModule;
-import static com.mikosik.stork.compile.link.MathModule.mathModule;
 import static com.mikosik.stork.compile.link.Modules.join;
+import static com.mikosik.stork.compile.link.OperatorModule.operatorModule;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
 import static com.mikosik.stork.compile.link.VerifyModule.verify;
@@ -24,7 +23,6 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
-import static com.mikosik.stork.program.ProgramModule.programModule;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.io.Directory;
@@ -49,10 +47,7 @@ public class Compiler {
   }
 
   public static Module nativeModule() {
-    return join(
-        combinatoryModule(),
-        mathModule(),
-        makeComputable(programModule()));
+    return operatorModule();
   }
 
   private static Module makeComputable(Module module) {

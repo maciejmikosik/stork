@@ -1,12 +1,14 @@
-lang.native.integer.equal nativeEqual
-lang.native.integer.moreThan nativeMoreThan
-lang.native.integer.add nativeAdd
-lang.native.integer.negate nativeNegate
-lang.native.integer.multiply nativeMultiply
-lang.native.integer.divideBy nativeDivideBy
+lang.op.EAGER
+lang.op.EQUAL
+lang.op.COMPARE
+lang.op.NEGATE
+lang.op.ADD
+lang.op.MULTIPLY
+lang.op.DIVIDE
 lang.function.if
 lang.function.constant
 lang.function.flip
+lang.function.doubly
 lang.function.compose
 lang.boolean.not
 lang.boolean.and

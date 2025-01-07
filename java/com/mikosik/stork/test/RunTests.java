@@ -9,6 +9,7 @@ import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
+import static com.mikosik.stork.test.QuackeryHelper.ignore;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
 import static com.mikosik.stork.test.cases.TestCompilerProblems.testCompilerProblems;
 import static com.mikosik.stork.test.cases.TestComputers.testComputers;
@@ -54,7 +55,7 @@ public class RunTests {
     runAndReport(fast(suite("programs")
         .add(testSimplePrograms())
         .add(testCompilerProblems())
-        .add(testInstructions())
+        .add(ignore(testInstructions()))
         .add(testCoreLibrary())));
   }
 

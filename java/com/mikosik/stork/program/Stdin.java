@@ -1,11 +1,22 @@
 package com.mikosik.stork.program;
 
-import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.model.Expression;
+import static com.mikosik.stork.compile.link.Bridge.NONE;
+import static com.mikosik.stork.compile.link.Bridge.some;
+import static com.mikosik.stork.compute.Computation.computation;
+import static com.mikosik.stork.model.Integer.integer;
 
-public class Stdin implements Expression {
-  public final Input input;
-  public final int index;
+import java.util.Optional;
+
+import com.mikosik.stork.common.io.Input;
+import com.mikosik.stork.compute.Computation;
+import com.mikosik.stork.compute.Stack;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Operator;
+
+public class Stdin implements Operator {
+  private final Input input;
+  private final int index;
+  private Expression computed = null;
 
   private Stdin(Input input, int index) {
     this.input = input;
@@ -18,5 +29,21 @@ public class Stdin implements Expression {
 
   public static Expression stdin(Input input, int index) {
     return new Stdin(input, index);
+  }
+
+  public synchronized Optional<Computation> compute(Stack stack) {
+    if (computed == null) {
+      var maybeByte = input.read();
+      computed = maybeByte.hasByte()
+          ? some(
+              integer(maybeByte.getByte()),
+              stdin(input, index + 1))
+          : NONE;
+    }
+    return Optional.of(computation(computed, stack));
+  }
+
+  public String toString() {
+    return "STDIN(%s)".formatted(index);
   }
 }

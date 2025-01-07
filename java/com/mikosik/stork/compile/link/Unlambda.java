@@ -1,11 +1,11 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Throwables.runtimeException;
-import static com.mikosik.stork.compile.link.CombinatoryModule.B;
-import static com.mikosik.stork.compile.link.CombinatoryModule.C;
-import static com.mikosik.stork.compile.link.CombinatoryModule.I;
-import static com.mikosik.stork.compile.link.CombinatoryModule.K;
-import static com.mikosik.stork.compile.link.CombinatoryModule.S;
+import static com.mikosik.stork.compile.link.Combinator.B;
+import static com.mikosik.stork.compile.link.Combinator.C;
+import static com.mikosik.stork.compile.link.Combinator.I;
+import static com.mikosik.stork.compile.link.Combinator.K;
+import static com.mikosik.stork.compile.link.Combinator.S;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifLambda;

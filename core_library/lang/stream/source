@@ -46,6 +46,17 @@
       (sum)
   }
 
+  reduceEager(sum)(add)(stream) {
+    stream
+      ((head)(tail) {
+        EAGER(reduceEager)
+          (add(head)(sum))
+          (add)
+          (tail)
+      })
+      (sum)
+  }
+
   tryAt(index)(stream) {
     atLeast(0)(index)
       (tryFirst(skip(index)(stream)))

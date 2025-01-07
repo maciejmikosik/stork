@@ -2,6 +2,7 @@ package com.mikosik.stork.common.io;
 
 import static com.mikosik.stork.common.io.Ascii.bytes;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
+import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Arrays.asList;
 
 public class Serializables {
@@ -19,6 +20,10 @@ public class Serializables {
 
   public static Serializable serializable(char character) {
     return serializable((byte) character);
+  }
+
+  public static Serializable serializable(Object object) {
+    return output -> output.write(object.toString().getBytes(US_ASCII));
   }
 
   public static Serializable join(Serializable... serializables) {
