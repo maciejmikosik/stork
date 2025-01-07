@@ -1,14 +1,12 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.compute.RequiringArgument.requiringArgument;
-
 import com.mikosik.stork.model.Operator;
 
 public class OperatorComputer implements Computer {
   private OperatorComputer() {}
 
   public static Computer operatorComputer() {
-    return requiringArgument(new OperatorComputer());
+    return new OperatorComputer();
   }
 
   public Computation compute(Computation computation) {
