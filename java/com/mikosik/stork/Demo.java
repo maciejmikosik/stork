@@ -7,24 +7,21 @@ import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.debug.Debug.configuredDecorator;
-import static com.mikosik.stork.debug.InjectNames.injectNames;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static org.logbuddy.decorator.NoDecorator.noDecorator;
 
 import java.nio.file.Paths;
 
-import com.mikosik.stork.model.Module;
-
 public class Demo {
   private final static boolean isLogging = false;
 
   public static void main(String[] args) {
     var project = project();
-    var module = maybeInjectNames(compile(compilation()
+    var module = compile(compilation()
         .source(project.demoDirectory)
         .source(project.coreLibraryDirectory)
-        .library(nativeModule())));
+        .library(nativeModule()));
 
     var decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))
@@ -32,11 +29,5 @@ public class Demo {
 
     decorator.decorate(program(identifier("main"), module))
         .run(input(System.in), output(System.out));
-  }
-
-  private static Module maybeInjectNames(Module module) {
-    return isLogging
-        ? injectNames(module)
-        : module;
   }
 }

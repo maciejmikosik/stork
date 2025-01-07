@@ -17,12 +17,10 @@ import static com.mikosik.stork.compile.link.MathOperator.NEGATE;
 import static com.mikosik.stork.compile.link.StackOperator.EAGER;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.EagerInstruction.eager;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Module.moduleOf;
-import static com.mikosik.stork.model.NamedInstruction.name;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
@@ -37,7 +35,6 @@ import java.math.BigInteger;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.common.io.Serializable;
@@ -46,8 +43,6 @@ import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.debug.Decompiler;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
@@ -96,7 +91,6 @@ public class TestDecompiler {
                 .add(suite("program")
                     .add(test("$WRITE", writeByteTo(null)))
                     .add(test("$CLOSE", CLOSE_STREAM))))
-            .add(testInstructions())
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("identifier")
@@ -126,32 +120,6 @@ public class TestDecompiler {
             .add(test("function", removeNamespaces(identifier("function")))));
   }
 
-  private static Suite testInstructions() {
-    Instruction instruction = x -> (Instruction) y -> identifier("z");
-    Instruction f = name("f", instruction);
-
-    Identifier x = identifier("x");
-    Identifier y = identifier("y");
-    return suite("instruction")
-        .add(suite("raw")
-            .add(test("<>", instruction))
-            .add(test("<>", instruction.apply(x)))
-            .add(test("<>(x)", application(instruction, x)))
-            .add(test("z", apply(instruction, x, y))))
-        .add(suite("nested")
-            .add(test("<f>", f))
-            .add(test("<f(x)>", apply(f, x)))
-            .add(test("<f(x)>(y)", application(apply(f, x), y)))
-            .add(test("z", apply(f, x, y)))
-            .add(test("eager(<>)", eager(instruction)))
-            .add(test("eager(<f>)", eager(f)))
-            .add(test("eager(<f(x)>)", apply(eager(f), x)))
-            .add(test("eagerVisited(<f>)", eager(f).visit()))
-            .add(suite("detects returning other named instruction")
-                .add(test("<g>", apply(name("f", a -> name("g", b -> b)), x)))
-                .add(test("<g>", apply(name("f", a -> a), name("g", b -> b))))));
-  }
-
   private static Test test(String expected, Expression expression) {
     return test(expected, expression, Decompiler::decompile);
   }
@@ -178,13 +146,5 @@ public class TestDecompiler {
             actual);
       }
     });
-  }
-
-  private static Expression apply(Instruction instruction, Expression... arguments) {
-    Expression result = instruction;
-    for (Expression argument : arguments) {
-      result = ((Instruction) result).apply(argument);
-    }
-    return result;
   }
 }

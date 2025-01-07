@@ -9,14 +9,11 @@ import java.util.stream.Stream;
 import com.mikosik.stork.common.io.Serializable;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.EagerInstruction;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Instruction;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Module;
-import com.mikosik.stork.model.NamedInstruction;
 import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
@@ -45,17 +42,9 @@ public class Decompiler {
       case Identifier identifier -> serializable(identifier.name());
       case Integer integer -> serializable(integer.value.toString());
       case Quote quote -> quoteBrackets(serializable(quote.string));
-      case EagerInstruction eager -> join(
-          serializable(eager.visited
-              ? "eagerVisited"
-              : "eager"),
-          roundBrackets(decompile(eager.instruction)));
-      case NamedInstruction instruction -> join(
-          angleBrackets(decompile(instruction.name)));
       case Operator operator -> join(
           serializable("$"),
           serializable(operator));
-      case Instruction instruction -> angleBrackets(serializable(""));
       case Parameter parameter -> serializable(parameter.name);
       case Lambda lambda -> join(
           roundBrackets(serializable(lambda.parameter.name)),
@@ -83,10 +72,6 @@ public class Decompiler {
 
   private static Serializable curlyBrackets(Serializable serializable) {
     return brackets('{', '}', serializable);
-  }
-
-  private static Serializable angleBrackets(Serializable serializable) {
-    return brackets('<', '>', serializable);
   }
 
   private static Serializable quoteBrackets(Serializable serializable) {

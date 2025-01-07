@@ -6,10 +6,10 @@ import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.ChainedComputer.chained;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.compute.InstructionComputer.instructionComputer;
 import static com.mikosik.stork.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.compute.LoopingComputer.looping;
 import static com.mikosik.stork.compute.ModulingComputer.modulingComputer;
+import static com.mikosik.stork.compute.OperatorComputer.operatorComputer;
 import static com.mikosik.stork.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -47,7 +47,7 @@ public class Program {
   private static Computer buildComputer(Module module) {
     return looping(interruptible(caching(chained(
         modulingComputer(module),
-        instructionComputer(),
+        operatorComputer(),
         applicationComputer(),
         stdinComputer(),
         returningComputer()))));
