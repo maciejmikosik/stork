@@ -35,6 +35,8 @@ import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
 
+// TODO cascading imports
+// TODO model of entire source code
 public class Compiler {
   public static Module compile(Compilation compilation) {
     var compiledSources = compilation.sources.stream()

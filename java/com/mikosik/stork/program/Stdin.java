@@ -36,6 +36,7 @@ public class Stdin implements Operator {
       var maybeByte = input.read();
       computed = maybeByte.hasByte()
           ? some(
+              // TODO Use Bridge method.
               integer(maybeByte.getByte()),
               stdin(input, index + 1))
           : NONE;
