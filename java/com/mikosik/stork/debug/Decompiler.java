@@ -18,7 +18,6 @@ import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.program.Stdin;
 
 public class Decompiler {
   public static Serializable decompile(Module module) {
@@ -52,9 +51,6 @@ public class Decompiler {
       case Application application -> join(
           decompile(application.function),
           roundBrackets(decompile(application.argument)));
-      case Stdin stdin -> join(
-          serializable("stdin"),
-          roundBrackets(serializable("" + stdin.index)));
       default -> throw runtimeException("unknown expression: %s", expression);
     };
   }

@@ -14,7 +14,6 @@ import static com.mikosik.stork.compute.ReturningComputer.returningComputer;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Stdin.stdin;
-import static com.mikosik.stork.program.StdinComputer.stdinComputer;
 
 import java.util.Optional;
 
@@ -49,7 +48,6 @@ public class Program {
         modulingComputer(module),
         operatorComputer(),
         applicationComputer(),
-        stdinComputer(),
         returningComputer()))));
   }
 

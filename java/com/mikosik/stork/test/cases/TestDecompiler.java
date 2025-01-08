@@ -60,9 +60,6 @@ public class TestDecompiler {
             .add(suite("quote")
                 .add(test("\"example quote\"", quote("example quote")))
                 .add(test("\"\"", quote(""))))
-            .add(suite("stdin")
-                .add(test("stdin(7)", stdin(input(new byte[0]), 7)))
-                .add(test("stdin(0)", stdin(input(new byte[0])))))
             .add(suite("operators")
                 .add(test("$OPERATOR", new Operator() {
                   public Optional<Computation> compute(Stack stack) {
@@ -90,7 +87,9 @@ public class TestDecompiler {
                     .add(test("$B", B)))
                 .add(suite("program")
                     .add(test("$WRITE", writeByteTo(null)))
-                    .add(test("$CLOSE", CLOSE_STREAM))))
+                    .add(test("$CLOSE", CLOSE_STREAM))
+                    .add(test("$STDIN(7)", stdin(input(new byte[0]), 7)))
+                    .add(test("$STDIN(0)", stdin(input(new byte[0]))))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("identifier")
