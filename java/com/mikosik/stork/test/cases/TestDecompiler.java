@@ -24,9 +24,9 @@ import static com.mikosik.stork.model.Module.moduleOf;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.program.Program.CLOSE_STREAM;
-import static com.mikosik.stork.program.Program.writeByteTo;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.program.Stdout.CLOSE;
+import static com.mikosik.stork.program.Stdout.writeByteTo;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -87,7 +87,7 @@ public class TestDecompiler {
                     .add(test("$B", B)))
                 .add(suite("program")
                     .add(test("$WRITE", writeByteTo(null)))
-                    .add(test("$CLOSE", CLOSE_STREAM))
+                    .add(test("$CLOSE", CLOSE))
                     .add(test("$STDIN(7)", stdin(input(new byte[0]), 7)))
                     .add(test("$STDIN(0)", stdin(input(new byte[0]))))))
             .add(suite("variable")

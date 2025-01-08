@@ -15,6 +15,7 @@ public class Bridge {
   public static final Identifier FALSE = identifier("lang.boolean.false");
   public static final Identifier SOME = identifier("lang.stream.some");
   public static final Identifier NONE = identifier("lang.stream.none");
+  public static final Identifier REDUCE_EAGER = identifier("lang.stream.reduceEager");
 
   public static Expression stork(String string) {
     Expression stream = NONE;
