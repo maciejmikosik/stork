@@ -11,6 +11,7 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Library;
 
+// TODO wrap in indexing computer that Identifier->Index
 public class LibraryComputer implements Computer {
   private final Map<Identifier, Expression> table;
 

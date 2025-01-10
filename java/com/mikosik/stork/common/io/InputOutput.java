@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import com.mikosik.stork.common.Sequence;
 
+//  TODO Use Path.of instead of Paths.get
 public class InputOutput {
   public static UncheckedIOException unchecked(IOException e) {
     return new UncheckedIOException(e);

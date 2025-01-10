@@ -19,6 +19,10 @@ import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 
+// TODO Decompiler<M> decompile(M model)
+// Decompiler<Module>, Decompiler<Definition>, Decompiler<Expression>
+// TODO Pretty decompiler that formats source code.
+// TODO replace combinators with lambdas.
 public class Decompiler {
   public static Serializable decompile(Library library) {
     return join(library.definitions.stream()

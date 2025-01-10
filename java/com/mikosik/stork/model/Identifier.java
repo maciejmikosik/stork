@@ -34,6 +34,7 @@ public class Identifier implements Expression {
         variable(path.getLast()));
   }
 
+  // TODO Try to combine 2 stream into one and join them.
   public String name() {
     List<String> path = new LinkedList<>(namespace.path);
     path.add(variable.name);

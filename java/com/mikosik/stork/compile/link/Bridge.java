@@ -20,6 +20,7 @@ public class Bridge {
   public static Expression stork(String string) {
     Expression stream = NONE;
     for (char character : reverse(string).toCharArray()) {
+      // TODO Use Bridge method.
       stream = some(integer(character), stream);
     }
     return stream;
@@ -33,6 +34,8 @@ public class Bridge {
     return value ? TRUE : FALSE;
   }
 
+  // TODO create cache for conversions for 0-255
+  // TODO channel all integer conversions through bridge
   public static Expression stork(BigInteger value) {
     return integer(value);
   }

@@ -37,6 +37,7 @@ public class VerifyLibrary {
         .collect(toSequence());
   }
 
+  // TODO correct name to undefinedImports
   private static Sequence<UndefinedImport> undefinedIdentifiers(Library library) {
     var definedIdentifiers = library.definitions.stream()
         .map(definition -> definition.identifier)

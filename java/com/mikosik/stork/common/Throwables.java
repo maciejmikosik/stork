@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class Throwables {
+  // TODO use runtimeException("...").formatted(...))
   public static RuntimeException runtimeException(String format, Object... args) {
     return new RuntimeException(format.formatted(args));
   }
