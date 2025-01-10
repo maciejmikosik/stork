@@ -13,6 +13,7 @@ import static com.mikosik.stork.program.Program.program;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
 
+// TODO Add --debug option. Similar to {@link Demo} main.
 public class Stork {
   public static void main(String[] args) {
     try {

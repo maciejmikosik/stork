@@ -36,6 +36,9 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 import com.mikosik.stork.model.Library;
 
+// TODO propose syntax for arrays
+// TODO allow direct lambda application (x){x}(arg)
+// TODO allow snake notation
 public class Parser {
   public static Library parse(Iterator<Token> iterator) {
     return parse(peekerator(checkingEOF(iterator)));
