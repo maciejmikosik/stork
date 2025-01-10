@@ -60,7 +60,7 @@
   tryAt(index)(stream) {
     atLeast(0)(index)
       (tryFirst(skip(index)(stream)))
-      (absent)
+      (nothing)
   }
 
   length(stream) {
@@ -89,8 +89,8 @@
 
   tryFirst(stream) {
     stream
-      ((head)(tail){ present(head) })
-      (absent)
+      ((head)(tail){ something(head) })
+      (nothing)
   }
 
   limit(n)(stream) {

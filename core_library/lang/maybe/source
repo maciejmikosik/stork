@@ -1,15 +1,15 @@
 
-  present(element)(vPresent)(vAbsent) {
-    vPresent(element)
+  something(element)(vSomething)(vNothing) {
+    vSomething(element)
   }
 
-  absent(vPresent)(vAbsent) {
-    vAbsent
+  nothing(vSomething)(vNothing) {
+    vNothing
   }
 
 
-  else(default)(maybe) {
+  default(defaultValue)(maybe) {
     maybe
-      (identity)
-      (default)
+      ((element){ element })
+      (defaultValue)
   }
