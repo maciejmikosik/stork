@@ -5,4 +5,4 @@ Core libraries of stork language. By default they are included in runtime enviro
  - [lang.boolean.*](boolean/doc.md) - boolean algebra
  - lang.integer.* - math operations on integers
  - lang.stream.* - operations on streams
- - lang.maybe.* - handling of optional values
+ - [lang.maybe.*](maybe/doc.md) - handling of optional values
