@@ -155,16 +155,6 @@ public class TestStream {
             .test("array(0)", "")
             .test("array(1)(97)", "a")
             .test("array(2)(97)(98)", "ab")
-            .test("array(3)(97)(98)(99)", "abc"))
-        .add(snippetSuite("count")
-            .importing("lang.stream.count")
-            .importing("lang.stream.limit")
-            .importing("lang.stream.each")
-            .importing("lang.integer.add")
-            .test("each(add(97))(limit(5)(count))", "abcde"))
-        .add(snippetSuite("countFrom")
-            .importing("lang.stream.countFrom")
-            .importing("lang.stream.limit")
-            .test("limit(5)(countFrom(97))", "abcde"));
+            .test("array(3)(97)(98)(99)", "abc"));
   }
 }

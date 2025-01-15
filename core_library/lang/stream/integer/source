@@ -1,0 +1,12 @@
+
+  count {
+    countFrom(0)
+  }
+
+  countFrom(n) {
+    iterate(increment)(n)
+  }
+
+  countTo(n) {
+    limit(n)(count)
+  }

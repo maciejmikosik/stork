@@ -3,7 +3,6 @@ lang.maybe.nothing
 lang.integer.add
 lang.integer.moreThan
 lang.integer.atLeast
-lang.integer.increment
 lang.integer.decrement
 lang.function.flip
 lang.boolean.true

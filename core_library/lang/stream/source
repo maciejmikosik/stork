@@ -191,11 +191,3 @@
       })
       (collected)
   }
-
-  count {
-    countFrom(0)
-  }
-
-  countFrom {
-    iterate(increment)
-  }
