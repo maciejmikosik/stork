@@ -15,12 +15,6 @@
     f(y)(x)
   }
 
-  if(condition)(function)(argument) {
-    condition(argument)
-      (function(argument))
-      (argument)
-  }
-
   doubly(g)(f)(x)(y) {
     g(g(flip(f))(y))(x)
   }
