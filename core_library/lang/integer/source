@@ -11,18 +11,12 @@
     flip(moreThan)
   }
 
-  atLeast(min)(number) {
-    not(lessThan(min)(number))
+  atLeast(threshold)(number) {
+    not(lessThan(threshold)(number))
   }
 
-  atMost(max)(number) {
-    not(moreThan(max)(number))
-  }
-
-  within(min)(max)(number) {
-    and
-      (atLeast(min)(number))
-      (atMost(max)(number))
+  atMost(threshold)(number) {
+    not(moreThan(threshold)(number))
   }
 
   negate {
@@ -59,30 +53,34 @@
       (dividend)
   }
 
-  signum {
-    compose
-      (if(moreThan(0))(constant(1)))
-      (if(lessThan(0))(constant(-1)))
+  sign(number) {
+    moreThan(0)(number)
+      (1)
+      (lessThan(0)(number)
+        (-1)
+        (0))
   }
 
-  absolute {
-    if(lessThan(0))(negate)
+  absolute(number) {
+    lessThan(0)(number)
+      (negate(number))
+      (number)
+  }
+
+  makeAtLeast(minimum)(number) {
+    atLeast(minimum)(number)
+      (number)
+      (minimum)
+  }
+
+  makeAtMost(maximum)(number) {
+    atMost(maximum)(number)
+      (number)
+      (maximum)
   }
 
   relu {
-    floor(0)
-  }
-
-  ceil(max) {
-    if(moreThan(max))(constant(max))
-  }
-
-  floor(min) {
-    if(lessThan(min))(constant(min))
-  }
-
-  clamp(min)(max) {
-    compose(ceil(max))(floor(min))
+    makeAtLeast(0)
   }
 
   format {
