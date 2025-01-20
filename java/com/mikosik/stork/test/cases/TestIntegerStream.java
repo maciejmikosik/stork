@@ -5,21 +5,21 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestStreamInteger {
-  public static Test testStreamInteger() {
-    return suite("stream.integer")
+public class TestIntegerStream {
+  public static Test testIntegerStream() {
+    return suite("integer.stream")
         .add(snippetSuite("count")
-            .importing("lang.stream.integer.count")
+            .importing("lang.integer.stream.count")
             .importing("lang.stream.limit")
             .importing("lang.stream.each")
             .importing("lang.integer.add")
             .test("each(add(97))(limit(5)(count))", "abcde"))
         .add(snippetSuite("countFrom")
-            .importing("lang.stream.integer.countFrom")
+            .importing("lang.integer.stream.countFrom")
             .importing("lang.stream.limit")
             .test("limit(5)(countFrom(97))", "abcde"))
         .add(snippetSuite("countTo")
-            .importing("lang.stream.integer.countTo")
+            .importing("lang.integer.stream.countTo")
             .importing("lang.stream.each")
             .importing("lang.integer.add")
             .test("each(add(97))(countTo(5))", "abcde"));

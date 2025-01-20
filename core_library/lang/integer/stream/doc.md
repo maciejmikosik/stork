@@ -1,4 +1,4 @@
-# lang.stream.integer.* #
+# lang.integer.stream.* #
 
 ### Functions ###
 
