@@ -17,7 +17,7 @@ Build stork compiler by running bash script.
 
 It creates stork binary in your home directory `~/stork`.
 
-Create a file named `source` with following contents.
+Create a file named `source.stork` with following contents.
 
     main(stdin) {
       "Hello World!"
@@ -28,19 +28,19 @@ Run it by executing stork binary in same directory.
     $ ~/stork
     Hello World!
 
-By default stork binary searches for file named `source` in current directory and launches function named `main`.
+By default stork binary searches for file named `source.stork` in current directory and launches function named `main`.
 
 There is no need for `return` keyword since function definition contains single expression of what is returned. There are no local variables. Function has no return type since stork is untyped.
 
 ### Imports ###
 
-Stork ships with [core library](../core_library/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library create a file named `import` in the same directory as `source` file and specify fully qualified name of a function you want to import.
+Stork ships with [core library](../core_library/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
 
-file: import
+`import.stork`
 
     lang.stream.append
 
-Now you can use `append` function in your `source` file.
+Now you can use `append` function in your `source.stork` file.
 
     main(stdin) {
       append("!")("Hello World")
@@ -58,25 +58,25 @@ Define a function for appending exclamation mark.
       append("!")(string)
     }
 
-Functions defined in top directory are in default namespace. You can organize your code into subdirectories. Function defined in subdirectory is in separate namespace based on its relative filesystem path. Each subdirectory can have it's own `source` and `import` file.
+Functions defined in top directory are in default namespace. You can organize your code into subdirectories. Function defined in subdirectory is in separate namespace based on its relative filesystem path. Each subdirectory can have it's own `source.stork` and `import.stork` file.
 
-source:
+`source.stork`
 
     main(stdin) {
       shout("Hello World")
     }
 
-import:
+`import.stork`
 
     my.project.shout
 
-my/project/source:
+`my/project/source.stork`
 
     shout(string) {
       append("!")(string)
     }
 
-my/project/import:
+`my/project/import.stork`
 
     lang.stream.append
 
@@ -133,11 +133,11 @@ String literal like `"Hello World!"` is [stream](../core_library/lang/stream/doc
 
 Running
 
-import:
+`import.stork`
 
     lang.stream.append
 
-source:
+`source.stork`
 
     main(stdin) {
       shout(stdin)
@@ -155,12 +155,12 @@ prints `Hello World!`
 
 Since strings are stream of integers, you can perform integer arithmetics on characters.
 
-import:
+`import.stork`
 
     lang.integer.add
     lang.stream.each
 
-source:
+`source.stork`
 
     main(stdin) {
       each(add(1))("ace")

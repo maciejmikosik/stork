@@ -80,8 +80,8 @@ public class ProgramTest implements Test {
     return directory + "/" + file;
   }
 
-  private static final String SOURCE_FILE_NAME = "source";
-  private static final String IMPORT_FILE_NAME = "import";
+  private static final String SOURCE_FILE_NAME = "source.stork";
+  private static final String IMPORT_FILE_NAME = "import.stork";
 
   public ProgramTest stdin(String stdin) {
     this.stdin = bytes(stdin);
