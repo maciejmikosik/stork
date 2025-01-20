@@ -20,6 +20,18 @@
     not(hasSome(stream))
   }
 
+  maybeHead(stream) {
+    stream
+      ((head)(tail) { something(head) })
+      (nothing)
+  }
+
+  maybeTail(stream) {
+    stream
+      ((head)(tail) { something(tail) })
+      (nothing)
+  }
+
   equal(equalElements)(streamA)(streamB) {
     streamA
       ((headA)(tailA) {
@@ -150,6 +162,25 @@
       (none)
   }
 
+  transpose(streams) {
+    hasSome(streams)
+      (some
+        (streams.each(maybeHead).unmaybe)
+        (transpose(streams.each(maybeTail).unmaybe))
+      )
+      (none)
+  }
+
+  unmaybe(stream) {
+    stream
+      ((head)(tail) {
+        head
+          ((element){ some(element)(unmaybe(tail)) })
+          (unmaybe(tail))
+      })
+      (none)
+  }
+
   length(stream) {
     stream
       ((head)(tail) {
@@ -164,8 +195,40 @@
       .hasSome
   }
 
+  startsWith(equal)(prefix)(stream) {
+    prefix
+      ((prefixHead)(prefixTail) {
+        stream
+          ((head)(tail) {
+            and
+              (equal(prefixHead)(head))
+              (startsWith(equal)(prefixTail)(tail))
+          })
+          (false)
+      })
+      (true)
+  }
+
   reverse {
     reduce(none)(some)
+  }
+
+  sort(comparator)(stream) {
+    stream
+      ((head)(tail) {
+        single(head)
+          .prepend(tail
+            .filter(negate(comparator(head)))
+            .sort(comparator))
+          .append(tail
+            .filter(comparator(head))
+            .sort(comparator))
+      })
+      (none)
+  }
+
+  negate(predicate)(x) {
+    not(predicate(x))
   }
 
   at(index)(stream) {
