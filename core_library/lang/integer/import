@@ -5,13 +5,9 @@ lang.op.NEGATE
 lang.op.ADD
 lang.op.MULTIPLY
 lang.op.DIVIDE
-lang.function.if
-lang.function.constant
 lang.function.flip
 lang.function.doubly
-lang.function.compose
 lang.boolean.not
-lang.boolean.and
 lang.stream.single
 lang.stream.prepend
 lang.stream.append

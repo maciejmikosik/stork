@@ -18,7 +18,6 @@ public class TestInteger {
         .add(testIntegerLessThan())
         .add(testIntegerAtLeast())
         .add(testIntegerAtMost())
-        .add(testIntegerWithin())
         .add(testIntegerNegate())
         .add(testIntegerAdd())
         .add(testIntegerSubtract())
@@ -27,13 +26,13 @@ public class TestInteger {
         .add(testIntegerMultiply())
         .add(testIntegerDivideBy())
         .add(testIntegerModulo())
-        .add(testIntegerSignum())
+        .add(testIntegerSign())
         .add(testIntegerAbsolute())
+        .add(testIntegerMakeAtMost())
+        .add(testIntegerMakeAtLeast())
         .add(testIntegerRelu())
-        .add(testIntegerCeil())
-        .add(testIntegerFloor())
-        .add(testIntegerClamp())
-        .add(testIntegerFormat());
+        .add(testIntegerFormat())
+        .add(testIntegerFormatBase());
   }
 
   private static Test testIntegerCanonical() {
@@ -136,18 +135,6 @@ public class TestInteger {
         .test("atMost( 1)( 0)", true)
         .test("atMost( 1)( 1)", true)
         .test("atMost(negate(3))(negate(4))", true);
-  }
-
-  private static Test testIntegerWithin() {
-    return snippetSuite("within")
-        .importing("lang.integer.within")
-        .importing("lang.integer.negate")
-        .test("within(-1)(1)(-2)", false)
-        .test("within(-1)(1)(-1)", true)
-        .test("within(-1)(1)( 0)", true)
-        .test("within(-1)(1)( 1)", true)
-        .test("within(-1)(1)( 2)", false)
-        .test("within(negate(1))(negate(-1))(negate(0))", true);
   }
 
   private static Test testIntegerNegate() {
@@ -286,15 +273,15 @@ public class TestInteger {
         .test("modulo(modulo(5)(9))(modulo(10)(17))", 3);
   }
 
-  private static Test testIntegerSignum() {
-    return snippetSuite("signum")
-        .importing("lang.integer.signum")
-        .test("signum(-21)", -1)
-        .test("signum( -1)", -1)
-        .test("signum(  0)", 0)
-        .test("signum(  1)", 1)
-        .test("signum( 21)", 1)
-        .test("signum(signum(21))", 1);
+  private static Test testIntegerSign() {
+    return snippetSuite("sign")
+        .importing("lang.integer.sign")
+        .test("sign(-21)", -1)
+        .test("sign( -1)", -1)
+        .test("sign(  0)", 0)
+        .test("sign(  1)", 1)
+        .test("sign( 21)", 1)
+        .test("sign(sign(21))", 1);
   }
 
   private static Test testIntegerAbsolute() {
@@ -308,6 +295,24 @@ public class TestInteger {
         .test("absolute(absolute(21))", 21);
   }
 
+  private static Test testIntegerMakeAtMost() {
+    return snippetSuite("makeAtMost")
+        .importing("lang.integer.makeAtMost")
+        .test("makeAtMost(7)(5)", 5)
+        .test("makeAtMost(7)(9)", 7)
+        .test("makeAtMost(7)(7)", 7)
+        .test("makeAtMost(5)(makeAtMost(7)(9))", 5);
+  }
+
+  private static Test testIntegerMakeAtLeast() {
+    return snippetSuite("makeAtLeast")
+        .importing("lang.integer.makeAtLeast")
+        .test("makeAtLeast(7)(5)", 7)
+        .test("makeAtLeast(7)(9)", 9)
+        .test("makeAtLeast(7)(7)", 7)
+        .test("makeAtLeast(9)(makeAtLeast(7)(5))", 9);
+  }
+
   private static Test testIntegerRelu() {
     return snippetSuite("relu")
         .importing("lang.integer.relu")
@@ -319,35 +324,6 @@ public class TestInteger {
         .test("relu(relu(21))", 21);
   }
 
-  private static Test testIntegerCeil() {
-    return snippetSuite("ceil")
-        .importing("lang.integer.ceil")
-        .test("ceil(7)(5)", 5)
-        .test("ceil(7)(9)", 7)
-        .test("ceil(7)(7)", 7)
-        .test("ceil(5)(ceil(7)(9))", 5);
-  }
-
-  private static Test testIntegerFloor() {
-    return snippetSuite("floor")
-        .importing("lang.integer.floor")
-        .test("floor(7)(5)", 7)
-        .test("floor(7)(9)", 9)
-        .test("floor(7)(7)", 7)
-        .test("floor(9)(floor(7)(5))", 9);
-  }
-
-  private static Test testIntegerClamp() {
-    return snippetSuite("clamp")
-        .importing("lang.integer.clamp")
-        .test("clamp(5)(7)(4)", 5)
-        .test("clamp(5)(7)(5)", 5)
-        .test("clamp(5)(7)(6)", 6)
-        .test("clamp(5)(7)(7)", 7)
-        .test("clamp(5)(7)(8)", 7)
-        .test("clamp(1)(3)(clamp(5)(7)(8))", 3);
-  }
-
   private static Test testIntegerFormat() {
     return snippetSuite("format")
         .importing("lang.integer.format")
@@ -357,6 +333,20 @@ public class TestInteger {
         .test("format(1000000000)", "1000000000")
         .test("format(123456789123456789)", "123456789123456789")
         .test("format(-123456789123456789)", "-123456789123456789");
+  }
+
+  private static Test testIntegerFormatBase() {
+    return snippetSuite("formatBase")
+        .importing("lang.integer.formatBase")
+        .test("formatBase(2)(0)", "0")
+        .test("formatBase(2)(1)", "1")
+        .test("formatBase(2)(10)", "1010")
+        .test("formatBase(2)(-1)", "-1")
+        .test("formatBase(2)(-10)", "-1010")
+        .test("formatBase(16)(1)", "1")
+        .test("formatBase(16)(255)", "FF")
+        .test("formatBase(16)(-1)", "-1")
+        .test("formatBase(16)(-255)", "-FF");
   }
 
   private static BigInteger big(String string) {

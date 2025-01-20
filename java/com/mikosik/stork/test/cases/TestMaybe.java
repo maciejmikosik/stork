@@ -8,17 +8,17 @@ import org.quackery.Test;
 public class TestMaybe {
   public static Test testMaybe() {
     return suite("maybe")
-        .add(snippetSuite("present")
-            .importing("lang.maybe.present")
-            .test("present(1)((x){x})(2)", 1))
-        .add(snippetSuite("absent")
-            .importing("lang.maybe.absent")
-            .test("absent((x){x})(2)", 2))
-        .add(snippetSuite("absent")
-            .importing("lang.maybe.else")
-            .importing("lang.maybe.present")
-            .importing("lang.maybe.absent")
-            .test("else(2)(present(1))", 1)
-            .test("else(2)(absent)", 2));
+        .add(snippetSuite("something")
+            .importing("lang.maybe.something")
+            .test("something('s') ((x){x})('n')", "s"))
+        .add(snippetSuite("nothing")
+            .importing("lang.maybe.nothing")
+            .test("nothing ((x){x})('n')", "n"))
+        .add(snippetSuite("default")
+            .importing("lang.maybe.default")
+            .importing("lang.maybe.something")
+            .importing("lang.maybe.nothing")
+            .test("default('d')(something('s'))", "s")
+            .test("default('d')(nothing)", "d"));
   }
 }

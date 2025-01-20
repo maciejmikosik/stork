@@ -8,7 +8,6 @@
   }
 
 
-
   hasSome(stream) {
     stream
       ((head)(tail) {
@@ -35,6 +34,40 @@
       (hasNone(streamB))
   }
 
+
+  single(element) {
+    some(element)(none)
+  }
+
+  repeat(element) {
+    some
+      (element)
+      (repeat(element))
+  }
+
+  cycle(stream) {
+    hasSome(stream)
+      (prepend(stream)(cycle(stream)))
+      (none)
+  }
+
+  iterate(next)(first) {
+    some
+      (first)
+      (iterate(next)(next(first)))
+  }
+
+
+  each(transform)(stream) {
+    stream
+      ((head)(tail) {
+        some
+          (transform(head))
+          (each(transform)(tail))
+      })
+      (none)
+  }
+
   reduce(sum)(add)(stream) {
     stream
       ((head)(tail) {
@@ -57,40 +90,14 @@
       (sum)
   }
 
-  tryAt(index)(stream) {
-    atLeast(0)(index)
-      (tryFirst(skip(index)(stream)))
-      (absent)
-  }
-
-  length(stream) {
+  filter(predicate)(stream) {
     stream
       ((head)(tail) {
-        add(1)(length(tail))
+        predicate(head)
+          (some(head)(filter(predicate)(tail)))
+          (filter(predicate)(tail))
       })
-      (0)
-  }
-
-  single(element) {
-    some(element)(none)
-  }
-
-  repeat(element) {
-    some
-      (element)
-      (repeat(element))
-  }
-
-  cycle(stream) {
-    hasSome(stream)
-      (prepend(stream)(cycle(stream)))
       (none)
-  }
-
-  tryFirst(stream) {
-    stream
-      ((head)(tail){ present(head) })
-      (absent)
   }
 
   limit(n)(stream) {
@@ -113,50 +120,22 @@
       (stream)
   }
 
-  filter(condition)(stream) {
+  while(predicate)(stream) {
     stream
       ((head)(tail) {
-        condition(head)
-          (some(head)(filter(condition)(tail)))
-          (filter(condition)(tail))
-      })
-      (none)
-  }
-
-  while(condition)(stream) {
-    stream
-      ((head)(tail) {
-        condition(head)
-          (some(head)(while(condition)(tail)))
+        predicate(head)
+          (some(head)(while(predicate)(tail)))
           (none)
       })
       (none)
   }
 
-  contains(condition)(stream){
-    hasSome(filter(condition)(stream))
-  }
-
-  each(transform)(stream) {
+  append(secondStream)(stream) {
     stream
       ((head)(tail) {
-        some
-          (transform(head))
-          (each(transform)(tail))
+        some(head)(append(secondStream)(tail))
       })
-      (none)
-  }
-
-  reverse {
-    reduce(none)(some)
-  }
-
-  append(end)(stream) {
-    stream
-      ((head)(tail) {
-        some(head)(append(end)(tail))
-      })
-      (end)
+      (secondStream)
   }
 
   prepend {
@@ -171,18 +150,32 @@
       (none)
   }
 
-  interlace(streams) {
-    streams
-      ((headStream)(tailStreams) {
-        headStream
-          ((head)(tail){
-            some
-              (head)
-              (interlace(append(single(tail))(tailStreams)))
-          })
-          (interlace(tailStreams))
+  length(stream) {
+    stream
+      ((head)(tail) {
+        add(1)(length(tail))
       })
-      (none)
+      (0)
+  }
+
+  contains(condition)(stream){
+    hasSome(filter(condition)(stream))
+  }
+
+  reverse {
+    reduce(none)(some)
+  }
+
+  at(index)(stream) {
+    atLeast(0)(index)
+      (first(skip(index)(stream)))
+      (nothing)
+  }
+
+  first(stream) {
+    stream
+      ((head)(tail){ something(head) })
+      (nothing)
   }
 
   array(size) {
@@ -197,22 +190,4 @@
           (append(single(element))(collected))
       })
       (collected)
-  }
-
-  generate(next)(current) {
-    some
-      (current)
-      (generate(next)(next(current)))
-  }
-
-  for(initial)(condition)(next) {
-    while(condition)(generate(next)(initial))
-  }
-
-  count {
-    countFrom(0)
-  }
-
-  countFrom {
-    generate(increment)
   }
