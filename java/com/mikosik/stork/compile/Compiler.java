@@ -84,8 +84,8 @@ public class Compiler {
   private static Unit unitFrom(Namespace namespace, Directory directory) {
     return unit(
         namespace,
-        compileFile(directory.file("source")),
-        linkageFrom(directory.file("import")));
+        compileFile(directory.file("source.stork")),
+        linkageFrom(directory.file("import.stork")));
   }
 
   private static Module compileFile(File file) {

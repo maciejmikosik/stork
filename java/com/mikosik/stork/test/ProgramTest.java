@@ -61,20 +61,27 @@ public class ProgramTest implements Test {
   }
 
   public ProgramTest sourceFile(String content) {
-    return file("source", content);
+    return file(SOURCE_FILE_NAME, content);
   }
 
   public ProgramTest sourceFile(String directory, String content) {
-    return file(directory + "/source", content);
+    return file(in(directory, SOURCE_FILE_NAME), content);
   }
 
   public ProgramTest importFile(String content) {
-    return file("import", content);
+    return file(IMPORT_FILE_NAME, content);
   }
 
   public ProgramTest importFile(String directory, String content) {
-    return file(directory + "/import", content);
+    return file(in(directory, IMPORT_FILE_NAME), content);
   }
+
+  private static final String in(String directory, String file) {
+    return directory + "/" + file;
+  }
+
+  private static final String SOURCE_FILE_NAME = "source.stork";
+  private static final String IMPORT_FILE_NAME = "import.stork";
 
   public ProgramTest stdin(String stdin) {
     this.stdin = bytes(stdin);

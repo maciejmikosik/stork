@@ -95,17 +95,17 @@ Syntax is designed so putting name before lambda turns it into function definiti
 
 # namespaces #
 
-Source code file is always named `source`. Directory path defines namespace of all functions defined inside. Using functions from other namespace require imports. Imports are in separate file named `import`. By default main function is named `main` and is in root directory/namespace.
+Source code file is always named `source.stork`. Directory path defines namespace of all functions defined inside. Using functions from other namespace require imports. Imports are in separate file named `import.stork`. By default main function is named `main` and is in root directory/namespace.
 
 Example stork program that takes first 10 characters from standard input, reverses them and returns to standard output.
 
-file: source
+`source.stork`
 
     main(stdin) {
       reverse(limit(10)(stdin))
     }
 
-file: import
+`import.stork`
 
     lang.stream.limit
     lang.stream.reverse
