@@ -1,4 +1,4 @@
-Stork is functional programming language with minimalistic syntax. It has no keywords and no operators. 
+Stork is untyped functional programming language.
 
     main(stdin) {
       "Hello World!"
@@ -110,22 +110,6 @@ file: import
     lang.stream.limit
     lang.stream.reverse
 
-# quick start #
+# Tutorial #
 
-Clone project.
-
-Build `stork` binary. Default destination is your home directory.
-
-    ./run/build
-
-Go to demo directory in stork project.
-
-    cd demo
-
-Run stork (update path if you moved binary from home directory)
-
-    ~/stork
-
-# documentation #
-
-[Documentation](doc/stork.md)
+Learn basic features from [tutorial](doc/tutorial.md).
