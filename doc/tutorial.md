@@ -189,3 +189,7 @@ Example of structure with 1 constructor `person` and 2 fields: `name` and `age`.
       visitor(name)(age)
     }
 
+### Interface ###
+Full doc: [Interface](interface.md).
+
+In stork you can't formally define interfaces, but they exist through conventions. Simple examples are: equal, comparator, predicate.
