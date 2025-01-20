@@ -19,14 +19,14 @@ Integer can be defined using literal expression: `0`, `123`, `-123`. Also non-ca
 `atMost(threshold)(number)` - true if `number` is equal or lower than `threshold`
 
 `negate(number)` - returns opposite number
-   - `negate(5)` -> `-5`
-   - `negate(-3)` -> `3`
-   - `negate(0)` -> `0`
+   - `negate(5)` = `-5`
+   - `negate(-3)` = `3`
+   - `negate(0)` = `0`
 
 `add(numberA)(numberB)` - returns sum of 2 numbers: `numberA` + `numberB`.
 
 `subtract(numberA)(numberB)` - returns difference of 2 numbers: `numberB` - `numberA`.
-   - `subtract(1)(10)` -> `9`
+   - `subtract(1)(10)` = `9`
 
 `increment(number)` - increases `number` by `1`.
 
