@@ -21,9 +21,9 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `hasNone(none)` -> `true`
 
 `equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
-   - `equal(equalInteger)("abc")("abc")` -> true
-   - `equal(equalInteger)("abc")("abx")` -> false
-   - `equal(equalInteger)("abc")("ab")` -> false
+   - `equal(equalInteger)("abc")("abc")` -> `true`
+   - `equal(equalInteger)("abc")("abx")` -> `false`
+   - `equal(equalInteger)("abc")("ab")` -> `false`
 
 ##### creating #####
 

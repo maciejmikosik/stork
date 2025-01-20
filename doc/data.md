@@ -43,14 +43,14 @@ Let's implement `TrafficLight` enum with 3 constants: `red`, `yellow` and `green
     red(vRed)(vYellow)(vGreen) { vRed }
     yellow(vRed)(vYellow)(vGreen) { vYellow }
     green(vRed)(vYellow)(vGreen) { vGreen }
-
+    
     canGoOn(trafficLight) {
       trafficLight
         (false)
         (false)
         (true)
     }
-
+    
     main(stdin) {
       yesOrNo(canGoOn(yellow))
     }
@@ -82,7 +82,7 @@ Let's implement functions that checks if given person is an adult.
         atLeast(18)(age)
       })
     }
-
+    
     main(stdin) {
       yesOrNo(isAdult(person("John")(23)))
     }
@@ -118,7 +118,7 @@ Simple example is [maybe](../core_library/lang/maybe/doc.md). It has 2 construct
     something(element)(vSomething)(vNothing) {
       vSomething(element)
     }
-
+    
     nothing(vSomething)(vNothing) {
       vNothing
     }
@@ -138,7 +138,7 @@ Another example is [stream](../core_library/lang/stream/doc.md). Stream can have
     some(head)(tail)(vSome)(vNone) {
       vSome(head)(tail)
     }
-
+    
     none(vSome)(vNone) {
       vNone
     }
