@@ -13,17 +13,17 @@ Stream is similar to singly linked list. This means accessing random element is 
 ### Functions ###
 
 `hasSome(stream)` - returns `true` if stream is not empty
-   - `hasSome(some(head)(tail))` -> `true`
-   - `hasSome(none)` -> `false`
+   - `hasSome(some(head)(tail))` = `true`
+   - `hasSome(none)` = `false`
 
 `hasNone(stream)` - returns `true` if stream is empty
-   - `hasNone(some(head)(tail))` -> `false`
-   - `hasNone(none)` -> `true`
+   - `hasNone(some(head)(tail))` = `false`
+   - `hasNone(none)` = `true`
 
 `equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
-   - `equal(equalInteger)("abc")("abc")` -> true
-   - `equal(equalInteger)("abc")("abx")` -> false
-   - `equal(equalInteger)("abc")("ab")` -> false
+   - `equal(equalInteger)("abc")("abc")` = `true`
+   - `equal(equalInteger)("abc")("abx")` = `false`
+   - `equal(equalInteger)("abc")("ab")` = `false`
 
 ##### creating #####
 
@@ -39,69 +39,69 @@ Stream is similar to singly linked list. This means accessing random element is 
 ##### processing #####
 
 `each(transform)(stream)` - goes through all elements in `stream` and replaces each of them by applying `transform` function.
-   - `each(add(1))("ace")` -> `"bdf"`
+   - `each(add(1))("ace")` = `"bdf"`
 
 `reduce(sum)(add)(stream)` - goes through all elements in `stream` and invokes a 2 parameter function `add` on each element. First parameter of `add` is element from `stream`. Second argument is `sum` accumulated so far from previous elements. It is similar to `foldl` and `foldr` in haskell. It goes through stream from first element like `foldl`, but element from stream is first argument to `add` like in `foldr`. Reducing an infinite stream hangs the program.
-   - `reduce(1)(multiply)(some(2)(some(3)(some(5)(none))))` ->  
-     `multiply(5)(multiply(3)(multiply(2)(1)))` ->  
-     `multiply(5)(multiply(3)(2))` ->  
-     `multiply(5)(6)` ->  
+   - `reduce(1)(multiply)(some(2)(some(3)(some(5)(none))))` =  
+     `multiply(5)(multiply(3)(multiply(2)(1)))` =  
+     `multiply(5)(multiply(3)(2))` =  
+     `multiply(5)(6)` =  
      `30`
-   - `reduce(1)(multiply)(none)` -> `1`
+   - `reduce(1)(multiply)(none)` = `1`
 
 `filter(predicate)(stream)` - returns a stream containing only those elements from `stream` that match given `predicate`.
-   - `filter(isDigit)("a1b2c3")` -> `"123"`
+   - `filter(isDigit)("a1b2c3")` = `"123"`
 
 `limit(n)(stream)` - shortens `stream` to maximum of `n` elements. If length of `stream` is equal or less than `n`, it returns the same `stream`. If `n` is negative, it returns an empty stream.
-   - `limit(2)("abcde")` -> `"ab"`
-   - `limit(5)("abcde")` -> `"abcde"`
-   - `limit(7)("abcde")` -> `"abcde"`
-   - `limit(0)("abcde")` -> `""`
-   - `limit(-1)("abcde")` -> `""`
+   - `limit(2)("abcde")` = `"ab"`
+   - `limit(5)("abcde")` = `"abcde"`
+   - `limit(7)("abcde")` = `"abcde"`
+   - `limit(0)("abcde")` = `""`
+   - `limit(-1)("abcde")` = `""`
 
 `skip(n)(stream)` - removes `n` elements from beginning of `stream`. If `n` is greater than length of `stream`, it returns an empty stream. If `n` is negative, it returns the same `stream`.
-   - `skip(2)("abcde")` -> `"cde"`
-   - `skip(5)("abcde")` -> `""`
-   - `skip(7)("abcde")` -> `""`
-   - `skip(0)("abcde")` -> `"abcde"`
-   - `skip(-1)("abcde")` -> `"abcde"`
+   - `skip(2)("abcde")` = `"cde"`
+   - `skip(5)("abcde")` = `""`
+   - `skip(7)("abcde")` = `""`
+   - `skip(0)("abcde")` = `"abcde"`
+   - `skip(-1)("abcde")` = `"abcde"`
 
 `while(predicate)(stream)` - preserves elements from `stream` up until a point where element from `stream` does not match predicate. First element that does not match predicate is removed altogether with all elements behind.
-   - `while(isDigit)("123x456x789")` -> `"123"`
+   - `while(isDigit)("123x456x789")` = `"123"`
    - `while(isDigit)("x123")` - > `"" `
-   - `while(isDigit)("")` -> `""`
+   - `while(isDigit)("")` = `""`
 
 ##### more than one stream #####
 
 `append(secondStream)(stream)` - appends elements from `secondStream` to the end of `stream`.
-   - `append("xyz")("abc")` -> `"abcxyz"`
+   - `append("xyz")("abc")` = `"abcxyz"`
 
 `prepend(secondStream)(stream)` - prepends `stream` with elements from `secondStream`.
-   - `preprend("xyz")("abc")` -> `"xyzabc"`
+   - `preprend("xyz")("abc")` = `"xyzabc"`
 
 `flatten(streams)` - converts 2-dimensional stream of streams into 1-dimensional stream by concatenating all `streams` in same order.
-   - `flatten(some("abc")(some("def")(some("ghi")(none))))` -> `"abcdefghi"`
+   - `flatten(some("abc")(some("def")(some("ghi")(none))))` = `"abcdefghi"`
 
 ##### other #####
 
 `length(stream)` - returns number of elements in `stream`.
-   - `length("abc")` -> `3`
-   - `length("")` -> `0`
+   - `length("abc")` = `3`
+   - `length("")` = `0`
 
 
 `contains(predicate)(stream)` - checks if `stream` has any element that matches `predicate`.
-   - `contains(isDigit)("ab8cd")` ->` true`
-   - `contains(isDigit)("abcd")` -> `false`
+   - `contains(isDigit)("ab8cd")` =` true`
+   - `contains(isDigit)("abcd")` = `false`
 
 `reverse(stream)` - reorders elements in `stream` so last element becomes first.
-   - `reverse("abcde")` -> `"edcba"`
+   - `reverse("abcde")` = `"edcba"`
 
  `at(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = 0. Last element has `index` = n-1, where n is length of `stream`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
-   - `at(0)("abcde")` -> `something(97)`
-   - `at(4)("abcde")` -> `something(101)`
-   - `at(5)("abcde")` -> `nothing`
-   - `at(-1)("abcde")` -> `nothing`
+   - `at(0)("abcde")` = `something(97)`
+   - `at(4)("abcde")` = `something(101)`
+   - `at(5)("abcde")` = `nothing`
+   - `at(-1)("abcde")` = `nothing`
 
 `first(stream)` - returns first element in `stream` wrapped in `something`. If `stream` is empty, returns `nothing`
-   - `first("abcde")` -> `something(97)`
-   - `first("")` -> `nothing`
+   - `first("abcde")` = `something(97)`
+   - `first("")` = `nothing`

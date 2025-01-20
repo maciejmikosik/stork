@@ -43,14 +43,14 @@ Let's implement `TrafficLight` enum with 3 constants: `red`, `yellow` and `green
     red(vRed)(vYellow)(vGreen) { vRed }
     yellow(vRed)(vYellow)(vGreen) { vYellow }
     green(vRed)(vYellow)(vGreen) { vGreen }
-
+    
     canGoOn(trafficLight) {
       trafficLight
         (false)
         (false)
         (true)
     }
-
+    
     main(stdin) {
       yesOrNo(canGoOn(yellow))
     }
@@ -82,7 +82,7 @@ Let's implement functions that checks if given person is an adult.
         atLeast(18)(age)
       })
     }
-
+    
     main(stdin) {
       yesOrNo(isAdult(person("John")(23)))
     }
@@ -113,12 +113,12 @@ Reuse of words `person`, `name`, `age` as lambda parameters is just a convention
 
 Structures and enums can be seen as specific cases of more general [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding). In case of structure we had one constructor with parameters. In case of enum we had multiple constructors with no parameters. But we can have multiple constructors with parameters and each constructor can even have different number of parameters. 
 
-Simple example is `maybe`. It has 2 constructors. One with parameter `something(element)`. Other without `nothing`. That's why we will have 2 visitors, one with one parameter, other with no parameters.
+Simple example is [maybe](../core_library/lang/maybe/doc.md). It has 2 constructors. One with parameter `something(element)`. Other without `nothing`. That's why we will have 2 visitors, one with one parameter, other with no parameters.
 
     something(element)(vSomething)(vNothing) {
       vSomething(element)
     }
-
+    
     nothing(vSomething)(vNothing) {
       vNothing
     }
@@ -133,12 +133,12 @@ Function that returns integer from `something` or else `0` (if `nothing`) looks 
 
 `valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
 
-Another example is stream. Stream can have element and a pointer to rest of a stream or be empty.
+Another example is [stream](../core_library/lang/stream/doc.md). Stream can have element (`head`) and a pointer to rest of the stream (`tail`) or be empty.
 
     some(head)(tail)(vSome)(vNone) {
       vSome(head)(tail)
     }
-
+    
     none(vSome)(vNone) {
       vNone
     }

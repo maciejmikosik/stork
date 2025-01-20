@@ -11,7 +11,7 @@ Example usage:
     yesOrNo(bool) {
       bool("yes")("no")
     }
-
+    
     main(stdin) {
       yesOrNo(true)
     }

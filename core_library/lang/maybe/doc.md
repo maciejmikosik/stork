@@ -9,5 +9,5 @@ Maybe has 2 constructors: `something(element)`, `nothing`.
 ### Functions ###
 
 `default(defaultElement)(maybe)` - returns the `element` from `something(element)`, or `defaultElement` if `maybe` is `nothing`.
-   - `default(defaultElement)(something(element))` -> `element`
-   - `default(defaultElement)(nothing)` -> `defaultElement`
+   - `default(defaultElement)(something(element))` = `element`
+   - `default(defaultElement)(nothing)` = `defaultElement`
