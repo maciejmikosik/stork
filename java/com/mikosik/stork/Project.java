@@ -15,6 +15,7 @@ public class Project {
   public final Directory root;
   public final Directory javaSourceDirectory;
   public final Directory coreLibraryDirectory;
+  public final Directory bridgeLibraryDirectory;
   public final Directory demoDirectory;
 
   private Project(FileSystem fileSystem, Directory root) {
@@ -22,6 +23,7 @@ public class Project {
     this.root = root;
     this.javaSourceDirectory = root.directory("java");
     this.coreLibraryDirectory = root.directory("core_library");
+    this.bridgeLibraryDirectory = root.directory("bridge_library");
     this.demoDirectory = root.directory("demo");
   }
 

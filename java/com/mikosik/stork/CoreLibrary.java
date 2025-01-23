@@ -18,6 +18,8 @@ import com.mikosik.stork.model.Library;
 public class CoreLibrary {
   public static enum Mode {
     /** launched from eclipse or from bash script */
+    BRIDGE,
+    /** launched from eclipse or from bash script */
     DEVELOPMENT,
     /** launched using stork binary */
     PRODUCTION,
@@ -26,6 +28,7 @@ public class CoreLibrary {
   public static Library coreLibrary(Mode mode) {
     return compile(compilation()
         .source(switch (mode) {
+          case BRIDGE -> project().bridgeLibraryDirectory;
           case DEVELOPMENT -> project().coreLibraryDirectory;
           case PRODUCTION -> coreLibraryDirectoryInZipFileInJarFile();
         })
