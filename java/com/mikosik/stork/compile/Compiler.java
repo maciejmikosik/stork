@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
-import static com.mikosik.stork.compile.link.Libraries.join;
 import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
@@ -14,6 +13,7 @@ import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Library.join;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
@@ -28,7 +28,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.common.io.File;
 import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.compile.link.Libraries;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
@@ -39,7 +38,7 @@ public class Compiler {
   public static Library compile(Compilation compilation) {
     var compiledSources = compilation.sources.stream()
         .map(Compiler::compileTree)
-        .collect(toSequenceThen(Libraries::join));
+        .collect(toSequenceThen(Library::join));
     var dependencies = join(compilation.libraries);
     return verify(join(
         makeComputable(compiledSources),
@@ -64,7 +63,7 @@ public class Compiler {
     var libraryFromThisDirectory = compileDirectory(namespace, directory);
     var libraryFromSubDirectories = directory.directories()
         .map(subDirectory -> compileTree(namespace.add(subDirectory.name()), subDirectory))
-        .collect(toSequenceThen(Libraries::join));
+        .collect(toSequenceThen(Library::join));
     return join(
         libraryFromThisDirectory,
         libraryFromSubDirectories);

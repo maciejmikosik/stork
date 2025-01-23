@@ -1,9 +1,9 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Sequence.toSequenceThen;
-import static com.mikosik.stork.compile.link.Libraries.join;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Library.join;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.util.Arrays.stream;
