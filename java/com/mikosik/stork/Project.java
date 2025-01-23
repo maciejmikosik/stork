@@ -14,15 +14,18 @@ public class Project {
   public final FileSystem fileSystem;
   public final Directory root;
   public final Directory javaSourceDirectory;
-  public final Directory coreLibraryDirectory;
+  public final Directory coreDirectory;
+  public final Directory mincoreDirectory;
   public final Directory demoDirectory;
 
   private Project(FileSystem fileSystem, Directory root) {
     this.fileSystem = fileSystem;
     this.root = root;
     this.javaSourceDirectory = root.directory("java");
-    this.coreLibraryDirectory = root.directory("core_library");
-    this.demoDirectory = root.directory("demo");
+    var storkDirectory = root.directory("stork");
+    this.coreDirectory = storkDirectory.directory("core");
+    this.mincoreDirectory = storkDirectory.directory("mincore");
+    this.demoDirectory = storkDirectory.directory("demo");
   }
 
   public static Project project() {

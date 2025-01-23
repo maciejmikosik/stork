@@ -14,34 +14,34 @@ import static java.util.stream.Collectors.toSet;
 
 import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.link.DuplicatedDefinition;
 import com.mikosik.stork.problem.compile.link.UndefinedImport;
 import com.mikosik.stork.problem.compile.link.UndefinedVariable;
 
-public class VerifyModule {
-  public static Module verify(Module module) {
+public class VerifyLibrary {
+  public static Library verify(Library library) {
     report(flatten(
-        undefinedVariables(module),
-        undefinedIdentifiers(module),
-        duplicatedDefinitions(module)));
-    return module;
+        undefinedVariables(library),
+        undefinedIdentifiers(library),
+        duplicatedDefinitions(library)));
+    return library;
   }
 
-  private static Sequence<UndefinedVariable> undefinedVariables(Module module) {
-    return module.definitions.stream()
+  private static Sequence<UndefinedVariable> undefinedVariables(Library library) {
+    return library.definitions.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
             .map(variable -> undefinedVariable(definition, variable)))
         .collect(toSequence());
   }
 
-  private static Sequence<UndefinedImport> undefinedIdentifiers(Module module) {
-    var definedIdentifiers = module.definitions.stream()
+  private static Sequence<UndefinedImport> undefinedIdentifiers(Library library) {
+    var definedIdentifiers = library.definitions.stream()
         .map(definition -> definition.identifier)
         .collect(toSet());
-    return module.definitions.stream()
+    return library.definitions.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
@@ -49,8 +49,8 @@ public class VerifyModule {
         .collect(toSequence());
   }
 
-  private static Sequence<DuplicatedDefinition> duplicatedDefinitions(Module module) {
-    var histogram = module.definitions.stream()
+  private static Sequence<DuplicatedDefinition> duplicatedDefinitions(Library library) {
+    var histogram = library.definitions.stream()
         .map(definition -> definition.identifier)
         .collect(groupingBy(identity(), counting()));
     return histogram.entrySet().stream()

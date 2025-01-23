@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 
 public class Compilation {
   public final List<Directory> sources = new LinkedList<>();
-  public final List<Module> libraries = new LinkedList<>();
+  public final List<Library> libraries = new LinkedList<>();
 
   public static Compilation compilation() {
     return new Compilation();
@@ -19,8 +19,8 @@ public class Compilation {
     return this;
   }
 
-  public Compilation library(Module module) {
-    libraries.add(module);
+  public Compilation library(Library library) {
+    libraries.add(library);
     return this;
   }
 }

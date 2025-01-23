@@ -1,0 +1,20 @@
+
+  some(head)(tail)(vSome)(vNone) {
+    vSome(head)(tail)
+  }
+
+  none(vSome)(vNone) {
+    vNone
+  }
+
+  reduceEager(sum)(add)(stream) {
+    stream
+      ((head)(tail) {
+        EAGER(reduceEager)
+          (add(head)(sum))
+          (add)
+          (tail)
+      })
+      (sum)
+  }
+

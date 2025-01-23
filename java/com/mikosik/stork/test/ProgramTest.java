@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
+import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
@@ -9,7 +10,6 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.Compiler.nativeModule;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
@@ -23,36 +23,61 @@ import java.util.function.BiFunction;
 import org.quackery.Body;
 import org.quackery.Test;
 
+import com.mikosik.stork.Core;
 import com.mikosik.stork.common.Reserver;
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
-  private static final Module CORE_LIBRARY = compile(compilation()
-      .source(project().coreLibraryDirectory)
-      .library(nativeModule()));
+  private static final Library CORE = Core.core(DEVELOPMENT);
+  private static final Library MINCORE = Core.core(TESTING);
 
-  private final String name;
-  private final FsBuilder fsBuilder;
+  private String name;
+  private FsBuilder fsBuilder;
+  private Library core;
+
   private byte[] stdin = new byte[0];
+  private final Reserver expectedType = reserver();
+  private final ExpectedProblems expectedCannotCompile = expectedProblems();
+  private final ExpectedProblems expectedCannotCompute = expectedProblems();
+  private final ExpectedStdout expectedStdout = expectedStdout();
 
-  public final Reserver expectedType = reserver();
-  public final ExpectedProblems expectedCannotCompile = expectedProblems();
-  public final ExpectedProblems expectedCannotCompute = expectedProblems();
-  public final ExpectedStdout expectedStdout = expectedStdout();
+  private ProgramTest() {}
 
-  private ProgramTest(String name, Directory directory) {
-    this.name = name;
-    this.fsBuilder = fsBuilder(directory);
+  public static ProgramTest programTest() {
+    return new ProgramTest()
+        .rootDirectory(directory(createTempDirectory("stork_test_program_")));
   }
 
   public static ProgramTest programTest(String name) {
-    var directory = directory(createTempDirectory("stork_test_program_"));
-    return new ProgramTest(name, directory);
+    return programTest()
+        .name(name)
+        .core(CORE);
+  }
+
+  public static ProgramTest minimalProgramTest(String name) {
+    return programTest()
+        .name(name)
+        .core(MINCORE);
+  }
+
+  private ProgramTest name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  private ProgramTest rootDirectory(Directory directory) {
+    fsBuilder = fsBuilder(directory);
+    return this;
+  }
+
+  private ProgramTest core(Library core) {
+    this.core = core;
+    return this;
   }
 
   public ProgramTest file(String path, String content) {
@@ -123,18 +148,18 @@ public class ProgramTest implements Test {
   }
 
   private void run() {
-    Module module;
+    Library library;
     try {
-      module = compile(compilation()
+      library = compile(compilation()
           .source(fsBuilder.directory)
-          .library(CORE_LIBRARY));
+          .library(core));
     } catch (ProblemException exception) {
       expectedCannotCompile.verify(exception.problems);
       return;
     }
     expectedCannotCompile.verify();
 
-    var program = program(identifier("main"), module);
+    var program = program(identifier("main"), library);
     var buffer = newBuffer();
     var input = input(stdin);
     var output = buffer.asOutput();

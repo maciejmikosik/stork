@@ -9,7 +9,7 @@ import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Module.module;
+import static com.mikosik.stork.model.Library.library;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
@@ -28,15 +28,15 @@ import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 
 public class Parser {
-  public static Module parse(Iterator<Token> iterator) {
+  public static Library parse(Iterator<Token> iterator) {
     return parse(peekerator(checkingEOF(iterator)));
   }
 
-  private static Module parse(Peekerator<Token> input) {
-    return module(sequenceFrom(parseDefinitions(input)));
+  private static Library parse(Peekerator<Token> input) {
+    return library(sequenceFrom(parseDefinitions(input)));
   }
 
   private static Iterator<Definition> parseDefinitions(Peekerator<Token> input) {

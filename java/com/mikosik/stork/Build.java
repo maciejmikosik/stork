@@ -24,7 +24,7 @@ public class Build {
     out("project: %s", project.root);
     out("script: %s", project.sourceFileOf(Build.class));
     out("java source directory: %s", project.javaSourceDirectory);
-    out("core library directory: %s", project.coreLibraryDirectory);
+    out("core directory: %s", project.coreDirectory);
     out("temp build directory: %s", buildDirectory);
 
     var stageDirectory = buildDirectory
@@ -47,7 +47,7 @@ public class Build {
             .getBytes(US_ASCII));
 
     zip()
-        .source(project.coreLibraryDirectory)
+        .source(project.coreDirectory)
         .destination(stageDirectory.file("core.star"))
         .execute();
 
