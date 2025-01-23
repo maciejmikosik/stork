@@ -15,28 +15,28 @@ import java.util.Map;
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Library;
 
-public class CoreLibrary {
+public class Core {
   public static enum Mode {
     /** launched from eclipse or from bash script */
-    BRIDGE,
+    TESTING,
     /** launched from eclipse or from bash script */
     DEVELOPMENT,
     /** launched using stork binary */
     PRODUCTION,
   }
 
-  public static Library coreLibrary(Mode mode) {
+  public static Library core(Mode mode) {
     return compile(compilation()
         .source(switch (mode) {
-          case BRIDGE -> project().bridgeLibraryDirectory;
-          case DEVELOPMENT -> project().coreLibraryDirectory;
-          case PRODUCTION -> coreLibraryDirectoryInZipFileInJarFile();
+          case TESTING -> project().mincoreDirectory;
+          case DEVELOPMENT -> project().coreDirectory;
+          case PRODUCTION -> coreDirectoryInZipFileInJarFile();
         })
         .library(operatorLibrary()));
   }
 
   // TODO simplify to directory inside jar
-  private static Directory coreLibraryDirectoryInZipFileInJarFile() {
+  private static Directory coreDirectoryInZipFileInJarFile() {
     try {
       // TODO why jar fs needs "core.star"?
       var jarFileSystem = newFileSystem(

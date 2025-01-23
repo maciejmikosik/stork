@@ -1,7 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.CoreLibrary.coreLibrary;
-import static com.mikosik.stork.CoreLibrary.Mode.DEVELOPMENT;
+import static com.mikosik.stork.Core.core;
+import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
@@ -92,7 +92,7 @@ public class RunTests {
 
   private static Test compilerCanCompileCoreLibrary() {
     return newCase("compiler can compile core library", () -> {
-      coreLibrary(DEVELOPMENT);
+      core(DEVELOPMENT);
     });
   }
 }

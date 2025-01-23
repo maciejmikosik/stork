@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.CoreLibrary.coreLibrary;
-import static com.mikosik.stork.CoreLibrary.Mode.PRODUCTION;
+import static com.mikosik.stork.Core.core;
+import static com.mikosik.stork.Core.Mode.PRODUCTION;
 import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.output;
@@ -18,7 +18,7 @@ public class Stork {
     try {
       var library = compile(compilation()
           .source(workingDirectory())
-          .library(coreLibrary(PRODUCTION)));
+          .library(core(PRODUCTION)));
 
       program(identifier("main"), library)
           .run(input(System.in), output(System.out));

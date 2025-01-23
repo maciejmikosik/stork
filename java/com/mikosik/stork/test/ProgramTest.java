@@ -1,8 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.CoreLibrary.coreLibrary;
-import static com.mikosik.stork.CoreLibrary.Mode.BRIDGE;
-import static com.mikosik.stork.CoreLibrary.Mode.DEVELOPMENT;
+import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
+import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
@@ -24,6 +23,7 @@ import java.util.function.BiFunction;
 import org.quackery.Body;
 import org.quackery.Test;
 
+import com.mikosik.stork.Core;
 import com.mikosik.stork.common.Reserver;
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Library;
@@ -33,8 +33,8 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
-  private static final Library CORE = coreLibrary(DEVELOPMENT);
-  private static final Library MINCORE = coreLibrary(BRIDGE);
+  private static final Library CORE = Core.core(DEVELOPMENT);
+  private static final Library MINCORE = Core.core(TESTING);
 
   private String name;
   private FsBuilder fsBuilder;

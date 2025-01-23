@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
-import static com.mikosik.stork.CoreLibrary.coreLibrary;
-import static com.mikosik.stork.CoreLibrary.Mode.DEVELOPMENT;
+import static com.mikosik.stork.Core.core;
+import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.output;
@@ -21,7 +21,7 @@ public class Demo {
     var project = project();
     var library = compile(compilation()
         .source(project.demoDirectory)
-        .library(coreLibrary(DEVELOPMENT)));
+        .library(core(DEVELOPMENT)));
 
     var decorator = isLogging
         ? configuredDecorator(Paths.get("/tmp/stork.log"))
