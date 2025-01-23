@@ -77,7 +77,7 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `append("xyz")("abc")` = `"abcxyz"`
 
 `prepend(secondStream)(stream)` - prepends `stream` with elements from `secondStream`.
-   - `preprend("xyz")("abc")` = `"xyzabc"`
+   - `prepend("xyz")("abc")` = `"xyzabc"`
 
 `flatten(streams)` - converts 2-dimensional stream of streams into 1-dimensional stream by concatenating all `streams` in same order.
    - `flatten(some("abc")(some("def")(some("ghi")(none))))` = `"abcdefghi"`
@@ -90,7 +90,7 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 
 `contains(predicate)(stream)` - checks if `stream` has any element that matches `predicate`.
-   - `contains(isDigit)("ab8cd")` =` true`
+   - `contains(isDigit)("ab8cd")` = `true`
    - `contains(isDigit)("abcd")` = `false`
 
 `reverse(stream)` - reorders elements in `stream` so last element becomes first.
