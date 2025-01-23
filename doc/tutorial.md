@@ -34,7 +34,7 @@ There is no need for `return` keyword since function definition contains single 
 
 ### Imports ###
 
-Stork ships with [core library](../core_library/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
+Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
 
 `import.stork`
 
@@ -129,7 +129,7 @@ Lambda with multiple parameters is achievable by nesting lambdas with single par
 
 ### Standard I/O ###
 
-String literal like `"Hello World!"` is [stream](../core_library/lang/stream/doc.md) of [integers](../core_library/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return stream of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is stream of integers representing bytes from standard input.
+String literal like `"Hello World!"` is [stream](../stork/core/lang/stream/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return stream of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is stream of integers representing bytes from standard input.
 
 Running
 

@@ -22,9 +22,10 @@ public class Project {
     this.fileSystem = fileSystem;
     this.root = root;
     this.javaSourceDirectory = root.directory("java");
-    this.coreDirectory = root.directory("core_library");
-    this.mincoreDirectory = root.directory("bridge_library");
-    this.demoDirectory = root.directory("demo");
+    var storkDirectory = root.directory("stork");
+    this.coreDirectory = storkDirectory.directory("core");
+    this.mincoreDirectory = storkDirectory.directory("mincore");
+    this.demoDirectory = storkDirectory.directory("demo");
   }
 
   public static Project project() {

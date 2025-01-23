@@ -20,7 +20,7 @@ public class Demo {
   public static void main(String[] args) {
     var project = project();
     var library = compile(compilation()
-        .source(project.demoDirectory)
+        .source(project.demoDirectory.directory("greeting"))
         .library(core(DEVELOPMENT)));
 
     var decorator = isLogging
