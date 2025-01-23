@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.CoreLibrary.coreLibrary;
+import static com.mikosik.stork.CoreLibrary.Mode.DEVELOPMENT;
 import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
@@ -9,7 +10,6 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.Compiler.nativeLibrary;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
@@ -32,9 +32,7 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
-  private static final Library CORE_LIBRARY = compile(compilation()
-      .source(project().coreLibraryDirectory)
-      .library(nativeLibrary()));
+  private static final Library CORE_LIBRARY = coreLibrary(DEVELOPMENT);
 
   private final String name;
   private final FsBuilder fsBuilder;

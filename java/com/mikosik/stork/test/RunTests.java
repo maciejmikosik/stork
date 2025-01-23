@@ -1,11 +1,9 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.CoreLibrary.coreLibrary;
+import static com.mikosik.stork.CoreLibrary.Mode.DEVELOPMENT;
 import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
-import static com.mikosik.stork.compile.Compilation.compilation;
-import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.Compiler.nativeLibrary;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
@@ -94,10 +92,7 @@ public class RunTests {
 
   private static Test compilerCanCompileCoreLibrary() {
     return newCase("compiler can compile core library", () -> {
-      var project = project();
-      compile(compilation()
-          .source(project.coreLibraryDirectory)
-          .library(nativeLibrary()));
+      coreLibrary(DEVELOPMENT);
     });
   }
 }

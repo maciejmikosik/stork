@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
-import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
 import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
@@ -43,10 +42,6 @@ public class Compiler {
     return verify(join(
         makeComputable(compiledSources),
         dependencies));
-  }
-
-  public static Library nativeLibrary() {
-    return operatorLibrary();
   }
 
   private static Library makeComputable(Library library) {
