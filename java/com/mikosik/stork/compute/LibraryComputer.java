@@ -9,21 +9,21 @@ import java.util.Map;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 
-public class ModulingComputer implements Computer {
+public class LibraryComputer implements Computer {
   private final Map<Identifier, Expression> table;
 
-  private ModulingComputer(Map<Identifier, Expression> table) {
+  private LibraryComputer(Map<Identifier, Expression> table) {
     this.table = table;
   }
 
-  public static Computer modulingComputer(Module module) {
+  public static Computer computer(Library library) {
     Map<Identifier, Expression> table = new HashMap<>();
-    for (Definition definition : module.definitions) {
+    for (Definition definition : library.definitions) {
       table.put(definition.identifier, definition.body);
     }
-    return uncloning(new ModulingComputer(table));
+    return uncloning(new LibraryComputer(table));
   }
 
   public Computation compute(Computation computation) {

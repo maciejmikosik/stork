@@ -1,30 +1,30 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Sequence.toSequenceThen;
-import static com.mikosik.stork.compile.link.Modules.join;
+import static com.mikosik.stork.compile.link.Libraries.join;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.util.Arrays.stream;
 
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Operator;
 
-public class OperatorModule {
-  public static Module operatorModule() {
+public class OperatorLibrary {
+  public static Library operatorLibrary() {
     return join(
-        asModule(StackOperator.class),
-        asModule(MathOperator.class));
+        asLibrary(StackOperator.class),
+        asLibrary(MathOperator.class));
   }
 
-  private static Module asModule(Class<? extends Operator> enumClass) {
+  private static Library asLibrary(Class<? extends Operator> enumClass) {
     return stream(enumClass.getEnumConstants())
         .map(operator -> definition(
             identifier(NAMESPACE, variable(operator.toString())),
             operator))
-        .collect(toSequenceThen(Module::module));
+        .collect(toSequenceThen(Library::library));
   }
 
   private static final Namespace NAMESPACE = namespaceOf("lang", "op");

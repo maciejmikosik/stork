@@ -7,10 +7,10 @@ import java.util.Map;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 
 public class Redefine {
-  public static Module redefine(Module updated, Module original) {
+  public static Library redefine(Library updated, Library original) {
     Map<Identifier, Definition> updates = updated.definitions.stream()
         .collect(toMap(
             definition -> definition.identifier,

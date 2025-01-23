@@ -9,7 +9,7 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.InputOutput.createTempDirectory;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.Compiler.nativeModule;
+import static com.mikosik.stork.compile.Compiler.nativeLibrary;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
@@ -25,16 +25,16 @@ import org.quackery.Test;
 
 import com.mikosik.stork.common.Reserver;
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
-  private static final Module CORE_LIBRARY = compile(compilation()
+  private static final Library CORE_LIBRARY = compile(compilation()
       .source(project().coreLibraryDirectory)
-      .library(nativeModule()));
+      .library(nativeLibrary()));
 
   private final String name;
   private final FsBuilder fsBuilder;
@@ -123,9 +123,9 @@ public class ProgramTest implements Test {
   }
 
   private void run() {
-    Module module;
+    Library library;
     try {
-      module = compile(compilation()
+      library = compile(compilation()
           .source(fsBuilder.directory)
           .library(CORE_LIBRARY));
     } catch (ProblemException exception) {
@@ -134,7 +134,7 @@ public class ProgramTest implements Test {
     }
     expectedCannotCompile.verify();
 
-    var program = program(identifier("main"), module);
+    var program = program(identifier("main"), library);
     var buffer = newBuffer();
     var input = input(stdin);
     var output = buffer.asOutput();

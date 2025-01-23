@@ -7,7 +7,7 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.Compiler.nativeModule;
+import static com.mikosik.stork.compile.Compiler.nativeLibrary;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static java.nio.file.FileSystems.newFileSystem;
@@ -23,12 +23,12 @@ import com.mikosik.stork.problem.ProblemException;
 public class Stork {
   public static void main(String[] args) {
     try {
-      var module = compile(compilation()
+      var library = compile(compilation()
           .source(workingDirectory())
           .source(coreLibraryDirectoryInZipFileInJarFile())
-          .library(nativeModule()));
+          .library(nativeLibrary()));
 
-      program(identifier("main"), module)
+      program(identifier("main"), library)
           .run(input(System.in), output(System.out));
     } catch (ProblemException e) {
       for (Problem problem : e.problems) {

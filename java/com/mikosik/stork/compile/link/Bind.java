@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Linkage;
-import com.mikosik.stork.model.Module;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Variable;
 
@@ -38,9 +38,9 @@ public class Bind {
     return variable -> map.getOrDefault(variable, variable);
   }
 
-  public static Function<Module, Module> export(Namespace namespace) {
-    return module -> {
-      var variables = module.definitions.stream()
+  public static Function<Library, Library> export(Namespace namespace) {
+    return library -> {
+      var variables = library.definitions.stream()
           .map(definition -> definition.identifier.variable)
           .collect(toSet());
       return onEachDefinition(onIdentifier(onNamespace(constant(namespace))))
@@ -48,7 +48,7 @@ public class Bind {
               ifVariable(variable -> variables.contains(variable)
                   ? identifier(namespace, variable)
                   : variable)))))
-          .apply(module);
+          .apply(library);
     };
   }
 

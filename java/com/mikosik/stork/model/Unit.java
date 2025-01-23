@@ -2,16 +2,16 @@ package com.mikosik.stork.model;
 
 public class Unit {
   public final Namespace namespace;
-  public final Module module;
+  public final Library library;
   public final Linkage linkage;
 
-  private Unit(Namespace namespace, Module module, Linkage linkage) {
+  private Unit(Namespace namespace, Library library, Linkage linkage) {
     this.namespace = namespace;
-    this.module = module;
+    this.library = library;
     this.linkage = linkage;
   }
 
-  public static Unit unit(Namespace namespace, Module module, Linkage linkage) {
-    return new Unit(namespace, module, linkage);
+  public static Unit unit(Namespace namespace, Library library, Linkage linkage) {
+    return new Unit(namespace, library, linkage);
   }
 }

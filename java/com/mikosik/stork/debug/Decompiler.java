@@ -13,15 +13,15 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Module;
+import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 
 public class Decompiler {
-  public static Serializable decompile(Module module) {
-    return join(module.definitions.stream()
+  public static Serializable decompile(Library library) {
+    return join(library.definitions.stream()
         .flatMap(definition -> Stream.of(
             serializable(' '),
             decompile(definition)))

@@ -2,10 +2,10 @@ package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.compute.ModulingComputer.modulingComputer;
+import static com.mikosik.stork.compute.LibraryComputer.computer;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Module.moduleOf;
+import static com.mikosik.stork.model.Library.libraryOf;
 import static com.mikosik.stork.model.Variable.variable;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -27,7 +27,7 @@ public class TestComputers {
             }))
             .add(newCase("moduling computer", () -> {
               var identifier = identifier("mock");
-              var computer = modulingComputer(moduleOf(
+              var computer = computer(libraryOf(
                   definition(identifier, identifier)));
               var computation = computation(identifier);
               assertUncloning(computer, computation);

@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.Compiler.nativeModule;
+import static com.mikosik.stork.compile.Compiler.nativeLibrary;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
@@ -97,7 +97,7 @@ public class RunTests {
       var project = project();
       compile(compilation()
           .source(project.coreLibraryDirectory)
-          .library(nativeModule()));
+          .library(nativeLibrary()));
     });
   }
 }
