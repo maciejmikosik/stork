@@ -1,6 +1,7 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.CoreLibrary.coreLibrary;
+import static com.mikosik.stork.CoreLibrary.Mode.BRIDGE;
 import static com.mikosik.stork.CoreLibrary.Mode.DEVELOPMENT;
 import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.Throwables.runtimeException;
@@ -32,25 +33,51 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
-  private static final Library CORE_LIBRARY = coreLibrary(DEVELOPMENT);
+  private static final Library CORE = coreLibrary(DEVELOPMENT);
+  private static final Library MINCORE = coreLibrary(BRIDGE);
 
-  private final String name;
-  private final FsBuilder fsBuilder;
+  private String name;
+  private FsBuilder fsBuilder;
+  private Library core;
+
   private byte[] stdin = new byte[0];
+  private final Reserver expectedType = reserver();
+  private final ExpectedProblems expectedCannotCompile = expectedProblems();
+  private final ExpectedProblems expectedCannotCompute = expectedProblems();
+  private final ExpectedStdout expectedStdout = expectedStdout();
 
-  public final Reserver expectedType = reserver();
-  public final ExpectedProblems expectedCannotCompile = expectedProblems();
-  public final ExpectedProblems expectedCannotCompute = expectedProblems();
-  public final ExpectedStdout expectedStdout = expectedStdout();
+  private ProgramTest() {}
 
-  private ProgramTest(String name, Directory directory) {
-    this.name = name;
-    this.fsBuilder = fsBuilder(directory);
+  public static ProgramTest programTest() {
+    return new ProgramTest()
+        .rootDirectory(directory(createTempDirectory("stork_test_program_")));
   }
 
   public static ProgramTest programTest(String name) {
-    var directory = directory(createTempDirectory("stork_test_program_"));
-    return new ProgramTest(name, directory);
+    return programTest()
+        .name(name)
+        .core(CORE);
+  }
+
+  public static ProgramTest minimalProgramTest(String name) {
+    return programTest()
+        .name(name)
+        .core(MINCORE);
+  }
+
+  private ProgramTest name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  private ProgramTest rootDirectory(Directory directory) {
+    fsBuilder = fsBuilder(directory);
+    return this;
+  }
+
+  private ProgramTest core(Library core) {
+    this.core = core;
+    return this;
   }
 
   public ProgramTest file(String path, String content) {
@@ -125,7 +152,7 @@ public class ProgramTest implements Test {
     try {
       library = compile(compilation()
           .source(fsBuilder.directory)
-          .library(CORE_LIBRARY));
+          .library(core));
     } catch (ProblemException exception) {
       expectedCannotCompile.verify(exception.problems);
       return;
