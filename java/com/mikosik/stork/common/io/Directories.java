@@ -6,6 +6,7 @@ import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Directories {
   public static Directory newTemporaryDirectory(String prefix) {
@@ -33,5 +34,9 @@ public class Directories {
     var fileSystem = FileSystems.getDefault();
     var path = fileSystem.getPath(".").toAbsolutePath();
     return directory(path);
+  }
+
+  public static Directory systemTemporaryDirectory() {
+    return directory(Path.of(System.getProperty("java.io.tmpdir")));
   }
 }
