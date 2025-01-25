@@ -6,7 +6,9 @@ import static com.mikosik.stork.common.StandardOutput.err;
 import static com.mikosik.stork.common.StandardOutput.out;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
+import static com.mikosik.stork.test.QuackeryHelper.deep;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
+import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.ignore;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
 import static com.mikosik.stork.test.cases.TestCompilerProblems.testCompilerProblems;
@@ -48,31 +50,39 @@ import org.quackery.Test;
 public class RunTests {
   public static void main(String[] args) {
     runAndReport(suite("unit tests")
-        .add(fast(testSequence()))
-        .add(fast(testComputers()))
+        .add(testSequence())
+        .add(testComputers())
         .add(suite("debug tools")
-            .add(fast(testDecompiler()))
-            .add(slow(testLogbuddyDecorator()))));
-    runAndReport(slow(compilerCanCompileCoreLibrary()));
-    runAndReport(fast(suite("programs")
+            .add(testDecompiler())
+            .add(testLogbuddyDecorator())));
+    runAndReport(compilerCanCompileCoreLibrary());
+    runAndReport(suite("programs")
         .add(testSimplePrograms())
         .add(testCompilerProblems())
         .add(ignore(testInstructions()))
-        .add(testCoreLibrary())));
-  }
-
-  private static Test fast(Test test) {
-    return timeout(ofMillis(100), test);
-  }
-
-  private static Test slow(Test test) {
-    return timeout(ofSeconds(3), test);
+        .add(testCoreLibrary()));
   }
 
   private static void runAndReport(Test test) {
+    var testWithTimeout = withTimeout(test);
     var started = Instant.now();
-    var report = run(test);
+    var report = run(testWithTimeout);
     var duration = between(started, Instant.now());
+    print(duration, report);
+  }
+
+  private static Test withTimeout(Test test) {
+    return deep(ifCase(RunTests::withTimeoutCase))
+        .apply(test);
+  }
+
+  private static Test withTimeoutCase(Test caze) {
+    return nameOf(caze).contains("logbuddy")
+        ? timeout(ofSeconds(1), caze)
+        : timeout(ofMillis(100), caze);
+  }
+
+  private static void print(Duration duration, Test report) {
     var failed = filterFailed(report);
     if (count(failed) > 0) {
       err("""
@@ -81,7 +91,7 @@ public class RunTests {
           time   : %.3fs
           failed : %d
           """,
-          nameOf(test),
+          nameOf(report),
           count(report),
           inSeconds(duration),
           count(failed));
@@ -94,7 +104,7 @@ public class RunTests {
           cases  : %d
           time   : %.3fs
           """,
-          nameOf(test),
+          nameOf(report),
           count(report),
           inSeconds(duration));
     }

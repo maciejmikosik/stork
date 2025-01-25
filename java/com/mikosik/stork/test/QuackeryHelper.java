@@ -31,6 +31,12 @@ public class QuackeryHelper {
         (name, children) -> test);
   }
 
+  public static Function<Test, Test> ifCase(Function<Test, Test> change) {
+    return test -> test.visit(
+        (name, body) -> change.apply(test),
+        (name, children) -> test);
+  }
+
   public static Function<Test, Test> ifSuite(BiFunction<String, List<Test>, Test> change) {
     return test -> test.visit(
         (name, body) -> test,
