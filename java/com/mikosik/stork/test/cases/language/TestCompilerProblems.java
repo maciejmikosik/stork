@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases;
+package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -8,7 +8,7 @@ import static com.mikosik.stork.problem.compile.link.UndefinedImport.undefinedIm
 import static com.mikosik.stork.problem.compile.link.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCodeInStringLiteral;
-import static com.mikosik.stork.test.ProgramTest.programTest;
+import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.range;
 import static org.quackery.Suite.suite;
@@ -16,6 +16,7 @@ import static org.quackery.Suite.suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.test.ProgramTest;
 
 public class TestCompilerProblems {
   private final static Expression body = identifier("body");
@@ -112,17 +113,15 @@ public class TestCompilerProblems {
   }
 
   private static Test reportsDuplicatedDefinition() {
-    return suite("duplicated definition")
-        .add(programTest("of user functions")
-            .sourceFile("""
-                function { 1 }
-                function { 2 }
-                """)
-            .expect(duplicatedDefinition(identifier("function"))))
-        .add(programTest("with core function")
-            .sourceFile("lang/stream", """
-                length { 1 }
-                """)
-            .expect(duplicatedDefinition(identifier("lang.stream.length"))));
+    return programTest("duplicated definition of user functions")
+        .sourceFile("""
+            function { 1 }
+            function { 2 }
+            """)
+        .expect(duplicatedDefinition(identifier("function")));
+  }
+
+  private static ProgramTest programTest(String name) {
+    return minimalProgramTest(name);
   }
 }

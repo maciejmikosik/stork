@@ -11,7 +11,6 @@ import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.ignore;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
-import static com.mikosik.stork.test.cases.TestCompilerProblems.testCompilerProblems;
 import static com.mikosik.stork.test.cases.TestComputers.testComputers;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
@@ -19,6 +18,7 @@ import static com.mikosik.stork.test.cases.TestInstructions.testInstructions;
 import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static com.mikosik.stork.test.cases.TestSequence.testSequence;
 import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
+import static com.mikosik.stork.test.cases.language.TestLanguage.testLanguage;
 import static java.lang.System.exit;
 import static java.time.Duration.between;
 import static java.time.Duration.ofMillis;
@@ -55,10 +55,10 @@ public class RunTests {
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator())));
+    runAndReport(testLanguage());
     runAndReport(compilerCanCompileCoreLibrary());
     runAndReport(suite("programs")
         .add(testSimplePrograms())
-        .add(testCompilerProblems())
         .add(ignore(testInstructions()))
         .add(testCoreLibrary()));
   }
