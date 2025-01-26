@@ -6,10 +6,6 @@ Ideas for new features.
 
 Ability to make function private. Private functions cannot be imported from other namespaces. Implementation similar to `.gitignore` files in git. You create `ignore.stork` file that contains [glob](https://en.wikipedia.org/wiki/Glob_(programming) filters.
 
-### Instance Functions ###
-
-`c(d)(a(b)(x))` = `x.a(b).c(d)`
-
 ### Function Composition ###
 
 `.a(b).c(d)` = `compose(c(d))(a(b))`

@@ -127,6 +127,27 @@ Lambda with multiple parameters is achievable by nesting lambdas with single par
       ...
     }
 
+### Instance methods ###
+
+In stork there are no instance methods. All functions are considered static. Still, it is possible to invoke a function as it would be part of some object. *This* instance is just added as last argument.
+
+ - `object.function` = `function(object)`
+ - `object.f(x)` = `f(x)(object)`
+ - `object.f(x)(y)` = `f(x)(y)(object)`
+ - `object.f(x).g(y).h(z)` = `h(z)(g(y)(f(x)(object)))`
+ - `function(object).f(x)` = `f(x)(function(object))`
+
+This works with all functions whether from core library or defined by user and with any expression (except lambda) including applications, string and integer literals.
+
+    main(stdin) {
+      "Hello World"
+        .append("!")
+    }
+
+    main(stdin) {
+      10.increment.format
+    }
+
 ### Standard I/O ###
 
 String literal like `"Hello World!"` is [stream](../stork/core/lang/stream/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return stream of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is stream of integers representing bytes from standard input.

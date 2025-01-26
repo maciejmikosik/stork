@@ -1,13 +1,11 @@
 package com.mikosik.stork.compile.tokenize;
 
-public class Symbol implements Token {
-  public final Byte character;
+public enum Symbol implements Token {
+  DOT('.');
 
-  private Symbol(Byte character) {
-    this.character = character;
-  }
+  public final byte character;
 
-  public static Symbol symbol(Byte character) {
-    return new Symbol(character);
+  Symbol(char character) {
+    this.character = (byte) character;
   }
 }

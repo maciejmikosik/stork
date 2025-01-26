@@ -48,9 +48,10 @@
   }
 
   modulo(divisor)(dividend) {
-    subtract
-      (multiply(divisor)(divideBy(divisor)(dividend)))
-      (dividend)
+    dividend.subtract
+      (dividend
+        .divideBy(divisor)
+        .multiply(divisor))
   }
 
   sign(number) {
@@ -90,21 +91,21 @@
   formatBase(base)(number) {
     equal(0)(number)
       ("0")
-      (prepend
-        (lessThan(0)(number)("-")(""))
-        (formatBasePositive(base)(absolute(number))))
+      (absolute(number)
+        .formatBasePositive(base)
+        .prepend(lessThan(0)(number)("-")("")))
   }
 
   formatBasePositive(base)(number) {
     equal(0)(number)
       ("")
-      (append
-        (single(formatDigit(modulo(base)(number))))
-        (formatBasePositive(base)(divideBy(base)(number))))
+      (prepend
+        (number.divideBy(base).formatBasePositive(base))
+        (number.modulo(base).formatDigit))
   }
 
   formatDigit(digit) {
-    lessThan(10)(digit)
+    single(lessThan(10)(digit)
       (add(48)(digit))
-      (add(55)(digit))
+      (add(55)(digit)))
   }

@@ -1,5 +1,6 @@
 package com.mikosik.stork.problem.compile.parse;
 
+import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
@@ -21,6 +22,8 @@ public class UnexpectedToken implements CannotParse {
     return switch (token) {
       case Label label -> "unexpected label [%s]"
           .formatted(label.string);
+      case Bracket bracket -> "unexpected bracket [%c]"
+          .formatted(bracket.character);
       case Symbol symbol -> "unexpected symbol [%c]"
           .formatted(symbol.character);
       case IntegerLiteral literal -> "unexpected integer literal [%s]"
