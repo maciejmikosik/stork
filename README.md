@@ -63,7 +63,7 @@ Integers can be arbitrarily big.
 
 prints `-123456789012345678901234567890`.
 
-# lambdas and currying #
+# lambdas, currying, methods #
 
 Stork supports [currying](https://en.wikipedia.org/wiki/Currying) and [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
 
@@ -92,6 +92,11 @@ Syntax is designed so putting name before lambda turns it into function definiti
        (x) { add(1)(x) }
     inc(x) { add(1)(x) } 
 
+All functions are static, but you can invoke them like instance methods.
+
+ - `x.add(1)` = `add(1)(x)`
+ - `inc(x).add(5)` = `add(5)(inc(x))`=
+ - `"Hello World".append("!")` = `append("!")("Hello World")`
 
 # namespaces #
 
