@@ -6,6 +6,10 @@ import static com.mikosik.stork.common.Sequence.sequenceFrom;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.stork;
+import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_CURLY_BRACKET;
+import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_ROUND_BRACKET;
+import static com.mikosik.stork.compile.tokenize.Bracket.LEFT_CURLY_BRACKET;
+import static com.mikosik.stork.compile.tokenize.Bracket.LEFT_ROUND_BRACKET;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
@@ -23,7 +27,7 @@ import com.mikosik.stork.common.Peekerator;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
-import com.mikosik.stork.compile.tokenize.Symbol;
+import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -61,9 +65,9 @@ public class Parser {
   private static Expression parseExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
       case Label label -> parseInvocation(input);
-      case Symbol symbol -> switch (symbol.character) {
-        case '(' -> parseLambda(input);
-        default -> failUnexpected(symbol);
+      case Bracket bracket -> switch (bracket) {
+        case LEFT_ROUND_BRACKET -> parseLambda(input);
+        default -> failUnexpected(bracket);
       };
       default -> switch (input.next()) {
         case StringLiteral literal -> quote(literal.string);
@@ -86,8 +90,8 @@ public class Parser {
       Expression function,
       Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Symbol symbol -> switch (symbol.character) {
-        case '(' -> parseSomeArguments(function, input);
+      case Bracket bracket -> switch (bracket) {
+        case LEFT_ROUND_BRACKET -> parseSomeArguments(function, input);
         default -> function;
       };
       default -> function;
@@ -103,34 +107,34 @@ public class Parser {
   }
 
   private static Expression parseArgument(Peekerator<Token> input) {
-    checkNextSymbol('(', input);
+    checkNextBracket(LEFT_ROUND_BRACKET, input);
     var argument = parseExpression(input);
-    checkNextSymbol(')', input);
+    checkNextBracket(RIGHT_ROUND_BRACKET, input);
     return argument;
   }
 
   private static Lambda parseLambda(Peekerator<Token> input) {
-    checkNextSymbol('(', input);
+    checkNextBracket(LEFT_ROUND_BRACKET, input);
     var parameter = parameter(parseName(input));
-    checkNextSymbol(')', input);
+    checkNextBracket(RIGHT_ROUND_BRACKET, input);
     return lambda(parameter, parseBody(input));
   }
 
   private static Expression parseBody(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Symbol symbol -> switch (symbol.character) {
-        case '(' -> parseLambda(input);
-        case '{' -> parseScope(input);
-        default -> failUnexpected(symbol);
+      case Bracket bracket -> switch (bracket) {
+        case LEFT_ROUND_BRACKET -> parseLambda(input);
+        case LEFT_CURLY_BRACKET -> parseScope(input);
+        default -> failUnexpected(bracket);
       };
       case Token token -> failUnexpected(token);
     };
   }
 
   private static Expression parseScope(Peekerator<Token> input) {
-    checkNextSymbol('{', input);
+    checkNextBracket(LEFT_CURLY_BRACKET, input);
     var body = parseExpression(input);
-    checkNextSymbol('}', input);
+    checkNextBracket(RIGHT_CURLY_BRACKET, input);
     return body;
   }
 
@@ -138,8 +142,8 @@ public class Parser {
     return next(Label.class, input).string;
   }
 
-  private static void checkNextSymbol(char character, Peekerator<Token> input) {
-    check(next(Symbol.class, input).character == character);
+  private static void checkNextBracket(Bracket bracket, Peekerator<Token> input) {
+    check(next(Bracket.class, input) == bracket);
   }
 
   private static <T extends Token> T next(Class<T> type, Peekerator<Token> input) {

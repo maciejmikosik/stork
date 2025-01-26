@@ -11,7 +11,8 @@ import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.compile.tokenize.IntegerLiteral.literal;
 import static com.mikosik.stork.compile.tokenize.Label.label;
 import static com.mikosik.stork.compile.tokenize.StringLiteral.literal;
-import static com.mikosik.stork.compile.tokenize.Symbol.symbol;
+import static com.mikosik.stork.compile.tokenize.Bracket.isBracket;
+import static com.mikosik.stork.compile.tokenize.Bracket.bracket;
 import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCodeInStringLiteral;
@@ -46,8 +47,8 @@ public class Tokenizer implements Iterator<Token> {
       return nextLabel();
     } else if (isNumeric(firstByte)) {
       return nextIntegerLiteral();
-    } else if ("(){}".indexOf(firstByte) >= 0) {
-      return symbol(iterator.next());
+    } else if (isBracket(firstByte)) {
+      return bracket(iterator.next());
     } else {
       throw exception(illegalCode(iterator.next()));
     }
