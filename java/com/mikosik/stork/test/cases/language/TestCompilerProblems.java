@@ -78,7 +78,7 @@ public class TestCompilerProblems {
     return 'A' <= code && code <= 'Z'
         || 'a' <= code && code <= 'z'
         || '0' <= code && code <= '9'
-        || "+-(){}\"\t\r\n ".indexOf(code) >= 0;
+        || "+-(){}.\"\t\r\n ".indexOf(code) >= 0;
   }
 
   private static Test reportsNonAsciiCodeAnywhere() {

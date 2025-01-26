@@ -6,10 +6,11 @@ import static com.mikosik.stork.common.Sequence.sequenceFrom;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.stork;
-import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_CURLY_BRACKET;
-import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.compile.tokenize.Bracket.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.compile.tokenize.Bracket.LEFT_ROUND_BRACKET;
+import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_CURLY_BRACKET;
+import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_ROUND_BRACKET;
+import static com.mikosik.stork.compile.tokenize.Symbol.DOT;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
@@ -24,10 +25,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.mikosik.stork.common.Peekerator;
+import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
-import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -63,6 +64,15 @@ public class Parser {
   }
 
   private static Expression parseExpression(Peekerator<Token> input) {
+    var result = parseUnchainedExpression(input);
+    while (input.peek() == DOT) {
+      input.next();
+      result = application(parseUnchainedExpression(input), result);
+    }
+    return result;
+  }
+
+  private static Expression parseUnchainedExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
       case Label label -> parseInvocation(input);
       case Bracket bracket -> switch (bracket) {
@@ -154,6 +164,7 @@ public class Parser {
   }
 
   private static <T> T failUnexpected(Token token) {
+    exception(unexpected(token)).printStackTrace(System.err);
     throw exception(unexpected(token));
   }
 

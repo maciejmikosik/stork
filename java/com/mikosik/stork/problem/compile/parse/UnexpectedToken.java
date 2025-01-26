@@ -4,6 +4,7 @@ import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
+import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
 
 public class UnexpectedToken implements CannotParse {
@@ -23,6 +24,8 @@ public class UnexpectedToken implements CannotParse {
           .formatted(label.string);
       case Bracket bracket -> "unexpected bracket [%c]"
           .formatted(bracket.character);
+      case Symbol symbol -> "unexpected symbol [%c]"
+          .formatted(symbol.character);
       case IntegerLiteral literal -> "unexpected integer literal [%s]"
           .formatted(literal.value);
       case StringLiteral literal -> "unexpected string literal [%s]"

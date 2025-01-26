@@ -18,6 +18,13 @@ public class TestSyntax {
         .add(suite("application")
             .add(applicationArgumentCanBeInteger())
             .add(applicationArgumentCanBeLambda()))
+        .add(suite("chain")
+            .add(chainCanStartWithInteger())
+            .add(chainCanStartWithString())
+            .add(chainCanStartWithApplication())
+            .add(chainCanBeLong())
+            .add(chainCanHaveApplications())
+            .add(chainCanBeArgument()))
         .add(suite("binding")
             .add(bindingIgnoresInteger())
             .add(suite("shadowing")
@@ -110,6 +117,91 @@ public class TestSyntax {
             }
             """)
         .stdout("");
+  }
+
+  private static ProgramTest chainCanStartWithInteger() {
+    return programTest("can start with integer")
+        .sourceFile("""
+            main(stdin) {
+              123.function
+            }
+
+            function(x) {
+              "x"
+            }
+            """)
+        .stdout("x");
+  }
+
+  private static ProgramTest chainCanStartWithString() {
+    return programTest("can start with string")
+        .sourceFile("""
+            main(stdin) {
+              "object".identity
+            }
+
+            identity(x) {
+              x
+            }
+            """)
+        .stdout("object");
+  }
+
+  private static ProgramTest chainCanStartWithApplication() {
+    return programTest("can start with application")
+        .sourceFile("""
+            main(stdin) {
+              identity("object").identity
+            }
+
+            identity(x) {
+              x
+            }
+            """)
+        .stdout("object");
+  }
+
+  private static ProgramTest chainCanBeLong() {
+    return programTest("can be long")
+        .sourceFile("""
+            main(stdin) {
+              "string".identity.identity.identity
+            }
+
+            identity(x) {
+              x
+            }
+            """)
+        .stdout("string");
+  }
+
+  private static ProgramTest chainCanHaveApplications() {
+    return programTest("can have applications")
+        .sourceFile("""
+            main(stdin) {
+              "string"
+                .identity(identity)(identity)
+            }
+
+            identity(x) {
+              x
+            }
+            """)
+        .stdout("string");
+  }
+
+  private static ProgramTest chainCanBeArgument() {
+    return programTest("can be argument")
+        .sourceFile("""
+            main(stdin) {
+              identity("object".identity)
+            }
+
+            identity(x) {
+              x
+            }
+            """)
+        .stdout("object");
   }
 
   private static ProgramTest bindingIgnoresInteger() {
