@@ -153,13 +153,15 @@
   length(stream) {
     stream
       ((head)(tail) {
-        add(1)(length(tail))
+        length(tail).add(1)
       })
       (0)
   }
 
   contains(condition)(stream){
-    hasSome(filter(condition)(stream))
+    stream
+      .filter(condition)
+      .hasSome
   }
 
   reverse {
@@ -168,7 +170,7 @@
 
   at(index)(stream) {
     atLeast(0)(index)
-      (first(skip(index)(stream)))
+      (stream.skip(index).first)
       (nothing)
   }
 
