@@ -198,12 +198,6 @@ public class TestStream {
         .add(snippetSuite("first")
             .importing("lang.stream.first")
             .test("first('abc')((x){x})(-1)", 97)
-            .test("first('')((x){x})(-1)", -1))
-        .add(snippetSuite("array")
-            .importing("lang.stream.array")
-            .test("array(0)", "")
-            .test("array(1)(97)", "a")
-            .test("array(2)(97)(98)", "ab")
-            .test("array(3)(97)(98)(99)", "abc"));
+            .test("first('')((x){x})(-1)", -1));
   }
 }

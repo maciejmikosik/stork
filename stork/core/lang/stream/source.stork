@@ -238,17 +238,3 @@
       ((head)(tail){ something(head) })
       (nothing)
   }
-
-  array(size) {
-    arrayCollecting(size)(none)
-  }
-
-  arrayCollecting(size)(collected) {
-    moreThan(0)(size)
-      ((element) {
-        arrayCollecting
-          (decrement(size))
-          (append(single(element))(collected))
-      })
-      (collected)
-  }
