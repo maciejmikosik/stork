@@ -181,12 +181,8 @@
       (none)
   }
 
-  length(stream) {
-    stream
-      ((head)(tail) {
-        length(tail).add(1)
-      })
-      (0)
+  length {
+    reduce(0)(constant(increment))
   }
 
   contains(predicate)(stream){
