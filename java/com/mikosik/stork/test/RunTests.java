@@ -16,6 +16,7 @@ import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.TestInstructions.testInstructions;
 import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDecorator;
+import static com.mikosik.stork.test.cases.TestParseOptions.testParseOptions;
 import static com.mikosik.stork.test.cases.TestSequence.testSequence;
 import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
 import static com.mikosik.stork.test.cases.language.TestLanguage.testLanguage;
@@ -56,6 +57,7 @@ public class RunTests {
     runAndReport(suite("unit tests")
         .add(testSequence())
         .add(testComputers())
+        .add(testParseOptions())
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator())));
