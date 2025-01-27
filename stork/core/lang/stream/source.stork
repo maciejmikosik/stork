@@ -189,9 +189,9 @@
       (0)
   }
 
-  contains(condition)(stream){
+  contains(predicate)(stream){
     stream
-      .filter(condition)
+      .filter(predicate)
       .hasSome
   }
 
