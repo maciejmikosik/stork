@@ -56,6 +56,13 @@ public class TestBoolean {
             .importing("lang.boolean.false")
             .importing("lang.boolean.format")
             .test("format(true)", "true")
-            .test("format(false)", "false"));
+            .test("format(false)", "false"))
+        .add(snippetSuite("negate")
+            .importing("lang.boolean.negate")
+            .importing("lang.boolean.equal")
+            .importing("lang.boolean.true")
+            .importing("lang.boolean.false")
+            .test("negate(equal(true))(true)", false)
+            .test("negate(equal(true))(false)", true));
   }
 }

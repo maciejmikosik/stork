@@ -33,6 +33,9 @@ Binary. They have 2 boolean parameters and return boolean
 
 To convert boolean value to string use `format(bool)`. It returns either `"true"` or `"false"`.
 
+`negate(predicate)` - negates predicate.
+ - `negate(atLeast(5))` = `lessThan(5)`
+
 ### Short-circuiting ###
 
 Since all arguments to functions are computed lazily, boolean operators support [short-circuiting](https://en.wikipedia.org/wiki/Short-circuit_evaluation) by default. They compute first argument and skip second if unnecessary. Following code `and(false)(longComputation(argument))` will not invoke `longComputation`. This applies to operators `and` and `or`.

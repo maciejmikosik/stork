@@ -223,10 +223,6 @@
       (none)
   }
 
-  negate(predicate)(x) {
-    not(predicate(x))
-  }
-
   at(index)(stream) {
     atLeast(0)(index)
       (stream.skip(index).first)

@@ -12,4 +12,5 @@ lang.boolean.false
 lang.boolean.and
 lang.boolean.or
 lang.boolean.not
+lang.boolean.negate
 lang.op.EAGER
