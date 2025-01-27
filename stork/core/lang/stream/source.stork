@@ -32,21 +32,6 @@
       (nothing)
   }
 
-  equal(equalElements)(streamA)(streamB) {
-    streamA
-      ((headA)(tailA) {
-        streamB
-          ((headB)(tailB) {
-            and
-              (equalElements(headA)(headB))
-              (equal(equalElements)(tailA)(tailB))
-          })
-          (false)
-      })
-      (hasNone(streamB))
-  }
-
-
   single(element) {
     some(element)(none)
   }
@@ -142,6 +127,16 @@
       (none)
   }
 
+  unmaybe(stream) {
+    stream
+      ((head)(tail) {
+        head
+          ((element){ some(element)(unmaybe(tail)) })
+          (unmaybe(tail))
+      })
+      (none)
+  }
+
   append(secondStream)(stream) {
     stream
       ((head)(tail) {
@@ -171,24 +166,18 @@
       (none)
   }
 
-  unmaybe(stream) {
-    stream
-      ((head)(tail) {
-        head
-          ((element){ some(element)(unmaybe(tail)) })
-          (unmaybe(tail))
+  equal(equalElements)(streamA)(streamB) {
+    streamA
+      ((headA)(tailA) {
+        streamB
+          ((headB)(tailB) {
+            and
+              (equalElements(headA)(headB))
+              (equal(equalElements)(tailA)(tailB))
+          })
+          (false)
       })
-      (none)
-  }
-
-  length {
-    reduce(0)(constant(increment))
-  }
-
-  contains(predicate)(stream){
-    stream
-      .filter(predicate)
-      .hasSome
+      (hasNone(streamB))
   }
 
   startsWith(equal)(prefix)(stream) {
@@ -203,6 +192,16 @@
           (false)
       })
       (true)
+  }
+
+  length {
+    reduce(0)(constant(increment))
+  }
+
+  contains(predicate)(stream){
+    stream
+      .filter(predicate)
+      .hasSome
   }
 
   reverse {

@@ -25,11 +25,6 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 `maybeTail(stream)` - returns `something(tail)` or `nothing` if stream is `none`.
 
-`equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
-   - `equal(equalInteger)("abc")("abc")` = `true`
-   - `equal(equalInteger)("abc")("abx")` = `false`
-   - `equal(equalInteger)("abc")("ab")` = `false`
-
 ##### creating #####
 
 `single(element)` - creates stream of length 1, containing only `element`.
@@ -76,6 +71,9 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `while(isDigit)("x123")` - > `"" `
    - `while(isDigit)("")` = `""`
 
+
+`unamybe(maybes)` - takes stream of `maybes`. First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
+
 ##### more than one stream #####
 
 `append(secondStream)(stream)` - appends elements from `secondStream` to the end of `stream`.
@@ -89,7 +87,17 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 `transpose(streams)` - takes 2-dimensional stream of streams and flips dimensions. All `streams` can be of different length and infinite as well.
 
-`unamybe(maybes)` - takes stream of `maybes`. First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
+`equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
+   - `equal(equalInteger)("abc")("abc")` = `true`
+   - `equal(equalInteger)("abc")("abx")` = `false`
+   - `equal(equalInteger)("abc")("ab")` = `false`
+
+`startsWith(equal)(prefix)(stream)` - checks if `stream` starts with `prefix` stream. Function `equal` is used to compare elements in those streams.
+   - `startsWith(equalInteger)("a")("abc")` = `true`
+   - `startsWith(equalInteger)("a")("a")` = `true`
+   - `startsWith(equalInteger)("a")("xyz")` = `false`
+   - `startsWith(equalInteger)("abc")("a")` = `false`
+   - `startsWith(equalInteger)("")("abc")` = `true`
 
 ##### other #####
 
@@ -101,13 +109,6 @@ Stream is similar to singly linked list. This means accessing random element is 
 `contains(predicate)(stream)` - checks if `stream` has any element that matches `predicate`.
    - `contains(isDigit)("ab8cd")` = `true`
    - `contains(isDigit)("abcd")` = `false`
-
-`startsWith(equal)(prefix)(stream)` - checks if `stream` starts with `prefix` stream. Function `equal` is used to compare elements in those streams.
-   - `startsWith(equalInteger)("a")("abc")` = `true`
-   - `startsWith(equalInteger)("a")("a")` = `true`
-   - `startsWith(equalInteger)("a")("xyz")` = `false`
-   - `startsWith(equalInteger)("abc")("a")` = `false`
-   - `startsWith(equalInteger)("")("abc")` = `true`
 
 `reverse(stream)` - reorders elements in `stream` so last element becomes first.
    - `reverse("abcde")` = `"edcba"`
