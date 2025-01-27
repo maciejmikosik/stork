@@ -187,17 +187,13 @@ public class TestStream {
             .test("sort(moreThan)('01')", "01")
             .test("sort(moreThan)('0')", "0")
             .test("sort(moreThan)('')", ""))
-        .add(snippetSuite("at")
-            .importing("lang.stream.at")
-            .test("at(-1)('abc')((x){x})(-100)", -100)
-            .test("at(0)('abc')((x){x})(-100)", 97)
-            .test("at(1)('abc')((x){x})(-100)", 98)
-            .test("at(2)('abc')((x){x})(-100)", 99)
-            .test("at(3)('abc')((x){x})(-100)", -100)
-            .test("at(0)('')((x){x})(-100)", -100))
-        .add(snippetSuite("first")
-            .importing("lang.stream.first")
-            .test("first('abc')((x){x})(-1)", 97)
-            .test("first('')((x){x})(-1)", -1));
+        .add(snippetSuite("maybeAt")
+            .importing("lang.stream.maybeAt")
+            .test("maybeAt(-1)('abc')((x){x})(-100)", -100)
+            .test("maybeAt(0)('abc')((x){x})(-100)", 97)
+            .test("maybeAt(1)('abc')((x){x})(-100)", 98)
+            .test("maybeAt(2)('abc')((x){x})(-100)", 99)
+            .test("maybeAt(3)('abc')((x){x})(-100)", -100)
+            .test("maybeAt(0)('')((x){x})(-100)", -100));
   }
 }

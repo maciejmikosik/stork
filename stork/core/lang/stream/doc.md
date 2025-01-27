@@ -22,8 +22,12 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 
 `maybeHead(stream)` - returns `something(head)` or `nothing` if stream is `none`.
+   - `maybeHead("abcde")` = `something(97)`
+   - `maybeHead("")` = `nothing`
 
 `maybeTail(stream)` - returns `something(tail)` or `nothing` if stream is `none`.
+   - `maybeTail("abcde")` = `something("bcde")`
+   - `maybeTail("")` = `nothing`
 
 ##### creating #####
 
@@ -116,12 +120,8 @@ Stream is similar to singly linked list. This means accessing random element is 
 `sort(comparator)(stream)` - sorts elements in `stream` in order defined by `comparator`.
    - `sort(moreThan)("1928374650")` = `"0123456789"`
 
- `at(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = 0. Last element has `index` = n-1, where n is length of `stream`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
-   - `at(0)("abcde")` = `something(97)`
-   - `at(4)("abcde")` = `something(101)`
-   - `at(5)("abcde")` = `nothing`
-   - `at(-1)("abcde")` = `nothing`
-
-`first(stream)` - returns first element in `stream` wrapped in `something`. If `stream` is empty, returns `nothing`
-   - `first("abcde")` = `something(97)`
-   - `first("")` = `nothing`
+ `maybeAt(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = 0. Last element has `index` = n-1, where n is length of `stream`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
+   - `maybeAt(0)("abcde")` = `something(97)`
+   - `maybeAt(4)("abcde")` = `something(101)`
+   - `maybeAt(5)("abcde")` = `nothing`
+   - `maybeAt(-1)("abcde")` = `nothing`

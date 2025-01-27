@@ -222,14 +222,8 @@
       (none)
   }
 
-  at(index)(stream) {
+  maybeAt(index)(stream) {
     atLeast(0)(index)
-      (stream.skip(index).first)
-      (nothing)
-  }
-
-  first(stream) {
-    stream
-      ((head)(tail){ something(head) })
+      (stream.skip(index).maybeHead)
       (nothing)
   }
