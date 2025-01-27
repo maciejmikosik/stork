@@ -6,7 +6,12 @@ Stream has 2 constructors: `some(head)(tail)`, `none`.
 
 Stream represents an ordered collection of elements. Stream can be a node that contains an element (`head`) and a reference to another node (`tail`), or it can be empty (`none`).
 
-Stream can be finite or infinite. Finite stream terminates with a node that references an empty stream as its tail. Some operations on infinite stream are not possible. For example calling `length` on infinite stream hangs the program.
+Stream can be created by manually linking nodes. Example of fixed sized streams would be:
+ - `some(1)(none)` - stream of: `1`
+ - `some(1)(some(2)(none))` - stream of: `1`, `2`
+ - `some(1)(some(2)(some(3)(none)))` - stream of: `1`, `2`, `3`
+
+Stream can be finite or infinite. Finite stream (like examples above) terminates with a node that references an empty stream (`none`) as its tail. Some operations on infinite stream are not possible. For example calling `length` on infinite stream hangs the program.
 
 Stream is similar to singly linked list. This means accessing random element is not constant-time operation since accessing an element requires iterating through all elements ahead of it.
 
@@ -33,7 +38,7 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 `single(element)` - creates stream of length 1, containing only `element`.
 
-`repeat(stream)` - creates an infinite stream. It is a concatenation of infinite number of copies of `stream`. If `stream` is empty, then result is also an empty stream. If `stream` is infinite, then result is effectively the same `stream`.
+`repeat(stream)` - creates an infinite stream. It is a concatenation of infinite number of copies of `stream`. If `stream` is empty, then result is also an empty stream. If `stream` is already infinite, then result is effectively the same `stream`.
 
 `repeatSingle(element)` - creates an infinite stream of which every element is `element`. Shorthand for `repeat(single(element))`.
 
@@ -45,12 +50,8 @@ Stream is similar to singly linked list. This means accessing random element is 
 `each(transform)(stream)` - goes through all elements in `stream` and replaces each of them by applying `transform` function.
    - `each(add(1))("ace")` = `"bdf"`
 
-`reduce(sum)(add)(stream)` - goes through all elements in `stream` and invokes a 2 parameter function `add` on each element. First parameter of `add` is element from `stream`. Second argument is `sum` accumulated so far from previous elements. It is similar to `foldl` and `foldr` in haskell. It goes through stream from first element like `foldl`, but element from stream is first argument to `add` like in `foldr`. Reducing an infinite stream hangs the program.
-   - `reduce(1)(multiply)(some(2)(some(3)(some(5)(none))))` =  
-     `multiply(5)(multiply(3)(multiply(2)(1)))` =  
-     `multiply(5)(multiply(3)(2))` =  
-     `multiply(5)(6)` =  
-     `30`
+`reduce(seed)(accumulator)(stream)` - goes through all elements in `stream` and invokes a 2 parameter function `accumulator` on each element. First parameter of `accumulator` is element from `stream`. Second argument is `seed` with elements previously accumulated. It is similar to `foldl` and `foldr` in haskell. `reduce` goes through `stream` starting from first element like `foldl`, but element from stream is the first argument to `accumulator` like in `foldr`. Reducing an infinite stream hangs the program.
+   - `reduce(1)(multiply)(some(2)(some(3)(some(5)(none))))` = `30`
    - `reduce(1)(multiply)(none)` = `1`
 
 `filter(predicate)(stream)` - returns a stream containing only those elements from `stream` that match given `predicate`.
@@ -70,13 +71,13 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `skip(0)("abcde")` = `"abcde"`
    - `skip(-1)("abcde")` = `"abcde"`
 
-`while(predicate)(stream)` - preserves elements from `stream` up until a point where element from `stream` does not match predicate. First element that does not match predicate is removed altogether with all elements behind.
+`while(predicate)(stream)` - preserves elements from `stream` up to a point where element from `stream` does not match `predicate`. First element that does not match predicate is removed altogether with all elements behind.
    - `while(isDigit)("123x456x789")` = `"123"`
    - `while(isDigit)("x123")` - > `"" `
    - `while(isDigit)("")` = `""`
 
 
-`unamybe(maybes)` - takes stream of `maybes`. First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
+`unamybe(maybes)` - takes stream of `maybes` [lang.stream.maybe](../maybe/doc.md). First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
 
 ##### more than one stream #####
 
@@ -91,7 +92,7 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 `transpose(streams)` - takes 2-dimensional stream of streams and flips dimensions. All `streams` can be of different length and infinite as well.
 
-`equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
+`equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain the same elements in the same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. It is intended to use with finite streams since infinite streams that are equal would hang the program.
    - `equal(equalInteger)("abc")("abc")` = `true`
    - `equal(equalInteger)("abc")("abx")` = `false`
    - `equal(equalInteger)("abc")("ab")` = `false`
@@ -114,13 +115,13 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `contains(isDigit)("ab8cd")` = `true`
    - `contains(isDigit)("abcd")` = `false`
 
-`reverse(stream)` - reorders elements in `stream` so last element becomes first.
+`reverse(stream)` - reorders elements in `stream` from last to first.
    - `reverse("abcde")` = `"edcba"`
 
 `sort(comparator)(stream)` - sorts elements in `stream` in order defined by `comparator`.
    - `sort(moreThan)("1928374650")` = `"0123456789"`
 
- `maybeAt(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = 0. Last element has `index` = n-1, where n is length of `stream`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
+ `maybeAt(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = `0`. Last element has `index` = n-1, where n is `length(stream)`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
    - `maybeAt(0)("abcde")` = `something(97)`
    - `maybeAt(4)("abcde")` = `something(101)`
    - `maybeAt(5)("abcde")` = `nothing`
