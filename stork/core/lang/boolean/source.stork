@@ -31,3 +31,7 @@
   format(bool) {
     bool("true")("false")
   }
+
+  negate(predicate)(item) {
+    not(predicate(item))
+  }

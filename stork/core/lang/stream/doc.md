@@ -20,10 +20,14 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `hasNone(some(head)(tail))` = `false`
    - `hasNone(none)` = `true`
 
-`equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
-   - `equal(equalInteger)("abc")("abc")` = `true`
-   - `equal(equalInteger)("abc")("abx")` = `false`
-   - `equal(equalInteger)("abc")("ab")` = `false`
+
+`maybeHead(stream)` - returns `something(head)` or `nothing` if stream is `none`.
+   - `maybeHead("abcde")` = `something(97)`
+   - `maybeHead("")` = `nothing`
+
+`maybeTail(stream)` - returns `something(tail)` or `nothing` if stream is `none`.
+   - `maybeTail("abcde")` = `something("bcde")`
+   - `maybeTail("")` = `nothing`
 
 ##### creating #####
 
@@ -71,6 +75,9 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `while(isDigit)("x123")` - > `"" `
    - `while(isDigit)("")` = `""`
 
+
+`unamybe(maybes)` - takes stream of `maybes`. First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
+
 ##### more than one stream #####
 
 `append(secondStream)(stream)` - appends elements from `secondStream` to the end of `stream`.
@@ -81,6 +88,20 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 `flatten(streams)` - converts 2-dimensional stream of streams into 1-dimensional stream by concatenating all `streams` in same order.
    - `flatten(some("abc")(some("def")(some("ghi")(none))))` = `"abcdefghi"`
+
+`transpose(streams)` - takes 2-dimensional stream of streams and flips dimensions. All `streams` can be of different length and infinite as well.
+
+`equal(equalElements)(streamA)(streamB)` - returns true if `streamA` and `streamB` contain same elements in same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. Its intended to use with finite streams since infinite streams that are equal would hang the program.
+   - `equal(equalInteger)("abc")("abc")` = `true`
+   - `equal(equalInteger)("abc")("abx")` = `false`
+   - `equal(equalInteger)("abc")("ab")` = `false`
+
+`startsWith(equal)(prefix)(stream)` - checks if `stream` starts with `prefix` stream. Function `equal` is used to compare elements in those streams.
+   - `startsWith(equalInteger)("a")("abc")` = `true`
+   - `startsWith(equalInteger)("a")("a")` = `true`
+   - `startsWith(equalInteger)("a")("xyz")` = `false`
+   - `startsWith(equalInteger)("abc")("a")` = `false`
+   - `startsWith(equalInteger)("")("abc")` = `true`
 
 ##### other #####
 
@@ -96,12 +117,11 @@ Stream is similar to singly linked list. This means accessing random element is 
 `reverse(stream)` - reorders elements in `stream` so last element becomes first.
    - `reverse("abcde")` = `"edcba"`
 
- `at(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = 0. Last element has `index` = n-1, where n is length of `stream`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
-   - `at(0)("abcde")` = `something(97)`
-   - `at(4)("abcde")` = `something(101)`
-   - `at(5)("abcde")` = `nothing`
-   - `at(-1)("abcde")` = `nothing`
+`sort(comparator)(stream)` - sorts elements in `stream` in order defined by `comparator`.
+   - `sort(moreThan)("1928374650")` = `"0123456789"`
 
-`first(stream)` - returns first element in `stream` wrapped in `something`. If `stream` is empty, returns `nothing`
-   - `first("abcde")` = `something(97)`
-   - `first("")` = `nothing`
+ `maybeAt(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = 0. Last element has `index` = n-1, where n is length of `stream`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
+   - `maybeAt(0)("abcde")` = `something(97)`
+   - `maybeAt(4)("abcde")` = `something(101)`
+   - `maybeAt(5)("abcde")` = `nothing`
+   - `maybeAt(-1)("abcde")` = `nothing`

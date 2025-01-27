@@ -17,10 +17,6 @@
     while(negate(isNewlineCharacter))
   }
 
-  negate(predicate)(item) {
-    not(predicate(item))
-  }
-
   isNewlineCharacter(character) {
     or
       (equal(LF)(character))

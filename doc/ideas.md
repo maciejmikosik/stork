@@ -43,10 +43,6 @@ you write something like
 
     some(head)(tail) | none
 
-### Fixed-length Stream Constructor ###
-
-`[a][b][c]` = `some(a)(some(b)(some(c)(none)))`
-
 ### Multi-line Strings ###
 
     "first line"

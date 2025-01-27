@@ -20,20 +20,17 @@
     not(hasSome(stream))
   }
 
-  equal(equalElements)(streamA)(streamB) {
-    streamA
-      ((headA)(tailA) {
-        streamB
-          ((headB)(tailB) {
-            and
-              (equalElements(headA)(headB))
-              (equal(equalElements)(tailA)(tailB))
-          })
-          (false)
-      })
-      (hasNone(streamB))
+  maybeHead(stream) {
+    stream
+      ((head)(tail) { something(head) })
+      (nothing)
   }
 
+  maybeTail(stream) {
+    stream
+      ((head)(tail) { something(tail) })
+      (nothing)
+  }
 
   single(element) {
     some(element)(none)
@@ -130,6 +127,16 @@
       (none)
   }
 
+  unmaybe(stream) {
+    stream
+      ((head)(tail) {
+        head
+          ((element){ some(element)(unmaybe(tail)) })
+          (unmaybe(tail))
+      })
+      (none)
+  }
+
   append(secondStream)(stream) {
     stream
       ((head)(tail) {
@@ -150,17 +157,50 @@
       (none)
   }
 
-  length(stream) {
-    stream
-      ((head)(tail) {
-        length(tail).add(1)
-      })
-      (0)
+  transpose(streams) {
+    hasSome(streams)
+      (some
+        (streams.each(maybeHead).unmaybe)
+        (transpose(streams.each(maybeTail).unmaybe))
+      )
+      (none)
   }
 
-  contains(condition)(stream){
+  equal(equalElements)(streamA)(streamB) {
+    streamA
+      ((headA)(tailA) {
+        streamB
+          ((headB)(tailB) {
+            and
+              (equalElements(headA)(headB))
+              (equal(equalElements)(tailA)(tailB))
+          })
+          (false)
+      })
+      (hasNone(streamB))
+  }
+
+  startsWith(equal)(prefix)(stream) {
+    prefix
+      ((prefixHead)(prefixTail) {
+        stream
+          ((head)(tail) {
+            and
+              (equal(prefixHead)(head))
+              (startsWith(equal)(prefixTail)(tail))
+          })
+          (false)
+      })
+      (true)
+  }
+
+  length {
+    reduce(0)(constant(increment))
+  }
+
+  contains(predicate)(stream){
     stream
-      .filter(condition)
+      .filter(predicate)
       .hasSome
   }
 
@@ -168,28 +208,22 @@
     reduce(none)(some)
   }
 
-  at(index)(stream) {
-    atLeast(0)(index)
-      (stream.skip(index).first)
-      (nothing)
-  }
-
-  first(stream) {
+  sort(comparator)(stream) {
     stream
-      ((head)(tail){ something(head) })
-      (nothing)
-  }
-
-  array(size) {
-    arrayCollecting(size)(none)
-  }
-
-  arrayCollecting(size)(collected) {
-    moreThan(0)(size)
-      ((element) {
-        arrayCollecting
-          (decrement(size))
-          (append(single(element))(collected))
+      ((head)(tail) {
+        single(head)
+          .prepend(tail
+            .filter(negate(comparator(head)))
+            .sort(comparator))
+          .append(tail
+            .filter(comparator(head))
+            .sort(comparator))
       })
-      (collected)
+      (none)
+  }
+
+  maybeAt(index)(stream) {
+    atLeast(0)(index)
+      (stream.skip(index).maybeHead)
+      (nothing)
   }
