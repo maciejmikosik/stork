@@ -2,6 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
+import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.Reserver.reserver;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
@@ -19,6 +20,7 @@ import static java.util.UUID.randomUUID;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.quackery.Body;
 import org.quackery.Test;
@@ -33,8 +35,8 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest implements Test {
-  private static final Library CORE = Core.core(DEVELOPMENT);
-  private static final Library MINCORE = Core.core(TESTING);
+  private static final Supplier<Library> CORE = singleton(() -> Core.core(DEVELOPMENT));
+  private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
 
   private final Directory root = systemTemporaryDirectory()
       .directory("stork_test_program_" + randomUUID());
@@ -67,8 +69,8 @@ public class ProgramTest implements Test {
     return this;
   }
 
-  private ProgramTest core(Library core) {
-    this.core = core;
+  private ProgramTest core(Supplier<Library> core) {
+    this.core = core.get();
     return this;
   }
 
