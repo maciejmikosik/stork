@@ -12,9 +12,9 @@ public class TestSyntax {
     return suite("syntax")
         .add(enablesStringLiterals())
         .add(suite("function")
-            .add(functionReturnsArgument())
-            .add(functionReturnsConstant())
-            .add(functionForwardsArgumentAndResult()))
+            .add(functionCanReturnArgument())
+            .add(functionCanReturnConstant())
+            .add(functionCanDelegate()))
         .add(suite("application")
             .add(applicationArgumentCanBeInteger())
             .add(applicationArgumentCanBeLambda()))
@@ -23,10 +23,10 @@ public class TestSyntax {
             .add(chainCanStartWithString())
             .add(chainCanStartWithApplication())
             .add(chainCanBeLong())
-            .add(chainCanHaveApplications())
+            .add(chainCanHaveApplication())
+            .add(chainCanBeLongAndHaveApplications())
             .add(chainCanBeArgument()))
         .add(suite("binding")
-            .add(bindingIgnoresInteger())
             .add(suite("shadowing")
                 .add(shadowingLambdaParameters())
                 .add(shadowingFunctionParameters())
@@ -45,219 +45,251 @@ public class TestSyntax {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest functionReturnsArgument() {
-    return programTest("returns argument")
+  private static ProgramTest functionCanReturnArgument() {
+    return programTest("can return argument")
         .sourceFile("""
             main(stdin) {
-              identity("argument")
+              function("mock")
             }
 
-            identity(x) {
-              x
+            function(string) {
+              string
             }
             """)
-        .stdout("argument");
+        .stdout("mock");
   }
 
-  private static ProgramTest functionReturnsConstant() {
-    return programTest("returns constant")
+  private static ProgramTest functionCanReturnConstant() {
+    return programTest("can return constant")
         .sourceFile("""
             main(stdin) {
               constant
             }
 
             constant {
-              "constant"
+              "mock"
             }
             """)
-        .stdout("constant");
+        .stdout("mock");
   }
 
-  private static ProgramTest functionForwardsArgumentAndResult() {
-    return programTest("forwards argument and result")
+  private static ProgramTest functionCanDelegate() {
+    return programTest("can delegate")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              function("y")
+              function("mock")
             }
 
-            function(x) {
-              identity(x)
+            function(string) {
+              delegate(string)
             }
 
-            identity(x) {
-              x
+            delegate(string) {
+              some(33)(string)
             }
             """)
-        .stdout("y");
+        .stdout("!mock");
   }
 
   private static ProgramTest applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              function(2)
+              function(33)
             }
 
-            function(x) {
-              "x"
+            function(char) {
+              some(char)("mock")
             }
             """)
-        .stdout("x");
+        .stdout("!mock");
   }
 
+  /**
+   * TODO You cannot apply lambda to argument now. You should be allowed. This
+   * will also simplify some test where lambda is wrapped in apply function to
+   * workaround that limitation.
+   */
   private static ProgramTest applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              apply((x){x})("")
+              apply((string){some(33)(string)})("mock")
             }
 
             apply(f)(x) {
               f(x)
             }
             """)
-        .stdout("");
+        .stdout("!mock");
   }
 
   private static ProgramTest chainCanStartWithInteger() {
     return programTest("can start with integer")
+        .importFile("""
+            lang.stream.some
+            """)
         .sourceFile("""
             main(stdin) {
-              123.function
+              33.function
             }
 
-            function(x) {
-              "x"
+            function(char) {
+              some(char)("mock")
             }
             """)
-        .stdout("x");
+        .stdout("!mock");
   }
 
   private static ProgramTest chainCanStartWithString() {
     return programTest("can start with string")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              "object".identity
+              "mock".function
             }
 
-            identity(x) {
-              x
+            function(string) {
+              some(33)(string)
             }
             """)
-        .stdout("object");
+        .stdout("!mock");
   }
 
   private static ProgramTest chainCanStartWithApplication() {
     return programTest("can start with application")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              identity("object").identity
+              functionA("mock").functionB
             }
 
-            identity(x) {
-              x
+            functionA(string) {
+              some(65)(string)
+            }
+
+            functionB(string) {
+              some(66)(string)
             }
             """)
-        .stdout("object");
+        .stdout("BAmock");
   }
 
   private static ProgramTest chainCanBeLong() {
     return programTest("can be long")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              "string".identity.identity.identity
+              "mock".functionA.functionB.functionC
             }
 
-            identity(x) {
-              x
+            functionA(string) {
+              some(65)(string)
+            }
+
+            functionB(string) {
+              some(66)(string)
+            }
+
+            functionC(string) {
+              some(67)(string)
             }
             """)
-        .stdout("string");
+        .stdout("CBAmock");
   }
 
-  private static ProgramTest chainCanHaveApplications() {
-    return programTest("can have applications")
+  private static ProgramTest chainCanHaveApplication() {
+    return programTest("can have application")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              "string"
-                .identity(identity)(identity)
+              "mock".function(65)(66)
             }
 
-            identity(x) {
-              x
+            function(charA)(charB)(string) {
+              some(charB)(some(charA)(string))
             }
             """)
-        .stdout("string");
+        .stdout("BAmock");
+  }
+
+  private static ProgramTest chainCanBeLongAndHaveApplications() {
+    return programTest("can be long and have applications")
+        .importFile("lang.stream.some")
+        .sourceFile("""
+            main(stdin) {
+              function(65)("mock").function(66).function(67)
+            }
+
+            function(char)(string) {
+              some(char)(string)
+            }
+            """)
+        .stdout("CBAmock");
   }
 
   private static ProgramTest chainCanBeArgument() {
     return programTest("can be argument")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              identity("object".identity)
+              functionB("mock".functionA)
             }
 
-            identity(x) {
-              x
+            functionA(string) {
+              some(65)(string)
+            }
+
+            functionB(string) {
+              some(66)(string)
             }
             """)
-        .stdout("object");
-  }
-
-  private static ProgramTest bindingIgnoresInteger() {
-    return programTest("ignores integer")
-        .sourceFile("""
-            apply2(f) {
-              f(2)
-            }
-
-            main(stdin) {
-              ""
-            }
-            """)
-        .stdout("");
+        .stdout("BAmock");
   }
 
   private static ProgramTest shadowingLambdaParameters() {
     return programTest("lambda parameters")
         .sourceFile("""
             main(stdin) {
-              apply((x)(x){ x })("a")("b")
+              apply((string)(string){ string })("mockA")("mockB")
             }
 
             apply(lambda) {
               lambda
             }
             """)
-        .stdout("b");
+        .stdout("mockB");
   }
 
   private static ProgramTest shadowingFunctionParameters() {
     return programTest("function parameters")
         .sourceFile("""
             main(stdin) {
-              function("a")("b")
+              function("mockA")("mockB")
             }
 
-            function(x)(x) {
-              x
+            function(string)(string) {
+              string
             }
             """)
-        .stdout("b");
+        .stdout("mockB");
   }
 
   private static ProgramTest shadowingFunctionByLambdaParameters() {
     return programTest("function by lambda parameters")
         .sourceFile("""
             main(stdin) {
-              function("a")("b")
+              function("mockA")("mockB")
             }
 
-            function(x) {
-              (x) { x }
+            function(string) {
+              (string) { string }
             }
             """)
-        .stdout("b");
+        .stdout("mockB");
   }
 
   private static ProgramTest appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
@@ -281,34 +313,33 @@ public class TestSyntax {
 
   private static ProgramTest cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
+        .importFile("lang.stream.some")
         .sourceFile("""
             main(stdin) {
-              longCalculation
-                ("true")
-                ("false")
+              longCalculation("")
             }
 
-            longCalculation {
+            longCalculation(string) {
               f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(
               f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(f(
-              true
+              string
                ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
                ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
             }
 
-            f(x) {
-              xor(x)(x)
+            f(string) {
+              join(string)(string)
             }
 
-            xor(a)(b) {
-              a
-                (b(false)(true))
-                (b(true)(false))
+            join(stringA)(stringB) {
+              stringA
+                ((head)(tail) {
+                  some(head)(join(tail)(stringB))
+                })
+                (stringB)
             }
-            true(a)(b) { a }
-            false(a)(b) { b }
             """)
-        .stdout("false");
+        .stdout("");
   }
 
   private static ProgramTest programTest(String name) {
