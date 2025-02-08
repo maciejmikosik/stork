@@ -5,7 +5,7 @@ This Tutorial teaches you basic features of stork:
    - writing hello world program
    - using core library
    - imports and namespaces
-   - lambda and currying
+   - functions: definition, currying, lambdas
    - standard I/O
    - defining custom data structure
 
@@ -32,9 +32,10 @@ By default stork binary searches for file named `source.stork` in current direct
 
 There is no need for `return` keyword since function definition contains single expression of what is returned. There are no local variables. Function has no return type since stork is untyped.
 
-### Imports ###
+### Namespace ###
+Full doc: [Namespace](namespace.md).
 
-Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
+Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library, create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
 
 `import.stork`
 
@@ -46,9 +47,12 @@ Now you can use `append` function in your `source.stork` file.
       append("!")("Hello World")
     }
 
+### Function ###
+Full doc: [Function](function.md).
+
 Syntax for calling a function `f` with argument `x` is `f(x)`. Syntax for calling a function with many arguments is `f(x)(y)(z)`.
 
-Define a function for appending exclamation mark.
+Let's define `shout` function that appends exclamation mark.
 
     main(stdin) {
       shout("Hello World")
@@ -57,30 +61,6 @@ Define a function for appending exclamation mark.
     shout(string) {
       append("!")(string)
     }
-
-Functions defined in top directory are in default namespace. You can organize your code into subdirectories. Function defined in subdirectory is in separate namespace based on its relative filesystem path. Each subdirectory can have it's own `source.stork` and `import.stork` file.
-
-`source.stork`
-
-    main(stdin) {
-      shout("Hello World")
-    }
-
-`import.stork`
-
-    my.project.shout
-
-`my/project/source.stork`
-
-    shout(string) {
-      append("!")(string)
-    }
-
-`my/project/import.stork`
-
-    lang.stream.append
-
-### Currying ###
 
 Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can apply functions partially. `append` has 2 parameters `"!"` and `"Hello World"`. They can be applied in 2 separate places.
 
@@ -92,62 +72,22 @@ Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can app
       append("!")
     }
 
-### Lambda abstraction ###
+Functions, although they are static, can still be called like instance methods. Instance call is converted to application where instance becomes its argument.
 
-Stork supports [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
-
-Increment function can be constructed as lambda
-
-    (x) { add(1)(x) }
-
-or using currying
-
-    add(1)
-
-or defined as named function
-
-    inc(x) {
-      add(1)(x)
+    main(stdin) {
+      "Hello World".append("!")
     }
 
-or simpler
-
-    inc {
-      add(1)
-    }
-
-Syntax is designed so putting name before lambda turns it into function definition.
-
-       (x) { add(1)(x) }
-    inc(x) { add(1)(x) }
-
-Lambda with multiple parameters is achievable by nesting lambdas with single parameter: `(x) { (y) { ... } }`. Nested curly brackets `{}` are redundant in that case so you can simplify to `(x)(y){ ... }`. Same applies to function definition.
-
-    function(x)(y) {
-      ...
-    }
-
-### Instance methods ###
-
-In stork there are no instance methods. All functions are considered static. Still, it is possible to invoke a function as it would be part of some object. *This* instance is just added as last argument.
-
- - `object.function` = `function(object)`
- - `object.f(x)` = `f(x)(object)`
- - `object.f(x)(y)` = `f(x)(y)(object)`
- - `object.f(x).g(y).h(z)` = `h(z)(g(y)(f(x)(object)))`
- - `function(object).f(x)` = `f(x)(function(object))`
-
-This works with all functions whether from core library or defined by user and with any expression (except lambda) including applications, string and integer literals.
+Instance calls can be chained.
 
     main(stdin) {
       "Hello World"
+        .prepend("!")
         .append("!")
     }
 
-    main(stdin) {
-      10.increment.format
-    }
-
+Lambdas have same syntax as function definition, just without name. `(x) { ... }` or `(x)(y) { ... }` for more parameters.
+ 
 ### Standard I/O ###
 
 String literal like `"Hello World!"` is [stream](../stork/core/lang/stream/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return stream of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is stream of integers representing bytes from standard input.
