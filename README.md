@@ -31,39 +31,7 @@ and using it in main
 
 prints `yes`.
 
-# data as function #
-
-Structures are encoded using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding)
-
-    something(element)(vSomething)(vNothing) {
-      vSomething(element)
-    }
-
-    nothing(vSomething)(vNothing) {
-      vNothing
-    }
-
-    valueOf(maybeInteger) {
-      maybeInteger
-        ((value){ value })
-        (0)
-    }
-
-`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
-
-More about encoding data as functions in [documentation](doc/data.md).
-
-# big integers #
-
-Integers can be arbitrarily big.
-
-    main(stdin) {
-        format(-123456789012345678901234567890)
-    }
-
-prints `-123456789012345678901234567890`.
-
-# lambdas, currying, methods #
+# lambdas, currying, instance calls #
 
 Stork supports [currying](https://en.wikipedia.org/wiki/Currying) and [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
 
@@ -107,13 +75,45 @@ Example stork program that takes first 10 characters from standard input, revers
 `source.stork`
 
     main(stdin) {
-      reverse(limit(10)(stdin))
+      stdin
+        .limit(10)
+        .reverse
     }
 
 `import.stork`
 
     lang.stream.limit
     lang.stream.reverse
+
+# big integers #
+
+Integers can be arbitrarily big.
+
+    main(stdin) {
+        format(-123456789012345678901234567890)
+    }
+
+prints `-123456789012345678901234567890`.
+
+# data as function #
+
+Structures are encoded using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding)
+
+    something(element)(vSomething)(vNothing) {
+      vSomething(element)
+    }
+
+    nothing(vSomething)(vNothing) {
+      vNothing
+    }
+
+    valueOf(maybeInteger) {
+      maybeInteger
+        ((value){ value })
+        (0)
+    }
+
+`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
 
 # Tutorial #
 
