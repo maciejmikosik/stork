@@ -65,6 +65,18 @@
       (none)
   }
 
+  eachMaybe(transform)(stream) {
+    stream
+      ((head)(tail) {
+        transform(head)
+          ((element) {
+            some(element)(eachMaybe(transform)(tail))
+          })
+          (eachMaybe(transform)(tail))
+      })
+      (none)
+  }
+
   reduce(seed)(accumulator)(stream) {
     stream
       ((head)(tail) {
@@ -137,16 +149,6 @@
       (none)
   }
 
-  unmaybe(stream) {
-    stream
-      ((head)(tail) {
-        head
-          ((element){ some(element)(unmaybe(tail)) })
-          (unmaybe(tail))
-      })
-      (none)
-  }
-
   append(secondStream)(stream) {
     stream
       ((head)(tail) {
@@ -170,8 +172,8 @@
   transpose(streams) {
     hasSome(streams)
       (some
-        (streams.each(maybeHead).unmaybe)
-        (transpose(streams.each(maybeTail).unmaybe))
+        (streams.eachMaybe(maybeHead))
+        (streams.eachMaybe(maybeTail).transpose)
       )
       (none)
   }

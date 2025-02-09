@@ -50,6 +50,8 @@ Stream is similar to singly linked list. This means accessing random element is 
 `each(transform)(stream)` - goes through all elements in `stream` and replaces each of them by applying `transform` function.
    - `each(add(1))("ace")` = `"bdf"`
 
+`eachMaybe(transform)(stream)` - goes through all elements in `stream` and applies `transform` function, that returns maybe elements. Then it removes all `nothing` elements. Then it unpacks elements wrapped in `something`.
+
 `reduce(seed)(accumulator)(stream)` - goes through all elements in `stream` and invokes a 2 parameter function `accumulator` on each element. First parameter of `accumulator` is element from `stream`. Second argument is `seed` with elements previously accumulated. It is similar to `foldl` and `foldr` in haskell. `reduce` goes through `stream` starting from first element like `foldl`, but element from stream is the first argument to `accumulator` like in `foldr`. Reducing an infinite stream hangs the program.
    - `reduce(1)(multiply)(some(2)(some(3)(some(5)(none))))` = `30`
    - `reduce(1)(multiply)(none)` = `1`
@@ -80,8 +82,6 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `until(isDigit)("abcd3efg")` = `"abcd3"`
    - `until(isDigit)("3abc")` - > `"" `
    - `until(isDigit)("")` = `""`
-
-`unamybe(maybes)` - takes stream of `maybes` [lang.stream.maybe](../maybe/doc.md). First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
 
 ##### more than one stream #####
 
