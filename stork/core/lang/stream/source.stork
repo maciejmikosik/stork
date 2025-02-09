@@ -210,7 +210,7 @@
     reduce(0)(constant(increment))
   }
 
-  contains(predicate)(stream){
+  contains(predicate)(stream) {
     stream
       .filter(predicate)
       .hasSome
