@@ -29,6 +29,7 @@ import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
+import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -64,6 +65,23 @@ public class Parser {
   }
 
   private static Expression parseExpression(Peekerator<Token> input) {
+    return switch (input.peek()) {
+      case Symbol symbol when symbol == DOT -> parsePipe(input);
+      default -> parseChain(input);
+    };
+  }
+
+  private static Expression parsePipe(Peekerator<Token> input) {
+    var parameter = parameter("pipeParameter");
+    Expression body = parameter;
+    while (input.peek() == DOT) {
+      input.next();
+      body = application(parseUnchainedExpression(input), body);
+    }
+    return lambda(parameter, body);
+  }
+
+  private static Expression parseChain(Peekerator<Token> input) {
     var result = parseUnchainedExpression(input);
     while (input.peek() == DOT) {
       input.next();
