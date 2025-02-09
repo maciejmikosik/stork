@@ -1,3 +1,5 @@
 lang.stream.iterate
 lang.stream.limit
+lang.stream.skip
 lang.integer.increment
+lang.integer.decrement
