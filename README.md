@@ -63,7 +63,7 @@ Syntax is designed so putting name before lambda turns it into function definiti
 All functions are static, but you can invoke them like instance methods.
 
  - `x.add(1)` = `add(1)(x)`
- - `inc(x).add(5)` = `add(5)(inc(x))`=
+ - `inc(x).add(5)` = `add(5)(inc(x))`
  - `"Hello World".append("!")` = `append("!")("Hello World")`
 
 Instance invocations can be chained.
