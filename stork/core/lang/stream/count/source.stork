@@ -1,0 +1,18 @@
+
+  count {
+    countFrom(0)
+  }
+
+  countFrom(n) {
+    iterate(increment)(n)
+  }
+
+  countTo(n) {
+    count.limit(n)
+  }
+
+  countDownFrom(n) {
+    iterate(decrement)(n)
+      .skip(1)
+      .limit(n)
+  }

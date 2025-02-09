@@ -3,9 +3,9 @@ package com.mikosik.stork.test.cases;
 import static com.mikosik.stork.test.cases.TestBoolean.testBoolean;
 import static com.mikosik.stork.test.cases.TestFunction.testFunction;
 import static com.mikosik.stork.test.cases.TestInteger.testInteger;
-import static com.mikosik.stork.test.cases.TestIntegerStream.testIntegerStream;
 import static com.mikosik.stork.test.cases.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.TestStream.testStream;
+import static com.mikosik.stork.test.cases.TestStreamCount.testStreamCount;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -16,8 +16,8 @@ public class TestCoreLibrary {
         .add(testBoolean())
         .add(testFunction())
         .add(testInteger())
-        .add(testIntegerStream())
         .add(testStream())
+        .add(testStreamCount())
         .add(testMaybe());
   }
 }

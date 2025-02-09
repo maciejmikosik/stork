@@ -36,16 +36,16 @@
     some(element)(none)
   }
 
-  repeat(stream) {
-    hasSome(stream)
-      (prepend(stream)(repeat(stream)))
-      (none)
-  }
-
-  repeatSingle(element) {
+  repeat(element) {
     some
       (element)
-      (repeatSingle(element))
+      (repeat(element))
+  }
+
+  cycle(stream) {
+    hasSome(stream)
+      (prepend(stream)(cycle(stream)))
+      (none)
   }
 
   iterate(next)(first) {
@@ -65,15 +65,27 @@
       (none)
   }
 
-  reduce(sum)(add)(stream) {
+  eachMaybe(transform)(stream) {
+    stream
+      ((head)(tail) {
+        transform(head)
+          ((element) {
+            some(element)(eachMaybe(transform)(tail))
+          })
+          (eachMaybe(transform)(tail))
+      })
+      (none)
+  }
+
+  reduce(seed)(accumulator)(stream) {
     stream
       ((head)(tail) {
         reduce
-          (add(head)(sum))
-          (add)
+          (accumulator(head)(seed))
+          (accumulator)
           (tail)
       })
-      (sum)
+      (seed)
   }
 
   reduceEager(sum)(add)(stream) {
@@ -127,12 +139,12 @@
       (none)
   }
 
-  unmaybe(stream) {
+  until(predicate)(stream) {
     stream
       ((head)(tail) {
-        head
-          ((element){ some(element)(unmaybe(tail)) })
-          (unmaybe(tail))
+        predicate(head)
+          (some(head)(none))
+          (some(head)(until(predicate)(tail)))
       })
       (none)
   }
@@ -160,8 +172,8 @@
   transpose(streams) {
     hasSome(streams)
       (some
-        (streams.each(maybeHead).unmaybe)
-        (transpose(streams.each(maybeTail).unmaybe))
+        (streams.eachMaybe(maybeHead))
+        (streams.eachMaybe(maybeTail).transpose)
       )
       (none)
   }
