@@ -31,7 +31,7 @@ and using it in main
 
 prints `yes`.
 
-# lambdas, currying, instance calls #
+# functional features #
 
 Stork supports [currying](https://en.wikipedia.org/wiki/Currying) and [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
 
@@ -65,6 +65,25 @@ All functions are static, but you can invoke them like instance methods.
  - `x.add(1)` = `add(1)(x)`
  - `inc(x).add(5)` = `add(5)(inc(x))`=
  - `"Hello World".append("!")` = `append("!")("Hello World")`
+
+Instance invocations can be chained.
+
+    main(stdin) {
+      surround("*")("Hello World")
+    }
+    
+    surround(affix)(string) {
+      string
+        .prepend(affix)
+        .append(affix)
+    }
+
+Or composed into pipes.
+
+    surround(affix) {
+      .prepend(affix)
+      .append(affix)
+    }
 
 # namespaces #
 

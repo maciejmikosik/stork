@@ -26,6 +26,12 @@ public class TestSyntax {
             .add(chainCanHaveApplication())
             .add(chainCanBeLongAndHaveApplications())
             .add(chainCanBeArgument()))
+        .add(suite("pipe")
+            .add(pipeCanHaveSingleFunction())
+            .add(pipeCanHaveApplication())
+            .add(pipeCanHaveApplication())
+            .add(pipeCanBeLongAndHaveApplications())
+            .add(pipeCanBeArgument()))
         .add(suite("binding")
             .add(suite("shadowing")
                 .add(shadowingLambdaParameters())
@@ -248,6 +254,72 @@ public class TestSyntax {
             }
             """)
         .stdout("BAmock");
+  }
+
+  private static ProgramTest pipeCanHaveSingleFunction() {
+    return programTest("can have single function")
+        .importFile("lang.stream.some")
+        .sourceFile("""
+            main(stdin) {
+              pipe("mock")
+            }
+
+            pipe {
+              .functionA
+            }
+
+            functionA(string) {
+              some(65)(string)
+            }
+            """)
+        .stdout("Amock");
+  }
+
+  private static ProgramTest pipeCanHaveApplication() {
+    return programTest("can have application")
+        .importFile("lang.stream.some")
+        .sourceFile("""
+            main(stdin) {
+              pipe("mock")
+            }
+
+            pipe {
+              .some(65)
+            }
+            """)
+        .stdout("Amock");
+  }
+
+  private static ProgramTest pipeCanBeLongAndHaveApplications() {
+    return programTest("can be long and have applications")
+        .importFile("lang.stream.some")
+        .sourceFile("""
+            main(stdin) {
+              pipe("mock")
+            }
+
+            pipe {
+              .some(65)
+              .some(66)
+              .some(67)
+            }
+            """)
+        .stdout("CBAmock");
+  }
+
+  private static ProgramTest pipeCanBeArgument() {
+    return programTest("can be argument")
+        .importFile("lang.stream.some")
+        .sourceFile("""
+            main(stdin) {
+              identity(.some(65))("mock")
+            }
+
+            identity(x) {
+              x
+            }
+            """)
+        .stdout("Amock");
   }
 
   private static ProgramTest shadowingLambdaParameters() {

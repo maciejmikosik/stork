@@ -81,9 +81,24 @@ Functions, although they are static, can still be called like instance methods. 
 Instance calls can be chained.
 
     main(stdin) {
-      "Hello World"
-        .prepend("!")
-        .append("!")
+      "Hello World".surround("*")
+    }
+    
+    surround(affix)(message) {
+      message
+        .prepend(affix)
+        .append(affix)
+    }
+
+Chain of instance calls can be composed into pipe.
+
+    main(stdin) {
+      "Hello World".surround("*")
+    }
+    
+    surround(affix) {
+      .prepend(affix)
+      .append(affix)
     }
 
 Lambdas have same syntax as function definition, just without name. `(x) { ... }` or `(x)(y) { ... }` for more parameters.
