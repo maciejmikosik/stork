@@ -127,6 +127,16 @@
       (none)
   }
 
+  until(predicate)(stream) {
+    stream
+      ((head)(tail) {
+        predicate(head)
+          (some(head)(none))
+          (some(head)(until(predicate)(tail)))
+      })
+      (none)
+  }
+
   unmaybe(stream) {
     stream
       ((head)(tail) {

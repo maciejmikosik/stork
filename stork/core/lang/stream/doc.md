@@ -76,6 +76,10 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `while(isDigit)("x123")` - > `"" `
    - `while(isDigit)("")` = `""`
 
+`until(predicate)(stream)` - preserves elements from `stream` up to a point where first element from `stream` matches `predicate`. First element that matches predicate will be the last one in returned stream.
+   - `until(isDigit)("abcd3efg")` = `"abcd3"`
+   - `until(isDigit)("3abc")` - > `"" `
+   - `until(isDigit)("")` = `""`
 
 `unamybe(maybes)` - takes stream of `maybes` [lang.stream.maybe](../maybe/doc.md). First it removes all `nothing` elements from the `maybes` stream. Then it unpacks elements wrapped in `something`.
 
