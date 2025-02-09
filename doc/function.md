@@ -106,14 +106,33 @@ This can greatly simplify your code. Let's rewrite previous example.
 Notice again that order of parameters matters. For example, functions operating on streams have stream as its last parameter. This allows creation of readable chain of invocations.
 
     main(stdin) {
-      single("Hello World")
+      shoutTimes(3)("Hello World")
+    }
+    
+    shoutTimes(n)(message) {
+      message
+        .single
         .repeat
+        .limit(n)
         .each(append("!"))
-        .limit(3)
         .flatten
     }
 
 prints `Hello World!Hello World!Hello World!`.
+
+Long chains of invocations can be extracted into pipes. Pipe is a composition of several functions into one function. Syntax is similar to chaining instance methods, but without initial instance.
+
+    main(stdin) {
+      shoutTimes(3)("Hello World")
+    }
+    
+    shoutTimes(n) {
+      .single
+      .repeat
+      .limit(n)
+      .each(append("!"))
+      .flatten
+    }
 
 ### Lambda abstraction ###
 
