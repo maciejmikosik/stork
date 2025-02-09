@@ -164,7 +164,7 @@
   flatten(streams) {
     streams
       ((head)(tail) {
-        prepend(head)(flatten(tail))
+        head.append(tail.flatten)
       })
       (none)
   }
