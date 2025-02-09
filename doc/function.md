@@ -111,7 +111,6 @@ Notice again that order of parameters matters. For example, functions operating 
     
     shoutTimes(n)(message) {
       message
-        .single
         .repeat
         .limit(n)
         .each(append("!"))
@@ -127,7 +126,6 @@ Long chains of invocations can be extracted into pipes. Pipe is a composition of
     }
     
     shoutTimes(n) {
-      .single
       .repeat
       .limit(n)
       .each(append("!"))

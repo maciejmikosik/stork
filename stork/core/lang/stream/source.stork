@@ -36,16 +36,16 @@
     some(element)(none)
   }
 
-  repeat(stream) {
-    hasSome(stream)
-      (prepend(stream)(repeat(stream)))
-      (none)
-  }
-
-  repeatSingle(element) {
+  repeat(element) {
     some
       (element)
-      (repeatSingle(element))
+      (repeat(element))
+  }
+
+  cycle(stream) {
+    hasSome(stream)
+      (prepend(stream)(cycle(stream)))
+      (none)
   }
 
   iterate(next)(first) {
