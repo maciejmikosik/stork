@@ -65,15 +65,15 @@
       (none)
   }
 
-  reduce(sum)(add)(stream) {
+  reduce(seed)(accumulator)(stream) {
     stream
       ((head)(tail) {
         reduce
-          (add(head)(sum))
-          (add)
+          (accumulator(head)(seed))
+          (accumulator)
           (tail)
       })
-      (sum)
+      (seed)
   }
 
   reduceEager(sum)(add)(stream) {
