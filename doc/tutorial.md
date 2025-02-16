@@ -74,7 +74,7 @@ Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can app
       append("!")
     }
 
-Functions, although they are static, can still be called like instance methods. Instance call is converted to application where instance becomes its argument.
+Functions, although they are static, can still be called like instance methods. Instance call is converted to static call and instance becomes its last argument.
 
     main(stdin) {
       "Hello World".append("!")
