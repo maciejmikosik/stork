@@ -109,6 +109,32 @@ Reuse of words `person`, `name`, `age` as lambda parameters is just a convention
       })
     }
 
+To make your structure more convenient to interact with, you can implement getters for `name` and `age`.
+
+    person(name)(age)(visitor) {
+      visitor(name)(age)
+    }
+    
+    name(person) {
+      person((name)(age){ name })
+    }
+    
+    age(person) {
+      person((name)(age){ age })
+    }
+
+You can take advantage of [chaining feature](function.md#chain) and invoke getters like they are instance methods.
+
+    main(stdin) {
+      john.name
+    }
+    
+    john {
+      person("John")(23)
+    }
+
+prints `John`
+
 ### Structures with multiple constructors ###
 
 Structures and enums can be seen as specific cases of more general [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding). In case of structure we had one constructor with parameters. In case of enum we had multiple constructors with no parameters. But we can have multiple constructors with parameters and each constructor can even have different number of parameters. 
