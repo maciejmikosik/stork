@@ -9,6 +9,8 @@ This Tutorial teaches you basic features of stork:
    - standard I/O
    - defining custom data structure
 
+All programs in this tutorial print `Hello World!`, unless specified otherwise.
+
 ### Hello World! ###
 
 Build stork compiler by running bash script.
@@ -72,7 +74,7 @@ Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can app
       append("!")
     }
 
-Functions, although they are static, can still be called like instance methods. Instance call is converted to application where instance becomes its argument.
+Functions, although they are static, can still be called like instance methods. Instance call is converted to static call and instance becomes its last argument.
 
     main(stdin) {
       "Hello World".append("!")
@@ -81,28 +83,24 @@ Functions, although they are static, can still be called like instance methods. 
 Instance calls can be chained.
 
     main(stdin) {
-      "Hello World".surround("*")
-    }
-    
-    surround(affix)(message) {
-      message
-        .prepend(affix)
-        .append(affix)
+      "World"
+        .prepend("Hello ")
+        .append("!")
     }
 
 Chain of instance calls can be composed into pipe.
 
     main(stdin) {
-      "Hello World".surround("*")
+      greet("World")
     }
     
-    surround(affix) {
-      .prepend(affix)
-      .append(affix)
+    greet {
+      .prepend("Hello ")
+      .append("!")
     }
 
 Lambdas have same syntax as function definition, just without name. `(x) { ... }` or `(x)(y) { ... }` for more parameters.
- 
+
 ### Standard I/O ###
 
 String literal like `"Hello World!"` is [stream](../stork/core/lang/stream/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return stream of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is stream of integers representing bytes from standard input.
@@ -126,8 +124,6 @@ Running
 console:
 
     echo -n "Hello World" | ~/stork
-
-prints `Hello World!`
 
 Since strings are stream of integers, you can perform integer arithmetics on characters.
 

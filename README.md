@@ -8,23 +8,20 @@ Stork is untyped functional programming language.
 
 There are no keywords like `if`, `else`, `true` or `false`. Boolean values are just ordinary functions in core library. They use [Church encodings](https://en.wikipedia.org/wiki/Church_encoding#Church_Booleans).
 
-    true(a)(b) { a }
-    false(a)(b) { b }
-
-Consider function that returns `"yes"` or `"no"` depending if argument is `true` or `false`. In javascript you would write
+In javascript you would write
 
     function yesOrNo(bool) {
       return bool ? "yes" : "no";
     }
+    
+    console.log(yesOrNo(true));
 
 In stork you write
 
     yesOrNo(bool) {
       bool("yes")("no")
     }
-
-and using it in main
-
+    
     main(stdin) {
       yesOrNo(true)
     }
@@ -33,13 +30,11 @@ prints `yes`.
 
 # functional features #
 
-Stork supports [currying](https://en.wikipedia.org/wiki/Currying) and [anonymous functions/lambdas](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr).
-
-Increment function can be constructed as lambda
+Increment function can be constructed as [anonymous functions (lambda abstraction)](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr)
 
     (x) { add(1)(x) }
 
-or using currying
+or using [currying](https://en.wikipedia.org/wiki/Currying)
 
     add(1)
 
@@ -60,36 +55,28 @@ Syntax is designed so putting name before lambda turns it into function definiti
        (x) { add(1)(x) }
     inc(x) { add(1)(x) } 
 
-All functions are static, but you can invoke them like instance methods.
-
- - `x.add(1)` = `add(1)(x)`
- - `inc(x).add(5)` = `add(5)(inc(x))`=
- - `"Hello World".append("!")` = `append("!")("Hello World")`
-
-Instance invocations can be chained.
+All functions are static, but you can invoke them like instance methods and chain them.
 
     main(stdin) {
-      surround("*")("Hello World")
+      "World"
+        .prepend("Hello ")
+        .append("!")
+    }
+
+And compose invocations into pipes.
+
+    main(stdin) {
+      greet("World")
     }
     
-    surround(affix)(string) {
-      string
-        .prepend(affix)
-        .append(affix)
-    }
-
-Or composed into pipes.
-
-    surround(affix) {
-      .prepend(affix)
-      .append(affix)
+    greet {
+      .prepend("Hello ")
+      .append("!")
     }
 
 # namespaces #
 
-Source code file is always named `source.stork`. Directory path defines namespace of all functions defined inside. Using functions from other namespace require imports. Imports are in separate file named `import.stork`. By default main function is named `main` and is in root directory/namespace.
-
-Example stork program that takes first 10 characters from standard input, reverses them and returns to standard output.
+All imports are in separate files.
 
 `source.stork`
 
