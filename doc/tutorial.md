@@ -13,11 +13,13 @@ All programs in this tutorial print `Hello World!`, unless specified otherwise.
 
 ### Hello World! ###
 
-Build stork compiler by running bash script.
+Build stork compiler by running bash script (requires Java 22).
 
     $ ./run/build
 
 It creates stork binary in your home directory `~/stork`.
+
+Or you can download built binary from project's [release page](https://github.com/maciejmikosik/stork/releases/tag/latest).
 
 Create a file named `source.stork` with following contents.
 
@@ -25,7 +27,7 @@ Create a file named `source.stork` with following contents.
       "Hello World!"
     }
 
-Run it by executing stork binary in same directory.
+Run it by executing stork binary in same directory (requires Java 21).
 
     $ ~/stork
     Hello World!

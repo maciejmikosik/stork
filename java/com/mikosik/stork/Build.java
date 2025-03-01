@@ -35,6 +35,7 @@ public class Build {
         .source(project.javaSourceDirectory)
         .destination(stageDirectory)
         .seed(project.sourceFileOf(Stork.class))
+        .release(21)
         .execute();
 
     stageDirectory

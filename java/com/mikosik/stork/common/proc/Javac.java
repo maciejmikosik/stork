@@ -1,5 +1,6 @@
 package com.mikosik.stork.common.proc;
 
+import static com.mikosik.stork.common.SequenceBuilder.sequenceBuilderOf;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.UncheckedInterruptedException.unchecked;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
@@ -13,6 +14,7 @@ public class Javac {
   private Directory source;
   private Directory destination;
   private File seed;
+  private int release;
 
   private Javac() {}
 
@@ -35,13 +37,21 @@ public class Javac {
     return this;
   }
 
+  public Javac release(int release) {
+    this.release = release;
+    return this;
+  }
+
   public void execute() {
     try {
+      var command = sequenceBuilderOf("javac")
+          .addAll("-sourcepath", source.toString())
+          .addAll("-d", destination.toString())
+          .andAllIf(release != 0, "--release", Integer.toString(release))
+          .addAll(seed.toString())
+          .build();
       int exitValue = new ProcessBuilder()
-          .command("javac",
-              "-sourcepath", source.toString(),
-              "-d", destination.toString(),
-              seed.toString())
+          .command(command)
           .inheritIO()
           .start()
           .waitFor();
