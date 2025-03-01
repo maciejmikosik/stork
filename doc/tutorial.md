@@ -25,7 +25,7 @@ Create a file named `source.stork` with following contents.
       "Hello World!"
     }
 
-Run it by executing stork binary in same directory.
+Run it by executing stork binary in same directory (requires Java 21).
 
     $ ~/stork
     Hello World!
