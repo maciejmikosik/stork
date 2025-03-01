@@ -13,7 +13,7 @@ All programs in this tutorial print `Hello World!`, unless specified otherwise.
 
 ### Hello World! ###
 
-Build stork compiler by running bash script.
+Build stork compiler by running bash script (requires Java 22).
 
     $ ./run/build
 
