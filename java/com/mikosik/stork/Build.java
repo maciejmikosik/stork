@@ -9,16 +9,32 @@ import static com.mikosik.stork.common.proc.Zip.zip;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
 
+import java.util.Scanner;
+
 /**
  * This is build of stork compiler. It can be run as multi-file source-code
  * program (<a href="https://openjdk.org/jeps/458">JEP-458</a>) (requires java
  * 22) or from Eclipse IDE.
  */
 public class Build {
+  private static final Scanner scanner = new Scanner(System.in);
+
   public static void main(String... args) throws Exception {
     var project = project();
     var homeDirectory = homeDirectory();
     var buildDirectory = newTemporaryDirectory("stork_build_");
+    var product = homeDirectory.directory(".local/bin").file("stork");
+
+    if (product.exists()) {
+      text()
+          .format("File %s already exists. Overwrite? y or n? ", product)
+          .stdout();
+      if (scanner.nextLine().trim().equals("y")) {
+        product.delete();
+      } else {
+        return;
+      }
+    }
 
     text()
         .line("building stork binary")
@@ -60,16 +76,16 @@ public class Build {
         .destination(storkJarFile)
         .execute();
 
-    var storkShebangFile = buildDirectory.file("stork")
+    buildDirectory.file("stork")
         .create()
         .append("#!/usr/bin/java -jar\n".getBytes(US_ASCII))
         .append(storkJarFile)
         .addPermission(OWNER_EXECUTE)
-        .move(homeDirectory);
+        .move(product.parent().createDeep());
 
     text()
         .line()
-        .line("created stork binary: ", storkShebangFile)
+        .line("created stork binary: ", product)
         .stdout();
   }
 }

@@ -13,6 +13,11 @@ public class Text {
     return new Text();
   }
 
+  public Text format(String template, Object... items) {
+    this.items.add(template.formatted(items));
+    return this;
+  }
+
   public Text line(Object... items) {
     this.items.addAll(asList(items));
     this.items.add("\n");

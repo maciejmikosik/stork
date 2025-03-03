@@ -69,6 +69,15 @@ public class Directory {
     }
   }
 
+  public Directory createDeep() {
+    try {
+      Files.createDirectories(path);
+      return this;
+    } catch (IOException e) {
+      throw unchecked(e);
+    }
+  }
+
   public Directory delete() {
     try {
       Files.delete(path);
