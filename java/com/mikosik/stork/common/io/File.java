@@ -1,6 +1,7 @@
 package com.mikosik.stork.common.io;
 
 import static com.mikosik.stork.common.Throwables.check;
+import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static java.nio.file.StandardOpenOption.APPEND;
 
@@ -23,6 +24,10 @@ public class File {
 
   public String name() {
     return path.getFileName().toString();
+  }
+
+  public Directory parent() {
+    return directory(path.getParent());
   }
 
   public boolean exists() {

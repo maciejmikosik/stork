@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.StandardOutput.out;
+import static com.mikosik.stork.common.Text.text;
 import static com.mikosik.stork.common.io.Directories.homeDirectory;
 import static com.mikosik.stork.common.io.Directories.newTemporaryDirectory;
 import static com.mikosik.stork.common.proc.Javac.javac;
@@ -9,23 +9,41 @@ import static com.mikosik.stork.common.proc.Zip.zip;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
 
+import java.util.Scanner;
+
 /**
  * This is build of stork compiler. It can be run as multi-file source-code
  * program (<a href="https://openjdk.org/jeps/458">JEP-458</a>) (requires java
  * 22) or from Eclipse IDE.
  */
 public class Build {
+  private static final Scanner scanner = new Scanner(System.in);
+
   public static void main(String... args) throws Exception {
     var project = project();
     var homeDirectory = homeDirectory();
     var buildDirectory = newTemporaryDirectory("stork_build_");
+    var product = homeDirectory.directory(".local/bin").file("stork");
 
-    out("building stork binary");
-    out("project: %s", project.root);
-    out("script: %s", project.sourceFileOf(Build.class));
-    out("java source directory: %s", project.javaSourceDirectory);
-    out("core directory: %s", project.coreDirectory);
-    out("temp build directory: %s", buildDirectory);
+    if (product.exists()) {
+      text()
+          .format("File %s already exists. Overwrite? y or n? ", product)
+          .stdout();
+      if (scanner.nextLine().trim().equals("y")) {
+        product.delete();
+      } else {
+        return;
+      }
+    }
+
+    text()
+        .line("building stork binary")
+        .line("                project: ", project.root)
+        .line("            this script: ", project.sourceFileOf(Build.class))
+        .line("  java source directory: ", project.javaSourceDirectory)
+        .line("         core directory: ", project.coreDirectory)
+        .line("   temp build directory: ", buildDirectory)
+        .stdout();
 
     var stageDirectory = buildDirectory
         .directory("stage")
@@ -58,14 +76,16 @@ public class Build {
         .destination(storkJarFile)
         .execute();
 
-    var storkShebangFile = buildDirectory.file("stork")
+    buildDirectory.file("stork")
         .create()
         .append("#!/usr/bin/java -jar\n".getBytes(US_ASCII))
         .append(storkJarFile)
         .addPermission(OWNER_EXECUTE)
-        .move(homeDirectory);
+        .move(product.parent().createDeep());
 
-    out("");
-    out("created stork binary: %s".formatted(storkShebangFile));
+    text()
+        .line()
+        .line("created stork binary: ", product)
+        .stdout();
   }
 }
