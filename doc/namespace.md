@@ -67,11 +67,11 @@ It is not permissible to have 2 functions with same name and namespace, because 
 Functions with same name cannot be defined in same source file. Following code causes compilation error.
 
     main(stdin) {
-      shout("Hello World")
+      "Hello World!"
     }
     
-    main(x) {
-      x
+    main {
+      "duplicate"
     }
 
 Also you cannot define your function with same name and namespace as core function. Following code causes compilation error.
