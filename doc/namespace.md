@@ -67,14 +67,14 @@ It is not permissible to have 2 functions with same name and namespace, because 
 Functions with same name cannot be defined in same source file. Following code causes compilation error.
 
     main(stdin) {
-      shout("Hello World")
+      "Hello World!"
     }
     
-    main(x) {
-      x
+    main {
+      "duplicate"
     }
 
-Also you cannot define your function with same name and namespace as core function. Following code causes compilation error.
+You cannot define your own function with same name and namespace as core function. Following code causes compilation error because function `lang.stream.append` is already defined in core library.
 
     ┗━lang
       ┗━stream
@@ -84,16 +84,3 @@ Also you cannot define your function with same name and namespace as core functi
           ┃   stream         ┃
           ┃ }                ┃
           ┗━━━━━━━━━━━━━━━━━━┛
-
-
-You can however define your function in source file in same namespace as some core function, but with different name. In this case functions in one source file cannot access functions from other source file. You still need to import them. Following code causes compilation error because `lang.stream.shout` cannot access core function `lang.stream.append` despite being in the same namespace.
-
-    ┗━lang
-      ┗━stream
-        ┗━source.stork
-          ┣━━━━━━━━━━━━━━━━━━━━━━━━┓
-          ┃ shout(message) {       ┃
-          ┃   append("!")(message) ┃
-          ┃ }                      ┃
-          ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
-
