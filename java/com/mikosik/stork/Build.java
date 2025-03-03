@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.StandardOutput.out;
+import static com.mikosik.stork.common.Text.text;
 import static com.mikosik.stork.common.io.Directories.homeDirectory;
 import static com.mikosik.stork.common.io.Directories.newTemporaryDirectory;
 import static com.mikosik.stork.common.proc.Javac.javac;
@@ -20,12 +20,14 @@ public class Build {
     var homeDirectory = homeDirectory();
     var buildDirectory = newTemporaryDirectory("stork_build_");
 
-    out("building stork binary");
-    out("project: %s", project.root);
-    out("script: %s", project.sourceFileOf(Build.class));
-    out("java source directory: %s", project.javaSourceDirectory);
-    out("core directory: %s", project.coreDirectory);
-    out("temp build directory: %s", buildDirectory);
+    text()
+        .line("building stork binary")
+        .line("                project: ", project.root)
+        .line("            this script: ", project.sourceFileOf(Build.class))
+        .line("  java source directory: ", project.javaSourceDirectory)
+        .line("         core directory: ", project.coreDirectory)
+        .line("   temp build directory: ", buildDirectory)
+        .stdout();
 
     var stageDirectory = buildDirectory
         .directory("stage")
@@ -65,7 +67,9 @@ public class Build {
         .addPermission(OWNER_EXECUTE)
         .move(homeDirectory);
 
-    out("");
-    out("created stork binary: %s".formatted(storkShebangFile));
+    text()
+        .line()
+        .line("created stork binary: ", storkShebangFile)
+        .stdout();
   }
 }

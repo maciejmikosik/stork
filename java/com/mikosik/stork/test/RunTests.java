@@ -2,8 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
-import static com.mikosik.stork.common.StandardOutput.err;
-import static com.mikosik.stork.common.StandardOutput.out;
+import static com.mikosik.stork.common.Text.text;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.deep;
@@ -84,29 +83,19 @@ public class RunTests {
 
   private static void print(Duration duration, Test report) {
     var failed = filterFailed(report);
+    var text = text()
+        .line("suite  : ", nameOf(report))
+        .line("cases  : ", count(report))
+        .line("time   : ", inSeconds(duration));
     if (count(failed) > 0) {
-      err("""
-          suite  : %s
-          cases  : %d
-          time   : %.3fs
-          failed : %d
-          """,
-          nameOf(report),
-          count(report),
-          inSeconds(duration),
-          count(failed));
-      err(format(failed));
-      err(formatExceptions(failed));
+      text
+          .line("failed : ", count(failed))
+          .line(format(failed))
+          .line(formatExceptions(failed))
+          .stderr();
       exit(1);
     } else {
-      out("""
-          suite  : %s
-          cases  : %d
-          time   : %.3fs
-          """,
-          nameOf(report),
-          count(report),
-          inSeconds(duration));
+      text.line().stdout();
     }
   }
 
