@@ -30,9 +30,8 @@ public class Project {
 
   public static Project project() {
     var fileSystem = FileSystems.getDefault();
-    var classLoaderPath = Project.class.getClassLoader().getResource("").getPath();
-    var classOrSourcePath = directory(fileSystem.getPath(classLoaderPath));
-    var root = findRoot(classOrSourcePath);
+    var workingDirectory = directory(fileSystem.getPath(System.getProperty("user.dir")));
+    var root = findRoot(workingDirectory);
     return new Project(fileSystem, root);
   }
 
