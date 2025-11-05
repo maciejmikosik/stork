@@ -44,7 +44,8 @@ public class TestInteger {
         .test("-00", 0)
         .test("+01", 1)
         .test(" 01", 1)
-        .test("-01", -1);
+        .test("-01", -1)
+        .build();
   }
 
   private static Test testIntegerHuge() {
@@ -54,7 +55,8 @@ public class TestInteger {
         .test(" 1000000000000000000000000000000",
             big("1000000000000000000000000000000"))
         .test("-1000000000000000000000000000000",
-            big("-1000000000000000000000000000000"));
+            big("-1000000000000000000000000000000"))
+        .build();
   }
 
   private static Test testIntegerEqual() {
@@ -70,7 +72,8 @@ public class TestInteger {
         .test("equal( 1)(-1)", false)
         .test("equal( 1)( 0)", false)
         .test("equal( 1)( 1)", true)
-        .test("equal(negate(2))(negate(3))", false);
+        .test("equal(negate(2))(negate(3))", false)
+        .build();
   }
 
   private static Test testIntegerMoreThan() {
@@ -86,7 +89,8 @@ public class TestInteger {
         .test("moreThan( 1)(-1)", false)
         .test("moreThan( 1)( 0)", false)
         .test("moreThan( 1)( 1)", false)
-        .test("moreThan(negate(3))(negate(4))", false);
+        .test("moreThan(negate(3))(negate(4))", false)
+        .build();
   }
 
   private static Test testIntegerLessThan() {
@@ -102,7 +106,8 @@ public class TestInteger {
         .test("lessThan( 1)(-1)", true)
         .test("lessThan( 1)( 0)", true)
         .test("lessThan( 1)( 1)", false)
-        .test("lessThan(negate(3))(negate(4))", true);
+        .test("lessThan(negate(3))(negate(4))", true)
+        .build();
   }
 
   private static Test testIntegerAtLeast() {
@@ -118,7 +123,8 @@ public class TestInteger {
         .test("atLeast( 1)(-1)", false)
         .test("atLeast( 1)( 0)", false)
         .test("atLeast( 1)( 1)", true)
-        .test("atLeast(negate(3))(negate(4))", false);
+        .test("atLeast(negate(3))(negate(4))", false)
+        .build();
   }
 
   private static Test testIntegerAtMost() {
@@ -134,7 +140,8 @@ public class TestInteger {
         .test("atMost( 1)(-1)", true)
         .test("atMost( 1)( 0)", true)
         .test("atMost( 1)( 1)", true)
-        .test("atMost(negate(3))(negate(4))", true);
+        .test("atMost(negate(3))(negate(4))", true)
+        .build();
   }
 
   private static Test testIntegerNegate() {
@@ -143,7 +150,8 @@ public class TestInteger {
         .test("negate( 5)", -5)
         .test("negate(-3)", 3)
         .test("negate( 0)", 0)
-        .test("negate(negate(3))", 3);
+        .test("negate(negate(3))", 3)
+        .build();
   }
 
   private static Test testIntegerAdd() {
@@ -152,7 +160,8 @@ public class TestInteger {
         .test("add(  2)( 3)", 5)
         .test("add( -1)( 1)", 0)
         .test("add(-10)(-5)", -15)
-        .test("add(add(1)(2))(add(3)(4))", 10);
+        .test("add(add(1)(2))(add(3)(4))", 10)
+        .build();
   }
 
   private static Test testIntegerSubtract() {
@@ -161,7 +170,8 @@ public class TestInteger {
         .test("subtract(  2)( 3)", 1)
         .test("subtract( -1)( 1)", 2)
         .test("subtract(-10)(-5)", 5)
-        .test("subtract(subtract(1)(2))(subtract(3)(4))", 0);
+        .test("subtract(subtract(1)(2))(subtract(3)(4))", 0)
+        .build();
   }
 
   private static Test testIntegerIncrement() {
@@ -170,7 +180,8 @@ public class TestInteger {
         .test("increment(-7)", -6)
         .test("increment( 0)", 1)
         .test("increment( 7)", 8)
-        .test("increment(increment(0))", 2);
+        .test("increment(increment(0))", 2)
+        .build();
   }
 
   private static Test testIntegerDecrement() {
@@ -179,7 +190,8 @@ public class TestInteger {
         .test("decrement(-7)", -8)
         .test("decrement( 0)", -1)
         .test("decrement( 7)", 6)
-        .test("decrement(decrement(0))", -2);
+        .test("decrement(decrement(0))", -2)
+        .build();
   }
 
   private static Test testIntegerMultiply() {
@@ -198,7 +210,8 @@ public class TestInteger {
         .test("multiply(-12)( 34)", -408)
         .test("multiply( 12)(-34)", -408)
         .test("multiply(-12)(-34)", 408)
-        .test("multiply(multiply(2)(3))(multiply(4)(5))", 120);
+        .test("multiply(multiply(2)(3))(multiply(4)(5))", 120)
+        .build();
   }
 
   private static Test testIntegerDivideBy() {
@@ -234,7 +247,8 @@ public class TestInteger {
         .test("divideBy(-3)( 5)", -1)
         .test("divideBy(-3)( 6)", -2)
         .test("divideBy(-3)( 7)", -2)
-        .test("divideBy(divideBy(4)(12))(divideBy(2)(14))", 2);
+        .test("divideBy(divideBy(4)(12))(divideBy(2)(14))", 2)
+        .build();
   }
 
   private static Test testIntegerModulo() {
@@ -270,7 +284,8 @@ public class TestInteger {
         .test("modulo(-3)( 5)", 2)
         .test("modulo(-3)( 6)", 0)
         .test("modulo(-3)( 7)", 1)
-        .test("modulo(modulo(5)(9))(modulo(10)(17))", 3);
+        .test("modulo(modulo(5)(9))(modulo(10)(17))", 3)
+        .build();
   }
 
   private static Test testIntegerSign() {
@@ -281,7 +296,8 @@ public class TestInteger {
         .test("sign(  0)", 0)
         .test("sign(  1)", 1)
         .test("sign( 21)", 1)
-        .test("sign(sign(21))", 1);
+        .test("sign(sign(21))", 1)
+        .build();
   }
 
   private static Test testIntegerAbsolute() {
@@ -292,7 +308,8 @@ public class TestInteger {
         .test("absolute(  0)", 0)
         .test("absolute(  1)", 1)
         .test("absolute( 21)", 21)
-        .test("absolute(absolute(21))", 21);
+        .test("absolute(absolute(21))", 21)
+        .build();
   }
 
   private static Test testIntegerMakeAtMost() {
@@ -301,7 +318,8 @@ public class TestInteger {
         .test("makeAtMost(7)(5)", 5)
         .test("makeAtMost(7)(9)", 7)
         .test("makeAtMost(7)(7)", 7)
-        .test("makeAtMost(5)(makeAtMost(7)(9))", 5);
+        .test("makeAtMost(5)(makeAtMost(7)(9))", 5)
+        .build();
   }
 
   private static Test testIntegerMakeAtLeast() {
@@ -310,7 +328,8 @@ public class TestInteger {
         .test("makeAtLeast(7)(5)", 7)
         .test("makeAtLeast(7)(9)", 9)
         .test("makeAtLeast(7)(7)", 7)
-        .test("makeAtLeast(9)(makeAtLeast(7)(5))", 9);
+        .test("makeAtLeast(9)(makeAtLeast(7)(5))", 9)
+        .build();
   }
 
   private static Test testIntegerRelu() {
@@ -321,7 +340,8 @@ public class TestInteger {
         .test("relu(  0)", 0)
         .test("relu(  1)", 1)
         .test("relu( 21)", 21)
-        .test("relu(relu(21))", 21);
+        .test("relu(relu(21))", 21)
+        .build();
   }
 
   private static Test testIntegerFormat() {
@@ -332,7 +352,8 @@ public class TestInteger {
         .test("format(-1)", "-1")
         .test("format(1000000000)", "1000000000")
         .test("format(123456789123456789)", "123456789123456789")
-        .test("format(-123456789123456789)", "-123456789123456789");
+        .test("format(-123456789123456789)", "-123456789123456789")
+        .build();
   }
 
   private static Test testIntegerFormatBase() {
@@ -346,7 +367,8 @@ public class TestInteger {
         .test("formatBase(16)(1)", "1")
         .test("formatBase(16)(255)", "FF")
         .test("formatBase(16)(-1)", "-1")
-        .test("formatBase(16)(-255)", "-FF");
+        .test("formatBase(16)(-255)", "-FF")
+        .build();
   }
 
   private static BigInteger big(String string) {
