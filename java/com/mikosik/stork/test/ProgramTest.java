@@ -17,12 +17,10 @@ import static com.mikosik.stork.test.ExpectedStdout.expectedStdout;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
+import static org.quackery.Case.newCase;
 
-import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import org.quackery.Body;
 import org.quackery.Test;
 
 import com.mikosik.stork.Core;
@@ -34,7 +32,7 @@ import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
-public class ProgramTest implements Test {
+public class ProgramTest {
   private static final Supplier<Library> CORE = singleton(() -> Core.core(DEVELOPMENT));
   private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
 
@@ -107,13 +105,13 @@ public class ProgramTest implements Test {
     return this;
   }
 
-  public ProgramTest stdout(String stdout) {
+  public Test stdout(String stdout) {
     expectedType.reserve("stdout");
     expectedStdout.expect(bytes(stdout));
-    return this;
+    return newCase(name, () -> tryRun());
   }
 
-  public ProgramTest expect(Problem problem) {
+  public Test expect(Problem problem) {
     switch (problem) {
       case CannotCompile p -> {
         expectedType.reserve("cannot compile");
@@ -125,12 +123,7 @@ public class ProgramTest implements Test {
       }
       default -> throw runtimeException("unknown problem");
     }
-    return this;
-  }
-
-  public <R> R visit(BiFunction<String, Body, R> caseHandler,
-      BiFunction<String, List<Test>, R> suiteHandler) {
-    return caseHandler.apply(name, this::tryRun);
+    return newCase(name, () -> tryRun());
   }
 
   private void tryRun() {
