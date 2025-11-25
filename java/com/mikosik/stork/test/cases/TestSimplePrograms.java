@@ -7,8 +7,6 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.test.ProgramTest;
-
 public class TestSimplePrograms {
   public static Test testSimplePrograms() {
     return suite("simple programs")
@@ -22,7 +20,7 @@ public class TestSimplePrograms {
             .add(processesStdinTwice()));
   }
 
-  private static ProgramTest importsCoreFunctions() {
+  private static Test importsCoreFunctions() {
     return programTest("imports core functions")
         .importFile("""
             lang.stream.append
@@ -35,7 +33,7 @@ public class TestSimplePrograms {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest cannotOverrideCoreFunction() {
+  private static Test cannotOverrideCoreFunction() {
     return programTest("cannot override core function")
         .sourceFile("lang/stream", """
             length(stream) { 0 }
@@ -43,7 +41,7 @@ public class TestSimplePrograms {
         .expect(duplicatedDefinition(identifier("lang.stream.length")));
   }
 
-  private static ProgramTest stdoutCanBeEmpty() {
+  private static Test stdoutCanBeEmpty() {
     return programTest("stdout can be empty")
         .sourceFile("""
             main(stdin) {
@@ -53,7 +51,7 @@ public class TestSimplePrograms {
         .stdout("");
   }
 
-  private static ProgramTest forwardsStdinToStdout() {
+  private static Test forwardsStdinToStdout() {
     return programTest("forwards stdin to stdout")
         .sourceFile("""
             main(stdin) {
@@ -64,7 +62,7 @@ public class TestSimplePrograms {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest prependsStdin() {
+  private static Test prependsStdin() {
     return programTest("prepends stdin")
         .importFile("""
             lang.stream.prepend
@@ -78,7 +76,7 @@ public class TestSimplePrograms {
         .stdout("!Hello World");
   }
 
-  private static ProgramTest appendsStdin() {
+  private static Test appendsStdin() {
     return programTest("appends stdin")
         .importFile("""
             lang.stream.append
@@ -92,7 +90,7 @@ public class TestSimplePrograms {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest processesStdinTwice() {
+  private static Test processesStdinTwice() {
     return programTest("processes stdin twice")
         .importFile("""
             lang.stream.append

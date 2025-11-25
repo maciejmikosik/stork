@@ -41,7 +41,7 @@ public class TestSyntax {
         .add(cachesDuplicatedArgument());
   }
 
-  private static ProgramTest enablesStringLiterals() {
+  private static Test enablesStringLiterals() {
     return programTest("enables string literals")
         .sourceFile("""
             main(stdin) {
@@ -51,7 +51,7 @@ public class TestSyntax {
         .stdout("Hello World!");
   }
 
-  private static ProgramTest functionCanReturnArgument() {
+  private static Test functionCanReturnArgument() {
     return programTest("can return argument")
         .sourceFile("""
             main(stdin) {
@@ -65,7 +65,7 @@ public class TestSyntax {
         .stdout("mock");
   }
 
-  private static ProgramTest functionCanReturnConstant() {
+  private static Test functionCanReturnConstant() {
     return programTest("can return constant")
         .sourceFile("""
             main(stdin) {
@@ -79,7 +79,7 @@ public class TestSyntax {
         .stdout("mock");
   }
 
-  private static ProgramTest functionCanDelegate() {
+  private static Test functionCanDelegate() {
     return programTest("can delegate")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -98,7 +98,7 @@ public class TestSyntax {
         .stdout("!mock");
   }
 
-  private static ProgramTest applicationArgumentCanBeInteger() {
+  private static Test applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -118,7 +118,7 @@ public class TestSyntax {
    * will also simplify some test where lambda is wrapped in apply function to
    * workaround that limitation.
    */
-  private static ProgramTest applicationArgumentCanBeLambda() {
+  private static Test applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -133,7 +133,7 @@ public class TestSyntax {
         .stdout("!mock");
   }
 
-  private static ProgramTest chainCanStartWithInteger() {
+  private static Test chainCanStartWithInteger() {
     return programTest("can start with integer")
         .importFile("""
             lang.stream.some
@@ -150,7 +150,7 @@ public class TestSyntax {
         .stdout("!mock");
   }
 
-  private static ProgramTest chainCanStartWithString() {
+  private static Test chainCanStartWithString() {
     return programTest("can start with string")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -165,7 +165,7 @@ public class TestSyntax {
         .stdout("!mock");
   }
 
-  private static ProgramTest chainCanStartWithApplication() {
+  private static Test chainCanStartWithApplication() {
     return programTest("can start with application")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -184,7 +184,7 @@ public class TestSyntax {
         .stdout("BAmock");
   }
 
-  private static ProgramTest chainCanBeLong() {
+  private static Test chainCanBeLong() {
     return programTest("can be long")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -207,7 +207,7 @@ public class TestSyntax {
         .stdout("CBAmock");
   }
 
-  private static ProgramTest chainCanHaveApplication() {
+  private static Test chainCanHaveApplication() {
     return programTest("can have application")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -222,7 +222,7 @@ public class TestSyntax {
         .stdout("BAmock");
   }
 
-  private static ProgramTest chainCanBeLongAndHaveApplications() {
+  private static Test chainCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -237,7 +237,7 @@ public class TestSyntax {
         .stdout("CBAmock");
   }
 
-  private static ProgramTest chainCanBeArgument() {
+  private static Test chainCanBeArgument() {
     return programTest("can be argument")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -256,7 +256,7 @@ public class TestSyntax {
         .stdout("BAmock");
   }
 
-  private static ProgramTest pipeCanHaveSingleFunction() {
+  private static Test pipeCanHaveSingleFunction() {
     return programTest("can have single function")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -275,7 +275,7 @@ public class TestSyntax {
         .stdout("Amock");
   }
 
-  private static ProgramTest pipeCanHaveApplication() {
+  private static Test pipeCanHaveApplication() {
     return programTest("can have application")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -290,7 +290,7 @@ public class TestSyntax {
         .stdout("Amock");
   }
 
-  private static ProgramTest pipeCanBeLongAndHaveApplications() {
+  private static Test pipeCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -307,7 +307,7 @@ public class TestSyntax {
         .stdout("CBAmock");
   }
 
-  private static ProgramTest pipeCanBeArgument() {
+  private static Test pipeCanBeArgument() {
     return programTest("can be argument")
         .importFile("lang.stream.some")
         .sourceFile("""
@@ -322,7 +322,7 @@ public class TestSyntax {
         .stdout("Amock");
   }
 
-  private static ProgramTest shadowingLambdaParameters() {
+  private static Test shadowingLambdaParameters() {
     return programTest("lambda parameters")
         .sourceFile("""
             main(stdin) {
@@ -336,7 +336,7 @@ public class TestSyntax {
         .stdout("mockB");
   }
 
-  private static ProgramTest shadowingFunctionParameters() {
+  private static Test shadowingFunctionParameters() {
     return programTest("function parameters")
         .sourceFile("""
             main(stdin) {
@@ -350,7 +350,7 @@ public class TestSyntax {
         .stdout("mockB");
   }
 
-  private static ProgramTest shadowingFunctionByLambdaParameters() {
+  private static Test shadowingFunctionByLambdaParameters() {
     return programTest("function by lambda parameters")
         .sourceFile("""
             main(stdin) {
@@ -364,7 +364,7 @@ public class TestSyntax {
         .stdout("mockB");
   }
 
-  private static ProgramTest appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
+  private static Test appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
     return programTest("applied argument is not accidently bound to lambda parameter")
         .sourceFile("""
             main(stdin) {
@@ -383,7 +383,7 @@ public class TestSyntax {
         .stdout("y");
   }
 
-  private static ProgramTest cachesDuplicatedArgument() {
+  private static Test cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
         .importFile("lang.stream.some")
         .sourceFile("""

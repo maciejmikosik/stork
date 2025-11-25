@@ -2,16 +2,16 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.test.ProgramTest.programTest;
+import static org.quackery.Suite.suite;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
 
-import org.quackery.Body;
+import org.quackery.Suite;
 import org.quackery.Test;
 
-public class SnippetSuite implements Test {
+public class SnippetSuite {
   private final String name;
   private String linkage = "";
   private final List<Test> cases = new LinkedList<>();
@@ -32,11 +32,6 @@ public class SnippetSuite implements Test {
   public SnippetSuite test(String snippet, Object expected) {
     cases.add(buildCase(snippet.replace('\'', '\"'), expected));
     return this;
-  }
-
-  public <R> R visit(BiFunction<String, Body, R> caseHandler,
-      BiFunction<String, List<Test>, R> suiteHandler) {
-    return suiteHandler.apply(name, cases);
   }
 
   private Test buildCase(String snippet, Object expected) {
@@ -81,5 +76,9 @@ public class SnippetSuite implements Test {
       case String s -> ExpectedType.STRING;
       default -> throw runtimeException("unknown type: %s", expected);
     };
+  }
+
+  public Suite build() {
+    return suite(name).addAll(cases);
   }
 }
