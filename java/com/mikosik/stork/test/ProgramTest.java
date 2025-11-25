@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.Core;
-import com.mikosik.stork.common.io.Directory;
+import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.problem.compile.CannotCompile;
@@ -35,37 +35,30 @@ public class ProgramTest {
   private static final Supplier<Library> CORE = singleton(() -> Core.core(DEVELOPMENT));
   private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
 
-  private final Directory root = systemTemporaryDirectory()
-      .directory("stork_test_program_" + randomUUID());
-  private final FsBuilder fsBuilder = fsBuilder();
-  private String name;
-  private Library core;
+  private final String name;
+  private final FsBuilder fsBuilder;
+  private final Compilation compilation;
 
   private byte[] stdin = new byte[0];
   private Outcome expected;
 
-  private ProgramTest() {}
+  private ProgramTest(String name, Library core) {
+    this.name = name;
+    var root = systemTemporaryDirectory()
+        .directory("stork_test_program_" + randomUUID());
+    fsBuilder = fsBuilder()
+        .directory(root);
+    compilation = compilation()
+        .library(core)
+        .source(root);
+  }
 
   public static ProgramTest programTest(String name) {
-    return new ProgramTest()
-        .name(name)
-        .core(CORE);
+    return new ProgramTest(name, CORE.get());
   }
 
   public static ProgramTest minimalProgramTest(String name) {
-    return new ProgramTest()
-        .name(name)
-        .core(MINCORE);
-  }
-
-  private ProgramTest name(String name) {
-    this.name = name;
-    return this;
-  }
-
-  private ProgramTest core(Supplier<Library> core) {
-    this.core = core.get();
-    return this;
+    return new ProgramTest(name, MINCORE.get());
   }
 
   public ProgramTest file(String path, String content) {
@@ -118,9 +111,7 @@ public class ProgramTest {
 
   private void tryRun() {
     try {
-      fsBuilder
-          .directory(root)
-          .create();
+      fsBuilder.create();
       run();
     } finally {
       fsBuilder.delete();
@@ -139,9 +130,7 @@ public class ProgramTest {
   private Outcome compileAndRun() {
     Library library;
     try {
-      library = compile(compilation()
-          .source(root)
-          .library(core));
+      library = compile(compilation);
     } catch (ProblemException exception) {
       // TODO throw dedicated internal compiler exception
       check(exception.problem instanceof CannotCompile);
