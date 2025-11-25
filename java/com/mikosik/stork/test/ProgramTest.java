@@ -38,9 +38,7 @@ public class ProgramTest {
   private final String name;
   private final FsBuilder fsBuilder;
   private final Compilation compilation;
-
   private byte[] stdin = new byte[0];
-  private Outcome expected;
 
   private ProgramTest(String name, Library core) {
     this.name = name;
@@ -95,30 +93,31 @@ public class ProgramTest {
   }
 
   public Test stdout(String stdout) {
-    expected = printed(bytes(stdout));
-    return newCase(name, () -> tryRun());
+    return newCaseExpecting(printed(bytes(stdout)));
   }
 
   public Test expect(CannotCompile problem) {
-    expected = failed(problem);
-    return newCase(name, () -> tryRun());
+    return newCaseExpecting(failed(problem));
   }
 
   public Test expect(CannotCompute problem) {
-    expected = failed(problem);
-    return newCase(name, () -> tryRun());
+    return newCaseExpecting(failed(problem));
   }
 
-  private void tryRun() {
+  private Test newCaseExpecting(Outcome expected) {
+    return newCase(name, () -> tryRun(expected));
+  }
+
+  private void tryRun(Outcome expected) {
     try {
       fsBuilder.create();
-      run();
+      run(expected);
     } finally {
       fsBuilder.delete();
     }
   }
 
-  private void run() {
+  private void run(Outcome expected) {
     var actual = compileAndRun();
     if (!deepEquals(expected, actual)) {
       // TODO create common for 2D text manipulation
