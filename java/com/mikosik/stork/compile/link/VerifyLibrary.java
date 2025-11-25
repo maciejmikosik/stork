@@ -4,7 +4,8 @@ import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.change.Changes.walk;
-import static com.mikosik.stork.problem.ProblemException.report;
+import static com.mikosik.stork.problem.ProblemException.exception;
+import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.UndefinedImport.undefinedImport;
 import static com.mikosik.stork.problem.compile.link.UndefinedVariable.undefinedVariable;
 import static java.util.function.Function.identity;
@@ -22,10 +23,13 @@ import com.mikosik.stork.problem.compile.link.UndefinedVariable;
 
 public class VerifyLibrary {
   public static Library verify(Library library) {
-    report(flatten(
+    var problems = flatten(
         undefinedVariables(library),
         undefinedIdentifiers(library),
-        duplicatedDefinitions(library)));
+        duplicatedDefinitions(library));
+    if (!problems.isEmpty()) {
+      throw exception(cannotLinkLibrary(problems));
+    }
     return library;
   }
 
