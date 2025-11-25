@@ -144,7 +144,7 @@ public class ProgramTest {
           .source(root)
           .library(core));
     } catch (ProblemException exception) {
-      expectedCannotCompile.verify(exception.problems);
+      expectedCannotCompile.verify(exception.problem);
       return;
     }
     expectedCannotCompile.verify();
@@ -156,7 +156,7 @@ public class ProgramTest {
     try {
       program.run(input, output);
     } catch (ProblemException exception) {
-      expectedCannotCompute.verify(exception.problems);
+      expectedCannotCompute.verify(exception.problem);
       return;
     }
     expectedCannotCompute.verify();
