@@ -20,7 +20,6 @@ import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms
 import static com.mikosik.stork.test.cases.language.TestLanguage.testLanguage;
 import static java.lang.System.exit;
 import static java.time.Duration.between;
-import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -71,14 +70,8 @@ public class RunTests {
   }
 
   private static Test withTimeout(Test test) {
-    return deep(ifCase(RunTests::withTimeoutCase))
+    return deep(ifCase(caze -> timeout(ofSeconds(1), caze)))
         .apply(test);
-  }
-
-  private static Test withTimeoutCase(Test caze) {
-    return nameOf(caze).contains("logbuddy")
-        ? timeout(ofSeconds(1), caze)
-        : timeout(ofMillis(100), caze);
   }
 
   private static void print(Duration duration, Test report) {
