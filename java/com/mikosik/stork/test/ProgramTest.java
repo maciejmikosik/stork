@@ -16,7 +16,6 @@ import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
 import static com.mikosik.stork.test.ExpectedStdout.expectedStdout;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 import static org.quackery.Case.newCase;
 
@@ -145,7 +144,7 @@ public class ProgramTest {
           .source(root)
           .library(core));
     } catch (ProblemException exception) {
-      expectedCannotCompile.verify(asList(exception.problem));
+      expectedCannotCompile.verify(exception.problem);
       return;
     }
     expectedCannotCompile.verify();
@@ -157,7 +156,7 @@ public class ProgramTest {
     try {
       program.run(input, output);
     } catch (ProblemException exception) {
-      expectedCannotCompute.verify(asList(exception.problem));
+      expectedCannotCompute.verify(exception.problem);
       return;
     }
     expectedCannotCompute.verify();
