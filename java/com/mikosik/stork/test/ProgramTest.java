@@ -22,6 +22,7 @@ import static org.quackery.Case.newCase;
 
 import java.util.function.Supplier;
 
+import org.quackery.Body;
 import org.quackery.Test;
 
 import com.mikosik.stork.Core;
@@ -105,16 +106,18 @@ public class ProgramTest {
   }
 
   private Test newCaseExpecting(Outcome expected) {
-    return newCase(name, () -> tryRun(expected));
+    return newCase(name, usingFilesystem(() -> run(expected)));
   }
 
-  private void tryRun(Outcome expected) {
-    try {
-      fsBuilder.create();
-      run(expected);
-    } finally {
-      fsBuilder.delete();
-    }
+  private Body usingFilesystem(Body body) {
+    return () -> {
+      try {
+        fsBuilder.create();
+        body.run();
+      } finally {
+        fsBuilder.delete();
+      }
+    };
   }
 
   private void run(Outcome expected) {
