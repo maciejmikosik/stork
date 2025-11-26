@@ -1,13 +1,12 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.DuplicatedDefinition.duplicatedDefinition;
-import static com.mikosik.stork.problem.compile.link.UndefinedImport.undefinedImport;
-import static com.mikosik.stork.problem.compile.link.UndefinedVariable.undefinedVariable;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCodeInStringLiteral;
+import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
+import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
+import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
+import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalCharacter;
+import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalStringCharacter;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.range;
@@ -15,12 +14,9 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.test.ProgramTest;
 
 public class TestCompilerProblems {
-  private final static Expression body = identifier("body");
-
   public static Test testCompilerProblems() {
     return suite("compiler reports problems when")
         .add(suite("tokenizing")
@@ -33,17 +29,21 @@ public class TestCompilerProblems {
                 .add(reportsIllegalAsciiCodeAnywhere())
                 .add(reportsNonAsciiCodeAnywhere())))
         .add(suite("linking")
-            .add(reportsUndefinedVariable())
-            .add(reportsUndefinedImport())
-            .add(reportsDuplicatedDefinition()));
+            .add(reportsVariableThatCannotBeBound())
+            .add(reportsFunctionNotDefined())
+            .add(reportsFunctionDefinedMoreThanOnce()));
   }
 
+  /*
+   * TODO Make this test more generic by allowing non-ascii codes. This requires
+   * .sourceFile function to accept byte[].
+   */
   private static Test reportsIllegalAsciiCodeInStringLiteral(int code) {
     return programTest("code: %d".formatted(code))
         .sourceFile("""
             function { "%c" }
             """.formatted(code))
-        .expect(illegalCodeInStringLiteral((byte) code));
+        .expect(illegalStringCharacter((byte) code));
   }
 
   private static Test reportsIllegalAsciiCodeInStringLiteral(int firstCode, int lastCode) {
@@ -59,7 +59,7 @@ public class TestCompilerProblems {
         .sourceFile("""
             function { "\u00FC" }
             """)
-        .expect(illegalCodeInStringLiteral("\u00FC".getBytes(UTF_8)[0]));
+        .expect(illegalStringCharacter("\u00FC".getBytes(UTF_8)[0]));
   }
 
   private static Test reportsIllegalAsciiCodeAnywhere() {
@@ -70,7 +70,7 @@ public class TestCompilerProblems {
                 .sourceFile("""
                     function%c { 0 }
                     """.formatted(code))
-                .expect(illegalCode((byte) code)))
+                .expect(illegalCharacter((byte) code)))
             .toList());
   }
 
@@ -86,39 +86,39 @@ public class TestCompilerProblems {
         .sourceFile("""
             function\u00FC { 0 }
             """)
-        .expect(illegalCode("\u00FC".getBytes(UTF_8)[0]));
+        .expect(illegalCharacter("\u00FC".getBytes(UTF_8)[0]));
   }
 
-  private static Test reportsUndefinedVariable() {
-    return programTest("undefined variable")
+  private static Test reportsVariableThatCannotBeBound() {
+    return programTest("variable that cannot be bound")
         .sourceFile("""
             function { variable }
             """)
-        .expect(undefinedVariable(
-            definition(identifier("function"), body),
+        .expect(variableCannotBeBound(
+            identifier("function"),
             variable("variable")));
   }
 
-  private static Test reportsUndefinedImport() {
-    return programTest("undefined import")
+  private static Test reportsFunctionNotDefined() {
+    return programTest("function that is not defined")
         .importFile("""
             namespace.function2
             """)
         .sourceFile("""
             function { function2 }
             """)
-        .expect(undefinedImport(
-            definition(identifier("function"), body),
+        .expect(functionNotDefined(
+            identifier("function"),
             identifier("namespace.function2")));
   }
 
-  private static Test reportsDuplicatedDefinition() {
-    return programTest("duplicated definition of user functions")
+  private static Test reportsFunctionDefinedMoreThanOnce() {
+    return programTest("function defined more than once")
         .sourceFile("""
             function { 1 }
             function { 2 }
             """)
-        .expect(duplicatedDefinition(identifier("function")));
+        .expect(functionDefinedMoreThanOnce(identifier("function")));
   }
 
   private static ProgramTest programTest(String name) {
