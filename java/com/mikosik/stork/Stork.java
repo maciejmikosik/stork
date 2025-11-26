@@ -10,7 +10,7 @@ import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 
-import com.mikosik.stork.problem.ProblemException;
+import com.mikosik.stork.problem.Problem;
 
 public class Stork {
   public static void main(String[] args) {
@@ -21,8 +21,8 @@ public class Stork {
 
       program(identifier("main"), library)
           .run(input(System.in), output(System.out));
-    } catch (ProblemException e) {
-      System.err.println(e.getMessage());
+    } catch (Problem problem) {
+      System.err.println(problem.getMessage());
     }
   }
 }

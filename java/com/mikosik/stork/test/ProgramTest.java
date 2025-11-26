@@ -3,7 +3,6 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Logic.singleton;
-import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directories.systemTemporaryDirectory;
 import static com.mikosik.stork.common.io.Input.input;
@@ -28,7 +27,6 @@ import org.quackery.Test;
 import com.mikosik.stork.Core;
 import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
-import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -133,10 +131,8 @@ public class ProgramTest {
     Library library;
     try {
       library = compile(compilation);
-    } catch (ProblemException exception) {
-      // TODO throw dedicated internal compiler exception
-      check(exception.problem instanceof CannotCompile);
-      return failed(exception.problem);
+    } catch (CannotCompile problem) {
+      return failed(problem);
     }
 
     var program = program(identifier("main"), library);
@@ -145,10 +141,8 @@ public class ProgramTest {
     var output = buffer.asOutput();
     try {
       program.run(input, output);
-    } catch (ProblemException exception) {
-      // TODO throw dedicated internal compiler exception
-      check(exception.problem instanceof CannotCompute);
-      return failed(exception.problem);
+    } catch (CannotCompute problem) {
+      return failed(problem);
     }
 
     var actualStdout = buffer.bytes();

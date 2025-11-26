@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.change.Changes.walk;
-import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
@@ -28,7 +27,7 @@ public class VerifyLibrary {
         findFunctionNotDefined(library),
         findFunctionDefinedMoreThanOnce(library));
     if (!problems.isEmpty()) {
-      throw exception(cannotLinkLibrary(problems));
+      throw cannotLinkLibrary(problems);
     }
     return library;
   }
@@ -53,7 +52,8 @@ public class VerifyLibrary {
         .collect(toSequence());
   }
 
-  private static Sequence<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(Library library) {
+  private static Sequence<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(
+      Library library) {
     var histogram = library.definitions.stream()
         .map(definition -> definition.identifier)
         .collect(groupingBy(identity(), counting()));
