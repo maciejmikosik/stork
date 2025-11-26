@@ -4,7 +4,7 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.DuplicatedDefinition.duplicatedDefinition;
-import static com.mikosik.stork.problem.compile.link.UndefinedImport.undefinedImport;
+import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.UndefinedVariable.undefinedVariable;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCodeInStringLiteral;
@@ -34,7 +34,7 @@ public class TestCompilerProblems {
                 .add(reportsNonAsciiCodeAnywhere())))
         .add(suite("linking")
             .add(reportsUndefinedVariable())
-            .add(reportsUndefinedImport())
+            .add(reportsFunctionNotDefined())
             .add(reportsDuplicatedDefinition()));
   }
 
@@ -99,16 +99,16 @@ public class TestCompilerProblems {
             variable("variable")));
   }
 
-  private static Test reportsUndefinedImport() {
-    return programTest("undefined import")
+  private static Test reportsFunctionNotDefined() {
+    return programTest("function that is not defined")
         .importFile("""
             namespace.function2
             """)
         .sourceFile("""
             function { function2 }
             """)
-        .expect(undefinedImport(
-            definition(identifier("function"), body),
+        .expect(functionNotDefined(
+            identifier("function"),
             identifier("namespace.function2")));
   }
 
