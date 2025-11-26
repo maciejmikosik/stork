@@ -3,8 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Logic.singleton;
-import static com.mikosik.stork.common.Reserver.reserver;
-import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directories.systemTemporaryDirectory;
 import static com.mikosik.stork.common.io.Input.input;
@@ -12,22 +11,23 @@ import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
-import static com.mikosik.stork.test.ExpectedProblems.expectedProblems;
-import static com.mikosik.stork.test.ExpectedStdout.expectedStdout;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
+import static com.mikosik.stork.test.Outcome.failed;
+import static com.mikosik.stork.test.Outcome.printed;
+import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.deepEquals;
 import static java.util.UUID.randomUUID;
 import static org.quackery.Case.newCase;
 
 import java.util.function.Supplier;
 
+import org.quackery.Body;
 import org.quackery.Test;
 
 import com.mikosik.stork.Core;
-import com.mikosik.stork.common.Reserver;
-import com.mikosik.stork.common.io.Directory;
+import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
-import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.ProblemException;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
@@ -36,40 +36,28 @@ public class ProgramTest {
   private static final Supplier<Library> CORE = singleton(() -> Core.core(DEVELOPMENT));
   private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
 
-  private final Directory root = systemTemporaryDirectory()
-      .directory("stork_test_program_" + randomUUID());
-  private final FsBuilder fsBuilder = fsBuilder();
-  private String name;
-  private Library core;
-
+  private final String name;
+  private final FsBuilder fsBuilder;
+  private final Compilation compilation;
   private byte[] stdin = new byte[0];
-  private final Reserver expectedType = reserver();
-  private final ExpectedProblems expectedCannotCompile = expectedProblems();
-  private final ExpectedProblems expectedCannotCompute = expectedProblems();
-  private final ExpectedStdout expectedStdout = expectedStdout();
 
-  private ProgramTest() {}
+  private ProgramTest(String name, Library core) {
+    this.name = name;
+    var root = systemTemporaryDirectory()
+        .directory("stork_test_program_" + randomUUID());
+    fsBuilder = fsBuilder()
+        .directory(root);
+    compilation = compilation()
+        .library(core)
+        .source(root);
+  }
 
   public static ProgramTest programTest(String name) {
-    return new ProgramTest()
-        .name(name)
-        .core(CORE);
+    return new ProgramTest(name, CORE.get());
   }
 
   public static ProgramTest minimalProgramTest(String name) {
-    return new ProgramTest()
-        .name(name)
-        .core(MINCORE);
-  }
-
-  private ProgramTest name(String name) {
-    this.name = name;
-    return this;
-  }
-
-  private ProgramTest core(Supplier<Library> core) {
-    this.core = core.get();
-    return this;
+    return new ProgramTest(name, MINCORE.get());
   }
 
   public ProgramTest file(String path, String content) {
@@ -106,48 +94,50 @@ public class ProgramTest {
   }
 
   public Test stdout(String stdout) {
-    expectedType.reserve("stdout");
-    expectedStdout.expect(bytes(stdout));
-    return newCase(name, () -> tryRun());
+    return newCaseExpecting(printed(bytes(stdout)));
   }
 
-  public Test expect(Problem problem) {
-    switch (problem) {
-      case CannotCompile p -> {
-        expectedType.reserve("cannot compile");
-        expectedCannotCompile.expect(problem);
+  public Test expect(CannotCompile problem) {
+    return newCaseExpecting(failed(problem));
+  }
+
+  public Test expect(CannotCompute problem) {
+    return newCaseExpecting(failed(problem));
+  }
+
+  private Test newCaseExpecting(Outcome expected) {
+    return newCase(name, usingFilesystem(() -> run(expected)));
+  }
+
+  private Body usingFilesystem(Body body) {
+    return () -> {
+      try {
+        fsBuilder.create();
+        body.run();
+      } finally {
+        fsBuilder.delete();
       }
-      case CannotCompute p -> {
-        expectedType.reserve("cannot compute");
-        expectedCannotCompute.expect(problem);
-      }
-      default -> throw runtimeException("unknown problem");
-    }
-    return newCase(name, () -> tryRun());
+    };
   }
 
-  private void tryRun() {
-    try {
-      fsBuilder
-          .directory(root)
-          .create();
-      run();
-    } finally {
-      fsBuilder.delete();
+  private void run(Outcome expected) {
+    var actual = compileAndRun();
+    if (!deepEquals(expected, actual)) {
+      // TODO create common for 2D text manipulation
+      throw assertException("expected\n\n%s\n\nactual\n\n%s\n"
+          .formatted(expected, actual));
     }
   }
 
-  private void run() {
+  private Outcome compileAndRun() {
     Library library;
     try {
-      library = compile(compilation()
-          .source(root)
-          .library(core));
+      library = compile(compilation);
     } catch (ProblemException exception) {
-      expectedCannotCompile.verify(exception.problem);
-      return;
+      // TODO throw dedicated internal compiler exception
+      check(exception.problem instanceof CannotCompile);
+      return failed(exception.problem);
     }
-    expectedCannotCompile.verify();
 
     var program = program(identifier("main"), library);
     var buffer = newBuffer();
@@ -156,13 +146,13 @@ public class ProgramTest {
     try {
       program.run(input, output);
     } catch (ProblemException exception) {
-      expectedCannotCompute.verify(exception.problem);
-      return;
+      // TODO throw dedicated internal compiler exception
+      check(exception.problem instanceof CannotCompute);
+      return failed(exception.problem);
     }
-    expectedCannotCompute.verify();
 
-    byte[] actualStdout = buffer.bytes();
-    expectedStdout.verify(actualStdout);
+    var actualStdout = buffer.bytes();
+    return printed(actualStdout);
   }
 
   private byte[] bytes(String string) {
