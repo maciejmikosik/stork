@@ -1,11 +1,10 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.DuplicatedDefinition.duplicatedDefinition;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
-import static com.mikosik.stork.problem.compile.link.UndefinedVariable.undefinedVariable;
+import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCodeInStringLiteral;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -15,12 +14,9 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.test.ProgramTest;
 
 public class TestCompilerProblems {
-  private final static Expression body = identifier("body");
-
   public static Test testCompilerProblems() {
     return suite("compiler reports problems when")
         .add(suite("tokenizing")
@@ -33,7 +29,7 @@ public class TestCompilerProblems {
                 .add(reportsIllegalAsciiCodeAnywhere())
                 .add(reportsNonAsciiCodeAnywhere())))
         .add(suite("linking")
-            .add(reportsUndefinedVariable())
+            .add(reportsVariableThatCannotBeBound())
             .add(reportsFunctionNotDefined())
             .add(reportsDuplicatedDefinition()));
   }
@@ -89,13 +85,13 @@ public class TestCompilerProblems {
         .expect(illegalCode("\u00FC".getBytes(UTF_8)[0]));
   }
 
-  private static Test reportsUndefinedVariable() {
-    return programTest("undefined variable")
+  private static Test reportsVariableThatCannotBeBound() {
+    return programTest("variable that cannot be bound")
         .sourceFile("""
             function { variable }
             """)
-        .expect(undefinedVariable(
-            definition(identifier("function"), body),
+        .expect(variableCannotBeBound(
+            identifier("function"),
             variable("variable")));
   }
 

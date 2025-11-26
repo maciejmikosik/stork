@@ -7,7 +7,7 @@ import static com.mikosik.stork.model.change.Changes.walk;
 import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
-import static com.mikosik.stork.problem.compile.link.UndefinedVariable.undefinedVariable;
+import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -19,12 +19,12 @@ import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.link.DuplicatedDefinition;
 import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
-import com.mikosik.stork.problem.compile.link.UndefinedVariable;
+import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 
 public class VerifyLibrary {
   public static Library verify(Library library) {
     var problems = flatten(
-        undefinedVariables(library),
+        findVariableCannotBeFound(library),
         findFunctionNotDefined(library),
         duplicatedDefinitions(library));
     if (!problems.isEmpty()) {
@@ -33,11 +33,11 @@ public class VerifyLibrary {
     return library;
   }
 
-  private static Sequence<UndefinedVariable> undefinedVariables(Library library) {
+  private static Sequence<VariableCannotBeBound> findVariableCannotBeFound(Library library) {
     return library.definitions.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
-            .map(variable -> undefinedVariable(definition, variable)))
+            .map(variable -> variableCannotBeBound(definition.identifier, variable)))
         .collect(toSequence());
   }
 
