@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases;
 
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.problem.compile.link.DuplicatedDefinition.duplicatedDefinition;
+import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
 
@@ -38,7 +38,7 @@ public class TestSimplePrograms {
         .sourceFile("lang/stream", """
             length(stream) { 0 }
             """)
-        .expect(duplicatedDefinition(identifier("lang.stream.length")));
+        .expect(functionDefinedMoreThanOnce(identifier("lang.stream.length")));
   }
 
   private static Test stdoutCanBeEmpty() {

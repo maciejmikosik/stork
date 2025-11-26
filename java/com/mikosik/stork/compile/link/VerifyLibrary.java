@@ -17,7 +17,7 @@ import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.problem.compile.link.DuplicatedDefinition;
+import com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce;
 import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 
@@ -26,7 +26,7 @@ public class VerifyLibrary {
     var problems = flatten(
         findVariableCannotBeFound(library),
         findFunctionNotDefined(library),
-        duplicatedDefinitions(library));
+        findFunctionDefinedMoreThanOnce(library));
     if (!problems.isEmpty()) {
       throw exception(cannotLinkLibrary(problems));
     }
@@ -53,14 +53,14 @@ public class VerifyLibrary {
         .collect(toSequence());
   }
 
-  private static Sequence<DuplicatedDefinition> duplicatedDefinitions(Library library) {
+  private static Sequence<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(Library library) {
     var histogram = library.definitions.stream()
         .map(definition -> definition.identifier)
         .collect(groupingBy(identity(), counting()));
     return histogram.entrySet().stream()
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
-        .map(DuplicatedDefinition::duplicatedDefinition)
+        .map(FunctionDefinedMoreThanOnce::functionDefinedMoreThanOnce)
         .collect(toSequence());
   }
 }

@@ -2,7 +2,7 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.DuplicatedDefinition.duplicatedDefinition;
+import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
@@ -31,7 +31,7 @@ public class TestCompilerProblems {
         .add(suite("linking")
             .add(reportsVariableThatCannotBeBound())
             .add(reportsFunctionNotDefined())
-            .add(reportsDuplicatedDefinition()));
+            .add(reportsFunctionDefinedMoreThanOnce()));
   }
 
   private static Test reportsIllegalAsciiCodeInStringLiteral(int code) {
@@ -108,13 +108,13 @@ public class TestCompilerProblems {
             identifier("namespace.function2")));
   }
 
-  private static Test reportsDuplicatedDefinition() {
-    return programTest("duplicated definition of user functions")
+  private static Test reportsFunctionDefinedMoreThanOnce() {
+    return programTest("function defined more than once")
         .sourceFile("""
             function { 1 }
             function { 2 }
             """)
-        .expect(duplicatedDefinition(identifier("function")));
+        .expect(functionDefinedMoreThanOnce(identifier("function")));
   }
 
   private static ProgramTest programTest(String name) {
