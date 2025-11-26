@@ -17,9 +17,9 @@ public class CannotLinkLibrary implements CannotLink {
     return new CannotLinkLibrary((Sequence<CannotLink>) problems);
   }
 
-  public String description() {
+  public String getMessage() {
     return problems.stream()
-        .map(problem -> problem.description())
+        .map(problem -> problem.getMessage())
         .collect(joining("\n"));
   }
 }

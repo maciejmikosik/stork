@@ -13,7 +13,7 @@ public class FunctionDefinedMoreThanOnce implements CannotLink {
     return new FunctionDefinedMoreThanOnce(function);
   }
 
-  public String description() {
+  public String getMessage() {
     return "function [%s] is defined more than once"
         .formatted(function.name());
   }

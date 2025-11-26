@@ -21,7 +21,7 @@ public class IllegalCharacter implements CannotTokenize {
     return new IllegalCharacter(character, true);
   }
 
-  public String description() {
+  public String getMessage() {
     return "%sillegal %s character %s".formatted(
         describeLocation(),
         describeCategory(),

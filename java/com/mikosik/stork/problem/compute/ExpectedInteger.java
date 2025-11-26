@@ -16,7 +16,7 @@ public class ExpectedInteger implements CannotCompute {
     return new ExpectedInteger(expression);
   }
 
-  public String description() {
+  public String getMessage() {
     return """
           wrong type
             expected: integer

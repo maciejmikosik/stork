@@ -22,7 +22,7 @@ public class VariableCannotBeBound implements CannotLink {
         variable);
   }
 
-  public String description() {
+  public String getMessage() {
     return "function [%s] uses variable [%s] which doesn't match any lambda parameter, local function or import"
         .formatted(location.name(), variable.name);
   }

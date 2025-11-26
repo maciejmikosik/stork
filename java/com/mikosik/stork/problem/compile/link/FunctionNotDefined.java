@@ -21,7 +21,7 @@ public class FunctionNotDefined implements CannotLink {
         undefined);
   }
 
-  public String description() {
+  public String getMessage() {
     return "function [%s] imports function [%s] which is not defined"
         .formatted(location.name(), undefined.name());
   }

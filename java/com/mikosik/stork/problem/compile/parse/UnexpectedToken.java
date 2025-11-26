@@ -18,7 +18,7 @@ public class UnexpectedToken implements CannotParse {
     return new UnexpectedToken(token);
   }
 
-  public String description() {
+  public String getMessage() {
     return switch (token) {
       case Label label -> "unexpected label [%s]"
           .formatted(label.string);

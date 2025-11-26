@@ -12,6 +12,6 @@ public class ProblemException extends RuntimeException {
   }
 
   public String getMessage() {
-    return problem.description();
+    return problem.getMessage();
   }
 }
