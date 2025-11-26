@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.joining;
 
 import com.mikosik.stork.common.Sequence;
 
-public class CannotLinkLibrary implements CannotLink {
+public class CannotLinkLibrary extends CannotLink {
   public final Sequence<CannotLink> problems;
 
   private CannotLinkLibrary(Sequence<CannotLink> problems) {

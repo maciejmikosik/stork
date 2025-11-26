@@ -3,7 +3,7 @@ package com.mikosik.stork.problem.compile.link;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 
-public class VariableCannotBeBound implements CannotLink {
+public class VariableCannotBeBound extends CannotLink {
   public final Identifier location;
   public final Variable variable;
 

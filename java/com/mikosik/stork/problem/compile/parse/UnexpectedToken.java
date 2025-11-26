@@ -7,7 +7,7 @@ import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
 
-public class UnexpectedToken implements CannotParse {
+public class UnexpectedToken extends CannotParse {
   private final Token token;
 
   private UnexpectedToken(Token token) {

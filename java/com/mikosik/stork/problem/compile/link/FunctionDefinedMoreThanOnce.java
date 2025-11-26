@@ -2,7 +2,7 @@ package com.mikosik.stork.problem.compile.link;
 
 import com.mikosik.stork.model.Identifier;
 
-public class FunctionDefinedMoreThanOnce implements CannotLink {
+public class FunctionDefinedMoreThanOnce extends CannotLink {
   public final Identifier function;
 
   private FunctionDefinedMoreThanOnce(Identifier function) {

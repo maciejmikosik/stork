@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static java.lang.Byte.toUnsignedInt;
 
-public class IllegalCharacter implements CannotTokenize {
+public class IllegalCharacter extends CannotTokenize {
   public final byte character;
   public final boolean inString;
 

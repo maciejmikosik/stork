@@ -2,7 +2,7 @@ package com.mikosik.stork.problem.compile.link;
 
 import com.mikosik.stork.model.Identifier;
 
-public class FunctionNotDefined implements CannotLink {
+public class FunctionNotDefined extends CannotLink {
   public final Identifier location;
   public final Identifier undefined;
 
