@@ -5,8 +5,8 @@ import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCode;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCode.illegalCodeInStringLiteral;
+import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalCharacter;
+import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalStringCharacter;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.range;
@@ -34,12 +34,16 @@ public class TestCompilerProblems {
             .add(reportsFunctionDefinedMoreThanOnce()));
   }
 
+  /*
+   * TODO Make this test more generic by allowing non-ascii codes. This requires
+   * .sourceFile function to accept byte[].
+   */
   private static Test reportsIllegalAsciiCodeInStringLiteral(int code) {
     return programTest("code: %d".formatted(code))
         .sourceFile("""
             function { "%c" }
             """.formatted(code))
-        .expect(illegalCodeInStringLiteral((byte) code));
+        .expect(illegalStringCharacter((byte) code));
   }
 
   private static Test reportsIllegalAsciiCodeInStringLiteral(int firstCode, int lastCode) {
@@ -55,7 +59,7 @@ public class TestCompilerProblems {
         .sourceFile("""
             function { "\u00FC" }
             """)
-        .expect(illegalCodeInStringLiteral("\u00FC".getBytes(UTF_8)[0]));
+        .expect(illegalStringCharacter("\u00FC".getBytes(UTF_8)[0]));
   }
 
   private static Test reportsIllegalAsciiCodeAnywhere() {
@@ -66,7 +70,7 @@ public class TestCompilerProblems {
                 .sourceFile("""
                     function%c { 0 }
                     """.formatted(code))
-                .expect(illegalCode((byte) code)))
+                .expect(illegalCharacter((byte) code)))
             .toList());
   }
 
@@ -82,7 +86,7 @@ public class TestCompilerProblems {
         .sourceFile("""
             function\u00FC { 0 }
             """)
-        .expect(illegalCode("\u00FC".getBytes(UTF_8)[0]));
+        .expect(illegalCharacter("\u00FC".getBytes(UTF_8)[0]));
   }
 
   private static Test reportsVariableThatCannotBeBound() {
