@@ -27,6 +27,7 @@ import org.quackery.Test;
 import com.mikosik.stork.Core;
 import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
+import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -104,7 +105,7 @@ public class ProgramTest {
   }
 
   private Test newCaseExpecting(Outcome expected) {
-    return newCase(name, usingFilesystem(() -> run(expected)));
+    return newCase(name, usingFilesystem(() -> compileRunAndAssert(expected)));
   }
 
   private Body usingFilesystem(Body body) {
@@ -118,7 +119,7 @@ public class ProgramTest {
     };
   }
 
-  private void run(Outcome expected) {
+  private void compileRunAndAssert(Outcome expected) {
     var actual = compileAndRun();
     if (!deepEquals(expected, actual)) {
       // TODO create common for 2D text manipulation
@@ -128,25 +129,14 @@ public class ProgramTest {
   }
 
   private Outcome compileAndRun() {
-    Library library;
     try {
-      library = compile(compilation);
-    } catch (CannotCompile problem) {
+      var buffer = newBuffer();
+      program(identifier("main"), compile(compilation))
+          .run(input(stdin), buffer.asOutput());
+      return printed(buffer.bytes());
+    } catch (Problem problem) {
       return failed(problem);
     }
-
-    var program = program(identifier("main"), library);
-    var buffer = newBuffer();
-    var input = input(stdin);
-    var output = buffer.asOutput();
-    try {
-      program.run(input, output);
-    } catch (CannotCompute problem) {
-      return failed(problem);
-    }
-
-    var actualStdout = buffer.bytes();
-    return printed(actualStdout);
   }
 
   private byte[] bytes(String string) {
