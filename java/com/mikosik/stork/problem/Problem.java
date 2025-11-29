@@ -1,5 +1,3 @@
 package com.mikosik.stork.problem;
 
-public interface Problem {
-  String description();
-}
+public abstract class Problem extends RuntimeException {}

@@ -55,16 +55,16 @@ public class Outcome {
 
     private boolean equals(Failed failed) {
       return deepEquals(
-          problem.description(),
-          failed.problem.description());
+          problem.getMessage(),
+          failed.problem.getMessage());
     }
 
     public int hashCode() {
-      return problem.description().hashCode();
+      return problem.getMessage().hashCode();
     }
 
     public String toString() {
-      return problem.description();
+      return problem.getMessage();
     }
   }
 }

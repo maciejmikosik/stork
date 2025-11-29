@@ -5,7 +5,7 @@ import static com.mikosik.stork.debug.Decompiler.decompile;
 
 import com.mikosik.stork.model.Expression;
 
-public class ExpectedInteger implements CannotCompute {
+public class ExpectedInteger extends CannotCompute {
   public final Expression expression;
 
   private ExpectedInteger(Expression expression) {
@@ -16,7 +16,7 @@ public class ExpectedInteger implements CannotCompute {
     return new ExpectedInteger(expression);
   }
 
-  public String description() {
+  public String getMessage() {
     return """
           wrong type
             expected: integer

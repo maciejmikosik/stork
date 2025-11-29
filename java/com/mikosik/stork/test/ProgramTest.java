@@ -3,7 +3,6 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Logic.singleton;
-import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directories.systemTemporaryDirectory;
 import static com.mikosik.stork.common.io.Input.input;
@@ -28,7 +27,7 @@ import org.quackery.Test;
 import com.mikosik.stork.Core;
 import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
-import com.mikosik.stork.problem.ProblemException;
+import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -106,7 +105,7 @@ public class ProgramTest {
   }
 
   private Test newCaseExpecting(Outcome expected) {
-    return newCase(name, usingFilesystem(() -> run(expected)));
+    return newCase(name, usingFilesystem(() -> compileRunAndAssert(expected)));
   }
 
   private Body usingFilesystem(Body body) {
@@ -120,7 +119,7 @@ public class ProgramTest {
     };
   }
 
-  private void run(Outcome expected) {
+  private void compileRunAndAssert(Outcome expected) {
     var actual = compileAndRun();
     if (!deepEquals(expected, actual)) {
       // TODO create common for 2D text manipulation
@@ -130,29 +129,14 @@ public class ProgramTest {
   }
 
   private Outcome compileAndRun() {
-    Library library;
     try {
-      library = compile(compilation);
-    } catch (ProblemException exception) {
-      // TODO throw dedicated internal compiler exception
-      check(exception.problem instanceof CannotCompile);
-      return failed(exception.problem);
+      var buffer = newBuffer();
+      program(identifier("main"), compile(compilation))
+          .run(input(stdin), buffer.asOutput());
+      return printed(buffer.bytes());
+    } catch (Problem problem) {
+      return failed(problem);
     }
-
-    var program = program(identifier("main"), library);
-    var buffer = newBuffer();
-    var input = input(stdin);
-    var output = buffer.asOutput();
-    try {
-      program.run(input, output);
-    } catch (ProblemException exception) {
-      // TODO throw dedicated internal compiler exception
-      check(exception.problem instanceof CannotCompute);
-      return failed(exception.problem);
-    }
-
-    var actualStdout = buffer.bytes();
-    return printed(actualStdout);
   }
 
   private byte[] bytes(String string) {

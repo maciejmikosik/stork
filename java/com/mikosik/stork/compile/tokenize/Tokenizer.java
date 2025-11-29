@@ -14,7 +14,6 @@ import static com.mikosik.stork.compile.tokenize.IntegerLiteral.literal;
 import static com.mikosik.stork.compile.tokenize.Label.label;
 import static com.mikosik.stork.compile.tokenize.StringLiteral.literal;
 import static com.mikosik.stork.compile.tokenize.Symbol.DOT;
-import static com.mikosik.stork.problem.ProblemException.exception;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalStringCharacter;
 
@@ -54,7 +53,7 @@ public class Tokenizer implements Iterator<Token> {
       iterator.next();
       return DOT;
     } else {
-      throw exception(illegalCharacter(iterator.next()));
+      throw illegalCharacter(iterator.next());
     }
   }
 
@@ -70,7 +69,7 @@ public class Tokenizer implements Iterator<Token> {
     while (iterator.hasNext() && !isDoubleQuote(iterator.peek())) {
       var nextByte = iterator.next().byteValue();
       if (!isPrintable(nextByte)) {
-        throw exception(illegalStringCharacter(nextByte));
+        throw illegalStringCharacter(nextByte);
       }
       builder.append((char) nextByte);
     }
