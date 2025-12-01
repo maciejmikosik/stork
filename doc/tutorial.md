@@ -19,7 +19,7 @@ Build stork compiler by running bash script (requires Java 22).
 
 It creates stork binary in local bin directory `~/.local/bin/stork`.
 
-Or you can download built binary from project's [release page](https://github.com/maciejmikosik/stork/releases/tag/latest).
+Or you can download built binary from project's [release page](https://github.com/maciejmikosik/stork/releases).
 
 Create a file named `source.stork` with following contents.
 
