@@ -4,7 +4,7 @@ Ideas for new features.
 
 ### Private Functions ###
 
-Ability to make function private. Private functions cannot be imported from other namespaces. Implementation similar to `.gitignore` files in git. You create `ignore.stork` file that contains [glob](https://en.wikipedia.org/wiki/Glob_(programming) filters.
+Ability to make function private. Private functions cannot be imported from other namespaces. Implementation similar to `.gitignore` files in git. You create `ignore.stork` file that contains [glob](https://en.wikipedia.org/wiki/Glob_(programming)) filters.
 
 ### Main Arguments ###
 
