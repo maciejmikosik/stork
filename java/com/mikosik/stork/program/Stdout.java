@@ -13,6 +13,7 @@ import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.compute.Stack.Argument;
+import com.mikosik.stork.compute.Stack.Function;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Operator;
@@ -57,7 +58,13 @@ public class Stdout {
 
   public static final Expression CLOSE = new Operator() {
     public Optional<Computation> compute(Stack stack) {
-      return Optional.empty();
+      return switch (stack) {
+        case Function function -> Optional.of(
+            computation(
+                application(function.expression, this),
+                function.previous));
+        default -> Optional.empty();
+      };
     }
 
     public String toString() {
