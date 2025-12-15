@@ -2,7 +2,6 @@ package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.common.Slot.slot;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.compute.UncloningComputer.uncloning;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -21,7 +20,7 @@ public class CachingComputer implements Computer {
   }
 
   public static Computer caching(Computer computer) {
-    return uncloning(new CachingComputer(computer));
+    return new CachingComputer(computer);
   }
 
   public Computation compute(Computation computation) {

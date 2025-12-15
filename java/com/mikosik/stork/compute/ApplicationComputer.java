@@ -4,19 +4,18 @@ import static com.mikosik.stork.compute.Computation.computation;
 
 import com.mikosik.stork.model.Application;
 
-public class ApplicationComputer implements Computer {
-  private ApplicationComputer() {}
+public class ApplicationComputer extends TypedComputer<Application> {
+  private ApplicationComputer() {
+    super(Application.class);
+  }
 
   public static Computer applicationComputer() {
     return new ApplicationComputer();
   }
 
-  public Computation compute(Computation computation) {
-    return switch (computation.expression) {
-      case Application application -> computation(
-          application.function,
-          computation.stack.pushArgument(application.argument));
-      default -> computation;
-    };
+  public Computation compute(Application application, Stack stack) {
+    return computation(
+        application.function,
+        stack.pushArgument(application.argument));
   }
 }

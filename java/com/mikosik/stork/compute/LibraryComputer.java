@@ -1,7 +1,7 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.compute.UncloningComputer.uncloning;
+import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +11,11 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Library;
 
-public class LibraryComputer implements Computer {
+public class LibraryComputer extends TypedComputer<Identifier> {
   private final Map<Identifier, Expression> table;
 
   private LibraryComputer(Map<Identifier, Expression> table) {
+    super(Identifier.class);
     this.table = table;
   }
 
@@ -23,15 +24,17 @@ public class LibraryComputer implements Computer {
     for (Definition definition : library.definitions) {
       table.put(definition.identifier, definition.body);
     }
-    return uncloning(new LibraryComputer(table));
+    return new LibraryComputer(table);
   }
 
-  public Computation compute(Computation computation) {
-    return switch (computation.expression) {
-      case Identifier identifier when table.containsKey(identifier) -> computation(
+  public Computation compute(Identifier identifier, Stack stack) {
+    if (table.containsKey(identifier)) {
+      return computation(
           table.get(identifier),
-          computation.stack);
-      default -> computation;
-    };
+          stack);
+    } else {
+      // TODO report that identifier was not found at runtime
+      throw cannotCompute();
+    }
   }
 }
