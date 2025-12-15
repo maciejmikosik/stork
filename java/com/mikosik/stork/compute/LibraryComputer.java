@@ -1,7 +1,7 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +33,7 @@ public class LibraryComputer extends TypedComputer<Identifier> {
           table.get(identifier),
           stack);
     } else {
-      // TODO report that identifier was not found at runtime
-      throw cannotCompute();
+      throw functionMissing(identifier);
     }
   }
 }
