@@ -21,8 +21,10 @@ public class Stork {
 
       program(identifier("main"), library)
           .run(input(System.in), output(System.out));
+      System.exit(0);
     } catch (Problem problem) {
       System.err.println(problem.getMessage());
+      System.exit(1);
     }
   }
 }

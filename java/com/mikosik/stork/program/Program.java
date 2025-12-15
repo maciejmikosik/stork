@@ -54,7 +54,7 @@ public class Program {
     while (!isDone(computation)) {
       computation = computer.compute(computation);
     }
-    output.close();
+    output.flush();
   }
 
   private boolean isDone(Computation computation) {
