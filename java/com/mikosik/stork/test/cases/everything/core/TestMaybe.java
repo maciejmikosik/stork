@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases;
+package com.mikosik.stork.test.cases.everything.core;
 
 import static com.mikosik.stork.test.SnippetSuite.snippetSuite;
 import static org.quackery.Suite.suite;

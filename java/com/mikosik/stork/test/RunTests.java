@@ -9,13 +9,19 @@ import static com.mikosik.stork.test.QuackeryHelper.deep;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
-import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
-import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.test.cases.TestOperators.testOperators;
-import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDecorator;
-import static com.mikosik.stork.test.cases.TestSequence.testSequence;
-import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
-import static com.mikosik.stork.test.cases.language.TestLanguage.testLanguage;
+import static com.mikosik.stork.test.cases.everything.TestOperators.testOperators;
+import static com.mikosik.stork.test.cases.everything.TestSimplePrograms.testSimplePrograms;
+import static com.mikosik.stork.test.cases.everything.core.TestBoolean.testBoolean;
+import static com.mikosik.stork.test.cases.everything.core.TestFunction.testFunction;
+import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteger;
+import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
+import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream;
+import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
+import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCompilerProblems;
+import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
+import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
+import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
+import static com.mikosik.stork.test.cases.unit.TestSequence.testSequence;
 import static java.lang.System.exit;
 import static java.time.Duration.between;
 import static java.time.Duration.ofSeconds;
@@ -50,12 +56,20 @@ public class RunTests {
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator())));
-    runAndReport(testLanguage());
+    runAndReport(suite("language")
+        .add(testSyntax())
+        .add(testCompilerProblems()));
     runAndReport(compilerCanCompileCoreLibrary());
-    runAndReport(suite("programs")
+    runAndReport(suite("everything")
         .add(testSimplePrograms())
         .add(testOperators())
-        .add(testCoreLibrary()));
+        .add(suite("core library")
+            .add(testBoolean())
+            .add(testFunction())
+            .add(testInteger())
+            .add(testStream())
+            .add(testStreamCount())
+            .add(testMaybe())));
   }
 
   private static void runAndReport(Test test) {

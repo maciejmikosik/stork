@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases;
+package com.mikosik.stork.test.cases.everything;
 
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.test.ProgramTest.programTest;
