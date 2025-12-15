@@ -27,6 +27,7 @@ public class FsBuilder {
   }
 
   public FsBuilder create() {
+    directory.createDeep();
     files.entrySet().stream()
         .forEach(entry -> {
           var path = entry.getKey();
