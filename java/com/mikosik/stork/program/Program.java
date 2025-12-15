@@ -1,6 +1,5 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
 import static com.mikosik.stork.compute.Computation.computation;
@@ -17,7 +16,6 @@ import static com.mikosik.stork.program.Stdout.writeStreamTo;
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computer;
-import com.mikosik.stork.compute.Stack.Empty;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -50,8 +48,7 @@ public class Program {
     var computation = computation(application(
         writeStreamTo(output),
         application(main, stdin(input))));
-    var computed = computer.compute(computation);
+    computer.compute(computation);
     output.close();
-    check(computed.stack instanceof Empty);
   }
 }

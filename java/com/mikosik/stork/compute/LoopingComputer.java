@@ -1,5 +1,9 @@
 package com.mikosik.stork.compute;
 
+import static com.mikosik.stork.program.Stdout.CLOSE;
+
+import com.mikosik.stork.compute.Stack.Empty;
+
 public class LoopingComputer implements Computer {
   private final Computer computer;
 
@@ -12,11 +16,14 @@ public class LoopingComputer implements Computer {
   }
 
   public Computation compute(Computation computation) {
-    Computation previous = null;
     do {
-      previous = computation;
       computation = computer.compute(computation);
-    } while (computation != previous);
+    } while (!isDone(computation));
     return computation;
+  }
+
+  private boolean isDone(Computation computation) {
+    return computation.expression == CLOSE
+        && computation.stack instanceof Empty;
   }
 }
