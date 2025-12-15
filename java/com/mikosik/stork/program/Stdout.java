@@ -2,12 +2,10 @@ package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.compile.link.Bridge.REDUCE_EAGER;
-import static com.mikosik.stork.compile.link.Combinator.I;
 import static com.mikosik.stork.compile.link.StackOperator.EAGER;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
-
-import java.util.Optional;
+import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;
@@ -37,17 +35,22 @@ public class Stdout {
 
   public static Expression writeByteTo(Output output) {
     return new Operator() {
-      public Optional<Computation> compute(Stack stack) {
-        if (stack instanceof Argument argumentA
-            && argumentA.expression instanceof Integer integer
-            && argumentA.previous instanceof Argument argumentB) {
-          int oneByte = integer.value.intValueExact();
-          check(0 <= oneByte && oneByte <= 255);
-          output.write((byte) oneByte);
-          return Optional.of(computation(I, argumentB));
-        } else {
-          return Optional.empty();
+      public Computation compute(Stack stack) {
+        int nArguments = 2;
+        var arguments = new Expression[nArguments];
+        for (int iArgument = 0; iArgument < nArguments; iArgument++) {
+          if (stack instanceof Argument argument) {
+            arguments[iArgument] = argument.expression;
+            stack = argument.previous;
+          } else {
+            throw cannotCompute();
+          }
         }
+        var integer = ((Integer) arguments[0]);
+        int oneByte = integer.value.intValueExact();
+        check(0 <= oneByte && oneByte <= 255);
+        output.write((byte) oneByte);
+        return computation(arguments[1], stack);
       }
 
       public String toString() {
@@ -57,14 +60,13 @@ public class Stdout {
   }
 
   public static final Expression CLOSE = new Operator() {
-    public Optional<Computation> compute(Stack stack) {
-      return switch (stack) {
-        case Function function -> Optional.of(
-            computation(
-                application(function.expression, this),
-                function.previous));
-        default -> Optional.empty();
-      };
+    public Computation compute(Stack stack) {
+      if (!(stack instanceof Function function)) {
+        throw cannotCompute();
+      }
+      return computation(
+          application(function.expression, this),
+          function.previous);
     }
 
     public String toString() {

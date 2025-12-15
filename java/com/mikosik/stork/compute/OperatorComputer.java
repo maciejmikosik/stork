@@ -1,5 +1,7 @@
 package com.mikosik.stork.compute;
 
+import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+
 import com.mikosik.stork.model.Operator;
 
 public class OperatorComputer implements Computer {
@@ -11,10 +13,8 @@ public class OperatorComputer implements Computer {
 
   public Computation compute(Computation computation) {
     return switch (computation.expression) {
-      case Operator operator -> operator
-          .compute(computation.stack)
-          .orElse(computation);
-      default -> computation;
+      case Operator operator -> operator.compute(computation.stack);
+      default -> throw cannotCompute();
     };
   }
 }

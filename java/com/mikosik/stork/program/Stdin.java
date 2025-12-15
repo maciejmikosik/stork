@@ -5,8 +5,6 @@ import static com.mikosik.stork.compile.link.Bridge.some;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
 
-import java.util.Optional;
-
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
@@ -31,7 +29,7 @@ public class Stdin implements Operator {
     return new Stdin(input, index);
   }
 
-  public synchronized Optional<Computation> compute(Stack stack) {
+  public synchronized Computation compute(Stack stack) {
     if (computed == null) {
       var maybeByte = input.read();
       computed = maybeByte.hasByte()
@@ -40,7 +38,7 @@ public class Stdin implements Operator {
               stdin(input, index + 1))
           : NONE;
     }
-    return Optional.of(computation(computed, stack));
+    return computation(computed, stack);
   }
 
   public String toString() {
