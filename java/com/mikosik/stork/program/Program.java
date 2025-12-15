@@ -6,16 +6,18 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.IntegerComputer.integerComputer;
 import static com.mikosik.stork.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.compute.LibraryComputer.computer;
-import static com.mikosik.stork.compute.LoopingComputer.looping;
 import static com.mikosik.stork.compute.OperatorComputer.operatorComputer;
 import static com.mikosik.stork.compute.Router.router;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.program.Stdin.stdin;
+import static com.mikosik.stork.program.Stdout.CLOSE;
 import static com.mikosik.stork.program.Stdout.writeStreamTo;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.common.io.Output;
+import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
+import com.mikosik.stork.compute.Stack.Empty;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -37,18 +39,26 @@ public class Program {
   }
 
   private static Computer buildComputer(Library library) {
-    return looping(interruptible(caching(router()
+    return interruptible(caching(router()
         .route(Identifier.class, computer(library))
         .route(Operator.class, operatorComputer())
         .route(Application.class, applicationComputer())
-        .route(Integer.class, integerComputer()))));
+        .route(Integer.class, integerComputer())));
   }
 
   public void run(Input input, Output output) {
     var computation = computation(application(
         writeStreamTo(output),
         application(main, stdin(input))));
-    computer.compute(computation);
+
+    while (!isDone(computation)) {
+      computation = computer.compute(computation);
+    }
     output.close();
+  }
+
+  private boolean isDone(Computation computation) {
+    return computation.expression == CLOSE
+        && computation.stack instanceof Empty;
   }
 }
