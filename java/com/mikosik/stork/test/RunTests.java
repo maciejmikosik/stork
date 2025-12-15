@@ -10,7 +10,6 @@ import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.ignore;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
-import static com.mikosik.stork.test.cases.TestComputers.testComputers;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.TestInstructions.testInstructions;
@@ -49,7 +48,6 @@ public class RunTests {
   public static void main(String[] args) {
     runAndReport(suite("unit tests")
         .add(testSequence())
-        .add(testComputers())
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator())));

@@ -1,7 +1,6 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.compute.UncloningComputer.uncloning;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class LibraryComputer extends TypedComputer<Identifier> {
     for (Definition definition : library.definitions) {
       table.put(definition.identifier, definition.body);
     }
-    return uncloning(new LibraryComputer(table));
+    return new LibraryComputer(table);
   }
 
   public Computation compute(Identifier identifier, Stack stack) {
