@@ -1,19 +1,19 @@
 package com.mikosik.stork.test.cases;
 
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.problem.compute.ExpectedInteger.expectedInteger;
+import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.model.Identifier;
-
-// TODO rewrite tests for eager operators
-public class TestInstructions {
-  private static final Identifier mock = identifier("mock");
-
-  public static Test testInstructions() {
+/**
+ * TODO Improve tests. Those tests fail not because specific integer function
+ * requires integer arguments. They fail because argument "" computes to
+ * expression of combinator without enough arguments. At least we are testing
+ * that they are EAGER and redirect computing to arguments.
+ */
+public class TestOperators {
+  public static Test testOperators() {
     return suite("instructions validate argument types")
         .add(suite("requires integer arguments")
             .add(requiresTwoIntegers("equal"))
@@ -29,26 +29,23 @@ public class TestInstructions {
         .add(programTest("first argument")
             .importFile("lang.integer.%s".formatted(function))
             .sourceFile("""
-                mock { mock }
-                main(stdin) { %s(mock) }
+                main(stdin) { %s("") }
                 """.formatted(function))
-            .expect(expectedInteger(mock)))
+            .expect(cannotCompute()))
         .add(programTest("second argument")
             .importFile("lang.integer.%s".formatted(function))
             .sourceFile("""
-                mock { mock }
-                main(stdin) { %s(0)(mock) }
+                main(stdin) { %s(0)("") }
                 """.formatted(function))
-            .expect(expectedInteger(mock)));
+            .expect(cannotCompute()));
   }
 
   private static Test requiresInteger(String function) {
     return programTest(function)
         .importFile("lang.integer.%s".formatted(function))
         .sourceFile("""
-            mock { mock }
-            main(stdin) { %s(mock) }
+            main(stdin) { %s("") }
             """.formatted(function))
-        .expect(expectedInteger(mock));
+        .expect(cannotCompute());
   }
 }

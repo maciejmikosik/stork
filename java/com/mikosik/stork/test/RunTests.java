@@ -8,11 +8,10 @@ import static com.mikosik.stork.test.QuackeryHelper.count;
 import static com.mikosik.stork.test.QuackeryHelper.deep;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
-import static com.mikosik.stork.test.QuackeryHelper.ignore;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
 import static com.mikosik.stork.test.cases.TestCoreLibrary.testCoreLibrary;
 import static com.mikosik.stork.test.cases.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.test.cases.TestInstructions.testInstructions;
+import static com.mikosik.stork.test.cases.TestOperators.testOperators;
 import static com.mikosik.stork.test.cases.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static com.mikosik.stork.test.cases.TestSequence.testSequence;
 import static com.mikosik.stork.test.cases.TestSimplePrograms.testSimplePrograms;
@@ -55,7 +54,7 @@ public class RunTests {
     runAndReport(compilerCanCompileCoreLibrary());
     runAndReport(suite("programs")
         .add(testSimplePrograms())
-        .add(ignore(testInstructions()))
+        .add(testOperators())
         .add(testCoreLibrary()));
   }
 
