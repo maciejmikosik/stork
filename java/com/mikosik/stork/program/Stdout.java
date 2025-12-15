@@ -63,13 +63,13 @@ public class Stdout {
 
   public static final Expression CLOSE = new Operator() {
     public Optional<Computation> compute(Stack stack) {
-      return switch (stack) {
-        case Function function -> Optional.of(
-            computation(
-                application(function.expression, this),
-                function.previous));
-        default -> Optional.empty();
-      };
+      if (!(stack instanceof Function function)) {
+        throw cannotCompute();
+      }
+      return Optional.of(
+          computation(
+              application(function.expression, this),
+              function.previous));
     }
 
     public String toString() {
