@@ -4,8 +4,6 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 
-import java.util.Optional;
-
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.compute.Stack.Argument;
@@ -24,7 +22,7 @@ public enum Combinator implements Operator {
   /** B(x)(y)(z) = x(y(z)) */
   B;
 
-  public Optional<Computation> compute(Stack stack) {
+  public Computation compute(Stack stack) {
     int nArguments = nArguments();
     var arguments = new Expression[nArguments];
     for (int iArgument = 0; iArgument < nArguments; iArgument++) {
@@ -35,7 +33,7 @@ public enum Combinator implements Operator {
         throw cannotCompute();
       }
     }
-    return Optional.of(computation(compute(arguments), stack));
+    return computation(compute(arguments), stack);
   }
 
   private int nArguments() {

@@ -7,8 +7,6 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 
-import java.util.Optional;
-
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
@@ -37,7 +35,7 @@ public class Stdout {
 
   public static Expression writeByteTo(Output output) {
     return new Operator() {
-      public Optional<Computation> compute(Stack stack) {
+      public Computation compute(Stack stack) {
         int nArguments = 2;
         var arguments = new Expression[nArguments];
         for (int iArgument = 0; iArgument < nArguments; iArgument++) {
@@ -52,7 +50,7 @@ public class Stdout {
         int oneByte = integer.value.intValueExact();
         check(0 <= oneByte && oneByte <= 255);
         output.write((byte) oneByte);
-        return Optional.of(computation(arguments[1], stack));
+        return computation(arguments[1], stack);
       }
 
       public String toString() {
@@ -62,14 +60,13 @@ public class Stdout {
   }
 
   public static final Expression CLOSE = new Operator() {
-    public Optional<Computation> compute(Stack stack) {
+    public Computation compute(Stack stack) {
       if (!(stack instanceof Function function)) {
         throw cannotCompute();
       }
-      return Optional.of(
-          computation(
-              application(function.expression, this),
-              function.previous));
+      return computation(
+          application(function.expression, this),
+          function.previous);
     }
 
     public String toString() {

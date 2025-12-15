@@ -32,7 +32,6 @@ import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import java.math.BigInteger;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.quackery.Test;
@@ -62,8 +61,8 @@ public class TestDecompiler {
                 .add(test("\"\"", quote(""))))
             .add(suite("operators")
                 .add(test("$OPERATOR", new Operator() {
-                  public Optional<Computation> compute(Stack stack) {
-                    return Optional.empty();
+                  public Computation compute(Stack stack) {
+                    return null;
                   }
 
                   public String toString() {

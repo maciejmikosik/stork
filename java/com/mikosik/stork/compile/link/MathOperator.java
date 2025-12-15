@@ -5,8 +5,6 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 
-import java.util.Optional;
-
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.compute.Stack.Argument;
@@ -22,7 +20,7 @@ public enum MathOperator implements Operator {
   MULTIPLY,
   DIVIDE;
 
-  public Optional<Computation> compute(Stack stack) {
+  public Computation compute(Stack stack) {
     int nArguments = nArguments();
     var arguments = new Integer[nArguments];
     for (int iArgument = 0; iArgument < nArguments; iArgument++) {
@@ -34,7 +32,7 @@ public enum MathOperator implements Operator {
         throw cannotCompute();
       }
     }
-    return Optional.of(computation(compute(arguments), stack));
+    return computation(compute(arguments), stack);
   }
 
   private int nArguments() {
