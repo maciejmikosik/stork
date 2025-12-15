@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases;
+package com.mikosik.stork.test.cases.unit;
 
 import static com.mikosik.stork.common.Sequence.sequenceOf;
 import static com.mikosik.stork.test.QuackeryHelper.assertSame;

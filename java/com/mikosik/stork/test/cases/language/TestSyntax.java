@@ -29,7 +29,6 @@ public class TestSyntax {
         .add(suite("pipe")
             .add(pipeCanHaveSingleFunction())
             .add(pipeCanHaveApplication())
-            .add(pipeCanHaveApplication())
             .add(pipeCanBeLongAndHaveApplications())
             .add(pipeCanBeArgument()))
         .add(suite("binding")
