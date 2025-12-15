@@ -25,7 +25,7 @@ public class TestOperators {
   }
 
   private static Test requiresTwoIntegers(String function) {
-    return suite("%s".formatted(function))
+    return suite(function)
         .add(programTest("first argument")
             .importFile("lang.integer.%s".formatted(function))
             .sourceFile("""
