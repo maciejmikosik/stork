@@ -135,10 +135,10 @@ Since strings are stream of integers, you can perform integer arithmetics on cha
 `source.stork`
 
     main(stdin) {
-      each(add(1))("ace")
+      "HAL".each(add(1))
     }
 
-prints `bde`.
+prints `IBM`.
 
 ### Data ###
 Full doc: [Data](data.md).
