@@ -56,7 +56,7 @@ If you define no parameters, function turns into constant, like `message` below.
 
 ### Currying ###
 
-Stork supports [currying](https://en.wikipedia.org/wiki/Currying), which means that all functions in reality have one parameter. When you call `f(x)(y)`, in reality you call function `f` with one argument `x` and that call returns some new function `g`. Then you call function `g` with argument `y`. This means you can apply functions partially, by providing less arguments than necessary. Result will be some function that can be passed around as argument to other functions.
+Stork supports [currying](https://en.wikipedia.org/wiki/Currying), which means that all functions have only single parameter. When you call `f(x)(y)`, function `f` is called with one argument `x` and that call returns some new function `g`. Then function `g` is called with argument `y`. This means you can apply functions partially, by providing less arguments than necessary. Result will be some function that can be passed around as argument to other functions.
 
 Here we have partial application `append("!")` with only one argument. This returns new function that can be passed around. This function is passed to `twice` function where second argument `object` is provided.
 
