@@ -1,8 +1,8 @@
 package com.mikosik.stork.problem.compile.link;
 
 import static com.mikosik.stork.common.Sequence.sequenceOf;
+import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.problem.Description.description;
-import static java.util.stream.Collectors.joining;
 
 import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.problem.Description;
@@ -26,8 +26,10 @@ public class CannotLinkLibrary extends CannotLink {
   }
 
   public Description describe() {
-    return description(problems.stream()
-        .map(problem -> problem.describe().toString())
-        .collect(joining("\n")));
+    return description(
+        "cannot link library",
+        problems.stream()
+            .map(CannotLink::describe)
+            .collect(toSequence()));
   }
 }
