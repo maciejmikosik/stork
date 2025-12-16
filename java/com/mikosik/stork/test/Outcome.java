@@ -1,9 +1,9 @@
 package com.mikosik.stork.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Objects.deepEquals;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import com.mikosik.stork.problem.Problem;
 
@@ -54,17 +54,15 @@ public class Outcome {
     }
 
     private boolean equals(Failed failed) {
-      return deepEquals(
-          problem.getMessage(),
-          failed.problem.getMessage());
+      return Objects.equals(problem, failed.problem);
     }
 
     public int hashCode() {
-      return problem.getMessage().hashCode();
+      return problem.hashCode();
     }
 
     public String toString() {
-      return problem.getMessage();
+      return problem.toString();
     }
   }
 }
