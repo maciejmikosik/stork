@@ -2,7 +2,10 @@ package com.mikosik.stork.problem.compile.tokenize;
 
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
+import static com.mikosik.stork.problem.Description.description;
 import static java.lang.Byte.toUnsignedInt;
+
+import com.mikosik.stork.problem.Description;
 
 public class IllegalCharacter extends CannotTokenize {
   public final byte character;
@@ -21,11 +24,11 @@ public class IllegalCharacter extends CannotTokenize {
     return new IllegalCharacter(character, true);
   }
 
-  public String getMessage() {
-    return "%sillegal %s character %s".formatted(
+  public Description describe() {
+    return description("%sillegal %s character %s".formatted(
         describeLocation(),
         describeCategory(),
-        describeValue());
+        describeValue()));
   }
 
   private String describeLocation() {

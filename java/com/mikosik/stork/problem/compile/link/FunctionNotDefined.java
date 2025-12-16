@@ -1,6 +1,9 @@
 package com.mikosik.stork.problem.compile.link;
 
+import static com.mikosik.stork.problem.Description.description;
+
 import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.problem.Description;
 
 public class FunctionNotDefined extends CannotLink {
   public final Identifier location;
@@ -21,8 +24,8 @@ public class FunctionNotDefined extends CannotLink {
         undefined);
   }
 
-  public String getMessage() {
-    return "function [%s] imports function [%s] which is not defined"
-        .formatted(location.name(), undefined.name());
+  public Description describe() {
+    return description("function [%s] imports function [%s] which is not defined"
+        .formatted(location.name(), undefined.name()));
   }
 }

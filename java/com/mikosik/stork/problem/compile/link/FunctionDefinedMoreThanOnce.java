@@ -1,6 +1,9 @@
 package com.mikosik.stork.problem.compile.link;
 
+import static com.mikosik.stork.problem.Description.description;
+
 import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.problem.Description;
 
 public class FunctionDefinedMoreThanOnce extends CannotLink {
   public final Identifier function;
@@ -13,8 +16,8 @@ public class FunctionDefinedMoreThanOnce extends CannotLink {
     return new FunctionDefinedMoreThanOnce(function);
   }
 
-  public String getMessage() {
-    return "function [%s] is defined more than once"
-        .formatted(function.name());
+  public Description describe() {
+    return description("function [%s] is defined more than once"
+        .formatted(function.name()));
   }
 }

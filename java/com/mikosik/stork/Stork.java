@@ -23,7 +23,7 @@ public class Stork {
           .run(input(System.in), output(System.out));
       System.exit(0);
     } catch (Problem problem) {
-      System.err.println(problem.getMessage());
+      System.err.println(problem);
       System.exit(1);
     }
   }
