@@ -36,7 +36,7 @@ Computation:
     true("yes")("no")
     "yes"
 
-Since boolean enum has 2 constants, each constants is a function that has 2 parameters called visitors. In case with more constants, we need to provide as many visitors.
+Since boolean enum has 2 constants, each constant is a function that has 2 parameters called visitors. In case with more constants, we need to provide as many visitors.
 
 Let's implement `TrafficLight` enum with 3 constants: `red`, `yellow` and `green`.
 
