@@ -1,5 +1,8 @@
 package com.mikosik.stork.problem.compute;
 
+import static com.mikosik.stork.problem.Description.description;
+
+import com.mikosik.stork.problem.Description;
 import com.mikosik.stork.problem.Problem;
 
 public class CannotCompute extends Problem {
@@ -7,7 +10,7 @@ public class CannotCompute extends Problem {
     return new CannotCompute();
   }
 
-  public String getMessage() {
-    return "cannot compute";
+  public Description describe() {
+    return description("cannot compute");
   }
 }

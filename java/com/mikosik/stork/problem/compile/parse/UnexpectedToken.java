@@ -1,11 +1,14 @@
 package com.mikosik.stork.problem.compile.parse;
 
+import static com.mikosik.stork.problem.Description.description;
+
 import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
+import com.mikosik.stork.problem.Description;
 
 public class UnexpectedToken extends CannotParse {
   private final Token token;
@@ -18,7 +21,11 @@ public class UnexpectedToken extends CannotParse {
     return new UnexpectedToken(token);
   }
 
-  public String getMessage() {
+  public Description describe() {
+    return description(textOfDescription());
+  }
+
+  private String textOfDescription() {
     return switch (token) {
       case Label label -> "unexpected label [%s]"
           .formatted(label.string);
