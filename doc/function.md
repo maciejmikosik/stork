@@ -1,4 +1,6 @@
-# Application #
+# Function #
+
+### Application ###
 
 Syntax for calling function `f` with single argument `x` is `f(x)`. For example, function `lang.stream.reverse` has one parameter of type stream. It reverses order of elements of that stream.
 
