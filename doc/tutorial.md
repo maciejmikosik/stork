@@ -5,7 +5,7 @@ This Tutorial teaches you basic features of stork:
    - writing hello world program
    - using core library
    - imports and namespaces
-   - functions: definition, currying, lambdas
+   - functions: definition, currying
    - standard I/O
    - defining custom data structure
 
@@ -100,8 +100,6 @@ Chain of instance calls can be composed into pipe.
       .prepend("Hello ")
       .append("!")
     }
-
-Lambdas have same syntax as function definition, just without name. `(x) { ... }` or `(x)(y) { ... }` for more parameters.
 
 ### Standard I/O ###
 

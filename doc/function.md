@@ -3,10 +3,10 @@
 Syntax for calling function `f` with single argument `x` is `f(x)`. For example, function `lang.stream.reverse` has one parameter of type stream. It reverses order of elements of that stream.
 
     main(stdin) {
-      reverse("Hello World!")
+      reverse("!dlroW olleH")
     }
 
-prints `!dlroW olleH`.
+prints `Hello World!`.
 
 Syntax for calling a function `f` with 2 arguments `x`, `y` is `f(x)(y)`. For example `lang.stream.append` has 2 parameters. First is a stream to append at the end of second stream parameter.
 
@@ -56,7 +56,7 @@ If you define no parameters, function turns into constant, like `message` below.
 
 ### Currying ###
 
-Stork supports [currying](https://en.wikipedia.org/wiki/Currying), which means that all functions in reality have one parameter. When you call `f(x)(y)`, in reality you call function `f` with one argument `x` and that call returns some new function `g`. Then you call function `g` with argument `y`. This means you can apply functions partially, by providing less arguments than necessary. Result will be some function that can be passed around as argument to other functions.
+Stork supports [currying](https://en.wikipedia.org/wiki/Currying), which means that all functions have only single parameter. When you call `f(x)(y)`, function `f` is called with one argument `x` and that call returns some new function `g`. Then function `g` is called with argument `y`. This means you can apply functions partially, by providing less arguments than necessary. Result will be some function that can be passed around as argument to other functions.
 
 Here we have partial application `append("!")` with only one argument. This returns new function that can be passed around. This function is passed to `twice` function where second argument `object` is provided.
 
@@ -80,7 +80,7 @@ Notice the order of parameters in `append` function. Deliberately, string which 
 
 ### Chain ###
 
-In stork all functions are static, there are no instance methods like in object-oriented languages. This can make some code look awkward to write and hard to read, like `surround` function we defined before. To solve this problem, stork offers compiler-sugar that allows you to invoke static functions in instance-method style. Also, it allows you to chain invocations just like in object-oriented languages.
+In stork all functions are static, there are no instance methods like in object-oriented languages. This can make some code look awkward to write and hard to read, like `surround` function we defined before. To solve this problem, stork offers compiler-sugar that allows you to invoke static functions in instance-method style. Also, it allows you to chain invocations just like in object-oriented languages. In all cases, function application `f(x)` has stronger association than chain operator `.`.
 
  - `object.function` = `function(object)`
  - `object.f(x)` = `f(x)(object)`
@@ -119,7 +119,9 @@ Notice again that order of parameters matters. For example, functions operating 
 
 prints `Hello World!Hello World!Hello World!`.
 
-Long chains of invocations can be extracted into pipes. Pipe is a composition of several functions into one function. Syntax is similar to chaining instance methods, but without initial instance.
+### Pipe ###
+
+Chains of invocations can be extracted into pipes. Pipe is a composition of several functions into one function. Syntax is similar to chaining instance methods, but without initial instance.
 
     main(stdin) {
       shoutTimes(3)("Hello World")
