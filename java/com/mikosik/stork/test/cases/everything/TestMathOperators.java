@@ -12,8 +12,8 @@ import org.quackery.Test;
  * expression of combinator without enough arguments. At least we are testing
  * that they are EAGER and redirect computing to arguments.
  */
-public class TestOperators {
-  public static Test testOperators() {
+public class TestMathOperators {
+  public static Test testMathOperators() {
     return suite("instructions validate argument types")
         .add(suite("requires integer arguments")
             .add(requiresTwoIntegers("equal"))

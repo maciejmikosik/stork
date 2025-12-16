@@ -9,16 +9,19 @@ import static com.mikosik.stork.test.QuackeryHelper.deep;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
-import static com.mikosik.stork.test.cases.everything.TestOperators.testOperators;
-import static com.mikosik.stork.test.cases.everything.TestSimplePrograms.testSimplePrograms;
+import static com.mikosik.stork.test.cases.everything.TestMainFunction.testMainFunction;
+import static com.mikosik.stork.test.cases.everything.TestMathOperators.testMathOperators;
+import static com.mikosik.stork.test.cases.everything.TestCore.testCore;
+import static com.mikosik.stork.test.cases.everything.TestStdio.testStdio;
 import static com.mikosik.stork.test.cases.everything.core.TestBoolean.testBoolean;
 import static com.mikosik.stork.test.cases.everything.core.TestFunction.testFunction;
 import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteger;
 import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream;
 import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
-import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCompilerProblems;
+import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
+import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static com.mikosik.stork.test.cases.unit.TestSequence.testSequence;
@@ -58,11 +61,15 @@ public class RunTests {
             .add(testLogbuddyDecorator())));
     runAndReport(suite("language")
         .add(testSyntax())
-        .add(testCompilerProblems()));
+        .add(suite("compiler problems")
+            .add(testTokenizerProblems())
+            .add(testLinkerProblems())));
     runAndReport(compilerCanCompileCoreLibrary());
     runAndReport(suite("everything")
-        .add(testSimplePrograms())
-        .add(testOperators())
+        .add(testMainFunction())
+        .add(testStdio())
+        .add(testCore())
+        .add(testMathOperators())
         .add(suite("core library")
             .add(testBoolean())
             .add(testFunction())
