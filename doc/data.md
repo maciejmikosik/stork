@@ -159,7 +159,7 @@ Function that returns integer from `something` or else `0` (if `nothing`) looks 
 
 `valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
 
-Another example is [stream](../stork/core/lang/stream/doc.md). Stream can have element (`head`) and a pointer to rest of the stream (`tail`) or be empty.
+Another example is [stream](../stork/core/lang/stream/doc.md). Stream has 2 constructors. First constructor `some` takes 2 parameters: `head` which is the first element of the stream and `tail` which is a stream containing remaining elements. Second constructor `none` is parameterless and returns empty stream.
 
     some(head)(tail)(vSome)(vNone) {
       vSome(head)(tail)
