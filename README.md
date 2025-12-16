@@ -11,7 +11,6 @@ Stork is untyped functional programming language.
    - [imports and namespaces](doc/tutorial.md#namespace)
    - [functions: definition, currying](doc/tutorial.md#function)
    - [standard I/O](doc/tutorial.md#standard-io)
-   - [defining custom data structure](doc/tutorial.md#data)
 
 [Function](doc/function.md)
    - [application](doc/function.md#application)
