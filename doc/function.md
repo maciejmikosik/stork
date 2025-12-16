@@ -80,7 +80,7 @@ Notice the order of parameters in `append` function. Deliberately, string which 
 
 ### Chain ###
 
-In stork all functions are static, there are no instance methods like in object-oriented languages. This can make some code look awkward to write and hard to read, like `surround` function we defined before. To solve this problem, stork offers compiler-sugar that allows you to invoke static functions in instance-method style. Also, it allows you to chain invocations just like in object-oriented languages.
+In stork all functions are static, there are no instance methods like in object-oriented languages. This can make some code look awkward to write and hard to read, like `surround` function we defined before. To solve this problem, stork offers compiler-sugar that allows you to invoke static functions in instance-method style. Also, it allows you to chain invocations just like in object-oriented languages. In all cases, function application `f(x)` has stronger association than chain operator `.`.
 
  - `object.function` = `function(object)`
  - `object.f(x)` = `f(x)(object)`
