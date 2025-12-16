@@ -149,15 +149,16 @@ Simple example is [maybe](../stork/core/lang/maybe/doc.md). It has 2 constructor
       vNothing
     }
 
-Function that returns integer from `something` or else `0` (if `nothing`) looks like this
+Consider function that takes maybe string `maybeUser` and reports what was found. 
 
-    valueOf(maybeInteger) {
-      maybeInteger
-        ((value){ value })
-        (0)
+    found(maybeUser) {
+      maybeUser
+        ((user) { "found user: ".append(user) })
+        ("user not found")
     }
 
-`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
+ - `found(something("John"))` returns `"found user: John"`.
+ - `found(nothing)` returns `"user not found"`.
 
 Another example is [stream](../stork/core/lang/stream/doc.md). Stream has 2 constructors. First constructor `some` takes 2 parameters: `head` which is the first element of the stream and `tail` which is a stream containing remaining elements. Second constructor `none` is parameterless and returns empty stream.
 
