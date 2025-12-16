@@ -75,7 +75,7 @@ Structure can be encoded as function with parameters that represents fields. It 
 
 You can create an instance of person by invoking constructor: `person("John")(23)`. You may pass that instance around and any code that wants to inspect values of fields can invoke that instance like it's a function by providing visitor. In this case, visitor is a function with 2 parameters.
 
-Let's implement functions that checks if given person is an adult.
+Let's implement functions that checks if given person is an adult. Here we create visitor as lambda with parameters `(name)(age) { }`.
 
     isAdult(person) {
       person((name)(age) {
