@@ -119,7 +119,7 @@ Notice again that order of parameters matters. For example, functions operating 
 
 prints `Hello World!Hello World!Hello World!`.
 
-Long chains of invocations can be extracted into pipes. Pipe is a composition of several functions into one function. Syntax is similar to chaining instance methods, but without initial instance.
+Chains of invocations can be extracted into pipes. Pipe is a composition of several functions into one function. Syntax is similar to chaining instance methods, but without initial instance.
 
     main(stdin) {
       shoutTimes(3)("Hello World")
