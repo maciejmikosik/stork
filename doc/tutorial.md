@@ -7,7 +7,6 @@ This Tutorial teaches you basic features of stork:
    - imports and namespaces
    - functions: definition, currying
    - standard I/O
-   - defining custom data structure
 
 All programs in this tutorial print `Hello World!`, unless specified otherwise.
 
@@ -139,29 +138,3 @@ Since strings are stream of integers, you can perform integer arithmetics on cha
     }
 
 prints `IBM`.
-
-### Data ###
-Full doc: [Data](data.md).
-
-Data structures are encoded as functions using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding). This includes: enums, structures with fields, collections etc.
-
-Example of enum with 2 values: `true` and `false`.
-
-    true(vTrue)(vFalse) {
-      vTrue
-    }
-    
-    false(vTrue)(vFalse) {
-      vFalse
-    }
-
-Example of structure with 1 constructor `person` and 2 fields: `name` and `age`.
-
-    person(name)(age)(visitor) {
-      visitor(name)(age)
-    }
-
-### Interface ###
-Full doc: [Interface](interface.md).
-
-In stork you can't formally define interfaces, but they exist through conventions. Simple examples are: equal, comparator, predicate.
