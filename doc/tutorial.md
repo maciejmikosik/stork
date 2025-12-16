@@ -123,7 +123,7 @@ Running
 
 console:
 
-    echo -n "Hello World" | ~/stork
+    printf "Hello World" | ~/stork
 
 Since strings are stream of integers, you can perform integer arithmetics on characters.
 
