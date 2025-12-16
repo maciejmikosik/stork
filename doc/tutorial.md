@@ -66,7 +66,7 @@ Let's define `shout` function that appends exclamation mark.
       append("!")(string)
     }
 
-Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can apply functions partially. `append` has 2 parameters `"!"` and `"Hello World"`. They can be applied in 2 separate places.
+Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can apply functions partially. Here we have function `append` that has 2 parameters. We call it with 2 arguments: `"!"` and `"Hello World"`. They can be applied in 2 separate places.
 
     main(stdin) {
       shout("Hello World")
@@ -123,7 +123,7 @@ Running
 
 console:
 
-    echo -n "Hello World" | ~/stork
+    printf "Hello World" | ~/stork
 
 Since strings are stream of integers, you can perform integer arithmetics on characters.
 
@@ -135,10 +135,10 @@ Since strings are stream of integers, you can perform integer arithmetics on cha
 `source.stork`
 
     main(stdin) {
-      each(add(1))("ace")
+      "HAL".each(add(1))
     }
 
-prints `bde`.
+prints `IBM`.
 
 ### Data ###
 Full doc: [Data](data.md).
