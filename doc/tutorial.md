@@ -66,7 +66,7 @@ Let's define `shout` function that appends exclamation mark.
       append("!")(string)
     }
 
-Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can apply functions partially. `append` has 2 parameters `"!"` and `"Hello World"`. They can be applied in 2 separate places.
+Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can apply functions partially. Here we have function `append` that has 2 parameters. We call it with 2 arguments: `"!"` and `"Hello World"`. They can be applied in 2 separate places.
 
     main(stdin) {
       shout("Hello World")
