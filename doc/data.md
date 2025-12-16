@@ -36,7 +36,7 @@ Computation:
     true("yes")("no")
     "yes"
 
-Since boolean enum has 2 constants, each constants is a function that has 2 parameters called visitors. In case with more constants, we need to provide as many visitors.
+Since boolean enum has 2 constants, each constant is a function that has 2 parameters called visitors. In case with more constants, we need to provide as many visitors.
 
 Let's implement `TrafficLight` enum with 3 constants: `red`, `yellow` and `green`.
 
@@ -75,7 +75,7 @@ Structure can be encoded as function with parameters that represents fields. It 
 
 You can create an instance of person by invoking constructor: `person("John")(23)`. You may pass that instance around and any code that wants to inspect values of fields can invoke that instance like it's a function by providing visitor. In this case, visitor is a function with 2 parameters.
 
-Let's implement functions that checks if given person is an adult.
+Let's implement functions that checks if given person is an adult. Here we create visitor as lambda with parameters `(name)(age) { }`.
 
     isAdult(person) {
       person((name)(age) {
@@ -149,17 +149,18 @@ Simple example is [maybe](../stork/core/lang/maybe/doc.md). It has 2 constructor
       vNothing
     }
 
-Function that returns integer from `something` or else `0` (if `nothing`) looks like this
+Consider function that takes maybe string `maybeUser` and reports what was found. 
 
-    valueOf(maybeInteger) {
-      maybeInteger
-        ((value){ value })
-        (0)
+    found(maybeUser) {
+      maybeUser
+        ((user) { "found user: ".append(user) })
+        ("user not found")
     }
 
-`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
+ - `found(something("John"))` returns `"found user: John"`.
+ - `found(nothing)` returns `"user not found"`.
 
-Another example is [stream](../stork/core/lang/stream/doc.md). Stream can have element (`head`) and a pointer to rest of the stream (`tail`) or be empty.
+Another example is [stream](../stork/core/lang/stream/doc.md). Stream has 2 constructors. First constructor `some` takes 2 parameters: `head` which is the first element of the stream and `tail` which is a stream containing remaining elements. Second constructor `none` is parameterless and returns empty stream.
 
     some(head)(tail)(vSome)(vNone) {
       vSome(head)(tail)
