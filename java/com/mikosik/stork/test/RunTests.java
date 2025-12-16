@@ -9,7 +9,7 @@ import static com.mikosik.stork.test.QuackeryHelper.deep;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
-import static com.mikosik.stork.test.cases.everything.TestOperators.testOperators;
+import static com.mikosik.stork.test.cases.everything.TestMathOperators.testMathOperators;
 import static com.mikosik.stork.test.cases.everything.TestSimplePrograms.testSimplePrograms;
 import static com.mikosik.stork.test.cases.everything.core.TestBoolean.testBoolean;
 import static com.mikosik.stork.test.cases.everything.core.TestFunction.testFunction;
@@ -65,7 +65,7 @@ public class RunTests {
     runAndReport(compilerCanCompileCoreLibrary());
     runAndReport(suite("everything")
         .add(testSimplePrograms())
-        .add(testOperators())
+        .add(testMathOperators())
         .add(suite("core library")
             .add(testBoolean())
             .add(testFunction())
