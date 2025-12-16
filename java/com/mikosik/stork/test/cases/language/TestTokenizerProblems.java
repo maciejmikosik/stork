@@ -1,10 +1,5 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
-import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
-import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalStringCharacter;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -16,22 +11,17 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestCompilerProblems {
-  public static Test testCompilerProblems() {
-    return suite("compiler reports problems when")
-        .add(suite("tokenizing")
-            .add(suite("illegal code in string literal")
-                .add(suite("ascii")
-                    .add(reportsIllegalAsciiCodeInStringLiteral(0, 31))
-                    .add(reportsIllegalAsciiCodeInStringLiteral(127)))
-                .add(reportsNonAsciiCodeInStringLiteral()))
-            .add(suite("illegal code anywhere")
-                .add(reportsIllegalAsciiCodeAnywhere())
-                .add(reportsNonAsciiCodeAnywhere())))
-        .add(suite("linking")
-            .add(reportsVariableThatCannotBeBound())
-            .add(reportsFunctionNotDefined())
-            .add(reportsFunctionDefinedMoreThanOnce()));
+public class TestTokenizerProblems {
+  public static Test testTokenizerProblems() {
+    return suite("tokenizer reports")
+        .add(suite("illegal code in string literal")
+            .add(suite("ascii")
+                .add(reportsIllegalAsciiCodeInStringLiteral(0, 31))
+                .add(reportsIllegalAsciiCodeInStringLiteral(127)))
+            .add(reportsNonAsciiCodeInStringLiteral()))
+        .add(suite("illegal code anywhere")
+            .add(reportsIllegalAsciiCodeAnywhere())
+            .add(reportsNonAsciiCodeAnywhere()));
   }
 
   /*
@@ -50,7 +40,7 @@ public class TestCompilerProblems {
     return suite("range <%d, %d>".formatted(firstCode, lastCode))
         .addAll(range(firstCode, lastCode + 1)
             .mapToObj(value -> Byte.valueOf((byte) value))
-            .map(TestCompilerProblems::reportsIllegalAsciiCodeInStringLiteral)
+            .map(TestTokenizerProblems::reportsIllegalAsciiCodeInStringLiteral)
             .toList());
   }
 
@@ -87,38 +77,6 @@ public class TestCompilerProblems {
             function\u00FC { 0 }
             """)
         .expect(illegalCharacter("\u00FC".getBytes(UTF_8)[0]));
-  }
-
-  private static Test reportsVariableThatCannotBeBound() {
-    return programTest("variable that cannot be bound")
-        .sourceFile("""
-            function { variable }
-            """)
-        .expect(variableCannotBeBound(
-            identifier("function"),
-            variable("variable")));
-  }
-
-  private static Test reportsFunctionNotDefined() {
-    return programTest("function that is not defined")
-        .importFile("""
-            namespace.function2
-            """)
-        .sourceFile("""
-            function { function2 }
-            """)
-        .expect(functionNotDefined(
-            identifier("function"),
-            identifier("namespace.function2")));
-  }
-
-  private static Test reportsFunctionDefinedMoreThanOnce() {
-    return programTest("function defined more than once")
-        .sourceFile("""
-            function { 1 }
-            function { 2 }
-            """)
-        .expect(functionDefinedMoreThanOnce(identifier("function")));
   }
 
   private static ProgramTest programTest(String name) {

@@ -17,8 +17,9 @@ import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteg
 import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream;
 import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
-import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCompilerProblems;
+import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
+import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static com.mikosik.stork.test.cases.unit.TestSequence.testSequence;
@@ -58,7 +59,9 @@ public class RunTests {
             .add(testLogbuddyDecorator())));
     runAndReport(suite("language")
         .add(testSyntax())
-        .add(testCompilerProblems()));
+        .add(suite("compiler problems")
+            .add(testTokenizerProblems())
+            .add(testLinkerProblems())));
     runAndReport(compilerCanCompileCoreLibrary());
     runAndReport(suite("everything")
         .add(testSimplePrograms())
