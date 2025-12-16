@@ -4,123 +4,31 @@ Stork is untyped functional programming language.
       "Hello World!"
     }
 
-# boolean logic #
+[Tutorial](doc/tutorial.md)
+   - [building stork binary](doc/tutorial.md#hello-world)
+   - [writing hello world program](doc/tutorial.md#hello-world)
+   - [using core library](doc/tutorial.md#namespace)
+   - [imports and namespaces](doc/tutorial.md#namespace)
+   - [functions: definition, currying](doc/tutorial.md#function)
+   - [standard I/O](doc/tutorial.md#standard-io)
+   - [defining custom data structure](doc/tutorial.md#data)
 
-There are no keywords like `if`, `else`, `true` or `false`. Boolean values are just ordinary functions in core library. They use [Church encodings](https://en.wikipedia.org/wiki/Church_encoding#Church_Booleans).
+[Function](doc/function.md)
+   - [application](doc/function.md#application)
+   - [definition](doc/function.md#definition)
+   - [currying](doc/function.md#currying)
+   - [chain](doc/function.md#chain)
+   - [pipe](doc/function.md#pipe)
+   - [lambda abstraction](doc/function.md#lambda-abstraction)
 
-In javascript you would write
+[Namespace](doc/namespace.md)
 
-    function yesOrNo(bool) {
-      return bool ? "yes" : "no";
-    }
-    
-    console.log(yesOrNo(true));
+[Data](doc/data.md)
+   - [enums](doc/data.md#enums)
+   - [structures with fields](doc/data.md#structures-with-fields)
+   - [structures with multiple constructors](doc/data.md#structures-with-multiple-constructors)
 
-In stork you write
+[Interface](doc/interface.md)
 
-    yesOrNo(bool) {
-      bool("yes")("no")
-    }
-    
-    main(stdin) {
-      yesOrNo(true)
-    }
+[Core Libraries](stork/core/lang/doc.md)
 
-prints `yes`.
-
-# functional features #
-
-Increment function can be constructed as [anonymous functions (lambda abstraction)](https://en.wikipedia.org/wiki/Lambda_calculus#lambdaAbstr)
-
-    (x) { add(1)(x) }
-
-or using [currying](https://en.wikipedia.org/wiki/Currying)
-
-    add(1)
-
-or defined as named function
-
-    inc(x) {
-      add(1)(x)
-    }
-
-or simpler
-
-    inc {
-      add(1)
-    }
-
-Syntax is designed so putting name before lambda turns it into function definition.
-
-       (x) { add(1)(x) }
-    inc(x) { add(1)(x) } 
-
-All functions are static, but you can invoke them like instance methods and chain them.
-
-    main(stdin) {
-      "World"
-        .prepend("Hello ")
-        .append("!")
-    }
-
-And compose invocations into pipes.
-
-    main(stdin) {
-      greet("World")
-    }
-    
-    greet {
-      .prepend("Hello ")
-      .append("!")
-    }
-
-# namespaces #
-
-All imports are in separate files.
-
-`source.stork`
-
-    main(stdin) {
-      stdin
-        .limit(10)
-        .reverse
-    }
-
-`import.stork`
-
-    lang.stream.limit
-    lang.stream.reverse
-
-# big integers #
-
-Integers can be arbitrarily big.
-
-    main(stdin) {
-        format(-123456789012345678901234567890)
-    }
-
-prints `-123456789012345678901234567890`.
-
-# data as function #
-
-Structures are encoded using [Mogensen-Scott encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding)
-
-    something(element)(vSomething)(vNothing) {
-      vSomething(element)
-    }
-
-    nothing(vSomething)(vNothing) {
-      vNothing
-    }
-
-    valueOf(maybeInteger) {
-      maybeInteger
-        ((value){ value })
-        (0)
-    }
-
-`valueOf(something(5))` is `5`. `valueOf(nothing)` is `0`.
-
-# Tutorial #
-
-Learn basic features from [tutorial](doc/tutorial.md).
