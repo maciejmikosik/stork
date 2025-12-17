@@ -35,7 +35,7 @@ public class TestLinkerProblems {
   private static Test reportsFunctionNotDefined() {
     return programTest("function that is not defined")
         .importFile("""
-            namespace.function2
+            namespace/function2
             """)
         .sourceFile("""
             function { function2 }
@@ -43,7 +43,7 @@ public class TestLinkerProblems {
         .expect(cannotLinkLibrary(
             functionNotDefined(
                 identifier("function"),
-                identifier("namespace.function2"))));
+                identifier("namespace/function2"))));
   }
 
   private static Test reportsFunctionDefinedMoreThanOnce() {

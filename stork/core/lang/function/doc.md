@@ -1,4 +1,4 @@
-# lang.function.* #
+# lang/function/* #
 
 ### Functions ###
 

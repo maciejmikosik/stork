@@ -14,11 +14,11 @@ Functions in same `source.stork` file, since they live in same namespace, can ac
       append("!")(message)
     }
 
-However, `append` function is not defined in the same `source.stork` file. It is defined in core library in `lang/stream/source.stork` file, so its qualified name is `lang.stream.append`. In order to access it, it has to be imported. Functions defined in `source.stork` file can access functions from other namespaces by listing qualified names of those functions in `import.stork` file in the same directory. You can think of `source.stork` file and `import.stork` file in same directory as single unit of what would be single file in any other language. To make above example work we need to create `import.stork` file in the same directory as `source.stork` file.
+However, `append` function is not defined in the same `source.stork` file. It is defined in core library in `lang/stream/source.stork` file, so its qualified name is `lang/stream/append`. In order to access it, it has to be imported. Functions defined in `source.stork` file can access functions from other namespaces by listing qualified names of those functions in `import.stork` file in the same directory. You can think of `source.stork` file and `import.stork` file in same directory as single unit of what would be single file in any other language. To make above example work we need to create `import.stork` file in the same directory as `source.stork` file.
 
     ┣━import.stork
     ┃ ┣━━━━━━━━━━━━━━━━━━━━┓
-    ┃ ┃ lang.stream.append ┃
+    ┃ ┃ lang/stream/append ┃
     ┃ ┗━━━━━━━━━━━━━━━━━━━━┛
     ┗━source.stork
       ┣━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -41,7 +41,7 @@ So far our program fits single source file in root directory. As it grows you ca
     ┃ ┗━text
     ┃   ┣━import.stork
     ┃   ┃ ┣━━━━━━━━━━━━━━━━━━━━┓
-    ┃   ┃ ┃ lang.stream.append ┃
+    ┃   ┃ ┃ lang/stream/append ┃
     ┃   ┃ ┗━━━━━━━━━━━━━━━━━━━━┛
     ┃   ┗━source.stork
     ┃     ┣━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -74,7 +74,7 @@ Functions with same name cannot be defined in same source file. Following code c
       "duplicate"
     }
 
-You cannot define your own function with same name and namespace as core function. Following code causes compilation error because function `lang.stream.append` is already defined in core library.
+You cannot define your own function with same name and namespace as core function. Following code causes compilation error because function `lang/stream/append` is already defined in core library.
 
     ┗━lang
       ┗━stream

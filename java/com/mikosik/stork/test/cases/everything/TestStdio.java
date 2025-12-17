@@ -39,7 +39,7 @@ public class TestStdio {
   private static Test prependsStdin() {
     return programTest("prepends stdin")
         .importFile("""
-            lang.stream.prepend
+            lang/stream/prepend
             """)
         .sourceFile("""
             main(stdin) {
@@ -53,7 +53,7 @@ public class TestStdio {
   private static Test appendsStdin() {
     return programTest("appends stdin")
         .importFile("""
-            lang.stream.append
+            lang/stream/append
             """)
         .sourceFile("""
             main(stdin) {
@@ -67,8 +67,8 @@ public class TestStdio {
   private static Test processesStdinTwice() {
     return programTest("processes stdin twice")
         .importFile("""
-            lang.stream.append
-            lang.stream.reverse
+            lang/stream/append
+            lang/stream/reverse
             """)
         .sourceFile("""
             main(stdin) {

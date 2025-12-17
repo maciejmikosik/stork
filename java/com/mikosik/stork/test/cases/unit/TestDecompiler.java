@@ -114,7 +114,7 @@ public class TestDecompiler {
                 definition("f", identifier("x")),
                 definition("g", identifier("y"))))))
         .add(suite("local")
-            .add(test("function", removeNamespaces(identifier("package.package.function"))))
+            .add(test("function", removeNamespaces(identifier("package/package/function"))))
             .add(test("function", removeNamespaces(identifier("function")))));
   }
 

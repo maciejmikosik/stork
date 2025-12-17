@@ -28,7 +28,7 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(String name) {
-    var path = sequenceOf(name.split("\\."));
+    var path = sequenceOf(name.split(SEPARATOR));
     return identifier(
         namespace(path.subList(0, path.size() - 1)),
         variable(path.getLast()));
@@ -37,7 +37,7 @@ public class Identifier implements Expression {
   public String name() {
     List<String> path = new LinkedList<>(namespace.path);
     path.add(variable.name);
-    return join(".", path);
+    return join(SEPARATOR, path);
   }
 
   public boolean equals(Object object) {
@@ -53,4 +53,6 @@ public class Identifier implements Expression {
   public int hashCode() {
     return hash(namespace, variable);
   }
+
+  private static final String SEPARATOR = "/";
 }

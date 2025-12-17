@@ -1,4 +1,4 @@
-# lang.integer.* #
+# lang/integer/* #
 
 Integer is primitive type representing an integer number. There is no limit on the size of integer, so overflow or underflow never happens. Integers are only expressions that cannot be applied like functions. Invoking `123(x)` causes an error.
 

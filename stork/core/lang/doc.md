@@ -1,4 +1,4 @@
-# lang.* #
+# lang/* #
 
 Core libraries of stork language. By default they are included in runtime environment.
  - lang
