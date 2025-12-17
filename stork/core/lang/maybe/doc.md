@@ -1,4 +1,4 @@
-# lang.maybe.* #
+# lang/maybe/* #
 
 Maybe represents data that can contain a single element or be empty. It is similar to `Maybe` in haskell or `Optional` in java.
 

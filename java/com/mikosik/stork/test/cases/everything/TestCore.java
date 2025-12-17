@@ -18,7 +18,7 @@ public class TestCore {
   private static Test importsCoreFunction() {
     return programTest("can import core function")
         .importFile("""
-            lang.stream.append
+            lang/stream/append
             """)
         .sourceFile("""
             main(stdin) {
@@ -35,6 +35,6 @@ public class TestCore {
             """)
         .expect(cannotLinkLibrary(
             functionDefinedMoreThanOnce(
-                identifier("lang.stream.length"))));
+                identifier("lang/stream/length"))));
   }
 }

@@ -2,7 +2,7 @@
 
 ### Application ###
 
-Syntax for calling function `f` with single argument `x` is `f(x)`. For example, function `lang.stream.reverse` has one parameter of type stream. It reverses order of elements of that stream.
+Syntax for calling function `f` with single argument `x` is `f(x)`. For example, function `lang/stream/reverse` has one parameter of type stream. It reverses order of elements of that stream.
 
     main(stdin) {
       reverse("!dlroW olleH")
@@ -10,7 +10,7 @@ Syntax for calling function `f` with single argument `x` is `f(x)`. For example,
 
 prints `Hello World!`.
 
-Syntax for calling a function `f` with 2 arguments `x`, `y` is `f(x)(y)`. For example `lang.stream.append` has 2 parameters. First is a stream to append at the end of second stream parameter.
+Syntax for calling a function `f` with 2 arguments `x`, `y` is `f(x)(y)`. For example `lang/stream/append` has 2 parameters. First is a stream to append at the end of second stream parameter.
 
     main(stdin) {
       append("!")("Hello World")

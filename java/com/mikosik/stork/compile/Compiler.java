@@ -3,6 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.Sequence.toSequenceThen;
 import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
@@ -22,6 +23,7 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
+import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import com.mikosik.stork.common.io.Directory;
@@ -96,11 +98,19 @@ public class Compiler {
 
   private static Linkage linkageFrom(Input input) {
     return linkage(input.bufferedReader(US_ASCII).lines()
-        .map(Compiler::linkFrom)
+        .map(line -> linkFrom(line.trim()))
         .collect(toSequence()));
   }
 
   private static Link linkFrom(String line) {
+    line.chars().forEach(character -> {
+      if (!(isAlphanumeric((byte) character)
+          || character == '/'
+          || character == ' ')) {
+        throw illegalCharacter(line, (byte) character);
+      }
+    });
+
     String[] split = line.split(" ");
     if (split.length == 1) {
       return link(identifier(split[0]));

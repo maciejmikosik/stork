@@ -58,8 +58,8 @@ public class SnippetSuite {
 
   private static String extraLinkage(ExpectedType type) {
     return switch (type) {
-      case INTEGER -> "lang.integer.format\n";
-      case BOOLEAN -> "lang.boolean.format\n";
+      case INTEGER -> "lang/integer/format\n";
+      case BOOLEAN -> "lang/boolean/format\n";
       default -> "";
     };
   }

@@ -1,8 +1,8 @@
-lang.boolean.not
-lang.boolean.or
-lang.boolean.negate
-lang.stream.append
-lang.stream.prepend
-lang.stream.single
-lang.stream.while
-lang.integer.equal
+lang/boolean/not
+lang/boolean/or
+lang/boolean/negate
+lang/stream/append
+lang/stream/prepend
+lang/stream/single
+lang/stream/while
+lang/integer/equal

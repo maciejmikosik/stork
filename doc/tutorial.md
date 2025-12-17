@@ -42,7 +42,7 @@ Stork ships with [core library](../stork/core/lang/doc.md) for basic operations 
 
 `import.stork`
 
-    lang.stream.append
+    lang/stream/append
 
 Now you can use `append` function in your `source.stork` file.
 
@@ -108,7 +108,7 @@ Running
 
 `import.stork`
 
-    lang.stream.append
+    lang/stream/append
 
 `source.stork`
 
@@ -128,8 +128,8 @@ Since strings are stream of integers, you can perform integer arithmetics on cha
 
 `import.stork`
 
-    lang.integer.add
-    lang.stream.each
+    lang/integer/add
+    lang/stream/each
 
 `source.stork`
 

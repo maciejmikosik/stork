@@ -1,4 +1,4 @@
-# lang.boolean.* #
+# lang/boolean/* #
 
 Stork has no keywords like `if`, `else`, `true` or `false`.  Instead it uses [church encodings](https://en.wikipedia.org/wiki/Church_encoding#Church_Booleans) to implement boolean algebra.
 

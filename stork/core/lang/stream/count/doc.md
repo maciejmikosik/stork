@@ -1,4 +1,4 @@
-# lang.stream.count.* #
+# lang/stream/count/* #
 
 ### Functions ###
 

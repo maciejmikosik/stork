@@ -80,7 +80,7 @@ public class TestSyntax {
 
   private static Test functionCanDelegate() {
     return programTest("can delegate")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               function("mock")
@@ -99,7 +99,7 @@ public class TestSyntax {
 
   private static Test applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               function(33)
@@ -119,7 +119,7 @@ public class TestSyntax {
    */
   private static Test applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               apply((string){some(33)(string)})("mock")
@@ -135,7 +135,7 @@ public class TestSyntax {
   private static Test chainCanStartWithInteger() {
     return programTest("can start with integer")
         .importFile("""
-            lang.stream.some
+            lang/stream/some
             """)
         .sourceFile("""
             main(stdin) {
@@ -151,7 +151,7 @@ public class TestSyntax {
 
   private static Test chainCanStartWithString() {
     return programTest("can start with string")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               "mock".function
@@ -166,7 +166,7 @@ public class TestSyntax {
 
   private static Test chainCanStartWithApplication() {
     return programTest("can start with application")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               functionA("mock").functionB
@@ -185,7 +185,7 @@ public class TestSyntax {
 
   private static Test chainCanBeLong() {
     return programTest("can be long")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               "mock".functionA.functionB.functionC
@@ -208,7 +208,7 @@ public class TestSyntax {
 
   private static Test chainCanHaveApplication() {
     return programTest("can have application")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               "mock".function(65)(66)
@@ -223,7 +223,7 @@ public class TestSyntax {
 
   private static Test chainCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               function(65)("mock").function(66).function(67)
@@ -238,7 +238,7 @@ public class TestSyntax {
 
   private static Test chainCanBeArgument() {
     return programTest("can be argument")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               functionB("mock".functionA)
@@ -257,7 +257,7 @@ public class TestSyntax {
 
   private static Test pipeCanHaveSingleFunction() {
     return programTest("can have single function")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               pipe("mock")
@@ -276,7 +276,7 @@ public class TestSyntax {
 
   private static Test pipeCanHaveApplication() {
     return programTest("can have application")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               pipe("mock")
@@ -291,7 +291,7 @@ public class TestSyntax {
 
   private static Test pipeCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               pipe("mock")
@@ -308,7 +308,7 @@ public class TestSyntax {
 
   private static Test pipeCanBeArgument() {
     return programTest("can be argument")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               identity(.some(65))("mock")
@@ -384,7 +384,7 @@ public class TestSyntax {
 
   private static Test cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
-        .importFile("lang.stream.some")
+        .importFile("lang/stream/some")
         .sourceFile("""
             main(stdin) {
               longCalculation("")

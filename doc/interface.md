@@ -19,8 +19,8 @@ They are used in stream functions `filter`, `while`, `contains`.
 
 ### Equal ###
 
-Equal is a function with 2 parameters that returns boolean. It tells if 2 arguments are equal. Objects in stork don't have built-in equality function, so some higher-order function require providing explicit function. For example function that tests equality of streams `lang.stream.equal` requires providing function for testing equality of elements in those streams.
+Equal is a function with 2 parameters that returns boolean. It tells if 2 arguments are equal. Objects in stork don't have built-in equality function, so some higher-order function require providing explicit function. For example function that tests equality of streams `lang/stream/equal` requires providing function for testing equality of elements in those streams.
 
 ### Comparator ###
 
-Comparator is a function with 2 parameters that returns boolean. It tells if they are in ascending order. It is used as parameter in sorting algorithms. Order of sorting can be reversed using `lang.function.flip` on comparator.
+Comparator is a function with 2 parameters that returns boolean. It tells if they are in ascending order. It is used as parameter in sorting algorithms. Order of sorting can be reversed using `lang/function/flip` on comparator.
