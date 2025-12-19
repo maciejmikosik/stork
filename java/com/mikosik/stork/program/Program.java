@@ -34,7 +34,7 @@ public class Program {
     this.computer = computer;
   }
 
-  public static Program program(Identifier main, Library library) {
+  public static Program program(Expression main, Library library) {
     return new Program(main, buildComputer(library));
   }
 

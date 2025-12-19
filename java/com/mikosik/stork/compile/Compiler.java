@@ -47,10 +47,10 @@ public class Compiler {
     var dependencies = join(compilation.libraries);
     return verify(join(
         makeComputable(compiledSources),
-        dependencies));
+        makeComputable(dependencies)));
   }
 
-  private static Library makeComputable(Library library) {
+  public static Library makeComputable(Library library) {
     return onEachDefinition(onBody(deep(unlambda)))
         .andThen(onEachDefinition(onBody(deep(unquote))))
         .apply(library);

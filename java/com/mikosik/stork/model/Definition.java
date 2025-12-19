@@ -18,4 +18,8 @@ public class Definition {
   public static Definition definition(String name, Expression body) {
     return definition(identifier(name), body);
   }
+
+  public String toString() {
+    return "definition(%s, %s)".formatted(identifier, body);
+  }
 }

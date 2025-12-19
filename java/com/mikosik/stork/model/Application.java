@@ -19,4 +19,8 @@ public class Application implements Expression {
     }
     return function;
   }
+
+  public String toString() {
+    return "application(%s, %s)".formatted(function, argument);
+  }
 }

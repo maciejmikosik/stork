@@ -54,5 +54,9 @@ public class Identifier implements Expression {
     return hash(namespace, variable);
   }
 
+  public String toString() {
+    return "Identifier(%s, %s)".formatted(namespace, variable);
+  }
+
   private static final String SEPARATOR = "/";
 }
