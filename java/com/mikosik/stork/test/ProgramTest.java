@@ -31,6 +31,7 @@ import com.mikosik.stork.model.Library;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.CannotCompileDirectory;
+import com.mikosik.stork.problem.compile.CannotCompileTree;
 import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -100,6 +101,10 @@ public class ProgramTest {
   }
 
   public Test expect(CannotCompileDirectory problem) {
+    return newCaseExpecting(failed(problem));
+  }
+
+  public Test expect(CannotCompileTree problem) {
     return newCaseExpecting(failed(problem));
   }
 

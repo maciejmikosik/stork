@@ -25,6 +25,7 @@ import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
 import static com.mikosik.stork.problem.compile.CannotCompileDirectory.cannotCompileDirectory;
+import static com.mikosik.stork.problem.compile.CannotCompileTree.cannotCompileTree;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -60,13 +61,19 @@ public class Compiler {
   }
 
   private static Library compileTree(Namespace namespace, Directory directory) {
-    var libraryFromThisDirectory = compileDirectory(namespace, directory);
-    var libraryFromSubDirectories = directory.directories()
-        .map(subDirectory -> compileTree(namespace.add(subDirectory.name()), subDirectory))
-        .collect(toSequenceThen(Library::join));
+    var catcher = catcher(CannotCompile.class);
+    var libraryFromThisDirectory = catcher.tryCatch(() -> {
+      return compileDirectory(namespace, directory);
+    });
+    var librariesFromSubDirectories = directory.directories()
+        .map(subDirectory -> catcher.tryCatch(() -> {
+          return compileTree(namespace.add(subDirectory.name()), subDirectory);
+        }))
+        .collect(toSequence());
+    catcher.rethrow(problems -> cannotCompileTree(toDirectory(namespace), problems));
     return join(
         libraryFromThisDirectory,
-        libraryFromSubDirectories);
+        join(librariesFromSubDirectories));
   }
 
   private static Library compileDirectory(Namespace namespace, Directory directory) {
