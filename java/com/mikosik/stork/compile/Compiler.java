@@ -1,5 +1,6 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.Catcher.catcher;
 import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.Sequence.toSequenceThen;
 import static com.mikosik.stork.common.Throwables.runtimeException;
@@ -23,6 +24,7 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onEachDefinition;
+import static com.mikosik.stork.problem.compile.CannotCompileDirectory.cannotCompileDirectory;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -34,6 +36,7 @@ import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Unit;
+import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
   public static Library compile(Compilation compilation) {
@@ -78,10 +81,17 @@ public class Compiler {
   }
 
   private static Unit unitFrom(Namespace namespace, Directory directory) {
-    return unit(
-        namespace,
-        compileFile(directory.file("source.stork")),
-        linkageFrom(directory.file("import.stork")));
+    var catcher = catcher(CannotCompile.class);
+    var library = catcher.tryCatch(() -> compileFile(directory.file("source.stork")));
+    var imports = catcher.tryCatch(() -> linkageFrom(directory.file("import.stork")));
+    catcher.rethrow(problems -> cannotCompileDirectory(toDirectory(namespace), problems));
+    return unit(namespace, library, imports);
+  }
+
+  private static String toDirectory(Namespace namespace) {
+    return namespace.path.isEmpty()
+        ? "."
+        : namespace.toString();
   }
 
   private static Library compileFile(File file) {

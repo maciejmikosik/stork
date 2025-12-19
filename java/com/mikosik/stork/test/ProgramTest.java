@@ -9,6 +9,7 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.problem.compile.CannotCompileDirectory.cannotCompileDirectory;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static com.mikosik.stork.test.Outcome.failed;
@@ -29,6 +30,8 @@ import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compile.CannotCompileDirectory;
+import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest {
@@ -96,7 +99,15 @@ public class ProgramTest {
     return newCaseExpecting(printed(bytes(stdout)));
   }
 
+  public Test expect(CannotCompileDirectory problem) {
+    return newCaseExpecting(failed(problem));
+  }
+
   public Test expect(CannotCompile problem) {
+    return newCaseExpecting(failed(cannotCompileDirectory(".", problem)));
+  }
+
+  public Test expect(CannotLink problem) {
     return newCaseExpecting(failed(problem));
   }
 

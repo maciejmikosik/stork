@@ -2,6 +2,7 @@ package com.mikosik.stork.model;
 
 import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.Sequence.sequenceOf;
+import static java.util.stream.Collectors.joining;
 
 import com.mikosik.stork.common.Sequence;
 
@@ -35,5 +36,9 @@ public class Namespace {
 
   public int hashCode() {
     return path.hashCode();
+  }
+
+  public String toString() {
+    return path.stream().collect(joining("/", "", "/"));
   }
 }
