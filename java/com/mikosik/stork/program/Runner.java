@@ -13,48 +13,38 @@ import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.CLOSE;
 import static com.mikosik.stork.program.Stdout.writeStreamTo;
 
-import com.mikosik.stork.common.io.Input;
-import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;
-import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack.Empty;
 import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Operator;
 
 public class Runner {
-  private final Expression main;
-  private final Computer computer;
+  private Runner() {}
 
-  private Runner(Expression main, Computer computer) {
-    this.main = main;
-    this.computer = computer;
+  public static Runner runner() {
+    return new Runner();
   }
 
-  public static Runner runner(Identifier main, Library library) {
-    return new Runner(main, buildComputer(library));
-  }
-
-  private static Computer buildComputer(Library library) {
-    return interruptible(caching(router()
-        .route(Identifier.class, computer(library))
+  public void run(Task task) {
+    var computer = interruptible(caching(router()
+        .route(Identifier.class, computer(task.program.library))
         .route(Operator.class, operatorComputer())
         .route(Application.class, applicationComputer())
         .route(Integer.class, integerComputer())));
-  }
 
-  public void run(Input input, Output output) {
-    var computation = computation(application(
-        writeStreamTo(output),
-        application(main, stdin(input))));
+    var computation = computation(
+        application(
+            writeStreamTo(task.terminal.output),
+            application(
+                task.program.main,
+                stdin(task.terminal.input))));
 
     while (!isDone(computation)) {
       computation = computer.compute(computation);
     }
-    output.flush();
+    task.terminal.output.flush();
   }
 
   private boolean isDone(Computation computation) {
