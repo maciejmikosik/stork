@@ -13,7 +13,6 @@ import org.logbuddy.Logger;
 import org.logbuddy.Renderer;
 
 import com.mikosik.stork.compute.Computer;
-import com.mikosik.stork.program.Program;
 
 public class Debug {
   public static Decorator configuredDecorator(Path logFile) {
@@ -34,7 +33,6 @@ public class Debug {
   }
 
   private static boolean shouldLog(Object decorable) {
-    return decorable instanceof Program
-        || decorable instanceof Computer;
+    return decorable instanceof Computer;
   }
 }
