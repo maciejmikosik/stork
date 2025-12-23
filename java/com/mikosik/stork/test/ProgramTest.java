@@ -6,10 +6,14 @@ import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Directories.systemTemporaryDirectory;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
+import static com.mikosik.stork.program.Runner.runner;
+import static com.mikosik.stork.program.Task.task;
+import static com.mikosik.stork.program.Terminal.terminal;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static com.mikosik.stork.test.Outcome.failed;
 import static com.mikosik.stork.test.Outcome.printed;
@@ -131,8 +135,9 @@ public class ProgramTest {
   private Outcome compileAndRun() {
     try {
       var buffer = newBuffer();
-      program(identifier("main"), compile(compilation))
-          .run(input(stdin), buffer.asOutput());
+      runner().run(task(
+          program(identifier("main"), compile(compilation)),
+          terminal(input(stdin), buffer.asOutput(), noOutput())));
       return printed(buffer.bytes());
     } catch (Problem problem) {
       return failed(problem);
