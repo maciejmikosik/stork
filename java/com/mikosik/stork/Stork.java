@@ -8,7 +8,7 @@ import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.program.Program.program;
+import static com.mikosik.stork.program.Runner.runner;
 
 import com.mikosik.stork.problem.Problem;
 
@@ -19,7 +19,7 @@ public class Stork {
           .source(workingDirectory())
           .library(core(PRODUCTION)));
 
-      program(identifier("main"), library)
+      runner(identifier("main"), library)
           .run(input(System.in), output(System.out));
       System.exit(0);
     } catch (Problem problem) {

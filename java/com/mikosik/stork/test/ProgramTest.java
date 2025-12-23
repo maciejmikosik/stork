@@ -9,7 +9,7 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.program.Program.program;
+import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static com.mikosik.stork.test.Outcome.failed;
 import static com.mikosik.stork.test.Outcome.printed;
@@ -131,7 +131,7 @@ public class ProgramTest {
   private Outcome compileAndRun() {
     try {
       var buffer = newBuffer();
-      program(identifier("main"), compile(compilation))
+      runner(identifier("main"), compile(compilation))
           .run(input(stdin), buffer.asOutput());
       return printed(buffer.bytes());
     } catch (Problem problem) {

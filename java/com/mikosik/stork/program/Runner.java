@@ -25,17 +25,17 @@ import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Operator;
 
-public class Program {
+public class Runner {
   private final Expression main;
   private final Computer computer;
 
-  private Program(Expression main, Computer computer) {
+  private Runner(Expression main, Computer computer) {
     this.main = main;
     this.computer = computer;
   }
 
-  public static Program program(Identifier main, Library library) {
-    return new Program(main, buildComputer(library));
+  public static Runner runner(Identifier main, Library library) {
+    return new Runner(main, buildComputer(library));
   }
 
   private static Computer buildComputer(Library library) {
