@@ -4,33 +4,36 @@ import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
-import static com.mikosik.stork.common.io.Directories.systemTemporaryDirectory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
-import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespaceOf;
+import static com.mikosik.stork.model.Source.source;
+import static com.mikosik.stork.model.Source.Kind.CODE;
+import static com.mikosik.stork.model.Source.Kind.IMPORT;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
-import static com.mikosik.stork.test.FsBuilder.fsBuilder;
 import static com.mikosik.stork.test.Outcome.failed;
 import static com.mikosik.stork.test.Outcome.printed;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 import static java.util.Objects.deepEquals;
-import static java.util.UUID.randomUUID;
 import static org.quackery.Case.newCase;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
-import org.quackery.Body;
 import org.quackery.Test;
 
 import com.mikosik.stork.Core;
-import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
+import com.mikosik.stork.model.Namespace;
+import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
@@ -40,19 +43,13 @@ public class ProgramTest {
   private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
 
   private final String name;
-  private final FsBuilder fsBuilder;
-  private final Compilation compilation;
+  private final Library core;
+  private final List<Source> sources = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, Library core) {
     this.name = name;
-    var root = systemTemporaryDirectory()
-        .directory("stork_test_program_" + randomUUID());
-    fsBuilder = fsBuilder()
-        .directory(root);
-    compilation = compilation()
-        .library(core)
-        .source(root);
+    this.core = core;
   }
 
   public static ProgramTest programTest(String name) {
@@ -63,33 +60,29 @@ public class ProgramTest {
     return new ProgramTest(name, MINCORE.get());
   }
 
-  public ProgramTest file(String path, String content) {
-    fsBuilder.file(path, bytes(content));
+  public ProgramTest sourceFile(String content) {
+    sources.add(source(CODE, namespaceOf(), bytes(content)));
     return this;
   }
 
-  public ProgramTest sourceFile(String content) {
-    return file(SOURCE_FILE_NAME, content);
-  }
-
   public ProgramTest sourceFile(String directory, String content) {
-    return file(in(directory, SOURCE_FILE_NAME), content);
+    sources.add(source(CODE, namespaceFor(directory), bytes(content)));
+    return this;
   }
 
   public ProgramTest importFile(String content) {
-    return file(IMPORT_FILE_NAME, content);
+    sources.add(source(IMPORT, namespaceOf(), bytes(content)));
+    return this;
   }
 
   public ProgramTest importFile(String directory, String content) {
-    return file(in(directory, IMPORT_FILE_NAME), content);
+    sources.add(source(IMPORT, namespaceFor(directory), bytes(content)));
+    return this;
   }
 
-  private static final String in(String directory, String file) {
-    return directory + "/" + file;
+  private static Namespace namespaceFor(String directory) {
+    return namespaceOf(directory.split("/"));
   }
-
-  private static final String SOURCE_FILE_NAME = "source.stork";
-  private static final String IMPORT_FILE_NAME = "import.stork";
 
   public ProgramTest stdin(String stdin) {
     this.stdin = bytes(stdin);
@@ -109,18 +102,7 @@ public class ProgramTest {
   }
 
   private Test newCaseExpecting(Outcome expected) {
-    return newCase(name, usingFilesystem(() -> compileRunAndAssert(expected)));
-  }
-
-  private Body usingFilesystem(Body body) {
-    return () -> {
-      try {
-        fsBuilder.create();
-        body.run();
-      } finally {
-        fsBuilder.delete();
-      }
-    };
+    return newCase(name, () -> compileRunAndAssert(expected));
   }
 
   private void compileRunAndAssert(Outcome expected) {
@@ -134,9 +116,10 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
+      var library = compile(sources, asList(core));
       var buffer = newBuffer();
       runner().run(task(
-          program(identifier("main"), compile(compilation)),
+          program(identifier("main"), library),
           terminal(input(stdin), buffer.asOutput(), noOutput())));
       return printed(buffer.bytes());
     } catch (Problem problem) {

@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
@@ -31,28 +30,27 @@ import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illeg
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
-import com.mikosik.stork.common.Sequence;
+import java.util.List;
+
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
+import com.mikosik.stork.model.Source;
 import com.mikosik.stork.model.Unit;
 
 public class Compiler {
-  private static final SourceReader sourceReader = sourceReader();
+  public static Library compile(
+      List<Source> sources,
+      List<Library> libraries) {
 
-  public static Library compile(Compilation compilation) {
-    var namespaceToLinkage = compilation.sources.stream()
-        .map(sourceReader::read)
-        .flatMap(Sequence::stream)
+    var namespaceToLinkage = sources.stream()
         .filter(source -> source.kind == IMPORT)
         .map(importSource -> entry(
             importSource.namespace,
             linkageFrom(importSource.content)))
         .collect(toMapFromEntries());
 
-    var compiledSources = compilation.sources.stream()
-        .map(sourceReader::read)
-        .flatMap(Sequence::stream)
+    var compiledSources = sources.stream()
         .filter(source -> source.kind == CODE)
         .map(codeSource -> entry(
             codeSource.namespace,
@@ -69,7 +67,7 @@ public class Compiler {
 
     return verify(join(
         join(compiledSources),
-        join(compilation.libraries)));
+        join(libraries)));
   }
 
   private static Library makeComputable(Library library) {
