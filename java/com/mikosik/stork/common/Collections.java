@@ -4,11 +4,14 @@ import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
+import static java.util.stream.Collectors.toMap;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.Spliterator;
@@ -80,5 +83,9 @@ public class Collections {
         return emptySet();
       }
     };
+  }
+
+  public static <K, V> Collector<Entry<K, V>, ?, Map<K, V>> toMapFromEntries() {
+    return toMap(Entry::getKey, Entry::getValue);
   }
 }
