@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
-import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
@@ -21,17 +20,20 @@ import static com.mikosik.stork.test.Outcome.failed;
 import static com.mikosik.stork.test.Outcome.printed;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 import static java.util.Objects.deepEquals;
 import static org.quackery.Case.newCase;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.quackery.Test;
 
 import com.mikosik.stork.Core;
-import com.mikosik.stork.compile.Compilation;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Namespace;
+import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
@@ -41,13 +43,13 @@ public class ProgramTest {
   private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
 
   private final String name;
-  private final Compilation compilation;
+  private final Library core;
+  private final List<Source> sources = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, Library core) {
     this.name = name;
-    compilation = compilation()
-        .library(core);
+    this.core = core;
   }
 
   public static ProgramTest programTest(String name) {
@@ -59,22 +61,22 @@ public class ProgramTest {
   }
 
   public ProgramTest sourceFile(String content) {
-    compilation.source(source(CODE, namespaceOf(), bytes(content)));
+    sources.add(source(CODE, namespaceOf(), bytes(content)));
     return this;
   }
 
   public ProgramTest sourceFile(String directory, String content) {
-    compilation.source(source(CODE, namespaceFor(directory), bytes(content)));
+    sources.add(source(CODE, namespaceFor(directory), bytes(content)));
     return this;
   }
 
   public ProgramTest importFile(String content) {
-    compilation.source(source(IMPORT, namespaceOf(), bytes(content)));
+    sources.add(source(IMPORT, namespaceOf(), bytes(content)));
     return this;
   }
 
   public ProgramTest importFile(String directory, String content) {
-    compilation.source(source(IMPORT, namespaceFor(directory), bytes(content)));
+    sources.add(source(IMPORT, namespaceFor(directory), bytes(content)));
     return this;
   }
 
@@ -114,9 +116,10 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
+      var library = compile(sources, asList(core));
       var buffer = newBuffer();
       runner().run(task(
-          program(identifier("main"), compile(compilation)),
+          program(identifier("main"), library),
           terminal(input(stdin), buffer.asOutput(), noOutput())));
       return printed(buffer.bytes());
     } catch (Problem problem) {

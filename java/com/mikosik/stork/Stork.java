@@ -6,22 +6,23 @@ import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
+import static java.util.Arrays.asList;
 
 import com.mikosik.stork.problem.Problem;
 
 public class Stork {
   public static void main(String[] args) {
     try {
-      var library = compile(compilation()
-          .source(workingDirectory())
-          .library(core(PRODUCTION)));
+      var library = compile(
+          sourceReader().read(workingDirectory()),
+          asList(core(PRODUCTION)));
 
       runner().run(task(
           program(identifier("main"), library),
