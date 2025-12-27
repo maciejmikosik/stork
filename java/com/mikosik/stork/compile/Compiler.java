@@ -18,7 +18,6 @@ import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Source.Kind.CODE;
 import static com.mikosik.stork.model.Source.Kind.IMPORT;
-import static com.mikosik.stork.model.Unit.unit;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
@@ -35,8 +34,8 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
+import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Source;
-import com.mikosik.stork.model.Unit;
 
 public class Compiler {
   public static Sequence<Definition> compile(List<Source> sources) {
@@ -57,7 +56,7 @@ public class Compiler {
           var library = entry.getValue();
           var linkage = namespaceToLinkage
               .getOrDefault(namespace, linkage(sequenceOf()));
-          return selfBuild(unit(namespace, library, linkage));
+          return selfBuild(namespace, library, linkage);
         })
         .map(Compiler::makeComputable)
         .flatMap(library -> library.definitions.stream())
@@ -70,11 +69,14 @@ public class Compiler {
         .apply(library);
   }
 
-  private static Library selfBuild(Unit unit) {
+  private static Library selfBuild(
+      Namespace namespace,
+      Library library,
+      Linkage linkage) {
     return onEachDefinition(onBody(deep(bindLambdaParameter)))
-        .andThen(export(unit.namespace))
-        .andThen(onEachDefinition(onBody(deep(ifVariable(linking(unit.linkage))))))
-        .apply(unit.library);
+        .andThen(export(namespace))
+        .andThen(onEachDefinition(onBody(deep(ifVariable(linking(linkage))))))
+        .apply(library);
   }
 
   private static Library compileCode(byte[] content) {
