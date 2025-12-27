@@ -1,20 +1,22 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
+import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.Throwables.linkageError;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
+import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static java.nio.file.FileSystems.newFileSystem;
-import static java.util.Arrays.asList;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Library;
+import com.mikosik.stork.model.Definition;
 
 public class Core {
   public static enum Mode {
@@ -26,14 +28,18 @@ public class Core {
     PRODUCTION,
   }
 
-  public static Library core(Mode mode) {
-    return compile(
-        sourceReader().read(switch (mode) {
-          case TESTING -> project().mincoreDirectory;
-          case DEVELOPMENT -> project().coreDirectory;
-          case PRODUCTION -> coreDirectoryInZipFileInJarFile();
-        }),
-        asList(operatorLibrary()));
+  public static Sequence<Definition> core(Mode mode) {
+    return verify(flatten(
+        compile(sourceReader().read(coreDirectoryFor(mode))),
+        operatorLibrary()));
+  }
+
+  private static Directory coreDirectoryFor(Mode mode) {
+    return switch (mode) {
+      case TESTING -> project().mincoreDirectory;
+      case DEVELOPMENT -> project().coreDirectory;
+      case PRODUCTION -> coreDirectoryInZipFileInJarFile();
+    };
   }
 
   // TODO simplify to directory inside jar

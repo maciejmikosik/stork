@@ -4,8 +4,6 @@ import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Serializables.join;
 import static com.mikosik.stork.common.io.Serializables.serializable;
 
-import java.util.stream.Stream;
-
 import com.mikosik.stork.common.io.Serializable;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
@@ -13,22 +11,12 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Integer;
 import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 
 public class Decompiler {
-  public static Serializable decompile(Library library) {
-    return join(library.definitions.stream()
-        .flatMap(definition -> Stream.of(
-            serializable(' '),
-            decompile(definition)))
-        .skip(1)
-        .toList());
-  }
-
   public static Serializable decompile(Definition definition) {
     return join(
         serializable(definition.identifier.name()),

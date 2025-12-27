@@ -1,18 +1,19 @@
 package com.mikosik.stork.program;
 
+import com.mikosik.stork.common.Sequence;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Library;
 
 public class Program {
   public final Expression main;
-  public final Library library;
+  public final Sequence<Definition> library;
 
-  private Program(Expression main, Library library) {
+  private Program(Expression main, Sequence<Definition> library) {
     this.main = main;
     this.library = library;
   }
 
-  public static Program program(Expression main, Library library) {
+  public static Program program(Expression main, Sequence<Definition> library) {
     return new Program(main, library);
   }
 }
