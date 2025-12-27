@@ -1,28 +1,28 @@
 package com.mikosik.stork.problem.compile.link;
 
-import static com.mikosik.stork.common.Sequence.sequenceOf;
-import static com.mikosik.stork.common.Sequence.toSequence;
+import static com.mikosik.stork.common.ImmutableList.toList;
 import static com.mikosik.stork.problem.Description.description;
 
-import com.mikosik.stork.common.Sequence;
+import java.util.List;
+
 import com.mikosik.stork.problem.Description;
 
 public class CannotLinkLibrary extends CannotLink {
-  public final Sequence<CannotLink> problems;
+  public final List<CannotLink> problems;
 
-  private CannotLinkLibrary(Sequence<CannotLink> problems) {
+  private CannotLinkLibrary(List<CannotLink> problems) {
     this.problems = problems;
   }
 
   @SuppressWarnings("unchecked")
   public static CannotLinkLibrary cannotLinkLibrary(
-      Sequence<? extends CannotLink> problems) {
-    return new CannotLinkLibrary((Sequence<CannotLink>) problems);
+      List<? extends CannotLink> problems) {
+    return new CannotLinkLibrary((List<CannotLink>) problems);
   }
 
   public static CannotLinkLibrary cannotLinkLibrary(
       CannotLink... problems) {
-    return cannotLinkLibrary(sequenceOf(problems));
+    return cannotLinkLibrary(toList(problems));
   }
 
   public Description describe() {
@@ -30,6 +30,6 @@ public class CannotLinkLibrary extends CannotLink {
         "cannot link library",
         problems.stream()
             .map(CannotLink::describe)
-            .collect(toSequence()));
+            .toList());
   }
 }

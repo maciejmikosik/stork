@@ -3,8 +3,8 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
+import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.Logic.singleton;
-import static com.mikosik.stork.common.Sequence.flatten;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
@@ -32,7 +32,6 @@ import java.util.function.Supplier;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Source;
@@ -41,15 +40,15 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest {
-  private static final Supplier<Sequence<Definition>> CORE = singleton(() -> core(DEVELOPMENT));
-  private static final Supplier<Sequence<Definition>> MINCORE = singleton(() -> core(TESTING));
+  private static final Supplier<List<Definition>> CORE = singleton(() -> core(DEVELOPMENT));
+  private static final Supplier<List<Definition>> MINCORE = singleton(() -> core(TESTING));
 
   private final String name;
-  private final Sequence<Definition> core;
+  private final List<Definition> core;
   private final List<Source> sources = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
-  private ProgramTest(String name, Sequence<Definition> core) {
+  private ProgramTest(String name, List<Definition> core) {
     this.name = name;
     this.core = core;
   }
@@ -118,7 +117,7 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
-      var library = verify(flatten(
+      var library = verify(join(
           compile(sources),
           core));
       var buffer = newBuffer();

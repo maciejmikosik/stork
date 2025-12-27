@@ -1,27 +1,28 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Sequence.flatten;
-import static com.mikosik.stork.common.Sequence.sequenceOf;
+import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.ImmutableList.toList;
 
-import com.mikosik.stork.common.Sequence;
+import java.util.List;
 
 public class Namespace {
-  public final Sequence<String> path;
+  public final List<String> components;
 
-  private Namespace(Sequence<String> path) {
-    this.path = path;
+  private Namespace(List<String> components) {
+    this.components = components;
   }
 
-  public static Namespace namespaceOf(String... path) {
-    return namespace(sequenceOf(path));
+  public static Namespace namespaceOf(String... components) {
+    return namespace(toList(components));
   }
 
-  public static Namespace namespace(Sequence<String> path) {
-    return new Namespace(path);
+  public static Namespace namespace(List<String> components) {
+    return new Namespace(components);
   }
 
   public Namespace add(String component) {
-    return namespace(flatten(path, sequenceOf(component)));
+    return namespace(join(components, single(component)));
   }
 
   public boolean equals(Object object) {
@@ -30,10 +31,10 @@ public class Namespace {
   }
 
   private boolean equals(Namespace that) {
-    return path.equals(that.path);
+    return components.equals(that.components);
   }
 
   public int hashCode() {
-    return path.hashCode();
+    return components.hashCode();
   }
 }

@@ -4,9 +4,9 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -19,7 +19,7 @@ public class LibraryComputer extends TypedComputer<Identifier> {
     this.table = table;
   }
 
-  public static Computer computer(Sequence<Definition> library) {
+  public static Computer computer(List<Definition> library) {
     Map<Identifier, Expression> table = new HashMap<>();
     for (Definition definition : library) {
       table.put(definition.identifier, definition.body);

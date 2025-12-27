@@ -1,8 +1,8 @@
 package com.mikosik.stork.compile.parse;
 
 import static com.mikosik.stork.common.Collections.checkSuchElement;
+import static com.mikosik.stork.common.ImmutableList.listFrom;
 import static com.mikosik.stork.common.Peekerator.peekerator;
-import static com.mikosik.stork.common.Sequence.sequenceFrom;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.stork;
@@ -20,10 +20,10 @@ import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.mikosik.stork.common.Peekerator;
-import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
@@ -35,12 +35,12 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
 
 public class Parser {
-  public static Sequence<Definition> parse(Iterator<Token> iterator) {
+  public static List<Definition> parse(Iterator<Token> iterator) {
     return parse(peekerator(checkingEOF(iterator)));
   }
 
-  private static Sequence<Definition> parse(Peekerator<Token> input) {
-    return sequenceFrom(parseDefinitions(input));
+  private static List<Definition> parse(Peekerator<Token> input) {
+    return listFrom(parseDefinitions(input));
   }
 
   private static Iterator<Definition> parseDefinitions(Peekerator<Token> input) {

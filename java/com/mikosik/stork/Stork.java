@@ -2,7 +2,7 @@ package com.mikosik.stork;
 
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.PRODUCTION;
-import static com.mikosik.stork.common.Sequence.flatten;
+import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
@@ -21,7 +21,7 @@ import com.mikosik.stork.problem.Problem;
 public class Stork {
   public static void main(String[] args) {
     try {
-      var library = verify(flatten(
+      var library = verify(join(
           compile(sourceReader().read(workingDirectory())),
           core(PRODUCTION)));
 

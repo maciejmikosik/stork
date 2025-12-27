@@ -1,9 +1,9 @@
 package com.mikosik.stork.common.proc;
 
-import static com.mikosik.stork.common.SequenceBuilder.sequenceBuilderOf;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.UncheckedInterruptedException.unchecked;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
+import static com.mikosik.stork.common.proc.CommandBuilder.command;
 
 import java.io.IOException;
 
@@ -44,11 +44,11 @@ public class Javac {
 
   public void execute() {
     try {
-      var command = sequenceBuilderOf("javac")
-          .addAll("-sourcepath", source.toString())
-          .addAll("-d", destination.toString())
-          .andAllIf(release != 0, "--release", Integer.toString(release))
-          .addAll(seed.toString())
+      var command = command("javac")
+          .option("-sourcepath", source.toString())
+          .option("-d", destination.toString())
+          .optionIf(release != 0, "--release", Integer.toString(release))
+          .arg(seed.toString())
           .build();
       int exitValue = new ProcessBuilder()
           .command(command)
