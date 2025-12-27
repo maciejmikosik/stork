@@ -11,7 +11,6 @@ import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Library.library;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Source.source;
 import static com.mikosik.stork.model.Source.Kind.CODE;
@@ -119,9 +118,9 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
-      var library = verify(library(flatten(
+      var library = verify(flatten(
           compile(sources),
-          core)));
+          core));
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),

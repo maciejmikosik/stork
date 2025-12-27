@@ -8,7 +8,6 @@ import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
 import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
-import static com.mikosik.stork.model.Library.library;
 import static java.nio.file.FileSystems.newFileSystem;
 
 import java.io.IOException;
@@ -30,10 +29,9 @@ public class Core {
   }
 
   public static Sequence<Definition> core(Mode mode) {
-    var library = flatten(
+    return verify(flatten(
         compile(sourceReader().read(coreDirectoryFor(mode))),
-        operatorLibrary());
-    return verify(library(library)).definitions;
+        operatorLibrary()));
   }
 
   private static Directory coreDirectoryFor(Mode mode) {

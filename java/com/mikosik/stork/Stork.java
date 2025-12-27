@@ -11,7 +11,6 @@ import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Library.library;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -22,9 +21,9 @@ import com.mikosik.stork.problem.Problem;
 public class Stork {
   public static void main(String[] args) {
     try {
-      var library = verify(library(flatten(
+      var library = verify(flatten(
           compile(sourceReader().read(workingDirectory())),
-          core(PRODUCTION))));
+          core(PRODUCTION)));
 
       runner().run(task(
           program(identifier("main"), library),
