@@ -20,7 +20,6 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Library.libraryOf;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
@@ -42,7 +41,6 @@ import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.debug.Decompiler;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Operator;
 import com.mikosik.stork.model.Parameter;
 
@@ -106,13 +104,6 @@ public class TestDecompiler {
             .add(test("f(x){x}", definition("f", lambda(x, x))))
             .add(test("f(x)(y){x}", definition("f", lambda(x, y, x))))
             .add(test("f{g}", definition("f", identifier("g")))))
-        .add(suite("library")
-            .add(test("", libraryOf()))
-            .add(test("f{x}", libraryOf(
-                definition("f", identifier("x")))))
-            .add(test("f{x} g{y}", libraryOf(
-                definition("f", identifier("x")),
-                definition("g", identifier("y"))))))
         .add(suite("local")
             .add(test("function", removeNamespaces(identifier("package/package/function"))))
             .add(test("function", removeNamespaces(identifier("function")))));
@@ -124,10 +115,6 @@ public class TestDecompiler {
 
   private static Test test(String expected, Definition definition) {
     return test(expected, definition, Decompiler::decompile);
-  }
-
-  private static Test test(String expected, Library library) {
-    return test(expected, library, Decompiler::decompile);
   }
 
   private static <M> Test test(String expected, M model, Function<M, Serializable> decompiler) {

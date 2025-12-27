@@ -1,11 +1,9 @@
 package com.mikosik.stork.model.change;
 
-import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Library.library;
 import static java.util.stream.Stream.concat;
 
 import java.util.function.Function;
@@ -16,20 +14,12 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Parameter;
 import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 
 public class Changes {
-  public static Function<Library, Library> onEachDefinition(
-      Function<? super Definition, ? extends Definition> change) {
-    return library -> library(library.definitions.stream()
-        .map(change)
-        .collect(toSequence()));
-  }
-
   public static Function<Definition, Definition> onIdentifier(
       Function<? super Identifier, ? extends Identifier> change) {
     return definition -> definition(
