@@ -11,11 +11,9 @@ import static com.mikosik.stork.compile.link.Bind.export;
 import static com.mikosik.stork.compile.link.Bind.linking;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
-import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Library.join;
 import static com.mikosik.stork.model.Link.link;
 import static com.mikosik.stork.model.Linkage.linkage;
 import static com.mikosik.stork.model.Source.Kind.CODE;
@@ -32,6 +30,8 @@ import static java.util.Map.entry;
 
 import java.util.List;
 
+import com.mikosik.stork.common.Sequence;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Library;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
@@ -39,10 +39,7 @@ import com.mikosik.stork.model.Source;
 import com.mikosik.stork.model.Unit;
 
 public class Compiler {
-  public static Library compile(
-      List<Source> sources,
-      List<Library> libraries) {
-
+  public static Sequence<Definition> compile(List<Source> sources) {
     var namespaceToLinkage = sources.stream()
         .filter(source -> source.kind == IMPORT)
         .map(importSource -> entry(
@@ -50,7 +47,7 @@ public class Compiler {
             linkageFrom(importSource.content)))
         .collect(toMapFromEntries());
 
-    var compiledSources = sources.stream()
+    return sources.stream()
         .filter(source -> source.kind == CODE)
         .map(codeSource -> entry(
             codeSource.namespace,
@@ -63,11 +60,8 @@ public class Compiler {
           return selfBuild(unit(namespace, library, linkage));
         })
         .map(Compiler::makeComputable)
-        .toList();
-
-    return verify(join(
-        join(compiledSources),
-        join(libraries)));
+        .flatMap(library -> library.definitions.stream())
+        .collect(toSequence());
   }
 
   private static Library makeComputable(Library library) {
