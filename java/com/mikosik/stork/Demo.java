@@ -22,7 +22,7 @@ public class Demo {
     var demoDirectory = project().demoDirectory.directory("greeting");
     var library = verify(library(flatten(
         compile(sourceReader().read(demoDirectory)),
-        core(DEVELOPMENT).definitions)));
+        core(DEVELOPMENT))));
 
     runner().run(task(
         program(identifier("main"), library),

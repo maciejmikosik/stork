@@ -24,7 +24,7 @@ public class Stork {
     try {
       var library = verify(library(flatten(
           compile(sourceReader().read(workingDirectory())),
-          core(PRODUCTION).definitions)));
+          core(PRODUCTION))));
 
       runner().run(task(
           program(identifier("main"), library),

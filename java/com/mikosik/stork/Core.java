@@ -15,8 +15,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Library;
+import com.mikosik.stork.model.Definition;
 
 public class Core {
   public static enum Mode {
@@ -28,10 +29,11 @@ public class Core {
     PRODUCTION,
   }
 
-  public static Library core(Mode mode) {
-    return verify(library(flatten(
+  public static Sequence<Definition> core(Mode mode) {
+    var library = flatten(
         compile(sourceReader().read(coreDirectoryFor(mode))),
-        operatorLibrary().definitions)));
+        operatorLibrary());
+    return verify(library(library)).definitions;
   }
 
   private static Directory coreDirectoryFor(Mode mode) {

@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Logic.singleton;
@@ -32,8 +33,8 @@ import java.util.function.Supplier;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.Core;
-import com.mikosik.stork.model.Library;
+import com.mikosik.stork.common.Sequence;
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.Problem;
@@ -41,15 +42,15 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest {
-  private static final Supplier<Library> CORE = singleton(() -> Core.core(DEVELOPMENT));
-  private static final Supplier<Library> MINCORE = singleton(() -> Core.core(TESTING));
+  private static final Supplier<Sequence<Definition>> CORE = singleton(() -> core(DEVELOPMENT));
+  private static final Supplier<Sequence<Definition>> MINCORE = singleton(() -> core(TESTING));
 
   private final String name;
-  private final Library core;
+  private final Sequence<Definition> core;
   private final List<Source> sources = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
-  private ProgramTest(String name, Library core) {
+  private ProgramTest(String name, Sequence<Definition> core) {
     this.name = name;
     this.core = core;
   }
@@ -120,7 +121,7 @@ public class ProgramTest {
     try {
       var library = verify(library(flatten(
           compile(sources),
-          core.definitions)));
+          core)));
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),
