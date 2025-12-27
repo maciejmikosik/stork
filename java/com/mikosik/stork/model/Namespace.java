@@ -7,22 +7,22 @@ import static com.mikosik.stork.common.ImmutableList.toList;
 import java.util.List;
 
 public class Namespace {
-  public final List<String> path;
+  public final List<String> components;
 
-  private Namespace(List<String> path) {
-    this.path = path;
+  private Namespace(List<String> components) {
+    this.components = components;
   }
 
-  public static Namespace namespaceOf(String... path) {
-    return namespace(toList(path));
+  public static Namespace namespaceOf(String... components) {
+    return namespace(toList(components));
   }
 
-  public static Namespace namespace(List<String> path) {
-    return new Namespace(path);
+  public static Namespace namespace(List<String> components) {
+    return new Namespace(components);
   }
 
   public Namespace add(String component) {
-    return namespace(join(path, single(component)));
+    return namespace(join(components, single(component)));
   }
 
   public boolean equals(Object object) {
@@ -31,10 +31,10 @@ public class Namespace {
   }
 
   private boolean equals(Namespace that) {
-    return path.equals(that.path);
+    return components.equals(that.components);
   }
 
   public int hashCode() {
-    return path.hashCode();
+    return components.hashCode();
   }
 }
