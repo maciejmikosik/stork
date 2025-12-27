@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.Sequence.flatten;
+import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.Throwables.linkageError;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.compile.Compiler.compile;
@@ -12,9 +12,9 @@ import static java.nio.file.FileSystems.newFileSystem;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 
-import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Definition;
 
@@ -28,8 +28,8 @@ public class Core {
     PRODUCTION,
   }
 
-  public static Sequence<Definition> core(Mode mode) {
-    return verify(flatten(
+  public static List<Definition> core(Mode mode) {
+    return verify(join(
         compile(sourceReader().read(coreDirectoryFor(mode))),
         operatorLibrary()));
   }

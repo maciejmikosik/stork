@@ -1,6 +1,6 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.Sequence.sequenceOf;
+import static com.mikosik.stork.common.ImmutableList.toList;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Variable.variable;
@@ -28,7 +28,7 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(String name) {
-    var path = sequenceOf(name.split(SEPARATOR));
+    var path = toList(name.split(SEPARATOR));
     return identifier(
         namespace(path.subList(0, path.size() - 1)),
         variable(path.getLast()));

@@ -3,7 +3,7 @@ package com.mikosik.stork;
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.Sequence.flatten;
+import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Output.output;
@@ -19,7 +19,7 @@ import static com.mikosik.stork.program.Terminal.terminal;
 public class Demo {
   public static void main(String[] args) {
     var demoDirectory = project().demoDirectory.directory("greeting");
-    var library = verify(flatten(
+    var library = verify(join(
         compile(sourceReader().read(demoDirectory)),
         core(DEVELOPMENT)));
 

@@ -1,29 +1,28 @@
 package com.mikosik.stork.problem;
 
-import static com.mikosik.stork.common.Sequence.sequenceOf;
+import static com.mikosik.stork.common.ImmutableList.none;
 
+import java.util.List;
 import java.util.Objects;
-
-import com.mikosik.stork.common.Sequence;
 
 public class Description {
   public final String text;
-  public final Sequence<Description> children;
+  public final List<Description> children;
 
   private Description(
       String text,
-      Sequence<Description> children) {
+      List<Description> children) {
     this.text = text;
     this.children = children;
   }
 
   public static Description description(String text) {
-    return new Description(text, sequenceOf());
+    return new Description(text, none());
   }
 
   public static Description description(
       String text,
-      Sequence<Description> children) {
+      List<Description> children) {
     return new Description(text, children);
   }
 

@@ -1,16 +1,14 @@
 package com.mikosik.stork.common.io;
 
 import static com.mikosik.stork.common.Collections.stream;
-import static com.mikosik.stork.common.Sequence.toSequence;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
-
-import com.mikosik.stork.common.Sequence;
 
 public class InputOutput {
   public static UncheckedIOException unchecked(IOException e) {
@@ -76,9 +74,9 @@ public class InputOutput {
     }
   }
 
-  public static Sequence<String> components(Path path) {
+  public static List<String> components(Path path) {
     return stream(path)
         .map(Path::toString)
-        .collect(toSequence());
+        .toList();
   }
 }

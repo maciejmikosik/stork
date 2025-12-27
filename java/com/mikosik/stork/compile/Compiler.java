@@ -1,9 +1,8 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.toMapFromEntries;
+import static com.mikosik.stork.common.ImmutableList.none;
 import static com.mikosik.stork.common.Logic.constant;
-import static com.mikosik.stork.common.Sequence.sequenceOf;
-import static com.mikosik.stork.common.Sequence.toSequence;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
@@ -32,7 +31,6 @@ import static java.util.stream.Collectors.toSet;
 import java.util.List;
 import java.util.Map;
 
-import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Link;
 import com.mikosik.stork.model.Linkage;
@@ -40,9 +38,9 @@ import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Source;
 
 public class Compiler {
-  private static final Linkage noLinkage = linkage(sequenceOf());
+  private static final Linkage noLinkage = linkage(none());
 
-  public static Sequence<Definition> compile(List<Source> sources) {
+  public static List<Definition> compile(List<Source> sources) {
     // TODO create dedicated class for handling imports
     var linkages = sources.stream()
         .filter(source -> source.kind == IMPORT)
@@ -55,10 +53,10 @@ public class Compiler {
         .filter(source -> source.kind == CODE)
         .map(source -> compile(source, linkages))
         .flatMap(definitions -> definitions.stream())
-        .collect(toSequence());
+        .toList();
   }
 
-  private static Sequence<Definition> compile(
+  private static List<Definition> compile(
       Source source,
       Map<Namespace, Linkage> linkages) {
     var linkage = linkages.getOrDefault(source.namespace, noLinkage);
@@ -77,10 +75,10 @@ public class Compiler {
         // TODO inline compilation helpers
         .map(onBody(deep(unlambda)))
         .map(onBody(deep(unquote)))
-        .collect(toSequence());
+        .toList();
   }
 
-  private static Sequence<Definition> compileCode(byte[] content) {
+  private static List<Definition> compileCode(byte[] content) {
     // TODO common for converting byte[] -> Iterator<Byte>
     return parse(tokenize(input(content).iterator()));
   }
@@ -88,7 +86,7 @@ public class Compiler {
   private static Linkage linkageFrom(byte[] content) {
     return linkage(input(content).bufferedReader(US_ASCII).lines()
         .map(line -> linkFrom(line.trim()))
-        .collect(toSequence()));
+        .toList());
   }
 
   private static Link linkFrom(String line) {

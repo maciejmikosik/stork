@@ -1,8 +1,7 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Collections.filter;
-import static com.mikosik.stork.common.Sequence.flatten;
-import static com.mikosik.stork.common.Sequence.toSequence;
+import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.change.Changes.walk;
 import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
@@ -12,7 +11,8 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
-import com.mikosik.stork.common.Sequence;
+import java.util.List;
+
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
@@ -21,8 +21,8 @@ import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 
 public class VerifyLibrary {
-  public static Sequence<Definition> verify(Sequence<Definition> library) {
-    var problems = flatten(
+  public static List<Definition> verify(List<Definition> library) {
+    var problems = join(
         findVariableCannotBeFound(library),
         findFunctionNotDefined(library),
         findFunctionDefinedMoreThanOnce(library));
@@ -32,17 +32,17 @@ public class VerifyLibrary {
     return library;
   }
 
-  private static Sequence<VariableCannotBeBound> findVariableCannotBeFound(
-      Sequence<Definition> library) {
+  private static List<VariableCannotBeBound> findVariableCannotBeFound(
+      List<Definition> library) {
     return library.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
             .map(variable -> variableCannotBeBound(definition.identifier, variable)))
-        .collect(toSequence());
+        .toList();
   }
 
-  private static Sequence<FunctionNotDefined> findFunctionNotDefined(
-      Sequence<Definition> library) {
+  private static List<FunctionNotDefined> findFunctionNotDefined(
+      List<Definition> library) {
     var definedIdentifiers = library.stream()
         .map(definition -> definition.identifier)
         .collect(toSet());
@@ -51,11 +51,11 @@ public class VerifyLibrary {
             .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
             .map(identifier -> functionNotDefined(definition.identifier, identifier)))
-        .collect(toSequence());
+        .toList();
   }
 
-  private static Sequence<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(
-      Sequence<Definition> library) {
+  private static List<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(
+      List<Definition> library) {
     var histogram = library.stream()
         .map(definition -> definition.identifier)
         .collect(groupingBy(identity(), counting()));
@@ -63,6 +63,6 @@ public class VerifyLibrary {
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
         .map(FunctionDefinedMoreThanOnce::functionDefinedMoreThanOnce)
-        .collect(toSequence());
+        .toList();
   }
 }

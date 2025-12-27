@@ -1,15 +1,15 @@
 package com.mikosik.stork.model;
 
-import com.mikosik.stork.common.Sequence;
+import java.util.List;
 
 public class Linkage {
-  public final Sequence<Link> links;
+  public final List<Link> links;
 
-  private Linkage(Sequence<Link> links) {
+  private Linkage(List<Link> links) {
     this.links = links;
   }
 
-  public static Linkage linkage(Sequence<Link> links) {
+  public static Linkage linkage(List<Link> links) {
     return new Linkage(links);
   }
 }

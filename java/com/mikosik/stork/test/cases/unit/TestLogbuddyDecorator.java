@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.unit;
 
-import static com.mikosik.stork.common.Sequence.sequenceOf;
+import static com.mikosik.stork.common.ImmutableList.none;
 import static com.mikosik.stork.common.io.InputOutput.delete;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
@@ -32,7 +32,7 @@ public class TestLogbuddyDecorator {
 
   private static Computer buildComputer() {
     return interruptible(caching(router()
-        .route(Identifier.class, computer(sequenceOf()))
+        .route(Identifier.class, computer(none()))
         .route(Operator.class, operatorComputer())
         .route(Application.class, applicationComputer())
         .route(Integer.class, integerComputer())));
