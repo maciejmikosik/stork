@@ -14,7 +14,6 @@ import static com.mikosik.stork.compile.tokenize.Symbol.DOT;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Library.library;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
@@ -24,6 +23,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.mikosik.stork.common.Peekerator;
+import com.mikosik.stork.common.Sequence;
 import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
@@ -33,15 +33,14 @@ import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Library;
 
 public class Parser {
-  public static Library parse(Iterator<Token> iterator) {
+  public static Sequence<Definition> parse(Iterator<Token> iterator) {
     return parse(peekerator(checkingEOF(iterator)));
   }
 
-  private static Library parse(Peekerator<Token> input) {
-    return library(sequenceFrom(parseDefinitions(input)));
+  private static Sequence<Definition> parse(Peekerator<Token> input) {
+    return sequenceFrom(parseDefinitions(input));
   }
 
   private static Iterator<Definition> parseDefinitions(Peekerator<Token> input) {
