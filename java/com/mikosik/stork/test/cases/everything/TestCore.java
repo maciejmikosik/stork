@@ -17,10 +17,10 @@ public class TestCore {
 
   private static Test importsCoreFunction() {
     return programTest("can import core function")
-        .importFile("""
+        .imports("""
             lang/stream/append
             """)
-        .sourceFile("""
+        .source("""
             main(stdin) {
               append("!")("Hello World")
             }
@@ -30,7 +30,8 @@ public class TestCore {
 
   private static Test cannotOverrideCoreFunction() {
     return programTest("cannot override core function")
-        .sourceFile("lang/stream", """
+        .namespace("lang/stream")
+        .source("""
             length(stream) { 0 }
             """)
         .expect(cannotLinkLibrary(

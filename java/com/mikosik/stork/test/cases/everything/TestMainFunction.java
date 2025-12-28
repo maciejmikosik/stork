@@ -22,13 +22,13 @@ public class TestMainFunction {
 
   private static Test rootFileCannotBeEmpty() {
     return programTest("cannot be empty")
-        .sourceFile("")
+        .source("")
         .expect(functionMissing(identifier("main")));
   }
 
   private static Test rootFileMustContainMain() {
     return programTest("must contain main")
-        .sourceFile("""
+        .source("""
             notMain(stdin) {
               ""
             }

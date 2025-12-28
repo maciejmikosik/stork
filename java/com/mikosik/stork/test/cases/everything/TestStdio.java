@@ -17,7 +17,7 @@ public class TestStdio {
 
   private static Test stdoutCanBeEmpty() {
     return programTest("stdout can be empty")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               ""
             }
@@ -27,7 +27,7 @@ public class TestStdio {
 
   private static Test forwardsStdinToStdout() {
     return programTest("forwards stdin to stdout")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               stdin
             }
@@ -38,10 +38,10 @@ public class TestStdio {
 
   private static Test prependsStdin() {
     return programTest("prepends stdin")
-        .importFile("""
+        .imports("""
             lang/stream/prepend
             """)
-        .sourceFile("""
+        .source("""
             main(stdin) {
               prepend("!")(stdin)
             }
@@ -52,10 +52,10 @@ public class TestStdio {
 
   private static Test appendsStdin() {
     return programTest("appends stdin")
-        .importFile("""
+        .imports("""
             lang/stream/append
             """)
-        .sourceFile("""
+        .source("""
             main(stdin) {
               append("!")(stdin)
             }
@@ -66,11 +66,11 @@ public class TestStdio {
 
   private static Test processesStdinTwice() {
     return programTest("processes stdin twice")
-        .importFile("""
+        .imports("""
             lang/stream/append
             lang/stream/reverse
             """)
-        .sourceFile("""
+        .source("""
             main(stdin) {
               reverse(append(reverse(stdin))(reverse(stdin)))
             }

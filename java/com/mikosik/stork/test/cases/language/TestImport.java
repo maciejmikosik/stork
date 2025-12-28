@@ -36,8 +36,8 @@ public class TestImport {
 
   private static Test reportIllegalCharacter(byte character) {
     return programTest("character [%c] is illegal".formatted(character))
-        .importFile("ab%cde".formatted(character))
-        .sourceFile("""
+        .imports("ab%cde".formatted(character))
+        .source("""
             main(stdin) {
               "ok"
             }
@@ -47,68 +47,74 @@ public class TestImport {
 
   private static Test canImportFromSubdirectoryToRoot() {
     return programTest("can import from subdirectory to root")
-        .sourceFile("sub", """
-            message { "ok" }
-            """)
-        .importFile("sub/message")
-        .sourceFile("""
+        .imports("sub/message")
+        .source("""
             main(stdin) {
               message
             }
+            """)
+        .namespace("sub")
+        .source("""
+            message { "ok" }
             """)
         .stdout("ok");
   }
 
   private static Test canImportFromDeepSubdirectoryToRoot() {
     return programTest("can import from deep subdirectory to root")
-        .sourceFile("subA/subB", """
-            message { "ok" }
-            """)
-        .importFile("subA/subB/message")
-        .sourceFile("""
+        .imports("subA/subB/message")
+        .source("""
             main(stdin) {
               message
             }
+            """)
+        .namespace("subA/subB")
+        .source("""
+            message { "ok" }
             """)
         .stdout("ok");
   }
 
   private static Test canImportFromNeighborDirectory() {
     return programTest("can import from neighbor directory")
-        .sourceFile("dirA", """
-            messageA { "ok" }
-            """)
-        .importFile("dirB", "dirA/messageA")
-        .sourceFile("dirB", """
-            messageB {
+        .imports("dirA/messageA")
+        .source("""
+            main(stdin) {
               messageA
             }
             """)
-        .importFile("dirB/messageB")
-        .sourceFile("""
-            main(stdin) {
+        .namespace("dirA")
+        .imports("dirB/messageB")
+        .source("""
+            messageA {
               messageB
             }
+            """)
+        .namespace("dirB")
+        .source("""
+            messageB { "ok" }
             """)
         .stdout("ok");
   }
 
   private static Test canImportFromParentDirectory() {
     return programTest("can import from parent directory")
-        .sourceFile("dirA", """
-            messageA { "ok" }
+        .imports("dirA/dirB/messageB")
+        .source("""
+            main(stdin) {
+              messageB
+            }
             """)
-        .importFile("dirA/dirB", "dirA/messageA")
-        .sourceFile("dirA/dirB", """
+        .namespace("dirA/dirB")
+        .imports("dirA/messageA")
+        .source("""
             messageB {
               messageA
             }
             """)
-        .importFile("dirA/dirB/messageB")
-        .sourceFile("""
-            main(stdin) {
-              messageB
-            }
+        .namespace("dirA")
+        .source("""
+            messageA { "ok" }
             """)
         .stdout("ok");
   }

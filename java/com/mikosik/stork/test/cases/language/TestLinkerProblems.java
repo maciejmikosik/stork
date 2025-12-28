@@ -23,7 +23,7 @@ public class TestLinkerProblems {
 
   private static Test reportsVariableThatCannotBeBound() {
     return programTest("variable that cannot be bound")
-        .sourceFile("""
+        .source("""
             function { variable }
             """)
         .expect(cannotLinkLibrary(
@@ -34,10 +34,10 @@ public class TestLinkerProblems {
 
   private static Test reportsFunctionNotDefined() {
     return programTest("function that is not defined")
-        .importFile("""
+        .imports("""
             namespace/function2
             """)
-        .sourceFile("""
+        .source("""
             function { function2 }
             """)
         .expect(cannotLinkLibrary(
@@ -48,7 +48,7 @@ public class TestLinkerProblems {
 
   private static Test reportsFunctionDefinedMoreThanOnce() {
     return programTest("function defined more than once")
-        .sourceFile("""
+        .source("""
             function { 1 }
             function { 2 }
             """)

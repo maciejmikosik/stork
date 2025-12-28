@@ -27,14 +27,14 @@ public class TestMathOperators {
   private static Test requiresTwoIntegers(String function) {
     return suite(function)
         .add(programTest("first argument")
-            .importFile("lang/integer/%s".formatted(function))
-            .sourceFile("""
+            .imports("lang/integer/%s".formatted(function))
+            .source("""
                 main(stdin) { %s("") }
                 """.formatted(function))
             .expect(cannotCompute()))
         .add(programTest("second argument")
-            .importFile("lang/integer/%s".formatted(function))
-            .sourceFile("""
+            .imports("lang/integer/%s".formatted(function))
+            .source("""
                 main(stdin) { %s(0)("") }
                 """.formatted(function))
             .expect(cannotCompute()));
@@ -42,8 +42,8 @@ public class TestMathOperators {
 
   private static Test requiresInteger(String function) {
     return programTest(function)
-        .importFile("lang/integer/%s".formatted(function))
-        .sourceFile("""
+        .imports("lang/integer/%s".formatted(function))
+        .source("""
             main(stdin) { %s("") }
             """.formatted(function))
         .expect(cannotCompute());
