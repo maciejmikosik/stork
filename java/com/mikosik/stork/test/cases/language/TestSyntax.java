@@ -42,11 +42,7 @@ public class TestSyntax {
 
   private static Test enablesStringLiterals() {
     return programTest("enables string literals")
-        .source("""
-            main(stdin) {
-              "Hello World!"
-            }
-            """)
+        .source("main(stdin) { 'Hello World!' }")
         .stdout("Hello World!");
   }
 
@@ -134,9 +130,7 @@ public class TestSyntax {
 
   private static Test chainCanStartWithInteger() {
     return programTest("can start with integer")
-        .imports("""
-            lang/stream/some
-            """)
+        .imports("lang/stream/some")
         .source("""
             main(stdin) {
               33.function

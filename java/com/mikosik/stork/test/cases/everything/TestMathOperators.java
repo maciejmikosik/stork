@@ -28,24 +28,18 @@ public class TestMathOperators {
     return suite(function)
         .add(programTest("first argument")
             .imports("lang/integer/%s".formatted(function))
-            .source("""
-                main(stdin) { %s("") }
-                """.formatted(function))
+            .source("main(stdin) { %s('') }".formatted(function))
             .expect(cannotCompute()))
         .add(programTest("second argument")
             .imports("lang/integer/%s".formatted(function))
-            .source("""
-                main(stdin) { %s(0)("") }
-                """.formatted(function))
+            .source("main(stdin) { %s(0)('') }".formatted(function))
             .expect(cannotCompute()));
   }
 
   private static Test requiresInteger(String function) {
     return programTest(function)
         .imports("lang/integer/%s".formatted(function))
-        .source("""
-            main(stdin) { %s("") }
-            """.formatted(function))
+        .source("main(stdin) { %s('') }".formatted(function))
         .expect(cannotCompute());
   }
 }

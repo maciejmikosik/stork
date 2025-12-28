@@ -17,51 +17,31 @@ public class TestStdio {
 
   private static Test stdoutCanBeEmpty() {
     return programTest("stdout can be empty")
-        .source("""
-            main(stdin) {
-              ""
-            }
-            """)
+        .source("main(stdin) { '' }")
         .stdout("");
   }
 
   private static Test forwardsStdinToStdout() {
     return programTest("forwards stdin to stdout")
-        .source("""
-            main(stdin) {
-              stdin
-            }
-            """)
-        .stdin("Hello World!")
-        .stdout("Hello World!");
+        .source("main(stdin) { stdin }")
+        .stdin("ok")
+        .stdout("ok");
   }
 
   private static Test prependsStdin() {
     return programTest("prepends stdin")
-        .imports("""
-            lang/stream/prepend
-            """)
-        .source("""
-            main(stdin) {
-              prepend("!")(stdin)
-            }
-            """)
-        .stdin("Hello World")
-        .stdout("!Hello World");
+        .imports("lang/stream/prepend")
+        .source("main(stdin) { prepend('!')(stdin) }")
+        .stdin("ok")
+        .stdout("!ok");
   }
 
   private static Test appendsStdin() {
     return programTest("appends stdin")
-        .imports("""
-            lang/stream/append
-            """)
-        .source("""
-            main(stdin) {
-              append("!")(stdin)
-            }
-            """)
-        .stdin("Hello World")
-        .stdout("Hello World!");
+        .imports("lang/stream/append")
+        .source("main(stdin) { append('!')(stdin) }")
+        .stdin("ok")
+        .stdout("ok!");
   }
 
   private static Test processesStdinTwice() {
@@ -72,10 +52,12 @@ public class TestStdio {
             """)
         .source("""
             main(stdin) {
-              reverse(append(reverse(stdin))(reverse(stdin)))
+              reverse(append
+                (reverse(stdin))
+                (reverse(stdin)))
             }
             """)
-        .stdin("abc")
-        .stdout("abcabc");
+        .stdin("ok")
+        .stdout("okok");
   }
 }

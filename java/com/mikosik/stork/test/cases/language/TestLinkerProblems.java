@@ -23,9 +23,7 @@ public class TestLinkerProblems {
 
   private static Test reportsVariableThatCannotBeBound() {
     return programTest("variable that cannot be bound")
-        .source("""
-            function { variable }
-            """)
+        .source("function { variable }")
         .expect(cannotLinkLibrary(
             variableCannotBeBound(
                 identifier("function"),
@@ -34,12 +32,8 @@ public class TestLinkerProblems {
 
   private static Test reportsFunctionNotDefined() {
     return programTest("function that is not defined")
-        .imports("""
-            namespace/function2
-            """)
-        .source("""
-            function { function2 }
-            """)
+        .imports("namespace/function2")
+        .source("function { function2 }")
         .expect(cannotLinkLibrary(
             functionNotDefined(
                 identifier("function"),

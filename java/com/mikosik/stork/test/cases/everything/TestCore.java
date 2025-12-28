@@ -17,23 +17,15 @@ public class TestCore {
 
   private static Test importsCoreFunction() {
     return programTest("can import core function")
-        .imports("""
-            lang/stream/append
-            """)
-        .source("""
-            main(stdin) {
-              append("!")("Hello World")
-            }
-            """)
+        .imports("lang/stream/append")
+        .source("main(stdin) { append('!')('Hello World') }")
         .stdout("Hello World!");
   }
 
   private static Test cannotOverrideCoreFunction() {
     return programTest("cannot override core function")
         .namespace("lang/stream")
-        .source("""
-            length(stream) { 0 }
-            """)
+        .source("length(stream) { 0 }")
         .expect(cannotLinkLibrary(
             functionDefinedMoreThanOnce(
                 identifier("lang/stream/length"))));

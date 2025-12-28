@@ -71,8 +71,12 @@ public class ProgramTest {
     return this;
   }
 
-  public ProgramTest source(String content) {
+  public ProgramTest sourceRaw(String content) {
     return source(Source.source(CODE, currentNamespace, bytes(content)));
+  }
+
+  public ProgramTest source(String content) {
+    return sourceRaw(content.replace('\'', '\"'));
   }
 
   public ProgramTest imports(String content) {

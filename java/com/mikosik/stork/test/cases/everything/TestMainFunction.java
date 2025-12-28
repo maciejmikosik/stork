@@ -28,11 +28,7 @@ public class TestMainFunction {
 
   private static Test rootFileMustContainMain() {
     return programTest("must contain main")
-        .source("""
-            notMain(stdin) {
-              ""
-            }
-            """)
+        .source("notMain(stdin) { '' }")
         .expect(functionMissing(identifier("main")));
   }
 }
