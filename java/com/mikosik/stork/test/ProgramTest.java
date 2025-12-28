@@ -12,7 +12,6 @@ import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
-import static com.mikosik.stork.model.Source.source;
 import static com.mikosik.stork.model.Source.Kind.CODE;
 import static com.mikosik.stork.model.Source.Kind.IMPORT;
 import static com.mikosik.stork.program.Program.program;
@@ -46,6 +45,7 @@ public class ProgramTest {
   private final String name;
   private final List<Definition> core;
   private final List<Source> sources = new LinkedList<>();
+  private Namespace currentNamespace = namespaceOf();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, List<Definition> core) {
@@ -61,28 +61,26 @@ public class ProgramTest {
     return new ProgramTest(name, MINCORE.get());
   }
 
-  public ProgramTest sourceFile(String content) {
-    sources.add(source(CODE, namespaceOf(), bytes(content)));
+  public ProgramTest namespace(String directory) {
+    currentNamespace = namespaceOf(directory.split("/"));
     return this;
   }
 
-  public ProgramTest sourceFile(String directory, String content) {
-    sources.add(source(CODE, namespaceFor(directory), bytes(content)));
+  public ProgramTest source(Source source) {
+    sources.add(source);
     return this;
   }
 
-  public ProgramTest importFile(String content) {
-    sources.add(source(IMPORT, namespaceOf(), bytes(content)));
-    return this;
+  public ProgramTest sourceRaw(String content) {
+    return source(Source.source(CODE, currentNamespace, bytes(content)));
   }
 
-  public ProgramTest importFile(String directory, String content) {
-    sources.add(source(IMPORT, namespaceFor(directory), bytes(content)));
-    return this;
+  public ProgramTest source(String content) {
+    return sourceRaw(content.replace('\'', '\"'));
   }
 
-  private static Namespace namespaceFor(String directory) {
-    return namespaceOf(directory.split("/"));
+  public ProgramTest imports(String content) {
+    return source(Source.source(IMPORT, currentNamespace, bytes(content)));
   }
 
   public ProgramTest stdin(String stdin) {

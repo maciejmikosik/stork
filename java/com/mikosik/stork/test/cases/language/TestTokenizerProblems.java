@@ -30,7 +30,7 @@ public class TestTokenizerProblems {
    */
   private static Test reportsIllegalAsciiCodeInStringLiteral(int code) {
     return programTest("code: %d".formatted(code))
-        .sourceFile("""
+        .sourceRaw("""
             function { "%c" }
             """.formatted(code))
         .expect(illegalStringCharacter((byte) code));
@@ -46,7 +46,7 @@ public class TestTokenizerProblems {
 
   private static Test reportsNonAsciiCodeInStringLiteral() {
     return programTest("non-ascii")
-        .sourceFile("""
+        .sourceRaw("""
             function { "\u00FC" }
             """)
         .expect(illegalStringCharacter("\u00FC".getBytes(UTF_8)[0]));
@@ -57,7 +57,7 @@ public class TestTokenizerProblems {
         .addAll(range(0, 128)
             .filter(code -> !isLegal(code))
             .mapToObj(code -> programTest("code: %d".formatted(code))
-                .sourceFile("""
+                .sourceRaw("""
                     function%c { 0 }
                     """.formatted(code))
                 .expect(illegalCharacter((byte) code)))
@@ -73,7 +73,7 @@ public class TestTokenizerProblems {
 
   private static Test reportsNonAsciiCodeAnywhere() {
     return programTest("non-ascii")
-        .sourceFile("""
+        .sourceRaw("""
             function\u00FC { 0 }
             """)
         .expect(illegalCharacter("\u00FC".getBytes(UTF_8)[0]));

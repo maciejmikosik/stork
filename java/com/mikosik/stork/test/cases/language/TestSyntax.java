@@ -42,17 +42,13 @@ public class TestSyntax {
 
   private static Test enablesStringLiterals() {
     return programTest("enables string literals")
-        .sourceFile("""
-            main(stdin) {
-              "Hello World!"
-            }
-            """)
+        .source("main(stdin) { 'Hello World!' }")
         .stdout("Hello World!");
   }
 
   private static Test functionCanReturnArgument() {
     return programTest("can return argument")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               function("mock")
             }
@@ -66,7 +62,7 @@ public class TestSyntax {
 
   private static Test functionCanReturnConstant() {
     return programTest("can return constant")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               constant
             }
@@ -80,8 +76,8 @@ public class TestSyntax {
 
   private static Test functionCanDelegate() {
     return programTest("can delegate")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               function("mock")
             }
@@ -99,8 +95,8 @@ public class TestSyntax {
 
   private static Test applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               function(33)
             }
@@ -119,8 +115,8 @@ public class TestSyntax {
    */
   private static Test applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               apply((string){some(33)(string)})("mock")
             }
@@ -134,10 +130,8 @@ public class TestSyntax {
 
   private static Test chainCanStartWithInteger() {
     return programTest("can start with integer")
-        .importFile("""
-            lang/stream/some
-            """)
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               33.function
             }
@@ -151,8 +145,8 @@ public class TestSyntax {
 
   private static Test chainCanStartWithString() {
     return programTest("can start with string")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               "mock".function
             }
@@ -166,8 +160,8 @@ public class TestSyntax {
 
   private static Test chainCanStartWithApplication() {
     return programTest("can start with application")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               functionA("mock").functionB
             }
@@ -185,8 +179,8 @@ public class TestSyntax {
 
   private static Test chainCanBeLong() {
     return programTest("can be long")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               "mock".functionA.functionB.functionC
             }
@@ -208,8 +202,8 @@ public class TestSyntax {
 
   private static Test chainCanHaveApplication() {
     return programTest("can have application")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               "mock".function(65)(66)
             }
@@ -223,8 +217,8 @@ public class TestSyntax {
 
   private static Test chainCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               function(65)("mock").function(66).function(67)
             }
@@ -238,8 +232,8 @@ public class TestSyntax {
 
   private static Test chainCanBeArgument() {
     return programTest("can be argument")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               functionB("mock".functionA)
             }
@@ -257,8 +251,8 @@ public class TestSyntax {
 
   private static Test pipeCanHaveSingleFunction() {
     return programTest("can have single function")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               pipe("mock")
             }
@@ -276,8 +270,8 @@ public class TestSyntax {
 
   private static Test pipeCanHaveApplication() {
     return programTest("can have application")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               pipe("mock")
             }
@@ -291,8 +285,8 @@ public class TestSyntax {
 
   private static Test pipeCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               pipe("mock")
             }
@@ -308,8 +302,8 @@ public class TestSyntax {
 
   private static Test pipeCanBeArgument() {
     return programTest("can be argument")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               identity(.some(65))("mock")
             }
@@ -323,7 +317,7 @@ public class TestSyntax {
 
   private static Test shadowingLambdaParameters() {
     return programTest("lambda parameters")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               apply((string)(string){ string })("mockA")("mockB")
             }
@@ -337,7 +331,7 @@ public class TestSyntax {
 
   private static Test shadowingFunctionParameters() {
     return programTest("function parameters")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               function("mockA")("mockB")
             }
@@ -351,7 +345,7 @@ public class TestSyntax {
 
   private static Test shadowingFunctionByLambdaParameters() {
     return programTest("function by lambda parameters")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               function("mockA")("mockB")
             }
@@ -365,7 +359,7 @@ public class TestSyntax {
 
   private static Test appliedArgumentIsNotAccidentlyBoundToLambdaParameter() {
     return programTest("applied argument is not accidently bound to lambda parameter")
-        .sourceFile("""
+        .source("""
             main(stdin) {
               f(y)(z)
             }
@@ -384,8 +378,8 @@ public class TestSyntax {
 
   private static Test cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
-        .importFile("lang/stream/some")
-        .sourceFile("""
+        .imports("lang/stream/some")
+        .source("""
             main(stdin) {
               longCalculation("")
             }

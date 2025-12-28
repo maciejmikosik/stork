@@ -37,8 +37,8 @@ public class SnippetSuite {
   private Test buildCase(String snippet, Object expected) {
     var type = typeOf(expected);
     return programTest(nameTemplate(type).formatted(snippet, expected))
-        .importFile(linkage + extraLinkage(type))
-        .sourceFile(mainTemplate(type).formatted(snippet))
+        .imports(linkage + extraLinkage(type))
+        .source(mainTemplate(type).formatted(snippet))
         .stdout(expected.toString());
   }
 
