@@ -45,7 +45,7 @@ public class Compiler {
         .map(onBody(deep(ifVariable(variable -> exported.contains(variable)
             ? identifier(source.namespace, variable)
             : variable))))
-        .map(onBody(deep(ifVariable(importer.linkageFor(source.namespace)))))
+        .map(onBody(deep(ifVariable(importer.importsFor(source.namespace)))))
         .map(onIdentifier(onNamespace(constant(source.namespace))))
         // TODO inline compilation helpers
         .map(onBody(deep(unlambda)))
