@@ -24,17 +24,21 @@ import com.mikosik.stork.model.Source;
 
 public class Compiler {
   public static List<Definition> compile(List<Source> sources) {
-    var importer = importer(sources);
-    return sources.stream()
+    var compiled = sources.stream()
         .filter(source -> source.kind == CODE)
-        .map(source -> compile(source, importer))
-        .flatMap(definitions -> definitions.stream())
+        .map(Compiler::compile)
+        .flatMap(List::stream)
         .toList();
+
+    var importer = importer(sources);
+    var linked = compiled.stream()
+        .map(importer::injectInto)
+        .toList();
+
+    return linked;
   }
 
-  private static List<Definition> compile(
-      Source source,
-      Importer importer) {
+  private static List<Definition> compile(Source source) {
     var library = compileCode(source.content);
     var exported = library.stream()
         .map(definition -> definition.identifier.variable)
@@ -45,7 +49,6 @@ public class Compiler {
         .map(onBody(deep(ifVariable(variable -> exported.contains(variable)
             ? identifier(source.namespace, variable)
             : variable))))
-        .map(onBody(deep(ifVariable(importer.importsFor(source.namespace)))))
         .map(onIdentifier(onNamespace(constant(source.namespace))))
         // TODO inline compilation helpers
         .map(onBody(deep(unlambda)))

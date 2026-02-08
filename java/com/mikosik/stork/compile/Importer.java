@@ -7,6 +7,9 @@ import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Source.Kind.IMPORT;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.change.Changes.deep;
+import static com.mikosik.stork.model.change.Changes.ifVariable;
+import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
@@ -16,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
+import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Namespace;
@@ -65,7 +69,13 @@ public class Importer {
     }
   }
 
-  public Function<Variable, Expression> importsFor(Namespace namespace) {
+  public Definition injectInto(Definition definition) {
+    return onBody(
+        deep(ifVariable(importsFor(definition.identifier.namespace))))
+            .apply(definition);
+  }
+
+  private Function<Variable, Expression> importsFor(Namespace namespace) {
     if (imports.containsKey(namespace)) {
       var namespaceImports = imports.get(namespace);
       return variable -> {
