@@ -2,6 +2,8 @@ package com.mikosik.stork.problem;
 
 import java.util.Objects;
 
+import com.mikosik.stork.common.Description;
+
 public abstract class Problem extends RuntimeException {
   public abstract Description describe();
 

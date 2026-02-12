@@ -1,14 +1,14 @@
 package com.mikosik.stork.problem.compile.parse;
 
-import static com.mikosik.stork.problem.Description.description;
+import static com.mikosik.stork.common.Description.description;
 
+import com.mikosik.stork.common.Description;
 import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
-import com.mikosik.stork.problem.Description;
 
 public class UnexpectedToken extends CannotParse {
   private final Token token;

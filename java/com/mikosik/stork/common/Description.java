@@ -1,4 +1,4 @@
-package com.mikosik.stork.problem;
+package com.mikosik.stork.common;
 
 import static com.mikosik.stork.common.ImmutableList.none;
 import static java.util.Objects.hash;
