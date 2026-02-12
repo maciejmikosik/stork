@@ -1,8 +1,5 @@
 package com.mikosik.stork.problem.compile.link;
 
-import static com.mikosik.stork.common.Description.description;
-
-import com.mikosik.stork.common.Description;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 
@@ -23,11 +20,5 @@ public class VariableCannotBeBound extends CannotLink {
     return new VariableCannotBeBound(
         location,
         variable);
-  }
-
-  public Description describe() {
-    return description(
-        "function [%s] uses variable [%s] which doesn't match any lambda parameter, local function or import"
-            .formatted(location.name(), variable.name));
   }
 }

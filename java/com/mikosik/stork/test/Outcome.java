@@ -1,5 +1,7 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.problem.Describe.describe;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -40,8 +42,8 @@ public sealed abstract class Outcome {
       };
       case Failed failedA -> switch (outcomeB) {
         case Failed failedB -> Objects.equals(
-            failedA.problem.describe(),
-            failedB.problem.describe());
+            describe(failedA.problem),
+            describe(failedB.problem));
         default -> false;
       };
     };

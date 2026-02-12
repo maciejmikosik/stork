@@ -3,6 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.Throwables.messageOf;
 import static com.mikosik.stork.common.Throwables.stackTraceOf;
+import static com.mikosik.stork.problem.Describe.describe;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -20,7 +21,7 @@ public class MoreReports {
     var expectedOrActualOutcome = join(" ", expectedOrActual, nameOf(outcome));
     var stdoutOrProblem = switch (outcome) {
       case Printed printed -> description(format(printed.bytes));
-      case Failed failed -> failed.problem.describe();
+      case Failed failed -> describe(failed.problem);
     };
     var description = description(expectedOrActualOutcome)
         .children(stdoutOrProblem);

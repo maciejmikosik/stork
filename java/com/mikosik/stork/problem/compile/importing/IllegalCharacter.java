@@ -1,12 +1,8 @@
 package com.mikosik.stork.problem.compile.importing;
 
-import static com.mikosik.stork.common.Description.description;
-
-import com.mikosik.stork.common.Description;
-
 public class IllegalCharacter extends CannotImport {
-  private final String text;
-  private final byte character;
+  public final String text;
+  public final byte character;
 
   private IllegalCharacter(String text, byte character) {
     this.text = text;
@@ -15,10 +11,5 @@ public class IllegalCharacter extends CannotImport {
 
   public static IllegalCharacter illegalCharacter(String text, byte character) {
     return new IllegalCharacter(text, character);
-  }
-
-  public Description describe() {
-    return description("import [%s] contains illegal character [%c]"
-        .formatted(text, character));
   }
 }

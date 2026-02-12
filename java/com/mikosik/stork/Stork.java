@@ -10,6 +10,7 @@ import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -31,7 +32,7 @@ public class Stork {
 
       System.exit(0);
     } catch (Problem problem) {
-      System.err.println(problem);
+      System.err.println(describe(problem));
       System.exit(1);
     }
   }
