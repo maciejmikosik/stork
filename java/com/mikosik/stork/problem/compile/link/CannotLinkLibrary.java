@@ -26,9 +26,8 @@ public class CannotLinkLibrary extends CannotLink {
   }
 
   public Description describe() {
-    return description(
-        "cannot link library",
-        problems.stream()
+    return description("cannot link library")
+        .children(problems.stream()
             .map(CannotLink::describe)
             .toList());
   }

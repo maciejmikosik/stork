@@ -1,7 +1,6 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Description.description;
-import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.Throwables.messageOf;
 import static com.mikosik.stork.common.Throwables.stackTraceOf;
 import static java.lang.String.join;
@@ -18,13 +17,13 @@ import com.mikosik.stork.test.Outcome.Printed;
 
 public class MoreReports {
   public static String format(String expectedOrActual, Outcome outcome) {
+    var expectedOrActualOutcome = join(" ", expectedOrActual, nameOf(outcome));
     var stdoutOrProblem = switch (outcome) {
       case Printed printed -> description(format(printed.bytes));
       case Failed failed -> failed.problem.describe();
     };
-    var description = description(
-        join(" ", expectedOrActual, nameOf(outcome)),
-        single(stdoutOrProblem));
+    var description = description(expectedOrActualOutcome)
+        .children(stdoutOrProblem);
     return description.toString();
   }
 
