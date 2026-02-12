@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalCharacter;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacter.illegalStringCharacter;
+import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
+import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.range;
@@ -33,7 +33,7 @@ public class TestTokenizerProblems {
         .sourceRaw("""
             function { "%c" }
             """.formatted(code))
-        .expect(illegalStringCharacter((byte) code));
+        .expect(illegalCharacterInString((byte) code));
   }
 
   private static Test reportsIllegalAsciiCodeInStringLiteral(int firstCode, int lastCode) {
@@ -49,7 +49,7 @@ public class TestTokenizerProblems {
         .sourceRaw("""
             function { "\u00FC" }
             """)
-        .expect(illegalStringCharacter("\u00FC".getBytes(UTF_8)[0]));
+        .expect(illegalCharacterInString("\u00FC".getBytes(UTF_8)[0]));
   }
 
   private static Test reportsIllegalAsciiCodeAnywhere() {
@@ -60,7 +60,7 @@ public class TestTokenizerProblems {
                 .sourceRaw("""
                     function%c { 0 }
                     """.formatted(code))
-                .expect(illegalCharacter((byte) code)))
+                .expect(illegalCharacterInCode((byte) code)))
             .toList());
   }
 
@@ -76,7 +76,7 @@ public class TestTokenizerProblems {
         .sourceRaw("""
             function\u00FC { 0 }
             """)
-        .expect(illegalCharacter("\u00FC".getBytes(UTF_8)[0]));
+        .expect(illegalCharacterInCode("\u00FC".getBytes(UTF_8)[0]));
   }
 
   private static ProgramTest programTest(String name) {
