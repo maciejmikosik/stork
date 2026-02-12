@@ -18,10 +18,12 @@ import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
+import static com.mikosik.stork.test.MoreReports.format;
 import static com.mikosik.stork.test.Outcome.areEqual;
 import static com.mikosik.stork.test.Outcome.failed;
 import static com.mikosik.stork.test.Outcome.printed;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
+import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.quackery.Case.newCase;
 
@@ -107,9 +109,9 @@ public class ProgramTest {
   private void compileRunAndAssert(Outcome expected) {
     var actual = compileAndRun();
     if (!areEqual(expected, actual)) {
-      // TODO create common for 2D text manipulation
-      throw assertException("expected\n\n%s\n\nactual\n\n%s\n"
-          .formatted(expected, actual));
+      throw assertException(join("",
+          format("expected", expected),
+          format("actual", actual)));
     }
   }
 

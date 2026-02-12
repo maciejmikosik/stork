@@ -1,7 +1,5 @@
 package com.mikosik.stork.test;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -18,10 +16,6 @@ public sealed abstract class Outcome {
     private Printed(byte[] bytes) {
       this.bytes = bytes;
     }
-
-    public String toString() {
-      return "stdout [%s]".formatted(new String(bytes, UTF_8));
-    }
   }
 
   public static Outcome failed(Problem problem) {
@@ -33,10 +27,6 @@ public sealed abstract class Outcome {
 
     private Failed(Problem problem) {
       this.problem = problem;
-    }
-
-    public String toString() {
-      return problem.toString();
     }
   }
 
