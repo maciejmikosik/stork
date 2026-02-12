@@ -1,9 +1,7 @@
 package com.mikosik.stork.problem.compile.tokenize;
 
 import static com.mikosik.stork.common.Description.description;
-import static com.mikosik.stork.common.io.Ascii.isAscii;
-import static com.mikosik.stork.common.io.Ascii.isPrintable;
-import static java.lang.Byte.toUnsignedInt;
+import static com.mikosik.stork.problem.Characters.describeCharacter;
 
 import com.mikosik.stork.common.Description;
 
@@ -25,29 +23,14 @@ public class IllegalCharacter extends CannotTokenize {
   }
 
   public Description describe() {
-    return description("%sillegal %s character %s".formatted(
+    return description("%sillegal %s".formatted(
         describeLocation(),
-        describeCategory(),
-        describeValue()));
+        describeCharacter(character)));
   }
 
   private String describeLocation() {
     return inString
         ? "string contains "
         : "";
-  }
-
-  private String describeCategory() {
-    return isAscii(character)
-        ? isPrintable(character)
-            ? "ascii"
-            : "non-printable ascii"
-        : "non-ascii";
-  }
-
-  private String describeValue() {
-    return isPrintable(character)
-        ? "[%c]".formatted(character)
-        : "with decimal value of [%d]".formatted(toUnsignedInt(character));
   }
 }
