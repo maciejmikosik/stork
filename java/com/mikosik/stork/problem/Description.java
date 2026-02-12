@@ -1,9 +1,9 @@
 package com.mikosik.stork.problem;
 
 import static com.mikosik.stork.common.ImmutableList.none;
+import static java.util.Objects.hash;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Description {
   public final String text;
@@ -28,11 +28,12 @@ public class Description {
 
   public boolean equals(Object object) {
     return object instanceof Description description
-        && Objects.equals(toString(), description.toString());
+        && text.equals(description.text)
+        && children.equals(description.children);
   }
 
   public int hashCode() {
-    return toString().hashCode();
+    return hash(text, children);
   }
 
   public String toString() {
