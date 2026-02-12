@@ -1,8 +1,8 @@
 package com.mikosik.stork.problem.compile.importing;
 
-import static com.mikosik.stork.problem.Description.description;
+import static com.mikosik.stork.common.Description.description;
 
-import com.mikosik.stork.problem.Description;
+import com.mikosik.stork.common.Description;
 
 public class IllegalCharacter extends CannotImport {
   private final String text;

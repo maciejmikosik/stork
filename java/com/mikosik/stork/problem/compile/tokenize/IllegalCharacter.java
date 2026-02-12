@@ -1,11 +1,11 @@
 package com.mikosik.stork.problem.compile.tokenize;
 
+import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
-import static com.mikosik.stork.problem.Description.description;
 import static java.lang.Byte.toUnsignedInt;
 
-import com.mikosik.stork.problem.Description;
+import com.mikosik.stork.common.Description;
 
 public class IllegalCharacter extends CannotTokenize {
   public final byte character;

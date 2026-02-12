@@ -1,9 +1,10 @@
-package com.mikosik.stork.problem;
+package com.mikosik.stork.common;
 
 import static com.mikosik.stork.common.ImmutableList.none;
+import static com.mikosik.stork.common.ImmutableList.toList;
+import static java.util.Objects.hash;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Description {
   public final String text;
@@ -20,19 +21,22 @@ public class Description {
     return new Description(text, none());
   }
 
-  public static Description description(
-      String text,
-      List<Description> children) {
+  public Description children(List<Description> children) {
     return new Description(text, children);
+  }
+
+  public Description children(Description... children) {
+    return new Description(text, toList(children));
   }
 
   public boolean equals(Object object) {
     return object instanceof Description description
-        && Objects.equals(toString(), description.toString());
+        && text.equals(description.text)
+        && children.equals(description.children);
   }
 
   public int hashCode() {
-    return toString().hashCode();
+    return hash(text, children);
   }
 
   public String toString() {

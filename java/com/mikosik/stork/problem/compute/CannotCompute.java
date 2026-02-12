@@ -1,8 +1,8 @@
 package com.mikosik.stork.problem.compute;
 
-import static com.mikosik.stork.problem.Description.description;
+import static com.mikosik.stork.common.Description.description;
 
-import com.mikosik.stork.problem.Description;
+import com.mikosik.stork.common.Description;
 import com.mikosik.stork.problem.Problem;
 
 public class CannotCompute extends Problem {

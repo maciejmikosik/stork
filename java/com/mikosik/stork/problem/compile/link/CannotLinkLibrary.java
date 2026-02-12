@@ -1,11 +1,11 @@
 package com.mikosik.stork.problem.compile.link;
 
+import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.ImmutableList.toList;
-import static com.mikosik.stork.problem.Description.description;
 
 import java.util.List;
 
-import com.mikosik.stork.problem.Description;
+import com.mikosik.stork.common.Description;
 
 public class CannotLinkLibrary extends CannotLink {
   public final List<CannotLink> problems;
@@ -26,9 +26,8 @@ public class CannotLinkLibrary extends CannotLink {
   }
 
   public Description describe() {
-    return description(
-        "cannot link library",
-        problems.stream()
+    return description("cannot link library")
+        .children(problems.stream()
             .map(CannotLink::describe)
             .toList());
   }

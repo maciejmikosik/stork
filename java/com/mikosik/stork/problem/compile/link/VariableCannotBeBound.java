@@ -1,10 +1,10 @@
 package com.mikosik.stork.problem.compile.link;
 
-import static com.mikosik.stork.problem.Description.description;
+import static com.mikosik.stork.common.Description.description;
 
+import com.mikosik.stork.common.Description;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.problem.Description;
 
 public class VariableCannotBeBound extends CannotLink {
   public final Identifier location;
