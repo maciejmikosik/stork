@@ -7,29 +7,16 @@ import java.util.Objects;
 
 import com.mikosik.stork.problem.Problem;
 
-public class Outcome {
+public sealed abstract class Outcome {
   public static Outcome printed(byte[] stdout) {
     return new Printed(stdout);
   }
 
-  private static class Printed extends Outcome {
-    private final byte[] bytes;
+  public static final class Printed extends Outcome {
+    public final byte[] bytes;
 
     private Printed(byte[] bytes) {
       this.bytes = bytes;
-    }
-
-    public boolean equals(Object object) {
-      return object instanceof Printed printed
-          && equals(printed);
-    }
-
-    private boolean equals(Printed printed) {
-      return Arrays.equals(bytes, printed.bytes);
-    }
-
-    public int hashCode() {
-      return Arrays.hashCode(bytes);
     }
 
     public String toString() {
@@ -41,28 +28,32 @@ public class Outcome {
     return new Failed(problem);
   }
 
-  private static class Failed extends Outcome {
-    private final Problem problem;
+  public static final class Failed extends Outcome {
+    public final Problem problem;
 
     private Failed(Problem problem) {
       this.problem = problem;
     }
 
-    public boolean equals(Object object) {
-      return object instanceof Failed failed
-          && equals(failed);
-    }
-
-    private boolean equals(Failed failed) {
-      return Objects.equals(problem, failed.problem);
-    }
-
-    public int hashCode() {
-      return problem.hashCode();
-    }
-
     public String toString() {
       return problem.toString();
     }
+  }
+
+  public static boolean areEqual(Outcome outcomeA, Outcome outcomeB) {
+    return switch (outcomeA) {
+      case Printed printedA -> switch (outcomeB) {
+        case Printed printedB -> Arrays.equals(
+            printedA.bytes,
+            printedB.bytes);
+        default -> false;
+      };
+      case Failed failedA -> switch (outcomeB) {
+        case Failed failedB -> Objects.equals(
+            failedA.problem.describe(),
+            failedB.problem.describe());
+        default -> false;
+      };
+    };
   }
 }
