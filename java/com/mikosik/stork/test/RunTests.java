@@ -21,8 +21,9 @@ import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream
 import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
 import static com.mikosik.stork.test.cases.language.TestImport.testImport;
 import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
+import static com.mikosik.stork.test.cases.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
-import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
+import static com.mikosik.stork.test.cases.language.TestTokenizer.testTokenizer;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static java.lang.System.exit;
@@ -61,8 +62,9 @@ public class RunTests {
     runAndReport(suite("language")
         .add(testSyntax())
         .add(testImport())
+        .add(testStringLiteral())
         .add(suite("compiler problems")
-            .add(testTokenizerProblems())
+            .add(testTokenizer())
             .add(testLinkerProblems())));
     runAndReport(compilerCanCompileCoreLibrary());
     runAndReport(suite("everything")

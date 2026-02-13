@@ -25,7 +25,7 @@ public enum Bracket implements Token {
   private static final Bracket[] index = index();
 
   private static Bracket[] index() {
-    var array = new Bracket[255];
+    var array = new Bracket[256];
     for (Bracket bracket : Bracket.values()) {
       array[bracket.character] = bracket;
     }

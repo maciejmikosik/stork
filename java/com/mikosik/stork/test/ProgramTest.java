@@ -77,6 +77,10 @@ public class ProgramTest {
     return source(Source.source(CODE, currentNamespace, bytes(content)));
   }
 
+  public ProgramTest sourceRaw(byte[] content) {
+    return source(Source.source(CODE, currentNamespace, content));
+  }
+
   public ProgramTest source(String content) {
     return sourceRaw(content.replace('\'', '\"'));
   }
