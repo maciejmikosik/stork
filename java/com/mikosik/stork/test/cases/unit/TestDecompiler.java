@@ -126,9 +126,7 @@ public class TestDecompiler {
               %s
             but was
               %s
-            """,
-            expected,
-            actual);
+            """.formatted(expected, actual));
       }
     });
   }

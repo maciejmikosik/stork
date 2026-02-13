@@ -91,14 +91,13 @@ public class QuackeryHelper {
             %s
           but was
             %s
-          """,
-          expected,
-          actual);
+          """
+          .formatted(expected, actual));
     }
   }
 
-  public static AssertException assertException(String format, Object... args) {
-    return new AssertException(format.formatted(args));
+  public static AssertException assertException(String message) {
+    return new AssertException(message);
   }
 
   public static Test ignore(Test test) {
