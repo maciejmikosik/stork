@@ -1,11 +1,13 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Importer.importer;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
+import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -23,19 +25,19 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Source;
 
 public class Compiler {
-  public static List<Definition> compile(List<Source> sources) {
-    var compiled = sources.stream()
+  public static List<Definition> compile(Compilation compilation) {
+    var compiled = compilation.sources.stream()
         .filter(source -> source.kind == CODE)
         .map(Compiler::compile)
         .flatMap(List::stream)
         .toList();
 
-    var importer = importer(sources);
-    var linked = compiled.stream()
+    var importer = importer(compilation.sources);
+    var linked = join(compiled, compilation.definitions).stream()
         .map(importer::injectInto)
         .toList();
 
-    return linked;
+    return verify(linked);
   }
 
   private static List<Definition> compile(Source source) {
