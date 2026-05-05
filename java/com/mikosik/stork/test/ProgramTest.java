@@ -122,7 +122,8 @@ public class ProgramTest {
     try {
       var library = compile(compilation()
           .sources(sources)
-          .definitions(core));
+          .definitions(core))
+              .getOrThrow();
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),

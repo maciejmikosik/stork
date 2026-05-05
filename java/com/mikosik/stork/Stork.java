@@ -22,7 +22,8 @@ public class Stork {
     try {
       var library = compile(compilation()
           .sources(sourceReader().read(workingDirectory()))
-          .definitions(core(PRODUCTION)));
+          .definitions(core(PRODUCTION)))
+              .getOrThrow();
 
       runner().run(task(
           program(identifier("main"), library),

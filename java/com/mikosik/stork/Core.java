@@ -30,7 +30,8 @@ public class Core {
   public static List<Definition> core(Mode mode) {
     return compile(compilation()
         .sources(sourceReader().read(coreDirectoryFor(mode)))
-        .definitions(operatorLibrary()));
+        .definitions(operatorLibrary()))
+            .getOrThrow();
   }
 
   private static Directory coreDirectoryFor(Mode mode) {

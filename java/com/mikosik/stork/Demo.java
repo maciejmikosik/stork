@@ -20,7 +20,8 @@ public class Demo {
     var demoDirectory = project().demoDirectory.directory("greeting");
     var library = compile(compilation()
         .sources(sourceReader().read(demoDirectory))
-        .definitions(core(DEVELOPMENT)));
+        .definitions(core(DEVELOPMENT)))
+            .getOrThrow();
 
     runner().run(task(
         program(identifier("main"), library),
