@@ -50,4 +50,9 @@ public class ImmutableList {
     }
     return unmodifiableList(joined);
   }
+
+  @SuppressWarnings("unchecked")
+  public static <E> List<E> cast(List<? extends E> list) {
+    return (List<E>) list;
+  }
 }
