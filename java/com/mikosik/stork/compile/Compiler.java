@@ -9,7 +9,7 @@ import static com.mikosik.stork.compile.Importer.importer;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
-import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
+import static com.mikosik.stork.compile.link.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -41,8 +41,10 @@ public class Compiler {
           .map(importer::injectInto)
           .toList();
 
-      verify(linked);
-      return compiled(linked);
+      var linkingProblems = findLinkingProblems(linked);
+      return linkingProblems.isEmpty()
+          ? compiled(linked)
+          : compiled(linkingProblems);
     } catch (CannotCompile problem) {
       return compiled(single(problem));
     }

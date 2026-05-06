@@ -2,7 +2,6 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
@@ -24,20 +23,18 @@ public class TestLinkerProblems {
   private static Test reportsVariableThatCannotBeBound() {
     return programTest("variable that cannot be bound")
         .source("function { variable }")
-        .expect(cannotLinkLibrary(
-            variableCannotBeBound(
-                identifier("function"),
-                variable("variable"))));
+        .expect(variableCannotBeBound(
+            identifier("function"),
+            variable("variable")));
   }
 
   private static Test reportsFunctionNotDefined() {
     return programTest("function that is not defined")
         .imports("namespace/function2")
         .source("function { function2 }")
-        .expect(cannotLinkLibrary(
-            functionNotDefined(
-                identifier("function"),
-                identifier("namespace/function2"))));
+        .expect(functionNotDefined(
+            identifier("function"),
+            identifier("namespace/function2")));
   }
 
   private static Test reportsFunctionDefinedMoreThanOnce() {
@@ -46,9 +43,8 @@ public class TestLinkerProblems {
             function { 1 }
             function { 2 }
             """)
-        .expect(cannotLinkLibrary(
-            functionDefinedMoreThanOnce(
-                identifier("function"))));
+        .expect(functionDefinedMoreThanOnce(
+            identifier("function")));
   }
 
   private static ProgramTest programTest(String name) {

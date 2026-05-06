@@ -3,7 +3,6 @@ package com.mikosik.stork.compile.link;
 import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.change.Changes.walk;
-import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static java.util.function.Function.identity;
@@ -16,20 +15,17 @@ import java.util.List;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce;
 import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 
 public class VerifyLibrary {
-  public static List<Definition> verify(List<Definition> library) {
-    var problems = join(
+  public static List<CannotLink> findLinkingProblems(List<Definition> library) {
+    return join(
         findVariableCannotBeFound(library),
         findFunctionNotDefined(library),
         findFunctionDefinedMoreThanOnce(library));
-    if (!problems.isEmpty()) {
-      throw cannotLinkLibrary(problems);
-    }
-    return library;
   }
 
   private static List<VariableCannotBeBound> findVariableCannotBeFound(
