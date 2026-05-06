@@ -3,13 +3,12 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
-import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
+import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
-import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
 import static com.mikosik.stork.model.Source.Kind.CODE;
@@ -121,9 +120,10 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
-      var library = verify(join(
-          compile(sources),
-          core));
+      var library = compile(compilation()
+          .sources(sources)
+          .definitions(core))
+              .getOrThrow();
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),

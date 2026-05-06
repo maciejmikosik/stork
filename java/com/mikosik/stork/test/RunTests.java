@@ -2,6 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
+import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Text.text;
 import static com.mikosik.stork.test.MoreReports.formatExceptions;
 import static com.mikosik.stork.test.QuackeryHelper.count;
@@ -40,6 +41,8 @@ import java.time.Instant;
 
 import org.quackery.Test;
 
+import com.mikosik.stork.Core.Mode;
+
 /**
  * Logging tests that use logbuddy require those options. They allow logbuddy to
  * read private fields of classes in {@code java.*} package.
@@ -59,6 +62,7 @@ public class RunTests {
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator())));
+    runAndReport(testCompilingCoreLibrary(TESTING));
     runAndReport(suite("language")
         .add(testSyntax())
         .add(testImport())
@@ -66,7 +70,7 @@ public class RunTests {
         .add(suite("compiler problems")
             .add(testTokenizer())
             .add(testLinkerProblems())));
-    runAndReport(compilerCanCompileCoreLibrary());
+    runAndReport(testCompilingCoreLibrary(DEVELOPMENT));
     runAndReport(suite("everything")
         .add(testMainFunction())
         .add(testStdio())
@@ -116,9 +120,9 @@ public class RunTests {
     return duration.getSeconds() + duration.getNano() * 1E-9f;
   }
 
-  private static Test compilerCanCompileCoreLibrary() {
-    return newCase("compiler can compile core library", () -> {
-      core(DEVELOPMENT);
+  private static Test testCompilingCoreLibrary(Mode mode) {
+    return newCase("compiler can compile core library for %s".formatted(mode), () -> {
+      core(mode);
     });
   }
 }

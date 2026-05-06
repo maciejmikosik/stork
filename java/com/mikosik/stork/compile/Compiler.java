@@ -1,11 +1,15 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.common.io.Input.input;
+import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.compile.Importer.importer;
 import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
 import static com.mikosik.stork.compile.link.Unquote.unquote;
+import static com.mikosik.stork.compile.link.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -21,21 +25,29 @@ import java.util.List;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Source;
+import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
-  public static List<Definition> compile(List<Source> sources) {
-    var compiled = sources.stream()
-        .filter(source -> source.kind == CODE)
-        .map(Compiler::compile)
-        .flatMap(List::stream)
-        .toList();
+  public static Compiled compile(Compilation compilation) {
+    try {
+      var compiled = compilation.sources.stream()
+          .filter(source -> source.kind == CODE)
+          .map(Compiler::compile)
+          .flatMap(List::stream)
+          .toList();
 
-    var importer = importer(sources);
-    var linked = compiled.stream()
-        .map(importer::injectInto)
-        .toList();
+      var importer = importer(compilation.sources);
+      var linked = join(compiled, compilation.definitions).stream()
+          .map(importer::injectInto)
+          .toList();
 
-    return linked;
+      var linkingProblems = findLinkingProblems(linked);
+      return linkingProblems.isEmpty()
+          ? compiled(linked)
+          : compiled(linkingProblems);
+    } catch (CannotCompile problem) {
+      return compiled(single(problem));
+    }
   }
 
   private static List<Definition> compile(Source source) {

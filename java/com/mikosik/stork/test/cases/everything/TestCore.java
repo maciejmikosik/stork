@@ -1,7 +1,6 @@
 package com.mikosik.stork.test.cases.everything;
 
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.problem.compile.link.CannotLinkLibrary.cannotLinkLibrary;
 import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
@@ -26,8 +25,7 @@ public class TestCore {
     return programTest("cannot override core function")
         .namespace("lang/stream")
         .source("length(stream) { 0 }")
-        .expect(cannotLinkLibrary(
-            functionDefinedMoreThanOnce(
-                identifier("lang/stream/length"))));
+        .expect(functionDefinedMoreThanOnce(
+            identifier("lang/stream/length")));
   }
 }

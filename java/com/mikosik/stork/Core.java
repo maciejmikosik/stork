@@ -1,13 +1,12 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.Throwables.linkageError;
 import static com.mikosik.stork.common.io.Directory.directory;
+import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
-import static com.mikosik.stork.compile.link.VerifyLibrary.verify;
 import static java.nio.file.FileSystems.newFileSystem;
 
 import java.io.IOException;
@@ -29,9 +28,10 @@ public class Core {
   }
 
   public static List<Definition> core(Mode mode) {
-    return verify(join(
-        compile(sourceReader().read(coreDirectoryFor(mode))),
-        operatorLibrary()));
+    return compile(compilation()
+        .sources(sourceReader().read(coreDirectoryFor(mode)))
+        .definitions(operatorLibrary()))
+            .getOrThrow();
   }
 
   private static Directory coreDirectoryFor(Mode mode) {
