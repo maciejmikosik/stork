@@ -28,7 +28,7 @@ import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
-  public static Compiled compile(Compilation compilation) {
+  public static Compiled<List<Definition>> compile(Compilation compilation) {
     try {
       var compiled = compilation.sources.stream()
           .filter(source -> source.kind == CODE)
