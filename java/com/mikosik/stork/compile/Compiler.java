@@ -29,6 +29,18 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
   public static Compiled<List<Definition>> compile(Compilation compilation) {
+    return compileSources(compilation)
+        .thenTry(Compiler::verify);
+  }
+
+  public static Compiled<List<Definition>> verify(List<Definition> definitions) {
+    var linkingProblems = findLinkingProblems(definitions);
+    return linkingProblems.isEmpty()
+        ? compiled(definitions)
+        : compiled(linkingProblems);
+  }
+
+  public static Compiled<List<Definition>> compileSources(Compilation compilation) {
     try {
       var compiled = compilation.sources.stream()
           .filter(source -> source.kind == CODE)
@@ -40,11 +52,7 @@ public class Compiler {
       var linked = join(compiled, compilation.definitions).stream()
           .map(importer::injectInto)
           .toList();
-
-      var linkingProblems = findLinkingProblems(linked);
-      return linkingProblems.isEmpty()
-          ? compiled(linked)
-          : compiled(linkingProblems);
+      return compiled(linked);
     } catch (CannotCompile problem) {
       return compiled(single(problem));
     }
