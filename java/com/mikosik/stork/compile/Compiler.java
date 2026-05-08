@@ -33,14 +33,14 @@ public class Compiler {
         .thenTry(Compiler::verify);
   }
 
-  public static Compiled<List<Definition>> verify(List<Definition> definitions) {
+  private static Compiled<List<Definition>> verify(List<Definition> definitions) {
     var linkingProblems = findLinkingProblems(definitions);
     return linkingProblems.isEmpty()
         ? compiled(definitions)
         : compiled(linkingProblems);
   }
 
-  public static Compiled<List<Definition>> compileSources(Compilation compilation) {
+  private static Compiled<List<Definition>> compileSources(Compilation compilation) {
     try {
       var compiled = compilation.sources.stream()
           .filter(source -> source.kind == CODE)
