@@ -50,10 +50,10 @@ public class Compiler {
           .toList();
 
       var importer = importer(compilation.sources).getOrThrow();
-      var linked = join(compiled, compilation.definitions).stream()
+      var linked = compiled.stream()
           .map(importer::injectInto)
           .toList();
-      return compiled(linked);
+      return compiled(join(linked, compilation.definitions));
     } catch (CannotCompile problem) {
       return compiled(single(problem));
     }
