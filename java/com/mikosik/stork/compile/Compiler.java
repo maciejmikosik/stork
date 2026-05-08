@@ -22,9 +22,11 @@ import static com.mikosik.stork.model.change.Changes.onNamespace;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Source;
+import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
@@ -44,8 +46,9 @@ public class Compiler {
     try {
       var compiled = compilation.sources.stream()
           .filter(source -> source.kind == CODE)
-          .map(Compiler::compile)
-          .map(Compiled::getOrThrow)
+          .map(source -> compile(source.content)
+              .then(makeComputable(source.namespace))
+              .getOrThrow())
           .flatMap(List::stream)
           .toList();
 
@@ -59,27 +62,32 @@ public class Compiler {
     }
   }
 
-  private static Compiled<List<Definition>> compile(Source source) {
-    return compileCode(source.content)
-        .then(definitions -> {
-          var exported = definitions.stream()
-              .map(definition -> definition.identifier.variable)
-              .collect(toSet());
-          return definitions.stream()
-              // TODO test that order is ensured: lambda, local, import
-              .map(onBody(deep(bindLambdaParameter)))
-              .map(onBody(deep(ifVariable(variable -> exported.contains(variable)
-                  ? identifier(source.namespace, variable)
-                  : variable))))
-              .map(onIdentifier(onNamespace(constant(source.namespace))))
-              // TODO inline compilation helpers
-              .map(onBody(deep(unlambda)))
-              .map(onBody(deep(unquote)))
-              .toList();
-        });
+  private static Function<List<Definition>, List<Definition>> makeComputable(
+      Namespace namespace) {
+    return definitions -> definitions.stream()
+        // TODO test that order is ensured: lambda, local, import
+        .map(onBody(deep(bindLambdaParameter)))
+        .map(onBody(deep(bindLocalFunctions(namespace, definitions))))
+        .map(onIdentifier(onNamespace(constant(namespace))))
+        // TODO inline compilation helpers
+        .map(onBody(deep(unlambda)))
+        .map(onBody(deep(unquote)))
+        // TODO onBody(deep(...)) should be enforced on lower level
+        .toList();
   }
 
-  private static Compiled<List<Definition>> compileCode(byte[] content) {
+  private static Function<Expression, Expression> bindLocalFunctions(
+      Namespace namespace,
+      List<Definition> definitions) {
+    var localFunctions = definitions.stream()
+        .map(definition -> definition.identifier.variable)
+        .collect(toSet());
+    return ifVariable(variable -> localFunctions.contains(variable)
+        ? identifier(namespace, variable)
+        : variable);
+  }
+
+  private static Compiled<List<Definition>> compile(byte[] content) {
     try {
       // TODO common for converting byte[] -> Iterator<Byte>
       return compiled(parse(tokenize(input(content).iterator())));
