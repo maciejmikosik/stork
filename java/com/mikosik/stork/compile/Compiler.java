@@ -28,48 +28,63 @@ import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
-  public static Compiled compile(Compilation compilation) {
+  public static Compiled<List<Definition>> compile(Compilation compilation) {
+    return compileSources(compilation)
+        .thenTry(Compiler::verify);
+  }
+
+  public static Compiled<List<Definition>> verify(List<Definition> definitions) {
+    var linkingProblems = findLinkingProblems(definitions);
+    return linkingProblems.isEmpty()
+        ? compiled(definitions)
+        : compiled(linkingProblems);
+  }
+
+  public static Compiled<List<Definition>> compileSources(Compilation compilation) {
     try {
       var compiled = compilation.sources.stream()
           .filter(source -> source.kind == CODE)
           .map(Compiler::compile)
+          .map(Compiled::getOrThrow)
           .flatMap(List::stream)
           .toList();
 
-      var importer = importer(compilation.sources);
+      var importer = importer(compilation.sources).getOrThrow();
       var linked = join(compiled, compilation.definitions).stream()
           .map(importer::injectInto)
           .toList();
-
-      var linkingProblems = findLinkingProblems(linked);
-      return linkingProblems.isEmpty()
-          ? compiled(linked)
-          : compiled(linkingProblems);
+      return compiled(linked);
     } catch (CannotCompile problem) {
       return compiled(single(problem));
     }
   }
 
-  private static List<Definition> compile(Source source) {
-    var library = compileCode(source.content);
-    var exported = library.stream()
-        .map(definition -> definition.identifier.variable)
-        .collect(toSet());
-    return library.stream()
-        // TODO test that order is ensured: lambda, local, import
-        .map(onBody(deep(bindLambdaParameter)))
-        .map(onBody(deep(ifVariable(variable -> exported.contains(variable)
-            ? identifier(source.namespace, variable)
-            : variable))))
-        .map(onIdentifier(onNamespace(constant(source.namespace))))
-        // TODO inline compilation helpers
-        .map(onBody(deep(unlambda)))
-        .map(onBody(deep(unquote)))
-        .toList();
+  private static Compiled<List<Definition>> compile(Source source) {
+    return compileCode(source.content)
+        .then(definitions -> {
+          var exported = definitions.stream()
+              .map(definition -> definition.identifier.variable)
+              .collect(toSet());
+          return definitions.stream()
+              // TODO test that order is ensured: lambda, local, import
+              .map(onBody(deep(bindLambdaParameter)))
+              .map(onBody(deep(ifVariable(variable -> exported.contains(variable)
+                  ? identifier(source.namespace, variable)
+                  : variable))))
+              .map(onIdentifier(onNamespace(constant(source.namespace))))
+              // TODO inline compilation helpers
+              .map(onBody(deep(unlambda)))
+              .map(onBody(deep(unquote)))
+              .toList();
+        });
   }
 
-  private static List<Definition> compileCode(byte[] content) {
-    // TODO common for converting byte[] -> Iterator<Byte>
-    return parse(tokenize(input(content).iterator()));
+  private static Compiled<List<Definition>> compileCode(byte[] content) {
+    try {
+      // TODO common for converting byte[] -> Iterator<Byte>
+      return compiled(parse(tokenize(input(content).iterator())));
+    } catch (CannotCompile problem) {
+      return compiled(problem);
+    }
   }
 }
