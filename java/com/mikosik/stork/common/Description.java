@@ -1,6 +1,9 @@
 package com.mikosik.stork.common;
 
+import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.common.ImmutableList.none;
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.ImmutableList.toList;
 import static java.util.Objects.hash;
 
@@ -22,11 +25,20 @@ public class Description {
   }
 
   public Description children(List<Description> children) {
-    return new Description(text, children);
+    return new Description(text, join(this.children, children));
   }
 
-  public Description children(Description... children) {
-    return new Description(text, toList(children));
+  public Description child(Description child) {
+    return children(single(child));
+  }
+
+  public Description children(
+      Description childA,
+      Description childB,
+      Description... children) {
+    return children(join(
+        list(childA, childB),
+        toList(children)));
   }
 
   public boolean equals(Object object) {

@@ -24,7 +24,7 @@ public class MoreReports {
       case Failed failed -> describe(failed.problem);
     };
     var description = description(expectedOrActualOutcome)
-        .children(stdoutOrProblem);
+        .child(stdoutOrProblem);
     return description.toString();
   }
 
