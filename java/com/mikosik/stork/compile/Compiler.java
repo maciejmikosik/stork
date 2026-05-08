@@ -29,11 +29,13 @@ import java.util.function.UnaryOperator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
+import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
   public static Compiled<List<Definition>> compile(Compilation compilation) {
-    return compileSources(compilation)
+    return compile(compilation.sources)
+        .then(definitions -> join(definitions, compilation.definitions))
         .thenTry(Compiler::verify);
   }
 
@@ -44,9 +46,9 @@ public class Compiler {
         : compiled(linkingProblems);
   }
 
-  private static Compiled<List<Definition>> compileSources(Compilation compilation) {
+  private static Compiled<List<Definition>> compile(List<Source> sources) {
     try {
-      var compiled = compilation.sources.stream()
+      var compiled = sources.stream()
           .filter(source -> source.kind == CODE)
           .map(source -> compile(source.content)
               .then(makeComputable(source.namespace))
@@ -54,11 +56,11 @@ public class Compiler {
           .flatMap(List::stream)
           .toList();
 
-      var importer = importer(compilation.sources).getOrThrow();
+      var importer = importer(sources).getOrThrow();
       var linked = compiled.stream()
           .map(importer::injectInto)
           .toList();
-      return compiled(join(linked, compilation.definitions));
+      return compiled(linked);
     } catch (CannotCompile problem) {
       return compiled(single(problem));
     }
