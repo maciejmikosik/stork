@@ -23,7 +23,6 @@ import static com.mikosik.stork.model.change.Changes.onNamespace;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import com.mikosik.stork.model.Definition;
@@ -66,7 +65,7 @@ public class Compiler {
     }
   }
 
-  private static Function<List<Definition>, List<Definition>> makeComputable(
+  private static UnaryOperator<List<Definition>> makeComputable(
       Namespace namespace) {
     return definitions -> definitions.stream()
         // TODO test that order is ensured: lambda, local, import
@@ -85,7 +84,7 @@ public class Compiler {
             : variable;
       })).apply(lambda)));
 
-  private static Function<Expression, Expression> bindLocalFunctions(
+  private static UnaryOperator<Expression> bindLocalFunctions(
       Namespace namespace,
       List<Definition> definitions) {
     var localFunctions = definitions.stream()
