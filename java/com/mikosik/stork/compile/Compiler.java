@@ -49,7 +49,7 @@ public class Compiler {
           .flatMap(List::stream)
           .toList();
 
-      var importer = importer(compilation.sources);
+      var importer = importer(compilation.sources).getOrThrow();
       var linked = join(compiled, compilation.definitions).stream()
           .map(importer::injectInto)
           .toList();
