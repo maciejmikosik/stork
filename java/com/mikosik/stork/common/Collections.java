@@ -88,4 +88,21 @@ public class Collections {
   public static <K, V> Collector<Entry<K, V>, ?, Map<K, V>> toMapFromEntries() {
     return toMap(Entry::getKey, Entry::getValue);
   }
+
+  public static Iterator<Byte> iterator(byte[] bytes) {
+    return new Iterator<Byte>() {
+      private int index = 0;
+
+      public boolean hasNext() {
+        return index < bytes.length;
+      }
+
+      public Byte next() {
+        if (!hasNext()) {
+          throw new NoSuchElementException();
+        }
+        return bytes[index++];
+      }
+    };
+  }
 }
