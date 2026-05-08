@@ -1,9 +1,9 @@
 package com.mikosik.stork.compile;
 
+import static com.mikosik.stork.common.Collections.iterator;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.Logic.constant;
-import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.compile.Importer.importer;
 import static com.mikosik.stork.compile.link.Bridge.stork;
@@ -98,8 +98,7 @@ public class Compiler {
 
   private static Compiled<List<Definition>> compile(byte[] content) {
     try {
-      // TODO common for converting byte[] -> Iterator<Byte>
-      return compiled(parse(tokenize(input(content).iterator())));
+      return compiled(parse(tokenize(iterator(content))));
     } catch (CannotCompile problem) {
       return compiled(problem);
     }
