@@ -6,15 +6,16 @@ import static com.mikosik.stork.common.Logic.constant;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.compile.Importer.importer;
-import static com.mikosik.stork.compile.link.Bind.bindLambdaParameter;
+import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
-import static com.mikosik.stork.compile.link.Unquote.unquote;
 import static com.mikosik.stork.compile.link.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Source.Kind.CODE;
 import static com.mikosik.stork.model.change.Changes.deep;
+import static com.mikosik.stork.model.change.Changes.ifLambda;
+import static com.mikosik.stork.model.change.Changes.ifQuote;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
@@ -23,6 +24,7 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -66,15 +68,20 @@ public class Compiler {
       Namespace namespace) {
     return definitions -> definitions.stream()
         // TODO test that order is ensured: lambda, local, import
-        .map(onBody(deep(bindLambdaParameter)))
-        .map(onBody(deep(bindLocalFunctions(namespace, definitions))))
+        .map(onBody(bindLambdaParameters))
+        .map(onBody(bindLocalFunctions(namespace, definitions)))
         .map(onIdentifier(onNamespace(constant(namespace))))
-        // TODO inline compilation helpers
-        .map(onBody(deep(unlambda)))
-        .map(onBody(deep(unquote)))
-        // TODO onBody(deep(...)) should be enforced on lower level
+        .map(onBody(unlambda))
+        .map(onBody(deep(ifQuote(quote -> stork(quote.string)))))
         .toList();
   }
+
+  private static final UnaryOperator<Expression> bindLambdaParameters = deep(
+      ifLambda(lambda -> deep(ifVariable(variable -> {
+        return variable.name.equals(lambda.parameter.name)
+            ? lambda.parameter
+            : variable;
+      })).apply(lambda)));
 
   private static Function<Expression, Expression> bindLocalFunctions(
       Namespace namespace,
@@ -82,9 +89,9 @@ public class Compiler {
     var localFunctions = definitions.stream()
         .map(definition -> definition.identifier.variable)
         .collect(toSet());
-    return ifVariable(variable -> localFunctions.contains(variable)
+    return deep(ifVariable(variable -> localFunctions.contains(variable)
         ? identifier(namespace, variable)
-        : variable);
+        : variable));
   }
 
   private static Compiled<List<Definition>> compile(byte[] content) {

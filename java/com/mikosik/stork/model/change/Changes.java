@@ -7,6 +7,7 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static java.util.stream.Stream.concat;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import com.mikosik.stork.model.Application;
@@ -41,7 +42,7 @@ public class Changes {
         identifier.variable);
   }
 
-  public static Function<Expression, Expression> deep(
+  public static UnaryOperator<Expression> deep(
       Function<? super Expression, ? extends Expression> change) {
     return expression -> switch (expression) {
       case Lambda lambda -> change.apply(lambda(

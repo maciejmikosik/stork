@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifLambda;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Expression;
@@ -26,7 +26,8 @@ import com.mikosik.stork.model.Parameter;
 public class Unlambda {
   // 2. T[(E₁ E₂)] => (T[E₁] T[E₂])
   // 5. T[λx.λy.E] => T[λx.T[λy.E]]
-  public static final Function<Expression, Expression> unlambda = ifLambda(Unlambda::transform);
+  // 2 and 5 are handled by deep function
+  public static final UnaryOperator<Expression> unlambda = deep(ifLambda(Unlambda::transform));
 
   private static Expression transform(Lambda lambda) {
     return transform(lambda.parameter, lambda.body);
