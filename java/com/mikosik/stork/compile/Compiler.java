@@ -32,10 +32,11 @@ import com.mikosik.stork.model.Source;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
-  public static Compiled<List<Definition>> compile(Compilation compilation) {
+  public static List<Definition> compile(Compilation compilation) {
     return compile(compilation.sources)
         .then(definitions -> join(definitions, compilation.definitions))
-        .thenTry(Compiler::verify);
+        .thenTry(Compiler::verify)
+        .getOrThrow();
   }
 
   private static Compiled<List<Definition>> verify(List<Definition> definitions) {
