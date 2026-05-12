@@ -19,8 +19,7 @@ import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
 import static com.mikosik.stork.test.MoreReports.format;
 import static com.mikosik.stork.test.Outcome.areEqual;
-import static com.mikosik.stork.test.Outcome.failed;
-import static com.mikosik.stork.test.Outcome.printed;
+import static com.mikosik.stork.test.Outcome.outcome;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -93,15 +92,15 @@ public class ProgramTest {
   }
 
   public Test stdout(String stdout) {
-    return newCaseExpecting(printed(bytes(stdout)));
+    return newCaseExpecting(outcome(bytes(stdout)));
   }
 
-  public Test expect(CannotCompile problem) {
-    return newCaseExpecting(failed(problem));
+  public Test expect(CannotCompile cannotCompile) {
+    return newCaseExpecting(outcome(cannotCompile));
   }
 
-  public Test expect(CannotCompute problem) {
-    return newCaseExpecting(failed(problem));
+  public Test expect(CannotCompute cannotCompute) {
+    return newCaseExpecting(outcome(cannotCompute));
   }
 
   private Test newCaseExpecting(Outcome expected) {
@@ -126,11 +125,11 @@ public class ProgramTest {
       runner().run(task(
           program(identifier("main"), library),
           terminal(input(stdin), buffer.asOutput(), noOutput())));
-      return printed(buffer.bytes());
+      return outcome(buffer.bytes());
     } catch (CannotCompile cannotCompile) {
-      return failed(cannotCompile);
+      return outcome(cannotCompile);
     } catch (CannotCompute cannotCompute) {
-      return failed(cannotCompute);
+      return outcome(cannotCompute);
     }
   }
 
