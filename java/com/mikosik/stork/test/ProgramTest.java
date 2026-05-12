@@ -19,8 +19,7 @@ import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
 import static com.mikosik.stork.test.MoreReports.format;
 import static com.mikosik.stork.test.Outcome.areEqual;
-import static com.mikosik.stork.test.Outcome.failed;
-import static com.mikosik.stork.test.Outcome.printed;
+import static com.mikosik.stork.test.Outcome.outcome;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -35,7 +34,6 @@ import org.quackery.Test;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Source;
-import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -94,15 +92,15 @@ public class ProgramTest {
   }
 
   public Test stdout(String stdout) {
-    return newCaseExpecting(printed(bytes(stdout)));
+    return newCaseExpecting(outcome(bytes(stdout)));
   }
 
-  public Test expect(CannotCompile problem) {
-    return newCaseExpecting(failed(problem));
+  public Test expect(CannotCompile cannotCompile) {
+    return newCaseExpecting(outcome(cannotCompile));
   }
 
-  public Test expect(CannotCompute problem) {
-    return newCaseExpecting(failed(problem));
+  public Test expect(CannotCompute cannotCompute) {
+    return newCaseExpecting(outcome(cannotCompute));
   }
 
   private Test newCaseExpecting(Outcome expected) {
@@ -122,15 +120,16 @@ public class ProgramTest {
     try {
       var library = compile(compilation()
           .sources(sources)
-          .definitions(core))
-              .getOrThrow();
+          .definitions(core));
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),
           terminal(input(stdin), buffer.asOutput(), noOutput())));
-      return printed(buffer.bytes());
-    } catch (Problem problem) {
-      return failed(problem);
+      return outcome(buffer.bytes());
+    } catch (CannotCompile cannotCompile) {
+      return outcome(cannotCompile);
+    } catch (CannotCompute cannotCompute) {
+      return outcome(cannotCompute);
     }
   }
 

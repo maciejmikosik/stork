@@ -5,47 +5,36 @@ import static com.mikosik.stork.problem.Describe.describe;
 import java.util.Arrays;
 import java.util.Objects;
 
-import com.mikosik.stork.problem.Problem;
+import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compute.CannotCompute;
 
-public sealed abstract class Outcome {
-  public static Outcome printed(byte[] stdout) {
-    return new Printed(stdout);
+public class Outcome {
+  public final Object object;
+
+  private Outcome(Object object) {
+    this.object = object;
   }
 
-  public static final class Printed extends Outcome {
-    public final byte[] bytes;
-
-    private Printed(byte[] bytes) {
-      this.bytes = bytes;
-    }
-  }
-
-  public static Outcome failed(Problem problem) {
-    return new Failed(problem);
-  }
-
-  public static final class Failed extends Outcome {
-    public final Problem problem;
-
-    private Failed(Problem problem) {
-      this.problem = problem;
-    }
+  public static Outcome outcome(Object object) {
+    return new Outcome(object);
   }
 
   public static boolean areEqual(Outcome outcomeA, Outcome outcomeB) {
-    return switch (outcomeA) {
-      case Printed printedA -> switch (outcomeB) {
-        case Printed printedB -> Arrays.equals(
-            printedA.bytes,
-            printedB.bytes);
-        default -> false;
-      };
-      case Failed failedA -> switch (outcomeB) {
-        case Failed failedB -> Objects.equals(
-            describe(failedA.problem),
-            describe(failedB.problem));
-        default -> false;
-      };
-    };
+    return areEqual(outcomeA.object, outcomeB.object);
+  }
+
+  public static boolean areEqual(Object objectA, Object objectB) {
+    if (objectA instanceof byte[] stdoutA
+        && objectB instanceof byte[] stdoutB) {
+      return Arrays.equals(stdoutA, stdoutB);
+    } else if (objectA instanceof CannotCompile cannotCompileA
+        && objectB instanceof CannotCompile cannotCompileB) {
+      return Objects.equals(describe(cannotCompileA), describe(cannotCompileB));
+    } else if (objectA instanceof CannotCompute cannotComputeA
+        && objectB instanceof CannotCompute cannotComputeB) {
+      return Objects.equals(describe(cannotComputeA), describe(cannotComputeB));
+    } else {
+      return false;
+    }
   }
 }

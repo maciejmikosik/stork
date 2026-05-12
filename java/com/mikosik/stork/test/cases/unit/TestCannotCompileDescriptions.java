@@ -12,7 +12,6 @@ import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.varia
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
-import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.report.AssertException.assertEquals;
@@ -20,11 +19,11 @@ import static org.quackery.report.AssertException.assertEquals;
 import org.quackery.Test;
 
 import com.mikosik.stork.common.Description;
-import com.mikosik.stork.problem.Problem;
+import com.mikosik.stork.problem.compile.CannotCompile;
 
-public class TestProblemDescriptions {
-  public static Test testProblemDescriptions() {
-    return suite("problem descriptions")
+public class TestCannotCompileDescriptions {
+  public static Test testCannotCompileDescriptions() {
+    return suite("cannot compute descriptions")
         .add(test(
             illegalCharacter("text", (byte) '!'),
             "import [text] contains illegal ascii character [!]"))
@@ -45,19 +44,16 @@ public class TestProblemDescriptions {
             "function [a.b.c] imports undefined function [x.y.z]"))
         .add(test(
             variableCannotBeBound(identifier("a.b.c"), variable("var")),
-            "function [a.b.c] uses undefined variable [var]"))
-        .add(test(
-            cannotCompute(),
-            "cannot compute"));
+            "function [a.b.c] uses undefined variable [var]"));
   }
 
-  private static Test test(Problem problem, Description expected) {
-    return newCase(problem.getClass().getSimpleName(), () -> {
-      assertEquals(describe(problem), expected);
+  private static Test test(CannotCompile cannotCompile, Description expected) {
+    return newCase(cannotCompile.getClass().getSimpleName(), () -> {
+      assertEquals(describe(cannotCompile), expected);
     });
   }
 
-  private static Test test(Problem problem, String expected) {
-    return test(problem, description(expected));
+  private static Test test(CannotCompile cannotCompile, String expected) {
+    return test(cannotCompile, description(expected));
   }
 }

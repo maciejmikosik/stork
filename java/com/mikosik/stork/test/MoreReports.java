@@ -2,6 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.Throwables.messageOf;
+import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.Throwables.stackTraceOf;
 import static com.mikosik.stork.problem.Describe.describe;
 import static java.lang.String.join;
@@ -13,15 +14,17 @@ import org.quackery.Body;
 import org.quackery.Test;
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.test.Outcome.Failed;
-import com.mikosik.stork.test.Outcome.Printed;
+import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class MoreReports {
   public static String format(String expectedOrActual, Outcome outcome) {
     var expectedOrActualOutcome = join(" ", expectedOrActual, nameOf(outcome));
-    var stdoutOrProblem = switch (outcome) {
-      case Printed printed -> description(format(printed.bytes));
-      case Failed failed -> describe(failed.problem);
+    var stdoutOrProblem = switch (outcome.object) {
+      case byte[] stdout -> description(format(stdout));
+      case CannotCompile cannotCompile -> describe(cannotCompile);
+      case CannotCompute cannotCompute -> describe(cannotCompute);
+      default -> throw runtimeException("" + outcome.object);
     };
     var description = description(expectedOrActualOutcome)
         .child(stdoutOrProblem);
@@ -33,7 +36,12 @@ public class MoreReports {
   }
 
   private static String nameOf(Outcome outcome) {
-    return outcome.getClass().getSimpleName().toLowerCase();
+    return switch (outcome.object) {
+      case byte[] b -> "printed";
+      case CannotCompile cannotCompile -> "failed";
+      case CannotCompute cannotCompute -> "failed";
+      default -> throw runtimeException("" + outcome.object);
+    };
   }
 
   public static String formatExceptions(Test report) {
