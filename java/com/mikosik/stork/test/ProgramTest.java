@@ -35,7 +35,6 @@ import org.quackery.Test;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Source;
-import com.mikosik.stork.problem.Problem;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -128,8 +127,10 @@ public class ProgramTest {
           program(identifier("main"), library),
           terminal(input(stdin), buffer.asOutput(), noOutput())));
       return printed(buffer.bytes());
-    } catch (Problem problem) {
-      return failed(problem);
+    } catch (CannotCompile cannotCompile) {
+      return failed(cannotCompile);
+    } catch (CannotCompute cannotCompute) {
+      return failed(cannotCompute);
     }
   }
 

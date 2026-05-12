@@ -16,7 +16,8 @@ import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
 
-import com.mikosik.stork.problem.Problem;
+import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Stork {
   public static void main(String[] args) {
@@ -24,14 +25,15 @@ public class Stork {
       var library = compile(compilation()
           .sources(sourceReader().read(workingDirectory()))
           .definitions(core(PRODUCTION)));
-
       runner().run(task(
           program(identifier("main"), library),
           terminal(input(System.in), output(System.out), noOutput())));
-
       System.exit(0);
-    } catch (Problem problem) {
-      System.err.println(describe(problem));
+    } catch (CannotCompile cannotCompile) {
+      System.err.println(describe(cannotCompile));
+      System.exit(1);
+    } catch (CannotCompute cannotCompute) {
+      System.err.println(describe(cannotCompute));
       System.exit(1);
     }
   }
