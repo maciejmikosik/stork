@@ -64,6 +64,12 @@ public class Compiler {
     }
   }
 
+  public static List<Definition> compile(StorkDirectory directory) {
+    return compile(directory.sourceFile.content)
+        .then(makeComputable(directory.namespace))
+        .getOrThrow();
+  }
+
   private static UnaryOperator<List<Definition>> makeComputable(
       Namespace namespace) {
     return definitions -> definitions.stream()
