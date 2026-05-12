@@ -1,8 +1,6 @@
 package com.mikosik.stork.problem.compute;
 
-import com.mikosik.stork.problem.Problem;
-
-public class CannotCompute extends Problem {
+public class CannotCompute extends RuntimeException {
   public static CannotCompute cannotCompute() {
     return new CannotCompute();
   }

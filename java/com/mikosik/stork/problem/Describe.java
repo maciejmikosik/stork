@@ -13,6 +13,7 @@ import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
+import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 import com.mikosik.stork.problem.compile.importing.IllegalCharacter;
 import com.mikosik.stork.problem.compile.link.CannotLink;
@@ -28,18 +29,17 @@ import com.mikosik.stork.problem.compute.CannotCompute;
 import com.mikosik.stork.problem.compute.FunctionMissing;
 
 public class Describe {
-  public static Description describe(Problem problem) {
-    return switch (problem) {
+  public static Description describe(CannotCompile cannotCompile) {
+    return switch (cannotCompile) {
       case CannotImport cannotImport -> describe(cannotImport);
       case CannotTokenize cannotTokenize -> describe(cannotTokenize);
       case CannotParse cannotParse -> describe(cannotParse);
       case CannotLink cannotLink -> describe(cannotLink);
-      case CannotCompute cannotCompute -> describe(cannotCompute);
-      default -> throw new RuntimeException(problem.getClass().toString());
+      default -> throw new RuntimeException(cannotCompile.getClass().toString());
     };
   }
 
-  private static Description describe(CannotCompute cannotCompute) {
+  public static Description describe(CannotCompute cannotCompute) {
     return switch (cannotCompute) {
       case FunctionMissing problem -> description(
           "function [%s] is missing".formatted(problem.function.name()));
