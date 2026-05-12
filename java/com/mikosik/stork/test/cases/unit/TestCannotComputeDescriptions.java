@@ -1,0 +1,37 @@
+package com.mikosik.stork.test.cases.unit;
+
+import static com.mikosik.stork.common.Description.description;
+import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.problem.Describe.describe;
+import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
+import static org.quackery.Case.newCase;
+import static org.quackery.Suite.suite;
+import static org.quackery.report.AssertException.assertEquals;
+
+import org.quackery.Test;
+
+import com.mikosik.stork.common.Description;
+import com.mikosik.stork.problem.compute.CannotCompute;
+
+public class TestCannotComputeDescriptions {
+  public static Test testCannotComputeDescriptions() {
+    return suite("cannot compute descriptions")
+        .add(test(
+            cannotCompute(),
+            "cannot compute"))
+        .add(test(
+            functionMissing(identifier("a.b.c")),
+            "function [a.b.c] is missing"));
+  }
+
+  private static Test test(CannotCompute cannotCompute, Description expected) {
+    return newCase(cannotCompute.getClass().getSimpleName(), () -> {
+      assertEquals(describe(cannotCompute), expected);
+    });
+  }
+
+  private static Test test(CannotCompute cannotCompute, String expected) {
+    return test(cannotCompute, description(expected));
+  }
+}
