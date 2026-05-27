@@ -28,6 +28,7 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkFile;
+import com.mikosik.stork.model.StorkFile.ImportFile;
 import com.mikosik.stork.model.StorkFile.SourceFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
@@ -57,7 +58,11 @@ public class Compiler {
           .flatMap(List::stream)
           .toList();
 
-      var importer = importer(storkFiles).getOrThrow();
+      var importFiles = storkFiles.stream()
+          .filter(ImportFile.class::isInstance)
+          .map(ImportFile.class::cast)
+          .toList();
+      var importer = importer(importFiles).getOrThrow();
       var linked = compiled.stream()
           .map(importer::injectInto)
           .toList();

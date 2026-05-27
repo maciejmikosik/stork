@@ -23,7 +23,6 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkFile;
 import com.mikosik.stork.model.StorkFile.ImportFile;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
@@ -35,12 +34,9 @@ public class Importer {
     this.imports = imports;
   }
 
-  // TODO move filtering outside and accept List<ImportFile>
-  public static Compiled<Importer> importer(List<StorkFile> storkFiles) {
+  public static Compiled<Importer> importer(List<ImportFile> importFiles) {
     try {
-      var imports = storkFiles.stream()
-          .filter(ImportFile.class::isInstance)
-          .map(ImportFile.class::cast)
+      var imports = importFiles.stream()
           .map(importFile -> entry(
               importFile.namespace,
               parseImports(importFile.content)))
