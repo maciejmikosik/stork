@@ -23,7 +23,7 @@ public class Stork {
   public static void main(String[] args) {
     try {
       var library = compile(compilation()
-          .sources(sourceReader().read(workingDirectory()))
+          .storkFiles(sourceReader().read(workingDirectory()))
           .definitions(core(PRODUCTION)));
       runner().run(task(
           program(identifier("main"), library),

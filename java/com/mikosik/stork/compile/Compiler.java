@@ -12,7 +12,7 @@ import static com.mikosik.stork.compile.link.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Source.Kind.CODE;
+import static com.mikosik.stork.model.StorkFile.Kind.CODE;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifLambda;
 import static com.mikosik.stork.model.change.Changes.ifQuote;
@@ -28,12 +28,12 @@ import java.util.function.UnaryOperator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.Source;
+import com.mikosik.stork.model.StorkFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
   public static List<Definition> compile(Compilation compilation) {
-    return compile(compilation.sources)
+    return compile(compilation.storkFiles)
         .then(definitions -> join(definitions, compilation.definitions))
         .thenTry(Compiler::verify)
         .getOrThrow();
@@ -46,17 +46,17 @@ public class Compiler {
         : compiled(linkingProblems);
   }
 
-  private static Compiled<List<Definition>> compile(List<Source> sources) {
+  private static Compiled<List<Definition>> compile(List<StorkFile> storkFiles) {
     try {
-      var compiled = sources.stream()
-          .filter(source -> source.kind == CODE)
-          .map(source -> compile(source.content)
-              .then(makeComputable(source.namespace))
+      var compiled = storkFiles.stream()
+          .filter(storkFile -> storkFile.kind == CODE)
+          .map(storkFile -> compile(storkFile.content)
+              .then(makeComputable(storkFile.namespace))
               .getOrThrow())
           .flatMap(List::stream)
           .toList();
 
-      var importer = importer(sources).getOrThrow();
+      var importer = importer(storkFiles).getOrThrow();
       var linked = compiled.stream()
           .map(importer::injectInto)
           .toList();

@@ -19,7 +19,7 @@ public class Demo {
   public static void main(String[] args) {
     var demoDirectory = project().demoDirectory.directory("greeting");
     var library = compile(compilation()
-        .sources(sourceReader().read(demoDirectory))
+        .storkFiles(sourceReader().read(demoDirectory))
         .definitions(core(DEVELOPMENT)));
 
     runner().run(task(

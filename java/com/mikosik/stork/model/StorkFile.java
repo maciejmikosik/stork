@@ -1,11 +1,11 @@
 package com.mikosik.stork.model;
 
-public class Source {
+public class StorkFile {
   public final Kind kind;
   public final Namespace namespace;
   public final byte[] content;
 
-  private Source(
+  private StorkFile(
       Kind kind,
       Namespace namespace,
       byte[] content) {
@@ -14,11 +14,11 @@ public class Source {
     this.content = content;
   }
 
-  public static Source source(
+  public static StorkFile storkFile(
       Kind kind,
       Namespace namespace,
       byte[] content) {
-    return new Source(kind, namespace, content);
+    return new StorkFile(kind, namespace, content);
   }
 
   public enum Kind {
