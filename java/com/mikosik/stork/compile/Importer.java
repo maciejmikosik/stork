@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.StorkFile.Kind.IMPORT;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
@@ -25,6 +24,7 @@ import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkFile;
+import com.mikosik.stork.model.StorkFile.ImportFile;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 
@@ -35,10 +35,12 @@ public class Importer {
     this.imports = imports;
   }
 
+  // TODO move filtering outside and accept List<ImportFile>
   public static Compiled<Importer> importer(List<StorkFile> storkFiles) {
     try {
       var imports = storkFiles.stream()
-          .filter(storkFile -> storkFile.kind == IMPORT)
+          .filter(ImportFile.class::isInstance)
+          .map(ImportFile.class::cast)
           .map(importFile -> entry(
               importFile.namespace,
               parseImports(importFile.content)))

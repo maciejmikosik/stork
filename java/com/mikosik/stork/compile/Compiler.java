@@ -12,7 +12,6 @@ import static com.mikosik.stork.compile.link.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.compile.parse.Parser.parse;
 import static com.mikosik.stork.compile.tokenize.Tokenizer.tokenize;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.StorkFile.Kind.CODE;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifLambda;
 import static com.mikosik.stork.model.change.Changes.ifQuote;
@@ -29,6 +28,7 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkFile;
+import com.mikosik.stork.model.StorkFile.SourceFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
@@ -49,9 +49,10 @@ public class Compiler {
   private static Compiled<List<Definition>> compile(List<StorkFile> storkFiles) {
     try {
       var compiled = storkFiles.stream()
-          .filter(storkFile -> storkFile.kind == CODE)
-          .map(storkFile -> compile(storkFile.content)
-              .then(makeComputable(storkFile.namespace))
+          .filter(SourceFile.class::isInstance)
+          .map(SourceFile.class::cast)
+          .map(sourceFile -> compile(sourceFile.content)
+              .then(makeComputable(sourceFile.namespace))
               .getOrThrow())
           .flatMap(List::stream)
           .toList();

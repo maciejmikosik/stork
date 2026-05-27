@@ -11,9 +11,8 @@ import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
-import static com.mikosik.stork.model.StorkFile.storkFile;
-import static com.mikosik.stork.model.StorkFile.Kind.CODE;
-import static com.mikosik.stork.model.StorkFile.Kind.IMPORT;
+import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
+import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -72,11 +71,11 @@ public class ProgramTest {
   }
 
   public ProgramTest sourceRaw(String content) {
-    return file(storkFile(CODE, currentNamespace, bytes(content)));
+    return file(sourceFile(currentNamespace, bytes(content)));
   }
 
   public ProgramTest sourceRaw(byte[] content) {
-    return file(storkFile(CODE, currentNamespace, content));
+    return file(sourceFile(currentNamespace, content));
   }
 
   public ProgramTest source(String content) {
@@ -84,7 +83,7 @@ public class ProgramTest {
   }
 
   public ProgramTest imports(String content) {
-    return file(storkFile(IMPORT, currentNamespace, bytes(content)));
+    return file(importFile(currentNamespace, bytes(content)));
   }
 
   public ProgramTest stdin(String stdin) {

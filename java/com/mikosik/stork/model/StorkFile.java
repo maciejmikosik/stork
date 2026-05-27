@@ -1,34 +1,36 @@
 package com.mikosik.stork.model;
 
-public class StorkFile {
-  public final Kind kind;
-  public final Namespace namespace;
-  public final byte[] content;
+public sealed class StorkFile {
 
-  private StorkFile(
-      Kind kind,
-      Namespace namespace,
-      byte[] content) {
-    this.kind = kind;
-    this.namespace = namespace;
-    this.content = content;
+  public static final class ImportFile extends StorkFile {
+    public static final String FILE_NAME = "import.stork";
+
+    public final Namespace namespace;
+    public final byte[] content;
+
+    public ImportFile(Namespace namespace, byte[] content) {
+      this.namespace = namespace;
+      this.content = content;
+    }
+
+    public static ImportFile importFile(Namespace namespace, byte[] content) {
+      return new ImportFile(namespace, content);
+    }
   }
 
-  public static StorkFile storkFile(
-      Kind kind,
-      Namespace namespace,
-      byte[] content) {
-    return new StorkFile(kind, namespace, content);
-  }
+  public static final class SourceFile extends StorkFile {
+    public static final String FILE_NAME = "source.stork";
 
-  public enum Kind {
-    CODE("source.stork"),
-    IMPORT("import.stork");
+    public final Namespace namespace;
+    public final byte[] content;
 
-    public final String fileName;
+    public SourceFile(Namespace namespace, byte[] content) {
+      this.namespace = namespace;
+      this.content = content;
+    }
 
-    Kind(String fileName) {
-      this.fileName = fileName;
+    public static SourceFile sourceFile(Namespace namespace, byte[] content) {
+      return new SourceFile(namespace, content);
     }
   }
 }
