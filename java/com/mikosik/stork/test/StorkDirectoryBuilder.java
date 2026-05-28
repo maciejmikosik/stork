@@ -8,11 +8,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkDirectory;
+import com.mikosik.stork.model.StorkFile.ImportFile;
+import com.mikosik.stork.model.StorkFile.SourceFile;
 
 public class StorkDirectoryBuilder {
   private final Namespace namespace;
-  private byte[] imports = new byte[0];
-  private byte[] source = new byte[0];
+  private ImportFile imports = importFile(new byte[0]);
+  private SourceFile source = sourceFile(new byte[0]);
 
   private StorkDirectoryBuilder(Namespace namespace) {
     this.namespace = namespace;
@@ -27,12 +29,12 @@ public class StorkDirectoryBuilder {
   }
 
   public StorkDirectoryBuilder imports(String imports) {
-    this.imports = imports.getBytes(UTF_8);
+    this.imports = importFile(imports.getBytes(UTF_8));
     return this;
   }
 
   public StorkDirectoryBuilder source(byte[] source) {
-    this.source = source;
+    this.source = sourceFile(source);
     return this;
   }
 
@@ -43,9 +45,6 @@ public class StorkDirectoryBuilder {
   }
 
   public StorkDirectory build() {
-    return storkDirectory(
-        namespace,
-        importFile(imports),
-        sourceFile(source));
+    return storkDirectory(namespace, imports, source);
   }
 }
