@@ -18,7 +18,7 @@ import static com.mikosik.stork.test.MoreReports.format;
 import static com.mikosik.stork.test.Outcome.areEqual;
 import static com.mikosik.stork.test.Outcome.outcome;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.Factory.path;
+import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.quackery.Case.newCase;
@@ -64,21 +64,17 @@ public class ProgramTest {
     return this;
   }
 
-  public ProgramTest sourceRaw(String content) {
-    return add(rootDirectory.sourceRaw(content));
+  public ProgramTest imports(String content) {
+    rootDirectory.imports(content);
+    return this;
   }
 
-  public ProgramTest sourceRaw(byte[] content) {
-    return add(rootDirectory.sourceRaw(content));
+  public ProgramTest source(byte[] content) {
+    return add(rootDirectory.source(content));
   }
 
   public ProgramTest source(String content) {
     return add(rootDirectory.source(content));
-  }
-
-  public ProgramTest imports(String content) {
-    rootDirectory.imports(content);
-    return this;
   }
 
   public ProgramTest stdin(String stdin) {

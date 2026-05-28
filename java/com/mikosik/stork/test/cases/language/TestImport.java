@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.Factory.path;
+import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
 import static org.quackery.Suite.suite;
 

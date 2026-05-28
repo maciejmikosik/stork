@@ -3,7 +3,7 @@ package com.mikosik.stork.test.cases.everything;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.test.ProgramTest.programTest;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.Factory.path;
+import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
