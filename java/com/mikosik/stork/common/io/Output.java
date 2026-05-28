@@ -2,6 +2,8 @@ package com.mikosik.stork.common.io;
 
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -28,6 +30,10 @@ public class Output implements AutoCloseable {
     } catch (IOException e) {
       throw unchecked(e);
     }
+  }
+
+  public static Output output(FileDescriptor fileDescriptor) {
+    return output(new FileOutputStream(fileDescriptor));
   }
 
   public void write(byte b) {
