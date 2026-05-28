@@ -32,7 +32,6 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
@@ -44,7 +43,6 @@ public class ProgramTest {
   private final String name;
   private final List<Definition> core;
   private final List<StorkFile> storkFiles = new LinkedList<>();
-  private Namespace currentNamespace = namespaceOf();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, List<Definition> core) {
@@ -60,8 +58,10 @@ public class ProgramTest {
     return new ProgramTest(name, MINCORE.get());
   }
 
-  public ProgramTest namespace(String directory) {
-    currentNamespace = namespaceOf(directory.split("/"));
+  public ProgramTest add(StorkDirectoryBuilder builder) {
+    var storkDirectory = builder.build();
+    storkFiles.add(storkDirectory.importFile);
+    storkFiles.add(storkDirectory.sourceFile);
     return this;
   }
 
@@ -71,11 +71,11 @@ public class ProgramTest {
   }
 
   public ProgramTest sourceRaw(String content) {
-    return file(sourceFile(currentNamespace, bytes(content)));
+    return file(sourceFile(namespaceOf(), bytes(content)));
   }
 
   public ProgramTest sourceRaw(byte[] content) {
-    return file(sourceFile(currentNamespace, content));
+    return file(sourceFile(namespaceOf(), content));
   }
 
   public ProgramTest source(String content) {
@@ -83,7 +83,7 @@ public class ProgramTest {
   }
 
   public ProgramTest imports(String content) {
-    return file(importFile(currentNamespace, bytes(content)));
+    return file(importFile(namespaceOf(), bytes(content)));
   }
 
   public ProgramTest stdin(String stdin) {
