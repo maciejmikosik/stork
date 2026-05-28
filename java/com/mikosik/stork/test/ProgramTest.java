@@ -10,9 +10,6 @@ import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespaceOf;
-import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
-import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -21,6 +18,7 @@ import static com.mikosik.stork.test.MoreReports.format;
 import static com.mikosik.stork.test.Outcome.areEqual;
 import static com.mikosik.stork.test.Outcome.outcome;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
+import static com.mikosik.stork.test.StorkDirectoryBuilder.Factory.path;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.quackery.Case.newCase;
@@ -42,6 +40,7 @@ public class ProgramTest {
 
   private final String name;
   private final List<Definition> core;
+  private final StorkDirectoryBuilder rootDirectory = path();
   private final List<StorkFile> storkFiles = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
@@ -65,25 +64,21 @@ public class ProgramTest {
     return this;
   }
 
-  public ProgramTest file(StorkFile storkFile) {
-    storkFiles.add(storkFile);
-    return this;
-  }
-
   public ProgramTest sourceRaw(String content) {
-    return file(sourceFile(namespaceOf(), bytes(content)));
+    return add(rootDirectory.sourceRaw(content));
   }
 
   public ProgramTest sourceRaw(byte[] content) {
-    return file(sourceFile(namespaceOf(), content));
+    return add(rootDirectory.sourceRaw(content));
   }
 
   public ProgramTest source(String content) {
-    return sourceRaw(content.replace('\'', '\"'));
+    return add(rootDirectory.source(content));
   }
 
   public ProgramTest imports(String content) {
-    return file(importFile(namespaceOf(), bytes(content)));
+    rootDirectory.imports(content);
+    return this;
   }
 
   public ProgramTest stdin(String stdin) {
