@@ -47,15 +47,11 @@ public class SourceReader {
       Namespace namespace) {
     return storkDirectory(
         namespace,
-        importFile(
-            namespace,
-            directory.file(ImportFile.FILE_NAME)
-                .tryInput()
-                .readAllBytes()),
-        sourceFile(
-            namespace,
-            directory.file(SourceFile.FILE_NAME)
-                .tryInput()
-                .readAllBytes()));
+        importFile(directory.file(ImportFile.FILE_NAME)
+            .tryInput()
+            .readAllBytes()),
+        sourceFile(directory.file(SourceFile.FILE_NAME)
+            .tryInput()
+            .readAllBytes()));
   }
 }
