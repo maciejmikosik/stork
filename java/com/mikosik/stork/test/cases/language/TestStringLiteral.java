@@ -23,7 +23,7 @@ public class TestStringLiteral {
 
   private static Test reportsIllegalCharacter(byte character) {
     return programTest("[%d]".formatted(character))
-        .sourceRaw(stringLiteralWith(character))
+        .source(stringLiteralWith(character))
         .expect(illegalCharacterInString(character));
   }
 

@@ -10,9 +10,6 @@ import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespaceOf;
-import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
-import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -21,6 +18,7 @@ import static com.mikosik.stork.test.MoreReports.format;
 import static com.mikosik.stork.test.Outcome.areEqual;
 import static com.mikosik.stork.test.Outcome.outcome;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
+import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.lang.String.join;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.quackery.Case.newCase;
@@ -32,7 +30,6 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
@@ -43,8 +40,8 @@ public class ProgramTest {
 
   private final String name;
   private final List<Definition> core;
+  private final StorkDirectoryBuilder rootDirectory = path();
   private final List<StorkFile> storkFiles = new LinkedList<>();
-  private Namespace currentNamespace = namespaceOf();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, List<Definition> core) {
@@ -60,30 +57,24 @@ public class ProgramTest {
     return new ProgramTest(name, MINCORE.get());
   }
 
-  public ProgramTest namespace(String directory) {
-    currentNamespace = namespaceOf(directory.split("/"));
+  public ProgramTest add(StorkDirectoryBuilder builder) {
+    var storkDirectory = builder.build();
+    storkFiles.add(storkDirectory.importFile);
+    storkFiles.add(storkDirectory.sourceFile);
     return this;
-  }
-
-  public ProgramTest file(StorkFile storkFile) {
-    storkFiles.add(storkFile);
-    return this;
-  }
-
-  public ProgramTest sourceRaw(String content) {
-    return file(sourceFile(currentNamespace, bytes(content)));
-  }
-
-  public ProgramTest sourceRaw(byte[] content) {
-    return file(sourceFile(currentNamespace, content));
-  }
-
-  public ProgramTest source(String content) {
-    return sourceRaw(content.replace('\'', '\"'));
   }
 
   public ProgramTest imports(String content) {
-    return file(importFile(currentNamespace, bytes(content)));
+    rootDirectory.imports(content);
+    return this;
+  }
+
+  public ProgramTest source(byte[] content) {
+    return add(rootDirectory.source(content));
+  }
+
+  public ProgramTest source(String content) {
+    return add(rootDirectory.source(content));
   }
 
   public ProgramTest stdin(String stdin) {

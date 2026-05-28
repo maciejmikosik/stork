@@ -23,7 +23,7 @@ public class TestTokenizer {
 
   private static Test reportsIllegalCharacter(byte character) {
     return programTest("[%d]".formatted(character))
-        .sourceRaw(sourceCodeWith(character))
+        .source(sourceCodeWith(character))
         .expect(illegalCharacterInCode(character));
   }
 
