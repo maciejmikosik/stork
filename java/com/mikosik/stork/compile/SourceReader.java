@@ -46,6 +46,7 @@ public class SourceReader {
       Directory directory,
       Namespace namespace) {
     return storkDirectory(
+        namespace,
         importFile(
             namespace,
             directory.file(ImportFile.FILE_NAME)

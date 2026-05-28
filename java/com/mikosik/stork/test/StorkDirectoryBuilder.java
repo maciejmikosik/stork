@@ -44,6 +44,7 @@ public class StorkDirectoryBuilder {
 
   public StorkDirectory build() {
     return storkDirectory(
+        namespace,
         importFile(namespace, imports),
         sourceFile(namespace, source));
   }
