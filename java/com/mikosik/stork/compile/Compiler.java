@@ -48,17 +48,13 @@ public class Compiler {
   private static Compiled<List<Definition>> compile(List<StorkDirectory> directories) {
     try {
       var compiled = directories.stream()
-          .map(directory -> directory.sourceFile)
-          .map(sourceFile -> compile(sourceFile.content)
-              .then(makeComputable(sourceFile.namespace))
+          .map(directory -> compile(directory.sourceFile.content)
+              .then(makeComputable(directory.namespace))
               .getOrThrow())
           .flatMap(List::stream)
           .toList();
 
-      var importFiles = directories.stream()
-          .map(directory -> directory.importFile)
-          .toList();
-      var importer = importer(importFiles).getOrThrow();
+      var importer = importer(directories).getOrThrow();
       var linked = compiled.stream()
           .map(importer::injectInto)
           .toList();

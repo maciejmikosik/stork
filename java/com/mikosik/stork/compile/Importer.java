@@ -23,7 +23,7 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkFile.ImportFile;
+import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 
@@ -34,12 +34,12 @@ public class Importer {
     this.imports = imports;
   }
 
-  public static Compiled<Importer> importer(List<ImportFile> importFiles) {
+  public static Compiled<Importer> importer(List<StorkDirectory> directories) {
     try {
-      var imports = importFiles.stream()
-          .map(importFile -> entry(
-              importFile.namespace,
-              parseImports(importFile.content)))
+      var imports = directories.stream()
+          .map(directory -> entry(
+              directory.namespace,
+              parseImports(directory.importFile.content)))
           .collect(toMapFromEntries());
       return compiled(new Importer(imports));
     } catch (CannotImport problem) {
