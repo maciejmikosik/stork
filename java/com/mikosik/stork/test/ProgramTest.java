@@ -6,7 +6,6 @@ import static com.mikosik.stork.Core.Mode.TESTING;
 import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -114,7 +113,7 @@ public class ProgramTest {
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),
-          terminal(input(stdin), buffer.asOutput(), noOutput())));
+          terminal(input(stdin), buffer.asOutput())));
       return outcome(buffer.bytes());
     } catch (CannotCompile cannotCompile) {
       return outcome(cannotCompile);

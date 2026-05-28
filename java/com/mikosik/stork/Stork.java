@@ -4,7 +4,6 @@ import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.PRODUCTION;
 import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
@@ -28,7 +27,7 @@ public class Stork {
           .build());
       runner().run(task(
           program(identifier("main"), library),
-          terminal(input(System.in), output(System.out), noOutput())));
+          terminal(input(System.in), output(System.out))));
       System.exit(0);
     } catch (CannotCompile cannotCompile) {
       System.err.println(describe(cannotCompile));
