@@ -6,16 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.model.StorkFile;
 
 public class Codebase {
   public final List<StorkFile> files;
+  public final List<StorkDirectory> directories;
   public final List<Definition> dependencies;
 
   private Codebase(
       List<StorkFile> files,
+      List<StorkDirectory> directories,
       List<Definition> definitions) {
     this.files = files;
+    this.directories = directories;
     this.dependencies = definitions;
   }
 
@@ -25,10 +29,16 @@ public class Codebase {
 
   public static class CodebaseBuilder {
     private final List<StorkFile> files = new ArrayList<>();
+    private final List<StorkDirectory> directories = new ArrayList<>();
     private final List<Definition> dependencies = new ArrayList<>();
 
     public CodebaseBuilder files(List<StorkFile> files) {
       this.files.addAll(files);
+      return this;
+    }
+
+    public CodebaseBuilder directories(List<StorkDirectory> directories) {
+      this.directories.addAll(directories);
       return this;
     }
 
@@ -40,6 +50,7 @@ public class Codebase {
     public Codebase build() {
       return new Codebase(
           unmodifiableList(files),
+          unmodifiableList(directories),
           unmodifiableList(dependencies));
     }
   }

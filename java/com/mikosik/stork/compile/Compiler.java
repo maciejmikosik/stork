@@ -23,6 +23,7 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -34,7 +35,12 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
   public static List<Definition> compile(Codebase codebase) {
-    return compile(codebase.files)
+    var filesFromDirectories = codebase.directories.stream()
+        .flatMap(directory -> Stream.of(
+            directory.importFile,
+            directory.sourceFile))
+        .toList();
+    return compile(join(codebase.files, filesFromDirectories))
         .then(definitions -> join(definitions, codebase.dependencies))
         .thenTry(Compiler::verify)
         .getOrThrow();
