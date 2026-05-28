@@ -7,7 +7,7 @@ import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
-import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.StorkFile;
+import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -41,7 +41,7 @@ public class ProgramTest {
   private final String name;
   private final List<Definition> core;
   private final StorkDirectoryBuilder rootDirectory = path();
-  private final List<StorkFile> storkFiles = new LinkedList<>();
+  private final List<StorkDirectory> storkDirectories = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, List<Definition> core) {
@@ -58,9 +58,7 @@ public class ProgramTest {
   }
 
   public ProgramTest add(StorkDirectoryBuilder builder) {
-    var storkDirectory = builder.build();
-    storkFiles.add(storkDirectory.importFile);
-    storkFiles.add(storkDirectory.sourceFile);
+    storkDirectories.add(builder.build());
     return this;
   }
 
@@ -109,9 +107,10 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
-      var library = compile(compilation()
-          .storkFiles(storkFiles)
-          .definitions(core));
+      var library = compile(codebase()
+          .directories(storkDirectories)
+          .dependencies(core)
+          .build());
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),

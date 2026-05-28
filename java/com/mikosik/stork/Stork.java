@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.io.Directories.workingDirectory;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -22,9 +22,10 @@ import com.mikosik.stork.problem.compute.CannotCompute;
 public class Stork {
   public static void main(String[] args) {
     try {
-      var library = compile(compilation()
-          .storkFiles(sourceReader().read(workingDirectory()))
-          .definitions(core(PRODUCTION)));
+      var library = compile(codebase()
+          .directories(sourceReader().read(workingDirectory()))
+          .dependencies(core(PRODUCTION))
+          .build());
       runner().run(task(
           program(identifier("main"), library),
           terminal(input(System.in), output(System.out), noOutput())));

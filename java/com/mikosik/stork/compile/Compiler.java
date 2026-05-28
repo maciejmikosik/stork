@@ -27,15 +27,13 @@ import java.util.function.UnaryOperator;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkFile;
-import com.mikosik.stork.model.StorkFile.ImportFile;
-import com.mikosik.stork.model.StorkFile.SourceFile;
+import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
-  public static List<Definition> compile(Compilation compilation) {
-    return compile(compilation.storkFiles)
-        .then(definitions -> join(definitions, compilation.definitions))
+  public static List<Definition> compile(Codebase codebase) {
+    return compile(codebase.directories)
+        .then(definitions -> join(definitions, codebase.dependencies))
         .thenTry(Compiler::verify)
         .getOrThrow();
   }
@@ -47,20 +45,18 @@ public class Compiler {
         : compiled(linkingProblems);
   }
 
-  private static Compiled<List<Definition>> compile(List<StorkFile> storkFiles) {
+  private static Compiled<List<Definition>> compile(List<StorkDirectory> directories) {
     try {
-      var compiled = storkFiles.stream()
-          .filter(SourceFile.class::isInstance)
-          .map(SourceFile.class::cast)
+      var compiled = directories.stream()
+          .map(directory -> directory.sourceFile)
           .map(sourceFile -> compile(sourceFile.content)
               .then(makeComputable(sourceFile.namespace))
               .getOrThrow())
           .flatMap(List::stream)
           .toList();
 
-      var importFiles = storkFiles.stream()
-          .filter(ImportFile.class::isInstance)
-          .map(ImportFile.class::cast)
+      var importFiles = directories.stream()
+          .map(directory -> directory.importFile)
           .toList();
       var importer = importer(importFiles).getOrThrow();
       var linked = compiled.stream()
