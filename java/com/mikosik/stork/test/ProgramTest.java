@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.StorkFile;
+import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -41,7 +41,7 @@ public class ProgramTest {
   private final String name;
   private final List<Definition> core;
   private final StorkDirectoryBuilder rootDirectory = path();
-  private final List<StorkFile> storkFiles = new LinkedList<>();
+  private final List<StorkDirectory> storkDirectories = new LinkedList<>();
   private byte[] stdin = new byte[0];
 
   private ProgramTest(String name, List<Definition> core) {
@@ -58,9 +58,7 @@ public class ProgramTest {
   }
 
   public ProgramTest add(StorkDirectoryBuilder builder) {
-    var storkDirectory = builder.build();
-    storkFiles.add(storkDirectory.importFile);
-    storkFiles.add(storkDirectory.sourceFile);
+    storkDirectories.add(builder.build());
     return this;
   }
 
@@ -110,7 +108,7 @@ public class ProgramTest {
   private Outcome compileAndRun() {
     try {
       var library = compile(codebase()
-          .files(storkFiles)
+          .directories(storkDirectories)
           .dependencies(core)
           .build());
       var buffer = newBuffer();
