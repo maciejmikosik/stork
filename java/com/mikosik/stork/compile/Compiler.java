@@ -33,9 +33,9 @@ import com.mikosik.stork.model.StorkFile.SourceFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
-  public static List<Definition> compile(Compilation compilation) {
-    return compile(compilation.storkFiles)
-        .then(definitions -> join(definitions, compilation.definitions))
+  public static List<Definition> compile(Codebase codebase) {
+    return compile(codebase.files)
+        .then(definitions -> join(definitions, codebase.dependencies))
         .thenTry(Compiler::verify)
         .getOrThrow();
   }

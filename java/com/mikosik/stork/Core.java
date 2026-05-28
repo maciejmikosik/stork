@@ -3,7 +3,7 @@ package com.mikosik.stork;
 import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.Throwables.linkageError;
 import static com.mikosik.stork.common.io.Directory.directory;
-import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
@@ -28,9 +28,10 @@ public class Core {
   }
 
   public static List<Definition> core(Mode mode) {
-    return compile(compilation()
-        .storkFiles(sourceReader().read(coreDirectoryFor(mode)))
-        .definitions(operatorLibrary()));
+    return compile(codebase()
+        .files(sourceReader().read(coreDirectoryFor(mode)))
+        .dependencies(operatorLibrary())
+        .build());
   }
 
   private static Directory coreDirectoryFor(Mode mode) {

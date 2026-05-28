@@ -6,7 +6,7 @@ import static com.mikosik.stork.Project.project;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
 import static com.mikosik.stork.common.io.Output.output;
-import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.model.Identifier.identifier;
@@ -18,9 +18,10 @@ import static com.mikosik.stork.program.Terminal.terminal;
 public class Demo {
   public static void main(String[] args) {
     var demoDirectory = project().demoDirectory.directory("greeting");
-    var library = compile(compilation()
-        .storkFiles(sourceReader().read(demoDirectory))
-        .definitions(core(DEVELOPMENT)));
+    var library = compile(codebase()
+        .files(sourceReader().read(demoDirectory))
+        .dependencies(core(DEVELOPMENT))
+        .build());
 
     runner().run(task(
         program(identifier("main"), library),

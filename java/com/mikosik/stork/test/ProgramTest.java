@@ -7,7 +7,7 @@ import static com.mikosik.stork.common.Logic.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Output.noOutput;
-import static com.mikosik.stork.compile.Compilation.compilation;
+import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.program.Program.program;
@@ -109,9 +109,10 @@ public class ProgramTest {
 
   private Outcome compileAndRun() {
     try {
-      var library = compile(compilation()
-          .storkFiles(storkFiles)
-          .definitions(core));
+      var library = compile(codebase()
+          .files(storkFiles)
+          .dependencies(core)
+          .build());
       var buffer = newBuffer();
       runner().run(task(
           program(identifier("main"), library),
