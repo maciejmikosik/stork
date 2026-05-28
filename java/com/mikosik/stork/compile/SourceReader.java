@@ -12,8 +12,6 @@ import java.util.List;
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkDirectory;
-import com.mikosik.stork.model.StorkFile.ImportFile;
-import com.mikosik.stork.model.StorkFile.SourceFile;
 
 // TODO rename to something better
 public class SourceReader {
@@ -47,10 +45,10 @@ public class SourceReader {
       Namespace namespace) {
     return storkDirectory(
         namespace,
-        importFile(directory.file(ImportFile.FILE_NAME)
+        importFile(directory.file("import.stork")
             .tryInput()
             .readAllBytes()),
-        sourceFile(directory.file(SourceFile.FILE_NAME)
+        sourceFile(directory.file("source.stork")
             .tryInput()
             .readAllBytes()));
   }

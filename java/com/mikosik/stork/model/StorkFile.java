@@ -3,8 +3,6 @@ package com.mikosik.stork.model;
 public sealed class StorkFile {
 
   public static final class ImportFile extends StorkFile {
-    public static final String FILE_NAME = "import.stork";
-
     public final byte[] content;
 
     public ImportFile(byte[] content) {
@@ -17,8 +15,6 @@ public sealed class StorkFile {
   }
 
   public static final class SourceFile extends StorkFile {
-    public static final String FILE_NAME = "source.stork";
-
     public final byte[] content;
 
     public SourceFile(byte[] content) {
