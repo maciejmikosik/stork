@@ -6,7 +6,6 @@ import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Source.Kind.IMPORT;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
@@ -24,7 +23,7 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.Source;
+import com.mikosik.stork.model.StorkFile.ImportFile;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 
@@ -35,13 +34,12 @@ public class Importer {
     this.imports = imports;
   }
 
-  public static Compiled<Importer> importer(List<Source> sources) {
+  public static Compiled<Importer> importer(List<ImportFile> importFiles) {
     try {
-      var imports = sources.stream()
-          .filter(source -> source.kind == IMPORT)
-          .map(importSource -> entry(
-              importSource.namespace,
-              parseImports(importSource.content)))
+      var imports = importFiles.stream()
+          .map(importFile -> entry(
+              importFile.namespace,
+              parseImports(importFile.content)))
           .collect(toMapFromEntries());
       return compiled(new Importer(imports));
     } catch (CannotImport problem) {

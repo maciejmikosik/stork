@@ -11,8 +11,8 @@ import static com.mikosik.stork.compile.Compilation.compilation;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
-import static com.mikosik.stork.model.Source.Kind.CODE;
-import static com.mikosik.stork.model.Source.Kind.IMPORT;
+import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
+import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -33,7 +33,7 @@ import org.quackery.Test;
 
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.Source;
+import com.mikosik.stork.model.StorkFile;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
@@ -43,7 +43,7 @@ public class ProgramTest {
 
   private final String name;
   private final List<Definition> core;
-  private final List<Source> sources = new LinkedList<>();
+  private final List<StorkFile> storkFiles = new LinkedList<>();
   private Namespace currentNamespace = namespaceOf();
   private byte[] stdin = new byte[0];
 
@@ -65,17 +65,17 @@ public class ProgramTest {
     return this;
   }
 
-  public ProgramTest source(Source source) {
-    sources.add(source);
+  public ProgramTest file(StorkFile storkFile) {
+    storkFiles.add(storkFile);
     return this;
   }
 
   public ProgramTest sourceRaw(String content) {
-    return source(Source.source(CODE, currentNamespace, bytes(content)));
+    return file(sourceFile(currentNamespace, bytes(content)));
   }
 
   public ProgramTest sourceRaw(byte[] content) {
-    return source(Source.source(CODE, currentNamespace, content));
+    return file(sourceFile(currentNamespace, content));
   }
 
   public ProgramTest source(String content) {
@@ -83,7 +83,7 @@ public class ProgramTest {
   }
 
   public ProgramTest imports(String content) {
-    return source(Source.source(IMPORT, currentNamespace, bytes(content)));
+    return file(importFile(currentNamespace, bytes(content)));
   }
 
   public ProgramTest stdin(String stdin) {
@@ -119,7 +119,7 @@ public class ProgramTest {
   private Outcome compileAndRun() {
     try {
       var library = compile(compilation()
-          .sources(sources)
+          .storkFiles(storkFiles)
           .definitions(core));
       var buffer = newBuffer();
       runner().run(task(
