@@ -1,8 +1,9 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.list;
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.model.Namespace.namespaceOf;
+import static com.mikosik.stork.model.StorkDirectory.storkDirectory;
 import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
 import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 import com.mikosik.stork.common.io.Directory;
 import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkFile;
+import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.model.StorkFile.ImportFile;
 import com.mikosik.stork.model.StorkFile.SourceFile;
 
@@ -22,15 +23,15 @@ public class SourceReader {
     return new SourceReader();
   }
 
-  public List<StorkFile> read(Directory directory) {
+  public List<StorkDirectory> read(Directory directory) {
     return readDeep(directory, namespaceOf());
   }
 
-  private static List<StorkFile> readDeep(
+  private static List<StorkDirectory> readDeep(
       Directory directory,
       Namespace namespace) {
     return join(
-        readCurrent(directory, namespace),
+        single(readCurrent(directory, namespace)),
         directory.directories()
             // TODO skip names with illegal characters
             // TODO skip inaccessible directories
@@ -41,10 +42,10 @@ public class SourceReader {
             .toList());
   }
 
-  private static List<StorkFile> readCurrent(
+  private static StorkDirectory readCurrent(
       Directory directory,
       Namespace namespace) {
-    return list(
+    return storkDirectory(
         importFile(
             namespace,
             directory.file(ImportFile.FILE_NAME)

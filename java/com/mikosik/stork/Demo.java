@@ -19,7 +19,7 @@ public class Demo {
   public static void main(String[] args) {
     var demoDirectory = project().demoDirectory.directory("greeting");
     var library = compile(codebase()
-        .files(sourceReader().read(demoDirectory))
+        .directories(sourceReader().read(demoDirectory))
         .dependencies(core(DEVELOPMENT))
         .build());
 

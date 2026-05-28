@@ -29,7 +29,7 @@ public class Core {
 
   public static List<Definition> core(Mode mode) {
     return compile(codebase()
-        .files(sourceReader().read(coreDirectoryFor(mode)))
+        .directories(sourceReader().read(coreDirectoryFor(mode)))
         .dependencies(operatorLibrary())
         .build());
   }

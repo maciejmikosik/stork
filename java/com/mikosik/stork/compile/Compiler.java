@@ -40,7 +40,7 @@ public class Compiler {
             directory.importFile,
             directory.sourceFile))
         .toList();
-    return compile(join(codebase.files, filesFromDirectories))
+    return compile(filesFromDirectories)
         .then(definitions -> join(definitions, codebase.dependencies))
         .thenTry(Compiler::verify)
         .getOrThrow();
