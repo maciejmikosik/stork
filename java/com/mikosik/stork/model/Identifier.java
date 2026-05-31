@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.ImmutableList.toList;
 import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Namespace.namespaceOf;
+import static com.mikosik.stork.model.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.lang.String.join;
 import static java.util.Objects.hash;
@@ -23,7 +23,7 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(Variable variable) {
-    return new Identifier(namespaceOf(), variable);
+    return new Identifier(namespaceRoot(), variable);
   }
 
   public static Identifier identifier(String name) {

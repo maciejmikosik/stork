@@ -1,9 +1,10 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespaceOf;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static java.util.Arrays.stream;
 
@@ -28,5 +29,5 @@ public class OperatorLibrary {
         .toList();
   }
 
-  private static final Namespace NAMESPACE = namespaceOf("lang", "op");
+  private static final Namespace NAMESPACE = namespace(list("lang", "op"));
 }
