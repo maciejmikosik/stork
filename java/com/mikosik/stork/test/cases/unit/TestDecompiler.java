@@ -101,9 +101,18 @@ public class TestDecompiler {
                 .add(test("f(x)(y)",
                     application(identifier("f"), identifier("x"), identifier("y"))))))
         .add(suite("definition")
-            .add(test("f(x){x}", definition("f", lambda(x, x))))
-            .add(test("f(x)(y){x}", definition("f", lambda(x, y, x))))
-            .add(test("f{g}", definition("f", identifier("g")))))
+            .add(test("f(x){x}",
+                definition(
+                    identifier(variable("f")),
+                    lambda(x, x))))
+            .add(test("f(x)(y){x}",
+                definition(
+                    identifier(variable("f")),
+                    lambda(x, y, x))))
+            .add(test("f{g}",
+                definition(
+                    identifier(variable("f")),
+                    identifier("g")))))
         .add(suite("local")
             .add(test("function", removeNamespaces(identifier("package/package/function"))))
             .add(test("function", removeNamespaces(identifier("function")))));

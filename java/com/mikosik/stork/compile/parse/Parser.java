@@ -13,6 +13,7 @@ import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.compile.tokenize.Symbol.DOT;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.model.Definition.definition;
+import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
@@ -58,7 +59,7 @@ public class Parser {
 
   private static Definition parseDefinition(Peekerator<Token> input) {
     return definition(
-        parseName(input),
+        identifier(variable(parseName(input))),
         parseBody(input));
   }
 
