@@ -37,13 +37,15 @@ public class TestCannotCompileDescriptions {
             unexpected(label("label_name")),
             "unexpected label [label_name]"))
         .add(test(
-            functionDefinedMoreThanOnce(identifier("a.b.c")),
+            functionDefinedMoreThanOnce(identifier(variable("a.b.c"))),
             "function [a.b.c] is defined more than once"))
         .add(test(
-            functionNotDefined(identifier("a.b.c"), identifier("x.y.z")),
+            functionNotDefined(
+                identifier(variable("a.b.c")),
+                identifier(variable("x.y.z"))),
             "function [a.b.c] imports undefined function [x.y.z]"))
         .add(test(
-            variableCannotBeBound(identifier("a.b.c"), variable("var")),
+            variableCannotBeBound(identifier(variable("a.b.c")), variable("var")),
             "function [a.b.c] uses undefined variable [var]"));
   }
 

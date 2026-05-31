@@ -1,5 +1,6 @@
 package com.mikosik.stork.test.cases.unit;
 
+import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.link.Bind.removeNamespaces;
@@ -20,6 +21,7 @@ import static com.mikosik.stork.model.Definition.definition;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
@@ -90,16 +92,22 @@ public class TestDecompiler {
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("identifier")
-                .add(test("iden", identifier("iden"))))
+                .add(test("iden", identifier(variable("iden")))))
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
             .add(suite("lambda")
                 .add(test("(x){x}", lambda(x, x)))
                 .add(test("(x)(y){x(y)}", lambda(x, y, application(x, y)))))
             .add(suite("application")
-                .add(test("f(x)", application(identifier("f"), identifier("x"))))
+                .add(test("f(x)",
+                    application(
+                        identifier(variable("f")),
+                        identifier(variable("x")))))
                 .add(test("f(x)(y)",
-                    application(identifier("f"), identifier("x"), identifier("y"))))))
+                    application(
+                        identifier(variable("f")),
+                        identifier(variable("x")),
+                        identifier(variable("y")))))))
         .add(suite("definition")
             .add(test("f(x){x}",
                 definition(
@@ -112,10 +120,14 @@ public class TestDecompiler {
             .add(test("f{g}",
                 definition(
                     identifier(variable("f")),
-                    identifier("g")))))
+                    identifier(variable("g"))))))
         .add(suite("local")
-            .add(test("function", removeNamespaces(identifier("package/package/function"))))
-            .add(test("function", removeNamespaces(identifier("function")))));
+            .add(test("function",
+                removeNamespaces(identifier(
+                    namespace(list("package", "package")),
+                    variable("function")))))
+            .add(test("function",
+                removeNamespaces(identifier(variable("function"))))));
   }
 
   private static Test test(String expected, Expression expression) {

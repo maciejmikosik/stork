@@ -1,11 +1,13 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.toMapFromEntries;
+import static com.mikosik.stork.common.Strings.split;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.model.change.Changes.deep;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
@@ -64,13 +66,20 @@ public class Importer {
 
     var split = line.split(" ");
     if (split.length == 1) {
-      var identifier = identifier(split[0]);
+      var identifier = identifierParse(split[0]);
       return entry(identifier.variable, identifier);
     } else if (split.length == 2) {
-      return entry(variable(split[1]), identifier(split[0]));
+      return entry(variable(split[1]), identifierParse(split[0]));
     } else {
       throw runtimeException("illegal import line: %s", line);
     }
+  }
+
+  public static Identifier identifierParse(String name) {
+    var components = split("/", name);
+    return identifier(
+        namespace(components.subList(0, components.size() - 1)),
+        variable(components.getLast()));
   }
 
   public Definition injectInto(Definition definition) {

@@ -9,6 +9,7 @@ import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
@@ -29,7 +30,7 @@ public class Stork {
           .dependencies(core(PRODUCTION))
           .build());
       runner().run(task(
-          program(identifier("main"), library),
+          program(identifier(variable("main")), library),
           terminal(input(System.in), output(FileDescriptor.out))));
       System.exit(0);
     } catch (CannotCompile cannotCompile) {

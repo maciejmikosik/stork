@@ -9,6 +9,7 @@ import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -23,7 +24,7 @@ public class Demo {
         .build());
 
     runner().run(task(
-        program(identifier("main"), library),
+        program(identifier(variable("main")), library),
         terminal(input(System.in), output(System.out))));
   }
 }
