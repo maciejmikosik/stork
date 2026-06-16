@@ -1,6 +1,9 @@
 package com.mikosik.stork.test.cases.everything;
 
+import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
@@ -27,6 +30,6 @@ public class TestCore {
         .add(path("lang/stream")
             .source("length(stream) { 0 }"))
         .expect(functionDefinedMoreThanOnce(
-            identifier("lang/stream/length")));
+            identifier(namespace(list("lang", "stream")), variable("length"))));
   }
 }

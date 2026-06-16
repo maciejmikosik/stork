@@ -2,10 +2,7 @@ package com.mikosik.stork.model;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.ImmutableList.toList;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Namespace.namespaceOf;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.Namespace.namespaceRoot;
 import static java.lang.String.join;
 import static java.util.Objects.hash;
 
@@ -23,14 +20,7 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(Variable variable) {
-    return new Identifier(namespaceOf(), variable);
-  }
-
-  public static Identifier identifier(String name) {
-    var components = toList(name.split(SEPARATOR));
-    return identifier(
-        namespace(components.subList(0, components.size() - 1)),
-        variable(components.getLast()));
+    return new Identifier(namespaceRoot(), variable);
   }
 
   public String name() {

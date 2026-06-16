@@ -1,6 +1,7 @@
 package com.mikosik.stork.test.cases.everything;
 
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
@@ -17,18 +18,18 @@ public class TestMainFunction {
 
   private static Test rootFileMustExist() {
     return programTest("must exist")
-        .expect(functionMissing(identifier("main")));
+        .expect(functionMissing(identifier(variable("main"))));
   }
 
   private static Test rootFileCannotBeEmpty() {
     return programTest("cannot be empty")
         .source("")
-        .expect(functionMissing(identifier("main")));
+        .expect(functionMissing(identifier(variable("main"))));
   }
 
   private static Test rootFileMustContainMain() {
     return programTest("must contain main")
         .source("notMain(stdin) { '' }")
-        .expect(functionMissing(identifier("main")));
+        .expect(functionMissing(identifier(variable("main"))));
   }
 }

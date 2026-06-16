@@ -1,8 +1,8 @@
 package com.mikosik.stork.model;
 
 import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.none;
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.ImmutableList.toList;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ public class Namespace {
     this.components = components;
   }
 
-  public static Namespace namespaceOf(String... components) {
-    return namespace(toList(components));
+  public static Namespace namespaceRoot() {
+    return namespace(none());
   }
 
   public static Namespace namespace(List<String> components) {

@@ -2,6 +2,7 @@ package com.mikosik.stork.test.cases.unit;
 
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
@@ -21,7 +22,7 @@ public class TestCannotComputeDescriptions {
             cannotCompute(),
             "cannot compute"))
         .add(test(
-            functionMissing(identifier("a.b.c")),
+            functionMissing(identifier(variable("a.b.c"))),
             "function [a.b.c] is missing"));
   }
 

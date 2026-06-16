@@ -1,5 +1,8 @@
 package com.mikosik.stork.common;
 
+import static com.mikosik.stork.common.ImmutableList.toList;
+
+import java.util.List;
 import java.util.function.Predicate;
 
 public class Strings {
@@ -16,6 +19,10 @@ public class Strings {
     return string.chars()
         .mapToObj(i -> (char) i)
         .allMatch(predicate);
+  }
+
+  public static List<String> split(String regex, String string) {
+    return toList(string.split(regex));
   }
 
   public static String reverse(String string) {

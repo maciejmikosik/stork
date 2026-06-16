@@ -2,7 +2,7 @@
 
 To avoid collisions between function names, functions live in namespaces. Functions defined in one namespace are not accessible to functions from other namespace by default. Stork offers mechanics to define which namespace your functions live in and which functions from other namespaces are accessible to them.
 
-Stork doesn't have syntax for declaring namespace/package inside source code file like other languages. Instead namespace is inferred from path of source file on filesystem. Stork requires all functions to be defined in a file named `source.stork`, so only one file is allowed per directory, because files' names have to be unique. All functions in same source file live in same namespace, defined by relative path of that file from the root of source directory.
+Stork doesn't have syntax for declaring namespace inside source code file like other languages. Instead, namespace is inferred from path of source file on filesystem. Stork requires all functions to be defined in a file named `source.stork`, so only one file is allowed per directory, because files' names have to be unique. All functions in same source file live in same namespace, defined by relative path of that file from the root of source directory.
 
 Functions in same `source.stork` file, since they live in same namespace, can access each other by default. You can call one from the other without any extra work. This includes function recursively calling itself. Here you can see call from `main` function to `shout` function just by referring to its unqualified name.
 
@@ -51,7 +51,7 @@ So far our program fits single source file in root directory. As it grows you ca
     ┃     ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
     ┣━import.stork
     ┃ ┣━━━━━━━━━━━━━━━━━━━┓
-    ┃ ┃ common.text.shout ┃
+    ┃ ┃ common/text/shout ┃
     ┃ ┗━━━━━━━━━━━━━━━━━━━┛
     ┗━source.stork
       ┣━━━━━━━━━━━━━━━━━━━━━━━━┓

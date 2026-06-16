@@ -1,6 +1,8 @@
 package com.mikosik.stork.test.cases.language;
 
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
@@ -24,7 +26,7 @@ public class TestLinkerProblems {
     return programTest("variable that cannot be bound")
         .source("function { variable }")
         .expect(variableCannotBeBound(
-            identifier("function"),
+            identifier(variable("function")),
             variable("variable")));
   }
 
@@ -33,8 +35,8 @@ public class TestLinkerProblems {
         .imports("namespace/function2")
         .source("function { function2 }")
         .expect(functionNotDefined(
-            identifier("function"),
-            identifier("namespace/function2")));
+            identifier(variable("function")),
+            identifier(namespace(single("namespace")), variable("function2"))));
   }
 
   private static Test reportsFunctionDefinedMoreThanOnce() {
@@ -44,7 +46,7 @@ public class TestLinkerProblems {
             function { 2 }
             """)
         .expect(functionDefinedMoreThanOnce(
-            identifier("function")));
+            identifier(variable("function"))));
   }
 
   private static ProgramTest programTest(String name) {

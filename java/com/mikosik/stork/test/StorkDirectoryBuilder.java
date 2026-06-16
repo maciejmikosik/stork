@@ -1,6 +1,8 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.model.Namespace.namespaceOf;
+import static com.mikosik.stork.common.Strings.split;
+import static com.mikosik.stork.model.Namespace.namespace;
+import static com.mikosik.stork.model.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.StorkDirectory.storkDirectory;
 import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
 import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
@@ -21,11 +23,11 @@ public class StorkDirectoryBuilder {
   }
 
   public static StorkDirectoryBuilder path() {
-    return new StorkDirectoryBuilder(namespaceOf());
+    return new StorkDirectoryBuilder(namespaceRoot());
   }
 
   public static StorkDirectoryBuilder path(String path) {
-    return new StorkDirectoryBuilder(namespaceOf(path.split("/")));
+    return new StorkDirectoryBuilder(namespace(split("/", path)));
   }
 
   public StorkDirectoryBuilder imports(String imports) {
