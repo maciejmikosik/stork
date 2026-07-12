@@ -2,9 +2,7 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.iterator;
 import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.func.Functions.faa;
-import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.compile.Importer.importer;
 import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.compile.link.Unlambda.unlambda;
@@ -28,40 +26,37 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkDirectory;
-import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class Compiler {
   public static List<Definition> compile(Codebase codebase) {
-    return compile(codebase.directories)
-        .then(definitions -> join(definitions, codebase.dependencies))
-        .thenTry(Compiler::verify)
-        .getOrThrow();
+    return verify(join(
+        compile(codebase.directories),
+        codebase.dependencies));
   }
 
-  private static Compiled<List<Definition>> verify(List<Definition> definitions) {
+  private static List<Definition> verify(List<Definition> definitions) {
     var linkingProblems = findLinkingProblems(definitions);
-    return linkingProblems.isEmpty()
-        ? compiled(definitions)
-        : compiled(linkingProblems);
+    if (linkingProblems.isEmpty()) {
+      return definitions;
+    } else {
+      // TODO aggregate compiler problems
+      throw linkingProblems.getFirst();
+    }
   }
 
-  private static Compiled<List<Definition>> compile(List<StorkDirectory> directories) {
-    try {
-      var compiled = directories.stream()
-          .map(directory -> compile(directory.sourceFile.content)
-              .then(makeComputable(directory.namespace))
-              .getOrThrow())
-          .flatMap(List::stream)
-          .toList();
+  private static List<Definition> compile(List<StorkDirectory> directories) {
+    var compiled = directories.stream()
+        // TODO aggregate compiler problems from stream
+        .map(directory -> makeComputable(directory.namespace)
+            .apply(compile(directory.sourceFile.content)))
+        .flatMap(List::stream)
+        .toList();
 
-      var importer = importer(directories).getOrThrow();
-      var linked = compiled.stream()
-          .map(importer::injectInto)
-          .toList();
-      return compiled(linked);
-    } catch (CannotCompile problem) {
-      return compiled(single(problem));
-    }
+    var importer = importer(directories);
+    var linked = compiled.stream()
+        .map(importer::injectInto)
+        .toList();
+    return linked;
   }
 
   private static Faa<List<Definition>> makeComputable(
@@ -94,11 +89,7 @@ public class Compiler {
         : variable));
   }
 
-  private static Compiled<List<Definition>> compile(byte[] content) {
-    try {
-      return compiled(parse(tokenize(iterator(content))));
-    } catch (CannotCompile problem) {
-      return compiled(problem);
-    }
+  private static List<Definition> compile(byte[] content) {
+    return parse(tokenize(iterator(content)));
   }
 }

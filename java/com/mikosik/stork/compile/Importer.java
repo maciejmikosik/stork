@@ -5,7 +5,6 @@ import static com.mikosik.stork.common.Strings.split;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
@@ -27,7 +26,6 @@ import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.problem.compile.importing.CannotImport;
 
 public class Importer {
   private final Map<Namespace, Map<Variable, Identifier>> imports;
@@ -36,17 +34,13 @@ public class Importer {
     this.imports = imports;
   }
 
-  public static Compiled<Importer> importer(List<StorkDirectory> directories) {
-    try {
-      var imports = directories.stream()
-          .map(directory -> entry(
-              directory.namespace,
-              parseImports(directory.importFile.content)))
-          .collect(toMapFromEntries());
-      return compiled(new Importer(imports));
-    } catch (CannotImport problem) {
-      return compiled(problem);
-    }
+  public static Importer importer(List<StorkDirectory> directories) {
+    var imports = directories.stream()
+        .map(directory -> entry(
+            directory.namespace,
+            parseImports(directory.importFile.content)))
+        .collect(toMapFromEntries());
+    return new Importer(imports);
   }
 
   private static Map<Variable, Identifier> parseImports(byte[] content) {
