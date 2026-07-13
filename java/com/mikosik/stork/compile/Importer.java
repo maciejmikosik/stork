@@ -19,8 +19,8 @@ import static java.util.Map.entry;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 
+import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Identifier;
@@ -88,7 +88,7 @@ public class Importer {
             .apply(definition);
   }
 
-  private Function<Variable, Expression> importsFor(Namespace namespace) {
+  private Fab<Variable, Expression> importsFor(Namespace namespace) {
     if (imports.containsKey(namespace)) {
       var namespaceImports = imports.get(namespace);
       return variable -> {

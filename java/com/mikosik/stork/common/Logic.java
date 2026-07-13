@@ -1,21 +1,22 @@
 package com.mikosik.stork.common;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import com.mikosik.stork.common.func.Functions.Fab;
+import com.mikosik.stork.common.func.Functions.Fabc;
 
 public class Logic {
   public static <T> Predicate<T> not(Predicate<T> predicate) {
     return item -> !predicate.test(item);
   }
 
-  public static <A, B, C> BiFunction<B, A, C> flip(BiFunction<A, B, C> function) {
+  public static <A, B, C> Fabc<B, A, C> flip(Fabc<A, B, C> function) {
     return (a, b) -> function.apply(b, a);
   }
 
-  public static <E> Function<Object, E> constant(E value) {
+  public static <E> Fab<Object, E> constant(E value) {
     return argument -> value;
   }
 
