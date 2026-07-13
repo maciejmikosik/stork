@@ -6,10 +6,10 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Lambda.lambda;
 import static java.util.stream.Stream.concat;
 
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import com.mikosik.stork.common.func.Functions.Faa;
+import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.Application;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
@@ -21,29 +21,25 @@ import com.mikosik.stork.model.Quote;
 import com.mikosik.stork.model.Variable;
 
 public class Changes {
-  public static Function<Definition, Definition> onIdentifier(
-      Function<? super Identifier, ? extends Identifier> change) {
+  public static Faa<Definition> onIdentifier(Faa<Identifier> change) {
     return definition -> definition(
         change.apply(definition.identifier),
         definition.body);
   }
 
-  public static Function<Definition, Definition> onBody(
-      Function<? super Expression, ? extends Expression> change) {
+  public static Faa<Definition> onBody(Faa<Expression> change) {
     return definition -> definition(
         definition.identifier,
         change.apply(definition.body));
   }
 
-  public static Function<Identifier, Identifier> onNamespace(
-      Function<? super Namespace, ? extends Namespace> change) {
+  public static Faa<Identifier> onNamespace(Faa<Namespace> change) {
     return identifier -> identifier(
         change.apply(identifier.namespace),
         identifier.variable);
   }
 
-  public static UnaryOperator<Expression> deep(
-      Function<? super Expression, ? extends Expression> change) {
+  public static Faa<Expression> deep(Faa<Expression> change) {
     return expression -> switch (expression) {
       case Lambda lambda -> change.apply(lambda(
           (Parameter) change.apply(lambda.parameter),
@@ -55,32 +51,28 @@ public class Changes {
     };
   }
 
-  public static Function<Expression, Expression> ifIdentifier(
-      Function<? super Identifier, ? extends Expression> change) {
+  public static Faa<Expression> ifIdentifier(Fab<Identifier, Expression> change) {
     return expression -> switch (expression) {
       case Identifier identifier -> change.apply(identifier);
       default -> expression;
     };
   }
 
-  public static Function<Expression, Expression> ifVariable(
-      Function<? super Variable, ? extends Expression> change) {
+  public static Faa<Expression> ifVariable(Fab<Variable, Expression> change) {
     return expression -> switch (expression) {
       case Variable variable -> change.apply(variable);
       default -> expression;
     };
   }
 
-  public static Function<Expression, Expression> ifLambda(
-      Function<? super Lambda, ? extends Expression> change) {
+  public static Faa<Expression> ifLambda(Fab<Lambda, Expression> change) {
     return expression -> switch (expression) {
       case Lambda lambda -> change.apply(lambda);
       default -> expression;
     };
   }
 
-  public static Function<Expression, Expression> ifQuote(
-      Function<? super Quote, ? extends Expression> change) {
+  public static Faa<Expression> ifQuote(Fab<Quote, Expression> change) {
     return expression -> switch (expression) {
       case Quote quote -> change.apply(quote);
       default -> expression;

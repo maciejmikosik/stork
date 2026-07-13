@@ -23,6 +23,9 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import com.mikosik.stork.common.func.Functions.Faa;
+import com.mikosik.stork.common.func.Functions.Fab;
+
 public class Collections {
   public static void checkSuchElement(boolean condition) {
     if (!condition) {
@@ -104,5 +107,13 @@ public class Collections {
         return bytes[index++];
       }
     };
+  }
+
+  public static <A, B> Fab<List<A>, List<B>> each(Fab<A, B> mapping) {
+    return list -> list.stream().map(mapping).toList();
+  }
+
+  public static <A> Faa<List<A>> each(Faa<A> mapping) {
+    return list -> list.stream().map(mapping).toList();
   }
 }

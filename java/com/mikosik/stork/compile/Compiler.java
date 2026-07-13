@@ -3,7 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.iterator;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.Logic.constant;
+import static com.mikosik.stork.common.func.Functions.faa;
 import static com.mikosik.stork.compile.Compiled.compiled;
 import static com.mikosik.stork.compile.Importer.importer;
 import static com.mikosik.stork.compile.link.Bridge.stork;
@@ -22,8 +22,8 @@ import static com.mikosik.stork.model.change.Changes.onNamespace;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
-import java.util.function.UnaryOperator;
 
+import com.mikosik.stork.common.func.Functions.Faa;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Expression;
 import com.mikosik.stork.model.Namespace;
@@ -64,26 +64,26 @@ public class Compiler {
     }
   }
 
-  private static UnaryOperator<List<Definition>> makeComputable(
+  private static Faa<List<Definition>> makeComputable(
       Namespace namespace) {
     return definitions -> definitions.stream()
         // TODO test that order is ensured: lambda, local, import
         .map(onBody(bindLambdaParameters))
         .map(onBody(bindLocalFunctions(namespace, definitions)))
-        .map(onIdentifier(onNamespace(constant(namespace))))
+        .map(onIdentifier(onNamespace(faa(x -> namespace))))
         .map(onBody(unlambda))
         .map(onBody(deep(ifQuote(quote -> stork(quote.string)))))
         .toList();
   }
 
-  private static final UnaryOperator<Expression> bindLambdaParameters = deep(
+  private static final Faa<Expression> bindLambdaParameters = deep(
       ifLambda(lambda -> deep(ifVariable(variable -> {
         return variable.name.equals(lambda.parameter.name)
             ? lambda.parameter
             : variable;
       })).apply(lambda)));
 
-  private static UnaryOperator<Expression> bindLocalFunctions(
+  private static Faa<Expression> bindLocalFunctions(
       Namespace namespace,
       List<Definition> definitions) {
     var localFunctions = definitions.stream()

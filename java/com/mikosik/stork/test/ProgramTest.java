@@ -3,7 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
-import static com.mikosik.stork.common.Logic.singleton;
+import static com.mikosik.stork.common.Singleton.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Codebase.codebase;
