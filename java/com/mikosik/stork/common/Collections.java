@@ -88,6 +88,12 @@ public class Collections {
     };
   }
 
+  public static <K, V, T> Collector<T, ?, Map<K, V>> toMapIgnoringDuplicates(
+      Fab<T, K> keyMapper,
+      Fab<T, V> valueMapper) {
+    return toMap(keyMapper, valueMapper, (value, duplicate) -> value);
+  }
+
   public static <K, V> Collector<Entry<K, V>, ?, Map<K, V>> toMapFromEntries() {
     return toMap(Entry::getKey, Entry::getValue);
   }

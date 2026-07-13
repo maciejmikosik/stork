@@ -1,6 +1,7 @@
 package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.each;
+import static com.mikosik.stork.common.Collections.toMapIgnoringDuplicates;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Importer.importer;
@@ -14,7 +15,6 @@ import static com.mikosik.stork.model.change.Changes.ifQuote;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
-import static java.util.stream.Collectors.toMap;
 
 import java.util.List;
 
@@ -72,10 +72,9 @@ public class Compiler {
     return definitions -> {
       var table = definitions.stream()
           .map(definition -> definition.identifier.variable)
-          .collect(toMap(
+          .collect(toMapIgnoringDuplicates(
               variable -> variable,
-              variable -> identifier(namespace, variable),
-              (value, duplicate) -> value));
+              variable -> identifier(namespace, variable)));
 
       return definitions.stream()
           .map(onIdentifier(identifier -> table.get(identifier.variable)))
