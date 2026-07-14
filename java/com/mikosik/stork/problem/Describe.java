@@ -22,7 +22,7 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 import com.mikosik.stork.problem.compile.importing.IllegalCharacter;
 import com.mikosik.stork.problem.compile.link.CannotLink;
-import com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce;
+import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
 import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 import com.mikosik.stork.problem.compile.parse.CannotParse;
@@ -84,7 +84,7 @@ public class Describe {
 
   private static Description describe(CannotLink cannotLink) {
     return description(switch (cannotLink) {
-      case FunctionDefinedMoreThanOnce problem -> format(
+      case DuplicatedFunction problem -> format(
           "function [%s] is defined more than once",
           problem.function);
       case FunctionNotDefined problem -> format(

@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
+import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
@@ -29,7 +29,7 @@ public class TestCore {
     return programTest("cannot override core function")
         .add(path("lang/stream")
             .source("length(stream) { 0 }"))
-        .expect(functionDefinedMoreThanOnce(
+        .expect(duplicatedFunction(
             identifier(namespace(list("lang", "stream")), variable("length"))));
   }
 }

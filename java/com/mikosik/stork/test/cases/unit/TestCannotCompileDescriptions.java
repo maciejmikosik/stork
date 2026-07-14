@@ -8,7 +8,7 @@ import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
-import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
+import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
 import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
@@ -39,7 +39,7 @@ public class TestCannotCompileDescriptions {
             unexpected(label("label_name")),
             "unexpected label [label_name]"))
         .add(test(
-            functionDefinedMoreThanOnce(
+            duplicatedFunction(
                 identifier(namespace(list("a", "b")), variable("c"))),
             "function [a/b/c] is defined more than once"))
         .add(test(

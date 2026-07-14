@@ -16,7 +16,7 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.link.CannotLink;
-import com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce;
+import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
 import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 
@@ -25,7 +25,7 @@ public class VerifyLibrary {
     return join(
         findVariableCannotBeFound(library),
         findFunctionNotDefined(library),
-        findFunctionDefinedMoreThanOnce(library));
+        findDuplicatedFunction(library));
   }
 
   private static List<VariableCannotBeBound> findVariableCannotBeFound(
@@ -50,7 +50,7 @@ public class VerifyLibrary {
         .toList();
   }
 
-  private static List<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(
+  private static List<DuplicatedFunction> findDuplicatedFunction(
       List<Definition> library) {
     var histogram = library.stream()
         .map(definition -> definition.identifier)
@@ -58,7 +58,7 @@ public class VerifyLibrary {
     return histogram.entrySet().stream()
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
-        .map(FunctionDefinedMoreThanOnce::functionDefinedMoreThanOnce)
+        .map(DuplicatedFunction::duplicatedFunction)
         .toList();
   }
 }
