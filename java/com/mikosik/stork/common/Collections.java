@@ -6,6 +6,7 @@ import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -121,5 +122,10 @@ public class Collections {
 
   public static <A> Faa<List<A>> each(Faa<A> mapping) {
     return list -> list.stream().map(mapping).toList();
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <A, B> Fab<A[], B[]> eachCell(Fab<A, B> mapping) {
+    return array -> (B[]) Arrays.stream(array).map(mapping).toArray();
   }
 }
