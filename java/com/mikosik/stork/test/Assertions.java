@@ -15,6 +15,17 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Assertions {
+  public static void assertMatch(Description expected, Description actual) {
+    if (!Objects.equals(expected, actual)) {
+      throw new AssertException(description("test failed because")
+          .child(description("expected")
+              .child(expected))
+          .child(description("found")
+              .child(actual))
+          .toString());
+    }
+  }
+
   public static void assertMatch(Outcome expected, Outcome actual) {
     if (!areEqual(expected, actual)) {
       throw new AssertException(failureMessage(expected, actual).toString());
