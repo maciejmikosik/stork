@@ -8,9 +8,9 @@ import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
+import static com.mikosik.stork.test.Assertions.assertMatch;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
-import static org.quackery.report.AssertException.assertEquals;
 
 import org.quackery.Test;
 
@@ -31,7 +31,7 @@ public class TestCannotComputeDescriptions {
 
   private static Test test(CannotCompute cannotCompute, Description expected) {
     return newCase(cannotCompute.getClass().getSimpleName(), () -> {
-      assertEquals(describe(cannotCompute), expected);
+      assertMatch(expected, describe(cannotCompute));
     });
   }
 

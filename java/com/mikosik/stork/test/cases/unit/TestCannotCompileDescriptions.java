@@ -14,9 +14,9 @@ import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.varia
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
+import static com.mikosik.stork.test.Assertions.assertMatch;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
-import static org.quackery.report.AssertException.assertEquals;
 
 import org.quackery.Test;
 
@@ -56,7 +56,7 @@ public class TestCannotCompileDescriptions {
 
   private static Test test(CannotCompile cannotCompile, Description expected) {
     return newCase(cannotCompile.getClass().getSimpleName(), () -> {
-      assertEquals(describe(cannotCompile), expected);
+      assertMatch(expected, describe(cannotCompile));
     });
   }
 
