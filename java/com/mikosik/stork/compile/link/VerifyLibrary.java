@@ -3,7 +3,7 @@ package com.mikosik.stork.compile.link;
 import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.change.Changes.walk;
-import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
+import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
 import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
@@ -17,14 +17,14 @@ import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
-import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
+import com.mikosik.stork.problem.compile.link.UndefinedFunction;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 
 public class VerifyLibrary {
   public static List<CannotLink> findLinkingProblems(List<Definition> library) {
     return join(
         findVariableCannotBeFound(library),
-        findFunctionNotDefined(library),
+        findUndefinedFunction(library),
         findDuplicatedFunction(library));
   }
 
@@ -37,7 +37,7 @@ public class VerifyLibrary {
         .toList();
   }
 
-  private static List<FunctionNotDefined> findFunctionNotDefined(
+  private static List<UndefinedFunction> findUndefinedFunction(
       List<Definition> library) {
     var definedIdentifiers = library.stream()
         .map(definition -> definition.identifier)
@@ -46,7 +46,7 @@ public class VerifyLibrary {
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
-            .map(identifier -> functionNotDefined(definition.identifier, identifier)))
+            .map(identifier -> undefinedFunction(definition.identifier, identifier)))
         .toList();
   }
 

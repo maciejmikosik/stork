@@ -23,7 +23,7 @@ import com.mikosik.stork.problem.compile.importing.CannotImport;
 import com.mikosik.stork.problem.compile.importing.IllegalCharacter;
 import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
-import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
+import com.mikosik.stork.problem.compile.link.UndefinedFunction;
 import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
 import com.mikosik.stork.problem.compile.parse.CannotParse;
 import com.mikosik.stork.problem.compile.parse.UnexpectedToken;
@@ -87,7 +87,7 @@ public class Describe {
       case DuplicatedFunction problem -> format(
           "function [%s] is defined more than once",
           problem.function);
-      case FunctionNotDefined problem -> format(
+      case UndefinedFunction problem -> format(
           "function [%s] imports undefined function [%s]",
           problem.location, problem.undefined);
       case VariableCannotBeBound problem -> format(
