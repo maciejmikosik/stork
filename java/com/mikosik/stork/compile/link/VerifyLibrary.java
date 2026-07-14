@@ -4,7 +4,7 @@ import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.change.Changes.walk;
 import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
-import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
+import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -18,22 +18,22 @@ import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
 import com.mikosik.stork.problem.compile.link.UndefinedFunction;
-import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
+import com.mikosik.stork.problem.compile.link.UnboundVariable;
 
 public class VerifyLibrary {
   public static List<CannotLink> findLinkingProblems(List<Definition> library) {
     return join(
-        findVariableCannotBeFound(library),
+        findUnboundVariable(library),
         findUndefinedFunction(library),
         findDuplicatedFunction(library));
   }
 
-  private static List<VariableCannotBeBound> findVariableCannotBeFound(
+  private static List<UnboundVariable> findUnboundVariable(
       List<Definition> library) {
     return library.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
-            .map(variable -> variableCannotBeBound(definition.identifier, variable)))
+            .map(variable -> unboundVariable(definition.identifier, variable)))
         .toList();
   }
 

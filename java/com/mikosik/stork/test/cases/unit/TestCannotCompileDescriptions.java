@@ -10,7 +10,7 @@ import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
 import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
-import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
+import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
@@ -48,7 +48,7 @@ public class TestCannotCompileDescriptions {
                 identifier(namespace(list("x", "y")), variable("z"))),
             "function [a/b/c] imports undefined function [x/y/z]"))
         .add(test(
-            variableCannotBeBound(
+            unboundVariable(
                 identifier(namespace(list("a", "b")), variable("c")),
                 variable("var")),
             "function [a/b/c] uses undefined variable [var]"));

@@ -5,8 +5,8 @@ import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
+import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
 import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
-import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static org.quackery.Suite.suite;
 
@@ -17,15 +17,15 @@ import com.mikosik.stork.test.ProgramTest;
 public class TestLinkerProblems {
   public static Test testLinkerProblems() {
     return suite("linker reports")
-        .add(reportsVariableThatCannotBeBound())
+        .add(reportsUnboundVariable())
         .add(reportsUndefinedFunction())
         .add(reportsDuplicatedFunction());
   }
 
-  private static Test reportsVariableThatCannotBeBound() {
-    return programTest("variable that cannot be bound")
+  private static Test reportsUnboundVariable() {
+    return programTest("unbound variable")
         .source("function { variable }")
-        .expect(variableCannotBeBound(
+        .expect(unboundVariable(
             identifier(variable("function")),
             variable("variable")));
   }
