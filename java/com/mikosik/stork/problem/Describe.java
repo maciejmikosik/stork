@@ -1,10 +1,10 @@
 package com.mikosik.stork.problem;
 
+import static com.mikosik.stork.common.Collections.eachCell;
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static java.lang.Byte.toUnsignedInt;
-import static java.lang.String.format;
 
 import com.mikosik.stork.common.Description;
 import com.mikosik.stork.compile.tokenize.Bracket;
@@ -51,7 +51,7 @@ public class Describe {
     return description(switch (cannotImport) {
       case IllegalCharacter problem -> format(
           "import [%s] contains illegal %s",
-          problem.text, describe(problem.character));
+          problem.text, problem.character);
       default -> throw new RuntimeException();
     });
   }
@@ -60,10 +60,10 @@ public class Describe {
     return description(switch (cannotTokenize) {
       case IllegalCharacterInString problem -> format(
           "string contains illegal %s",
-          describe(problem.character));
+          problem.character);
       case IllegalCharacterInCode problem -> format(
           "code contains illegal %s",
-          describe(problem.character));
+          problem.character);
       default -> throw new RuntimeException();
     });
   }
@@ -72,7 +72,7 @@ public class Describe {
     return description(switch (cannotParse) {
       case UnexpectedToken problem -> format(
           "unexpected %s",
-          describe(problem.token));
+          problem.token);
       default -> throw new RuntimeException();
     });
   }
@@ -92,27 +92,31 @@ public class Describe {
     });
   }
 
-  private static String describe(Token token) {
-    return switch (token) {
-      case Label label -> "label [%s]".formatted(label.string);
-      case Bracket bracket -> "bracket [%c]".formatted(bracket.character);
-      case Symbol symbol -> "symbol [%c]".formatted(symbol.character);
-      case IntegerLiteral literal -> "integer [%s]".formatted(literal.value);
-      case StringLiteral literal -> "string [%s]".formatted(literal.string);
-      default -> "token [%s]".formatted(token.getClass().getSimpleName());
-    };
+  public static String format(String format, Object... args) {
+    return String.format(format, eachCell(Describe::formatArg).apply(args));
   }
 
-  private static String describe(byte character) {
-    return "%s character %s".formatted(
-        isAscii(character)
-            ? isPrintable(character)
-                ? "ascii"
-                : "non-printable ascii"
-            : "non-ascii",
-        isPrintable(character)
-            ? "[%c]".formatted(character)
-            : "with decimal value of [%d]"
-                .formatted(toUnsignedInt(character)));
+  private static Object formatArg(Object arg) {
+    return switch (arg) {
+      case Token token -> switch (token) {
+        case Label label -> "label [%s]".formatted(label.string);
+        case Bracket bracket -> "bracket [%c]".formatted(bracket.character);
+        case Symbol symbol -> "symbol [%c]".formatted(symbol.character);
+        case IntegerLiteral literal -> "integer [%s]".formatted(literal.value);
+        case StringLiteral literal -> "string [%s]".formatted(literal.string);
+        default -> "token [%s]".formatted(token.getClass().getSimpleName());
+      };
+      case Byte character -> "%s character %s".formatted(
+          isAscii(character)
+              ? isPrintable(character)
+                  ? "ascii"
+                  : "non-printable ascii"
+              : "non-ascii",
+          isPrintable(character)
+              ? "[%c]".formatted(character)
+              : "with decimal value of [%d]"
+                  .formatted(toUnsignedInt(character)));
+      default -> arg;
+    };
   }
 }
