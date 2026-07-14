@@ -1,10 +1,13 @@
 package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Collections.filter;
+import static com.mikosik.stork.common.ImmutableList.cast;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.change.Changes.walk;
-import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
+import static com.mikosik.stork.problem.compile.InNamespace.in;
+import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
 import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
+import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -15,13 +18,12 @@ import java.util.List;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
-import com.mikosik.stork.problem.compile.link.CannotLink;
-import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
-import com.mikosik.stork.problem.compile.link.UndefinedFunction;
+import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.link.UnboundVariable;
+import com.mikosik.stork.problem.compile.link.UndefinedFunction;
 
 public class VerifyLibrary {
-  public static List<CannotLink> findLinkingProblems(List<Definition> library) {
+  public static List<CannotCompile> findLinkingProblems(List<Definition> library) {
     return join(
         findUnboundVariable(library),
         findUndefinedFunction(library),
@@ -50,15 +52,16 @@ public class VerifyLibrary {
         .toList();
   }
 
-  private static List<DuplicatedFunction> findDuplicatedFunction(
+  private static List<CannotCompile> findDuplicatedFunction(
       List<Definition> library) {
     var histogram = library.stream()
         .map(definition -> definition.identifier)
         .collect(groupingBy(identity(), counting()));
-    return histogram.entrySet().stream()
+    return cast(histogram.entrySet().stream()
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
-        .map(DuplicatedFunction::duplicatedFunction)
-        .toList();
+        .map(function -> in(function.namespace,
+            duplicatedFunction(function.variable)))
+        .toList());
   }
 }

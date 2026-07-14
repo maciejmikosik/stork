@@ -1,15 +1,16 @@
 package com.mikosik.stork.problem.compile.link;
 
-import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.Variable;
 
 public class DuplicatedFunction extends CannotLink {
-  public final Identifier function;
+  public final Variable function;
 
-  private DuplicatedFunction(Identifier function) {
+  private DuplicatedFunction(Variable function) {
     this.function = function;
   }
 
-  public static DuplicatedFunction duplicatedFunction(Identifier function) {
+  public static DuplicatedFunction duplicatedFunction(
+      Variable function) {
     return new DuplicatedFunction(function);
   }
 }

@@ -3,13 +3,16 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.Singleton.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.problem.compile.InNamespace.in;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -29,6 +32,7 @@ import org.quackery.Test;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest {
@@ -82,6 +86,16 @@ public class ProgramTest {
   }
 
   public Test expect(CannotCompile cannotCompile) {
+    return expectExact(inRootNamespace.contains(cannotCompile.getClass())
+        ? in(namespaceRoot(), cannotCompile)
+        : cannotCompile);
+  }
+
+  // TODO replace list by wrapping all CannotCompile except InNamespace
+  private static final List<Class<?>> inRootNamespace = single(
+      DuplicatedFunction.class);
+
+  private Test expectExact(CannotCompile cannotCompile) {
     return newCaseExpecting(outcome(cannotCompile));
   }
 

@@ -46,7 +46,7 @@ public class TestLinkerProblems {
             function { 2 }
             """)
         .expect(duplicatedFunction(
-            identifier(variable("function"))));
+            variable("function")));
   }
 
   private static ProgramTest programTest(String name) {

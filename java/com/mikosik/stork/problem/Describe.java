@@ -17,8 +17,10 @@ import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.Namespace;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compile.InNamespace;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 import com.mikosik.stork.problem.compile.importing.IllegalCharacter;
 import com.mikosik.stork.problem.compile.link.CannotLink;
@@ -40,6 +42,7 @@ public class Describe {
       case CannotTokenize cannotTokenize -> describe(cannotTokenize);
       case CannotParse cannotParse -> describe(cannotParse);
       case CannotLink cannotLink -> describe(cannotLink);
+      case InNamespace problem -> describe(problem);
       default -> throw new RuntimeException(cannotCompile.getClass().toString());
     };
   }
@@ -97,6 +100,11 @@ public class Describe {
     });
   }
 
+  private static Description describe(InNamespace problem) {
+    return description(format("in namespace [%s]", problem.namespace))
+        .child(describe(problem.cause));
+  } // TODO implement custom format method that handles those types
+
   public static String format(String format, Object... args) {
     return String.format(format, eachCell(Describe::formatArg).apply(args));
   }
@@ -122,6 +130,7 @@ public class Describe {
               : "with decimal value of [%d]"
                   .formatted(toUnsignedInt(character)));
       case Variable variable -> variable.name;
+      case Namespace namespace -> join("/", namespace.components);
       case Identifier identifier -> join("/", join(
           identifier.namespace.components,
           single(identifier.variable.name)));

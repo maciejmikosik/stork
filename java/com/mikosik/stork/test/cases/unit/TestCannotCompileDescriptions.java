@@ -39,9 +39,8 @@ public class TestCannotCompileDescriptions {
             unexpected(label("label_name")),
             "unexpected label [label_name]"))
         .add(test(
-            duplicatedFunction(
-                identifier(namespace(list("a", "b")), variable("c"))),
-            "function [a/b/c] is defined more than once"))
+            duplicatedFunction(variable("func")),
+            "function [func] is defined more than once"))
         .add(test(
             undefinedFunction(
                 identifier(namespace(list("a", "b")), variable("c")),
