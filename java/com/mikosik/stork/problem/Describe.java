@@ -13,6 +13,7 @@ import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
+import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
 import com.mikosik.stork.problem.compile.importing.IllegalCharacter;
@@ -87,7 +88,7 @@ public class Describe {
           problem.location.name(), problem.undefined.name());
       case VariableCannotBeBound problem -> format(
           "function [%s] uses undefined variable [%s]",
-          problem.location.name(), problem.variable.name);
+          problem.location.name(), problem.variable);
       default -> throw new RuntimeException();
     });
   }
@@ -116,6 +117,7 @@ public class Describe {
               ? "[%c]".formatted(character)
               : "with decimal value of [%d]"
                   .formatted(toUnsignedInt(character)));
+      case Variable variable -> variable.name;
       default -> arg;
     };
   }
