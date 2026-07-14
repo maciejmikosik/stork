@@ -4,9 +4,9 @@ import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce.functionDefinedMoreThanOnce;
-import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
-import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
+import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
+import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
+import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static org.quackery.Suite.suite;
 
@@ -17,35 +17,35 @@ import com.mikosik.stork.test.ProgramTest;
 public class TestLinkerProblems {
   public static Test testLinkerProblems() {
     return suite("linker reports")
-        .add(reportsVariableThatCannotBeBound())
-        .add(reportsFunctionNotDefined())
-        .add(reportsFunctionDefinedMoreThanOnce());
+        .add(reportsUnboundVariable())
+        .add(reportsUndefinedFunction())
+        .add(reportsDuplicatedFunction());
   }
 
-  private static Test reportsVariableThatCannotBeBound() {
-    return programTest("variable that cannot be bound")
+  private static Test reportsUnboundVariable() {
+    return programTest("unbound variable")
         .source("function { variable }")
-        .expect(variableCannotBeBound(
+        .expect(unboundVariable(
             identifier(variable("function")),
             variable("variable")));
   }
 
-  private static Test reportsFunctionNotDefined() {
-    return programTest("function that is not defined")
+  private static Test reportsUndefinedFunction() {
+    return programTest("undefined function")
         .imports("namespace/function2")
         .source("function { function2 }")
-        .expect(functionNotDefined(
+        .expect(undefinedFunction(
             identifier(variable("function")),
             identifier(namespace(single("namespace")), variable("function2"))));
   }
 
-  private static Test reportsFunctionDefinedMoreThanOnce() {
-    return programTest("function defined more than once")
+  private static Test reportsDuplicatedFunction() {
+    return programTest("duplicated function")
         .source("""
             function { 1 }
             function { 2 }
             """)
-        .expect(functionDefinedMoreThanOnce(
+        .expect(duplicatedFunction(
             identifier(variable("function"))));
   }
 

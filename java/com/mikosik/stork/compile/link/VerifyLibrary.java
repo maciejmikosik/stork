@@ -3,8 +3,8 @@ package com.mikosik.stork.compile.link;
 import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.change.Changes.walk;
-import static com.mikosik.stork.problem.compile.link.FunctionNotDefined.functionNotDefined;
-import static com.mikosik.stork.problem.compile.link.VariableCannotBeBound.variableCannotBeBound;
+import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
+import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -16,28 +16,28 @@ import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.link.CannotLink;
-import com.mikosik.stork.problem.compile.link.FunctionDefinedMoreThanOnce;
-import com.mikosik.stork.problem.compile.link.FunctionNotDefined;
-import com.mikosik.stork.problem.compile.link.VariableCannotBeBound;
+import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
+import com.mikosik.stork.problem.compile.link.UnboundVariable;
+import com.mikosik.stork.problem.compile.link.UndefinedFunction;
 
 public class VerifyLibrary {
   public static List<CannotLink> findLinkingProblems(List<Definition> library) {
     return join(
-        findVariableCannotBeFound(library),
-        findFunctionNotDefined(library),
-        findFunctionDefinedMoreThanOnce(library));
+        findUnboundVariable(library),
+        findUndefinedFunction(library),
+        findDuplicatedFunction(library));
   }
 
-  private static List<VariableCannotBeBound> findVariableCannotBeFound(
+  private static List<UnboundVariable> findUnboundVariable(
       List<Definition> library) {
     return library.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
-            .map(variable -> variableCannotBeBound(definition.identifier, variable)))
+            .map(variable -> unboundVariable(definition.identifier, variable)))
         .toList();
   }
 
-  private static List<FunctionNotDefined> findFunctionNotDefined(
+  private static List<UndefinedFunction> findUndefinedFunction(
       List<Definition> library) {
     var definedIdentifiers = library.stream()
         .map(definition -> definition.identifier)
@@ -46,11 +46,11 @@ public class VerifyLibrary {
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
-            .map(identifier -> functionNotDefined(definition.identifier, identifier)))
+            .map(identifier -> undefinedFunction(definition.identifier, identifier)))
         .toList();
   }
 
-  private static List<FunctionDefinedMoreThanOnce> findFunctionDefinedMoreThanOnce(
+  private static List<DuplicatedFunction> findDuplicatedFunction(
       List<Definition> library) {
     var histogram = library.stream()
         .map(definition -> definition.identifier)
@@ -58,7 +58,7 @@ public class VerifyLibrary {
     return histogram.entrySet().stream()
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
-        .map(FunctionDefinedMoreThanOnce::functionDefinedMoreThanOnce)
+        .map(DuplicatedFunction::duplicatedFunction)
         .toList();
   }
 }
