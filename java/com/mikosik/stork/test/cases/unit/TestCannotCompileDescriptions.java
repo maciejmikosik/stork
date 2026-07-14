@@ -1,8 +1,10 @@
 package com.mikosik.stork.test.cases.unit;
 
 import static com.mikosik.stork.common.Description.description;
+import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.compile.tokenize.Label.label;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
@@ -23,7 +25,7 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class TestCannotCompileDescriptions {
   public static Test testCannotCompileDescriptions() {
-    return suite("cannot compute descriptions")
+    return suite("describer can describe compiler problems")
         .add(test(
             illegalCharacter("text", (byte) '!'),
             "import [text] contains illegal ascii character [!]"))
@@ -37,16 +39,19 @@ public class TestCannotCompileDescriptions {
             unexpected(label("label_name")),
             "unexpected label [label_name]"))
         .add(test(
-            functionDefinedMoreThanOnce(identifier(variable("a.b.c"))),
-            "function [a.b.c] is defined more than once"))
+            functionDefinedMoreThanOnce(
+                identifier(namespace(list("a", "b")), variable("c"))),
+            "function [a/b/c] is defined more than once"))
         .add(test(
             functionNotDefined(
-                identifier(variable("a.b.c")),
-                identifier(variable("x.y.z"))),
-            "function [a.b.c] imports undefined function [x.y.z]"))
+                identifier(namespace(list("a", "b")), variable("c")),
+                identifier(namespace(list("x", "y")), variable("z"))),
+            "function [a/b/c] imports undefined function [x/y/z]"))
         .add(test(
-            variableCannotBeBound(identifier(variable("a.b.c")), variable("var")),
-            "function [a.b.c] uses undefined variable [var]"));
+            variableCannotBeBound(
+                identifier(namespace(list("a", "b")), variable("c")),
+                variable("var")),
+            "function [a/b/c] uses undefined variable [var]"));
   }
 
   private static Test test(CannotCompile cannotCompile, Description expected) {

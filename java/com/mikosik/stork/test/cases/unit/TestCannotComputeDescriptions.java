@@ -1,7 +1,9 @@
 package com.mikosik.stork.test.cases.unit;
 
 import static com.mikosik.stork.common.Description.description;
+import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.model.Identifier.identifier;
+import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
 import static com.mikosik.stork.problem.Describe.describe;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
@@ -17,13 +19,14 @@ import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class TestCannotComputeDescriptions {
   public static Test testCannotComputeDescriptions() {
-    return suite("cannot compute descriptions")
+    return suite("describer can describe computer problems")
         .add(test(
             cannotCompute(),
             "cannot compute"))
         .add(test(
-            functionMissing(identifier(variable("a.b.c"))),
-            "function [a.b.c] is missing"));
+            functionMissing(
+                identifier(namespace(list("a", "b")), variable("c"))),
+            "function [a/b/c] is missing"));
   }
 
   private static Test test(CannotCompute cannotCompute, Description expected) {
