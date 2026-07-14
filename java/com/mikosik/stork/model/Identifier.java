@@ -1,9 +1,6 @@
 package com.mikosik.stork.model;
 
-import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.model.Namespace.namespaceRoot;
-import static java.lang.String.join;
 import static java.util.Objects.hash;
 
 public class Identifier implements Expression {
@@ -23,10 +20,6 @@ public class Identifier implements Expression {
     return new Identifier(namespaceRoot(), variable);
   }
 
-  public String name() {
-    return join(SEPARATOR, join(namespace.components, single(variable.name)));
-  }
-
   public boolean equals(Object object) {
     return object instanceof Identifier identifier
         && equals(identifier);
@@ -40,6 +33,4 @@ public class Identifier implements Expression {
   public int hashCode() {
     return hash(namespace, variable);
   }
-
-  private static final String SEPARATOR = "/";
 }

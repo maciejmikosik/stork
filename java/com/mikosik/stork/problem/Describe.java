@@ -2,9 +2,12 @@ package com.mikosik.stork.problem;
 
 import static com.mikosik.stork.common.Collections.eachCell;
 import static com.mikosik.stork.common.Description.description;
+import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static java.lang.Byte.toUnsignedInt;
+import static java.lang.String.join;
 
 import com.mikosik.stork.common.Description;
 import com.mikosik.stork.compile.tokenize.Bracket;
@@ -13,6 +16,7 @@ import com.mikosik.stork.compile.tokenize.Label;
 import com.mikosik.stork.compile.tokenize.StringLiteral;
 import com.mikosik.stork.compile.tokenize.Symbol;
 import com.mikosik.stork.compile.tokenize.Token;
+import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.importing.CannotImport;
@@ -43,7 +47,7 @@ public class Describe {
   public static Description describe(CannotCompute cannotCompute) {
     return switch (cannotCompute) {
       case FunctionMissing problem -> description(
-          "function [%s] is missing".formatted(problem.function.name()));
+          format("function [%s] is missing", problem.function));
       default -> description("cannot compute");
     };
   }
@@ -82,13 +86,13 @@ public class Describe {
     return description(switch (cannotLink) {
       case FunctionDefinedMoreThanOnce problem -> format(
           "function [%s] is defined more than once",
-          problem.function.name());
+          problem.function);
       case FunctionNotDefined problem -> format(
           "function [%s] imports undefined function [%s]",
-          problem.location.name(), problem.undefined.name());
+          problem.location, problem.undefined);
       case VariableCannotBeBound problem -> format(
           "function [%s] uses undefined variable [%s]",
-          problem.location.name(), problem.variable);
+          problem.location, problem.variable);
       default -> throw new RuntimeException();
     });
   }
@@ -118,6 +122,9 @@ public class Describe {
               : "with decimal value of [%d]"
                   .formatted(toUnsignedInt(character)));
       case Variable variable -> variable.name;
+      case Identifier identifier -> join("/", join(
+          identifier.namespace.components,
+          single(identifier.variable.name)));
       default -> arg;
     };
   }
