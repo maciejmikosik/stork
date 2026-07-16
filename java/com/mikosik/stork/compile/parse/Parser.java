@@ -18,6 +18,7 @@ import static com.mikosik.stork.model.Lambda.lambda;
 import static com.mikosik.stork.model.Parameter.parameter;
 import static com.mikosik.stork.model.Quote.quote;
 import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 
 import java.util.Iterator;
@@ -181,7 +182,7 @@ public class Parser {
   }
 
   private static <T> T failUnexpected(Token token) {
-    throw unexpected(token);
+    throw exception(unexpected(token));
   }
 
   private static <E> Iterator<E> checkingEOF(Iterator<E> iterator) {

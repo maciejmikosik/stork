@@ -29,6 +29,7 @@ import org.quackery.Test;
 import com.mikosik.stork.model.Definition;
 import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class ProgramTest {
@@ -109,8 +110,8 @@ public class ProgramTest {
           program(identifier(variable("main")), library),
           terminal(input(stdin), buffer.asOutput())));
       return outcome(buffer.bytes());
-    } catch (CannotCompile cannotCompile) {
-      return outcome(cannotCompile);
+    } catch (CompilerException compilerException) {
+      return outcome(compilerException.problem);
     } catch (CannotCompute cannotCompute) {
       return outcome(cannotCompute);
     }

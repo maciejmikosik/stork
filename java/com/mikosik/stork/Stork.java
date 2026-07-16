@@ -19,7 +19,7 @@ import static com.mikosik.stork.program.Terminal.terminal;
 import java.io.FileDescriptor;
 import java.io.UncheckedIOException;
 
-import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Stork {
@@ -33,8 +33,8 @@ public class Stork {
           program(identifier(variable("main")), library),
           terminal(input(System.in), output(FileDescriptor.out))));
       System.exit(0);
-    } catch (CannotCompile cannotCompile) {
-      System.err.println(describe(cannotCompile));
+    } catch (CompilerException compilerException) {
+      System.err.println(describe(compilerException.problem));
       System.exit(1);
     } catch (CannotCompute cannotCompute) {
       System.err.println(describe(cannotCompute));

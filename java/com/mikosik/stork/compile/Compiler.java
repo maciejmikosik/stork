@@ -15,6 +15,7 @@ import static com.mikosik.stork.model.change.Changes.ifQuote;
 import static com.mikosik.stork.model.change.Changes.ifVariable;
 import static com.mikosik.stork.model.change.Changes.onBody;
 import static com.mikosik.stork.model.change.Changes.onIdentifier;
+import static com.mikosik.stork.problem.compile.CompilerException.exception;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Compiler {
       return definitions;
     } else {
       // TODO aggregate compiler problems
-      throw linkingProblems.getFirst();
+      throw exception(linkingProblems.getFirst());
     }
   }
 
