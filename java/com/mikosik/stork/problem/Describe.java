@@ -1,15 +1,16 @@
 package com.mikosik.stork.problem;
 
-import static com.mikosik.stork.common.Collections.eachCell;
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
+import static com.mikosik.stork.common.text.Templater.templater;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.join;
 
 import com.mikosik.stork.common.Description;
+import com.mikosik.stork.common.text.Templater;
 import com.mikosik.stork.compile.tokenize.Bracket;
 import com.mikosik.stork.compile.tokenize.IntegerLiteral;
 import com.mikosik.stork.compile.tokenize.Label;
@@ -19,89 +20,29 @@ import com.mikosik.stork.compile.tokenize.Token;
 import com.mikosik.stork.model.Identifier;
 import com.mikosik.stork.model.Variable;
 import com.mikosik.stork.problem.compile.CannotCompile;
-import com.mikosik.stork.problem.compile.importing.CannotImport;
-import com.mikosik.stork.problem.compile.importing.IllegalCharacter;
-import com.mikosik.stork.problem.compile.link.CannotLink;
-import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
-import com.mikosik.stork.problem.compile.link.UnboundVariable;
-import com.mikosik.stork.problem.compile.link.UndefinedFunction;
-import com.mikosik.stork.problem.compile.parse.CannotParse;
-import com.mikosik.stork.problem.compile.parse.UnexpectedToken;
-import com.mikosik.stork.problem.compile.tokenize.CannotTokenize;
-import com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode;
-import com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString;
 import com.mikosik.stork.problem.compute.CannotCompute;
 import com.mikosik.stork.problem.compute.FunctionMissing;
 
 public class Describe {
-  public static Description describe(CannotCompile cannotCompile) {
-    return switch (cannotCompile) {
-      case CannotImport cannotImport -> describe(cannotImport);
-      case CannotTokenize cannotTokenize -> describe(cannotTokenize);
-      case CannotParse cannotParse -> describe(cannotParse);
-      case CannotLink cannotLink -> describe(cannotLink);
-      default -> throw new RuntimeException(cannotCompile.getClass().toString());
-    };
+  private static final ProblemTemplates templates = new ProblemTemplates();
+  private static final Templater templater = templater(Describe::formatArgument);
+
+  public static Description describe(CannotCompile problem) {
+    return description(templater
+        .template(templates.get(problem))
+        .model(problem));
   }
 
   public static Description describe(CannotCompute cannotCompute) {
     return switch (cannotCompute) {
-      case FunctionMissing problem -> description(
-          format("function [%s] is missing", problem.function));
+      case FunctionMissing problem -> description(templater
+          .template("function {function} is missing")
+          .model(problem));
       default -> description("cannot compute");
     };
   }
 
-  private static Description describe(CannotImport cannotImport) {
-    return description(switch (cannotImport) {
-      case IllegalCharacter problem -> format(
-          "import [%s] contains illegal %s",
-          problem.text, problem.character);
-      default -> throw new RuntimeException();
-    });
-  }
-
-  private static Description describe(CannotTokenize cannotTokenize) {
-    return description(switch (cannotTokenize) {
-      case IllegalCharacterInString problem -> format(
-          "string contains illegal %s",
-          problem.character);
-      case IllegalCharacterInCode problem -> format(
-          "code contains illegal %s",
-          problem.character);
-      default -> throw new RuntimeException();
-    });
-  }
-
-  private static Description describe(CannotParse cannotParse) {
-    return description(switch (cannotParse) {
-      case UnexpectedToken problem -> format(
-          "unexpected %s",
-          problem.token);
-      default -> throw new RuntimeException();
-    });
-  }
-
-  private static Description describe(CannotLink cannotLink) {
-    return description(switch (cannotLink) {
-      case DuplicatedFunction problem -> format(
-          "function [%s] is defined more than once",
-          problem.function);
-      case UndefinedFunction problem -> format(
-          "function [%s] imports undefined function [%s]",
-          problem.location, problem.undefined);
-      case UnboundVariable problem -> format(
-          "function [%s] uses undefined variable [%s]",
-          problem.location, problem.variable);
-      default -> throw new RuntimeException();
-    });
-  }
-
-  public static String format(String format, Object... args) {
-    return String.format(format, eachCell(Describe::formatArg).apply(args));
-  }
-
-  private static Object formatArg(Object arg) {
+  private static String formatArgument(Object arg) {
     return switch (arg) {
       case Token token -> switch (token) {
         case Label label -> "label [%s]".formatted(label.string);
@@ -121,11 +62,16 @@ public class Describe {
               ? "[%c]".formatted(character)
               : "with decimal value of [%d]"
                   .formatted(toUnsignedInt(character)));
-      case Variable variable -> variable.name;
-      case Identifier identifier -> join("/", join(
+      case String string -> bracket(string);
+      case Variable variable -> bracket(variable.name);
+      case Identifier identifier -> bracket(join("/", join(
           identifier.namespace.components,
-          single(identifier.variable.name)));
-      default -> arg;
+          single(identifier.variable.name))));
+      default -> arg.toString();
     };
+  }
+
+  private static String bracket(String string) {
+    return "[" + string + "]";
   }
 }
