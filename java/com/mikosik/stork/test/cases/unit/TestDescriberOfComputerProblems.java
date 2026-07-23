@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.Describe.describe;
+import static com.mikosik.stork.problem.Describer.describe;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 import static com.mikosik.stork.test.Assertions.assertMatch;
@@ -17,8 +17,8 @@ import org.quackery.Test;
 import com.mikosik.stork.common.Description;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
-public class TestCannotComputeDescriptions {
-  public static Test testCannotComputeDescriptions() {
+public class TestDescriberOfComputerProblems {
+  public static Test testDescriberOfComputerProblems() {
     return suite("describer can describe computer problems")
         .add(test(
             cannotCompute(),

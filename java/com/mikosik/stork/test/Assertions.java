@@ -2,7 +2,7 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.Throwables.runtimeException;
-import static com.mikosik.stork.problem.Describe.describe;
+import static com.mikosik.stork.problem.Describer.describe;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.util.Arrays;

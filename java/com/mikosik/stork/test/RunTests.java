@@ -25,9 +25,9 @@ import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinke
 import static com.mikosik.stork.test.cases.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
 import static com.mikosik.stork.test.cases.language.TestTokenizer.testTokenizer;
-import static com.mikosik.stork.test.cases.unit.TestCannotCompileDescriptions.testCannotCompileDescriptions;
-import static com.mikosik.stork.test.cases.unit.TestCannotComputeDescriptions.testCannotComputeDescriptions;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
+import static com.mikosik.stork.test.cases.unit.TestDescriberOfCompilerProblems.testDescriberOfCompilerProblems;
+import static com.mikosik.stork.test.cases.unit.TestDescriberOfComputerProblems.testDescriberOfComputerProblems;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static java.lang.System.exit;
 import static java.time.Duration.between;
@@ -64,8 +64,8 @@ public class RunTests {
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator()))
-        .add(testCannotCompileDescriptions())
-        .add(testCannotComputeDescriptions()));
+        .add(testDescriberOfCompilerProblems())
+        .add(testDescriberOfComputerProblems()));
     runAndReport(testCompilingCoreLibrary(TESTING));
     runAndReport(suite("language")
         .add(testSyntax())

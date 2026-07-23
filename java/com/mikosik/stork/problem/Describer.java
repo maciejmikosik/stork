@@ -23,9 +23,9 @@ import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 import com.mikosik.stork.problem.compute.FunctionMissing;
 
-public class Describe {
+public class Describer {
   private static final ProblemTemplates templates = new ProblemTemplates();
-  private static final Templater templater = templater(Describe::formatArgument);
+  private static final Templater templater = templater(Describer::formatArgument);
 
   public static Description describe(CannotCompile problem) {
     return description(templater
