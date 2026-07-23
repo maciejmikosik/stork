@@ -6,7 +6,7 @@ import static com.mikosik.stork.compile.tokenize.Label.label;
 import static com.mikosik.stork.model.Identifier.identifier;
 import static com.mikosik.stork.model.Namespace.namespace;
 import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.problem.Describe.describe;
+import static com.mikosik.stork.problem.Describer.describe;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
 import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
@@ -23,8 +23,8 @@ import org.quackery.Test;
 import com.mikosik.stork.common.Description;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
-public class TestCannotCompileDescriptions {
-  public static Test testCannotCompileDescriptions() {
+public class TestDescriberOfCompilerProblems {
+  public static Test testDescriberOfCompilerProblems() {
     return suite("describer can describe compiler problems")
         .add(test(
             illegalCharacter("text", (byte) '!'),
