@@ -42,9 +42,7 @@ public class Assertions {
       return Arrays.equals(stdoutA, stdoutB);
     } else if (objectA instanceof CannotCompile cannotCompileA
         && objectB instanceof CannotCompile cannotCompileB) {
-      return Objects.equals(
-          describe(cannotCompileA),
-          describe(cannotCompileB));
+      return cannotCompileA.equals(cannotCompileB);
     } else if (objectA instanceof CannotCompute cannotComputeA
         && objectB instanceof CannotCompute cannotComputeB) {
       return Objects.equals(
