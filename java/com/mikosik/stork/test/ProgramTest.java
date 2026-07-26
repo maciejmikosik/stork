@@ -31,6 +31,7 @@ import com.mikosik.stork.model.StorkDirectory;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compute.CannotCompute;
+import com.mikosik.stork.problem.compute.ComputerException;
 
 public class ProgramTest {
   private static final Supplier<List<Definition>> CORE = singleton(() -> core(DEVELOPMENT));
@@ -112,8 +113,8 @@ public class ProgramTest {
       return outcome(buffer.bytes());
     } catch (CompilerException compilerException) {
       return outcome(compilerException.problem);
-    } catch (CannotCompute cannotCompute) {
-      return outcome(cannotCompute);
+    } catch (ComputerException computerException) {
+      return outcome(computerException.problem);
     }
   }
 

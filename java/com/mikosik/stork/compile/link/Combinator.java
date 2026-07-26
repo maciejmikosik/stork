@@ -3,6 +3,7 @@ package com.mikosik.stork.compile.link;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
@@ -30,7 +31,7 @@ public enum Combinator implements Operator {
         arguments[iArgument] = argument.expression;
         stack = argument.previous;
       } else {
-        throw cannotCompute();
+        throw exception(cannotCompute());
       }
     }
     return computation(compute(arguments), stack);
@@ -54,7 +55,7 @@ public enum Combinator implements Operator {
       case S -> application(application(x, z), application(y, z));
       case C -> application(application(x, z), y);
       case B -> application(x, application(y, z));
-      default -> throw cannotCompute();
+      default -> throw exception(cannotCompute());
     };
   }
 }

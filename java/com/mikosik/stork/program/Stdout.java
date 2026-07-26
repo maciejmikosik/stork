@@ -6,6 +6,7 @@ import static com.mikosik.stork.compile.link.StackOperator.EAGER;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;
@@ -43,7 +44,7 @@ public class Stdout {
             arguments[iArgument] = argument.expression;
             stack = argument.previous;
           } else {
-            throw cannotCompute();
+            throw exception(cannotCompute());
           }
         }
         var integer = ((Integer) arguments[0]);
@@ -62,7 +63,7 @@ public class Stdout {
   public static final Expression CLOSE = new Operator() {
     public Computation compute(Stack stack) {
       if (!(stack instanceof Function function)) {
-        throw cannotCompute();
+        throw exception(cannotCompute());
       }
       return computation(
           application(function.expression, this),
