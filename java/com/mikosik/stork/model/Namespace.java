@@ -6,7 +6,9 @@ import static com.mikosik.stork.common.ImmutableList.single;
 
 import java.util.List;
 
-public class Namespace {
+import com.mikosik.stork.common.Model;
+
+public class Namespace extends Model {
   public final List<String> components;
 
   private Namespace(List<String> components) {
@@ -23,18 +25,5 @@ public class Namespace {
 
   public Namespace add(String component) {
     return namespace(join(components, single(component)));
-  }
-
-  public boolean equals(Object object) {
-    return object instanceof Namespace namespace
-        && equals(namespace);
-  }
-
-  private boolean equals(Namespace that) {
-    return components.equals(that.components);
-  }
-
-  public int hashCode() {
-    return components.hashCode();
   }
 }
