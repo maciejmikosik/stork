@@ -13,7 +13,7 @@ public class IntegerComputer extends TypedComputer<Integer> {
     super(Integer.class);
   }
 
-  public static Computer integerComputer() {
+  public static TypedComputer<Integer> integerComputer() {
     return new IntegerComputer();
   }
 

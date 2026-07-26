@@ -7,7 +7,7 @@ public class OperatorComputer extends TypedComputer<Operator> {
     super(Operator.class);
   }
 
-  public static Computer operatorComputer() {
+  public static TypedComputer<Operator> operatorComputer() {
     return new OperatorComputer();
   }
 
