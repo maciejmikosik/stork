@@ -1,9 +1,10 @@
 package com.mikosik.stork.test;
 
+import com.mikosik.stork.common.Model;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
-public class Outcome {
+public class Outcome extends Model {
   public final Object object;
 
   private Outcome(Object object) {
