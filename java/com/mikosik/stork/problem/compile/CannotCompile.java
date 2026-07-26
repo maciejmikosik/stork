@@ -1,3 +1,5 @@
 package com.mikosik.stork.problem.compile;
 
-public abstract class CannotCompile {}
+import com.mikosik.stork.common.Model;
+
+public abstract class CannotCompile extends Model {}

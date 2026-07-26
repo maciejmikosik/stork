@@ -4,6 +4,7 @@ import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.Integer.integer;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
@@ -29,7 +30,7 @@ public enum MathOperator implements Operator {
         arguments[iArgument] = integer;
         stack = argument.previous;
       } else {
-        throw cannotCompute();
+        throw exception(cannotCompute());
       }
     }
     return computation(compute(arguments), stack);
@@ -52,7 +53,7 @@ public enum MathOperator implements Operator {
       case ADD -> integer(x.add(y));
       case MULTIPLY -> integer(x.multiply(y));
       case DIVIDE -> integer(x.divide(y));
-      default -> throw cannotCompute();
+      default -> throw exception(cannotCompute());
     };
   }
 }

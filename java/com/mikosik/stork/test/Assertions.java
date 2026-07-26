@@ -4,8 +4,8 @@ import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.problem.Describer.describe;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.deepEquals;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import org.quackery.report.AssertException;
@@ -27,31 +27,8 @@ public class Assertions {
   }
 
   public static void assertMatch(Outcome expected, Outcome actual) {
-    if (!areEqual(expected, actual)) {
+    if (!deepEquals(expected, actual)) {
       throw new AssertException(failureMessage(expected, actual).toString());
-    }
-  }
-
-  private static boolean areEqual(Outcome outcomeA, Outcome outcomeB) {
-    return areEqual(outcomeA.object, outcomeB.object);
-  }
-
-  private static boolean areEqual(Object objectA, Object objectB) {
-    if (objectA instanceof byte[] stdoutA
-        && objectB instanceof byte[] stdoutB) {
-      return Arrays.equals(stdoutA, stdoutB);
-    } else if (objectA instanceof CannotCompile cannotCompileA
-        && objectB instanceof CannotCompile cannotCompileB) {
-      return Objects.equals(
-          describe(cannotCompileA),
-          describe(cannotCompileB));
-    } else if (objectA instanceof CannotCompute cannotComputeA
-        && objectB instanceof CannotCompute cannotComputeB) {
-      return Objects.equals(
-          describe(cannotComputeA),
-          describe(cannotComputeB));
-    } else {
-      return false;
     }
   }
 

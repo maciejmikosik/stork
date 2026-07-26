@@ -20,7 +20,7 @@ import java.io.FileDescriptor;
 import java.io.UncheckedIOException;
 
 import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compute.CannotCompute;
+import com.mikosik.stork.problem.compute.ComputerException;
 
 public class Stork {
   public static void main(String[] args) {
@@ -36,8 +36,8 @@ public class Stork {
     } catch (CompilerException compilerException) {
       System.err.println(describe(compilerException.problem));
       System.exit(1);
-    } catch (CannotCompute cannotCompute) {
-      System.err.println(describe(cannotCompute));
+    } catch (ComputerException computerException) {
+      System.err.println(describe(computerException.problem));
       System.exit(1);
     } catch (UncheckedIOException e) {
       if (isMessage("Broken pipe", e)) {

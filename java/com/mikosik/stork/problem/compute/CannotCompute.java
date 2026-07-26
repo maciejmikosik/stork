@@ -1,6 +1,8 @@
 package com.mikosik.stork.problem.compute;
 
-public class CannotCompute extends RuntimeException {
+import com.mikosik.stork.common.Model;
+
+public class CannotCompute extends Model {
   public static CannotCompute cannotCompute() {
     return new CannotCompute();
   }

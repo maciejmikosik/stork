@@ -2,6 +2,7 @@ package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
@@ -19,7 +20,7 @@ public enum StackOperator implements Operator {
           arguments[iArgument] = argument.expression;
           stack = argument.previous;
         } else {
-          throw cannotCompute();
+          throw exception(cannotCompute());
         }
       }
       return computation(
