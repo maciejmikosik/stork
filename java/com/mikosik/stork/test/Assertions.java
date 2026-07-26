@@ -45,9 +45,7 @@ public class Assertions {
       return cannotCompileA.equals(cannotCompileB);
     } else if (objectA instanceof CannotCompute cannotComputeA
         && objectB instanceof CannotCompute cannotComputeB) {
-      return Objects.equals(
-          describe(cannotComputeA),
-          describe(cannotComputeB));
+      return cannotComputeA.equals(cannotComputeB);
     } else {
       return false;
     }
