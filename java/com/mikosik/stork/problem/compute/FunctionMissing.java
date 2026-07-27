@@ -1,6 +1,6 @@
 package com.mikosik.stork.problem.compute;
 
-import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.exp.Identifier;
 
 public class FunctionMissing extends CannotCompute {
   public final Identifier function;

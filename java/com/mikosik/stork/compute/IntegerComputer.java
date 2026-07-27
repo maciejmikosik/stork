@@ -1,12 +1,12 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.compute.Stack.Function;
-import com.mikosik.stork.model.Integer;
+import com.mikosik.stork.model.exp.Integer;
 
 public class IntegerComputer extends TypedComputer<Integer> {
   private IntegerComputer() {

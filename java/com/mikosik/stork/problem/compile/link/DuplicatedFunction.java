@@ -1,6 +1,6 @@
 package com.mikosik.stork.problem.compile.link;
 
-import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.exp.Identifier;
 
 public class DuplicatedFunction extends CannotLink {
   public final Identifier function;

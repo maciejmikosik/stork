@@ -7,8 +7,8 @@ import static com.mikosik.stork.problem.compute.ComputerException.exception;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.compute.Stack.Argument;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Operator;
 
 public enum StackOperator implements Operator {
   EAGER {

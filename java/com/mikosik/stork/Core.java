@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.exp.Definition;
 
 public class Core {
   public static enum Mode {

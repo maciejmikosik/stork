@@ -1,6 +1,6 @@
 package com.mikosik.stork.problem.compile.link;
 
-import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.exp.Identifier;
 
 public class UndefinedFunction extends CannotLink {
   public final Identifier location;

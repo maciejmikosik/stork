@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.tokenize;
+package com.mikosik.stork.model.token;
 
 public enum Symbol implements Token {
   DOT('.');

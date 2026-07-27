@@ -6,9 +6,9 @@ import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.compute.Computations.depthOf;
 import static com.mikosik.stork.debug.Decompiler.decompile;
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Application.application;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static java.lang.String.format;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ import org.logbuddy.renderer.TextRenderer;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.compute.Stack;
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 // TODO Decompiler is tested but renderer is not.
 public final class StorkTextRenderer extends TextRenderer {

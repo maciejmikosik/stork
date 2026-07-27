@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.tokenize;
+package com.mikosik.stork.model.token;
 
 public class Label implements Token {
   public String string;

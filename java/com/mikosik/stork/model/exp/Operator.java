@@ -1,4 +1,4 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.exp;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;

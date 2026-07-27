@@ -8,16 +8,16 @@ import static com.mikosik.stork.common.io.Serializables.serializable;
 import static java.lang.String.join;
 
 import com.mikosik.stork.common.io.Serializable;
-import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Operator;
-import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.model.exp.Application;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Integer;
+import com.mikosik.stork.model.exp.Lambda;
+import com.mikosik.stork.model.exp.Operator;
+import com.mikosik.stork.model.exp.Parameter;
+import com.mikosik.stork.model.exp.Quote;
+import com.mikosik.stork.model.exp.Variable;
 
 public class Decompiler {
   public static Serializable decompile(Definition definition) {

@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 public abstract sealed class Stack {
   public static Stack stack() {

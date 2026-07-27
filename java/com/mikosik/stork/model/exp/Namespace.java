@@ -1,4 +1,4 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.exp;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.none;

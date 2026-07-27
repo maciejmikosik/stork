@@ -1,24 +1,15 @@
-package com.mikosik.stork.model.change;
+package com.mikosik.stork.model.exp;
 
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Lambda.lambda;
+import static com.mikosik.stork.model.exp.Application.application;
+import static com.mikosik.stork.model.exp.Definition.definition;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Lambda.lambda;
 import static java.util.stream.Stream.concat;
 
 import java.util.stream.Stream;
 
 import com.mikosik.stork.common.func.Functions.Faa;
 import com.mikosik.stork.common.func.Functions.Fab;
-import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.Parameter;
-import com.mikosik.stork.model.Quote;
-import com.mikosik.stork.model.Variable;
 
 public class Changes {
   public static Faa<Definition> onIdentifier(Faa<Identifier> change) {

@@ -1,10 +1,10 @@
-package com.mikosik.stork.compile.tokenize;
+package com.mikosik.stork.model.token;
 
 import static com.mikosik.stork.common.Throwables.check;
-import static com.mikosik.stork.compile.tokenize.Bracket.Shape.CURLY;
-import static com.mikosik.stork.compile.tokenize.Bracket.Shape.ROUND;
-import static com.mikosik.stork.compile.tokenize.Bracket.Side.LEFT;
-import static com.mikosik.stork.compile.tokenize.Bracket.Side.RIGHT;
+import static com.mikosik.stork.model.token.Bracket.Shape.CURLY;
+import static com.mikosik.stork.model.token.Bracket.Shape.ROUND;
+import static com.mikosik.stork.model.token.Bracket.Side.LEFT;
+import static com.mikosik.stork.model.token.Bracket.Side.RIGHT;
 
 public enum Bracket implements Token {
   LEFT_ROUND_BRACKET(LEFT, ROUND, '('),

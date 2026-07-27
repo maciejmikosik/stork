@@ -5,12 +5,12 @@ import static com.mikosik.stork.common.Strings.split;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Variable.variable;
-import static com.mikosik.stork.model.change.Changes.deep;
-import static com.mikosik.stork.model.change.Changes.ifVariable;
-import static com.mikosik.stork.model.change.Changes.onBody;
+import static com.mikosik.stork.model.exp.Changes.deep;
+import static com.mikosik.stork.model.exp.Changes.ifVariable;
+import static com.mikosik.stork.model.exp.Changes.onBody;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.mikosik.stork.common.func.Functions.Fab;
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkDirectory;
-import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.model.disk.StorkDirectory;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.model.exp.Variable;
 
 public class Importer {
   private final Map<Namespace, Map<Variable, Identifier>> imports;

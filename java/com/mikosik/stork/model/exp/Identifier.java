@@ -1,6 +1,6 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.exp;
 
-import static com.mikosik.stork.model.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 
 import com.mikosik.stork.common.Model;
 

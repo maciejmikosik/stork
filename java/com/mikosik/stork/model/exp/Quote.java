@@ -1,4 +1,4 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.exp;
 
 public class Quote implements Expression {
   public final String string;

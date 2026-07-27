@@ -1,7 +1,8 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.disk;
 
-import com.mikosik.stork.model.StorkFile.ImportFile;
-import com.mikosik.stork.model.StorkFile.SourceFile;
+import com.mikosik.stork.model.disk.StorkFile.ImportFile;
+import com.mikosik.stork.model.disk.StorkFile.SourceFile;
+import com.mikosik.stork.model.exp.Namespace;
 
 public class StorkDirectory {
   public final Namespace namespace;

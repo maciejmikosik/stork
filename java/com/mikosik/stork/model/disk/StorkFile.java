@@ -1,4 +1,4 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.disk;
 
 public sealed class StorkFile {
 

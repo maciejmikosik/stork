@@ -5,8 +5,8 @@ import static java.util.Collections.unmodifiableList;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.StorkDirectory;
+import com.mikosik.stork.model.disk.StorkDirectory;
+import com.mikosik.stork.model.exp.Definition;
 
 public class Codebase {
   public final List<StorkDirectory> directories;

@@ -2,17 +2,17 @@ package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.list;
-import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Definition.definition;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static java.util.Arrays.stream;
 
 import java.util.List;
 
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.model.exp.Operator;
 
 public class OperatorLibrary {
   public static List<Definition> operatorLibrary() {

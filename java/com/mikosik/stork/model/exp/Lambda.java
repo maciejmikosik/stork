@@ -1,4 +1,4 @@
-package com.mikosik.stork.model;
+package com.mikosik.stork.model.exp;
 
 public class Lambda implements Expression {
   public final Parameter parameter;

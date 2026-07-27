@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.mikosik.stork.common.Slot;
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 public class CachingComputer implements Computer {
   private final Map<Stack, Slot<Expression>> cachedStacks = new WeakHashMap<>();

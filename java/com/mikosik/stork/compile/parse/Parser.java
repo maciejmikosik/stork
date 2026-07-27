@@ -6,18 +6,18 @@ import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.link.Bridge.stork;
-import static com.mikosik.stork.compile.tokenize.Bracket.LEFT_CURLY_BRACKET;
-import static com.mikosik.stork.compile.tokenize.Bracket.LEFT_ROUND_BRACKET;
-import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_CURLY_BRACKET;
-import static com.mikosik.stork.compile.tokenize.Bracket.RIGHT_ROUND_BRACKET;
-import static com.mikosik.stork.compile.tokenize.Symbol.DOT;
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Definition.definition;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Lambda.lambda;
-import static com.mikosik.stork.model.Parameter.parameter;
-import static com.mikosik.stork.model.Quote.quote;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Application.application;
+import static com.mikosik.stork.model.exp.Definition.definition;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Lambda.lambda;
+import static com.mikosik.stork.model.exp.Parameter.parameter;
+import static com.mikosik.stork.model.exp.Quote.quote;
+import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.model.token.Bracket.LEFT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Bracket.LEFT_ROUND_BRACKET;
+import static com.mikosik.stork.model.token.Bracket.RIGHT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Bracket.RIGHT_ROUND_BRACKET;
+import static com.mikosik.stork.model.token.Symbol.DOT;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 
@@ -26,15 +26,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.mikosik.stork.common.Peekerator;
-import com.mikosik.stork.compile.tokenize.Bracket;
-import com.mikosik.stork.compile.tokenize.IntegerLiteral;
-import com.mikosik.stork.compile.tokenize.Label;
-import com.mikosik.stork.compile.tokenize.StringLiteral;
-import com.mikosik.stork.compile.tokenize.Symbol;
-import com.mikosik.stork.compile.tokenize.Token;
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Lambda;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Lambda;
+import com.mikosik.stork.model.token.Bracket;
+import com.mikosik.stork.model.token.IntegerLiteral;
+import com.mikosik.stork.model.token.Label;
+import com.mikosik.stork.model.token.StringLiteral;
+import com.mikosik.stork.model.token.Symbol;
+import com.mikosik.stork.model.token.Token;
 
 public class Parser {
   public static List<Definition> parse(Iterator<Token> iterator) {

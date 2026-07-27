@@ -6,15 +6,15 @@ import static com.mikosik.stork.compile.link.Combinator.C;
 import static com.mikosik.stork.compile.link.Combinator.I;
 import static com.mikosik.stork.compile.link.Combinator.K;
 import static com.mikosik.stork.compile.link.Combinator.S;
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.change.Changes.deep;
-import static com.mikosik.stork.model.change.Changes.ifLambda;
+import static com.mikosik.stork.model.exp.Application.application;
+import static com.mikosik.stork.model.exp.Changes.deep;
+import static com.mikosik.stork.model.exp.Changes.ifLambda;
 
 import com.mikosik.stork.common.func.Functions.Faa;
-import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Lambda;
-import com.mikosik.stork.model.Parameter;
+import com.mikosik.stork.model.exp.Application;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Lambda;
+import com.mikosik.stork.model.exp.Parameter;
 
 /**
  * Transforms lambda abstractions into basis using SKI combinators.

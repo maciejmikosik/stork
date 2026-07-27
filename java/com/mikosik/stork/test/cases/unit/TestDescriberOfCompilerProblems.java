@@ -2,10 +2,10 @@ package com.mikosik.stork.test.cases.unit;
 
 import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.ImmutableList.list;
-import static com.mikosik.stork.compile.tokenize.Label.label;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.problem.Describer.describe;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;

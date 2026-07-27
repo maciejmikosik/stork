@@ -2,7 +2,7 @@ package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.exp.Application.application;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -11,7 +11,7 @@ import com.mikosik.stork.compute.Stack.Argument;
 import com.mikosik.stork.compute.Stack.Empty;
 import com.mikosik.stork.compute.Stack.Frame;
 import com.mikosik.stork.compute.Stack.Function;
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 public class Computations {
   public static boolean areSame(Computation first, Computation second) {

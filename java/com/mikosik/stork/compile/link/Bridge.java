@@ -2,17 +2,17 @@ package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.Strings.reverse;
-import static com.mikosik.stork.model.Application.application;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Integer.integer;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Application.application;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Integer.integer;
+import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Variable.variable;
 
 import java.math.BigInteger;
 
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Namespace;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Namespace;
 
 public class Bridge {
   private static final Namespace lang = namespace(single("lang"));

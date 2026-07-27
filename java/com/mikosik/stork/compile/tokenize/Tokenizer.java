@@ -8,12 +8,12 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
-import static com.mikosik.stork.compile.tokenize.Bracket.bracket;
-import static com.mikosik.stork.compile.tokenize.Bracket.isBracket;
-import static com.mikosik.stork.compile.tokenize.IntegerLiteral.literal;
-import static com.mikosik.stork.compile.tokenize.Label.label;
-import static com.mikosik.stork.compile.tokenize.StringLiteral.literal;
-import static com.mikosik.stork.compile.tokenize.Symbol.DOT;
+import static com.mikosik.stork.model.token.Bracket.bracket;
+import static com.mikosik.stork.model.token.Bracket.isBracket;
+import static com.mikosik.stork.model.token.IntegerLiteral.literal;
+import static com.mikosik.stork.model.token.Label.label;
+import static com.mikosik.stork.model.token.StringLiteral.literal;
+import static com.mikosik.stork.model.token.Symbol.DOT;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
@@ -22,6 +22,10 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import com.mikosik.stork.common.Peekerator;
+import com.mikosik.stork.model.token.IntegerLiteral;
+import com.mikosik.stork.model.token.Label;
+import com.mikosik.stork.model.token.StringLiteral;
+import com.mikosik.stork.model.token.Token;
 
 public class Tokenizer implements Iterator<Token> {
   private final Peekerator<Byte> iterator;

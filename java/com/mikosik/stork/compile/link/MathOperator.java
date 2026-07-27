@@ -2,16 +2,16 @@ package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.compile.link.Bridge.stork;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.model.Integer.integer;
+import static com.mikosik.stork.model.exp.Integer.integer;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.compute.Stack.Argument;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Integer;
+import com.mikosik.stork.model.exp.Operator;
 
 public enum MathOperator implements Operator {
   EQUAL,

@@ -2,7 +2,7 @@ package com.mikosik.stork.compile.link;
 
 import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.model.change.Changes.walk;
+import static com.mikosik.stork.model.exp.Changes.walk;
 import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
 import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
 import static java.util.function.Function.identity;
@@ -12,9 +12,9 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
 
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Variable;
 import com.mikosik.stork.problem.compile.link.CannotLink;
 import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
 import com.mikosik.stork.problem.compile.link.UnboundVariable;

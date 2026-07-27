@@ -1,7 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;

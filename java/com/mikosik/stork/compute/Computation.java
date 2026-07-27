@@ -2,7 +2,7 @@ package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Stack.stack;
 
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 public class Computation {
   public final Expression expression;

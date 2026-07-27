@@ -16,10 +16,10 @@ import static org.quackery.Case.newCase;
 import org.quackery.Test;
 
 import com.mikosik.stork.compute.Computer;
-import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Application;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Integer;
+import com.mikosik.stork.model.exp.Operator;
 
 public class TestLogbuddyDecorator {
   public static Test testLogbuddyDecorator() {
