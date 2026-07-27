@@ -16,6 +16,7 @@ import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Changes.onIdentifier;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
+import static java.util.Objects.deepEquals;
 
 import java.util.List;
 
@@ -50,12 +51,13 @@ public class Compiler {
             .map(Tokenizer::tokenize)
             .map(Parser::parse)
             .map(each(onBody(deep(ifLambda(lambda -> on(lambda)
-                .map(deep(ifVariable(variable -> variable.name.equals(lambda.parameter.name)
-                    ? lambda.parameter
-                    : variable)))
-                .get())))))
+                .apply(deep(ifVariable(variable -> deepEquals(
+                    variable.name,
+                    lambda.parameter.name)
+                        ? lambda.parameter
+                        : variable))))))))
             .map(bind(directory.namespace))
-            .get())
+            .apply())
         .flatMap(List::stream)
         .map(onBody(unlambda))
         .map(onBody(deep(ifQuote(quote -> stork(quote.string)))))
