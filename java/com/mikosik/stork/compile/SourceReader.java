@@ -3,8 +3,6 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
-import static com.mikosik.stork.model.disk.StorkFile.ImportFile.importFile;
-import static com.mikosik.stork.model.disk.StorkFile.SourceFile.sourceFile;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 
 import java.util.List;
@@ -45,11 +43,11 @@ public class SourceReader {
       Namespace namespace) {
     return storkDirectory(
         namespace,
-        importFile(directory.file("import.stork")
+        directory.file("import.stork")
             .tryInput()
-            .readAllBytes()),
-        sourceFile(directory.file("source.stork")
+            .readAllBytes(),
+        directory.file("source.stork")
             .tryInput()
-            .readAllBytes()));
+            .readAllBytes());
   }
 }

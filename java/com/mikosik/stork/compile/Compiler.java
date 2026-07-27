@@ -45,7 +45,7 @@ public class Compiler {
   private static List<Definition> compile(List<StorkDirectory> directories) {
     // TODO aggregate compiler problems from stream
     var compiled = directories.stream()
-        .map(directory -> on(directory.sourceFile.content)
+        .map(directory -> on(directory.sourceFile)
             .map(Collections::iterator)
             .map(Tokenizer::tokenize)
             .map(Parser::parse)

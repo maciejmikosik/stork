@@ -2,21 +2,17 @@ package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Strings.split;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
-import static com.mikosik.stork.model.disk.StorkFile.ImportFile.importFile;
-import static com.mikosik.stork.model.disk.StorkFile.SourceFile.sourceFile;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.mikosik.stork.model.disk.StorkDirectory;
-import com.mikosik.stork.model.disk.StorkFile.ImportFile;
-import com.mikosik.stork.model.disk.StorkFile.SourceFile;
 import com.mikosik.stork.model.exp.Namespace;
 
 public class StorkDirectoryBuilder {
   private final Namespace namespace;
-  private ImportFile imports = importFile(new byte[0]);
-  private SourceFile source = sourceFile(new byte[0]);
+  private byte[] imports = new byte[0];
+  private byte[] source = new byte[0];
 
   private StorkDirectoryBuilder(Namespace namespace) {
     this.namespace = namespace;
@@ -31,12 +27,12 @@ public class StorkDirectoryBuilder {
   }
 
   public StorkDirectoryBuilder imports(String imports) {
-    this.imports = importFile(imports.getBytes(UTF_8));
+    this.imports = imports.getBytes(UTF_8);
     return this;
   }
 
   public StorkDirectoryBuilder source(byte[] source) {
-    this.source = sourceFile(source);
+    this.source = source;
     return this;
   }
 
