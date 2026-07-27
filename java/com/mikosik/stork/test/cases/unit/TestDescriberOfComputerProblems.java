@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases.unit;
 
-import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.ImmutableList.list;
+import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -14,7 +14,7 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.common.Description;
+import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class TestDescriberOfComputerProblems {
@@ -29,13 +29,13 @@ public class TestDescriberOfComputerProblems {
             "function [a/b/c] is missing"));
   }
 
-  private static Test test(CannotCompute cannotCompute, Description expected) {
+  private static Test test(CannotCompute cannotCompute, Outline expected) {
     return newCase(cannotCompute.getClass().getSimpleName(), () -> {
       assertMatch(expected, describe(cannotCompute));
     });
   }
 
   private static Test test(CannotCompute cannotCompute, String expected) {
-    return test(cannotCompute, description(expected));
+    return test(cannotCompute, outline(expected));
   }
 }
