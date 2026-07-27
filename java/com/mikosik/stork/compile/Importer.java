@@ -66,7 +66,7 @@ public class Importer {
     } else if (split.length == 2) {
       return entry(variable(split[1]), identifierParse(split[0]));
     } else {
-      throw runtimeException("illegal import line: %s", line);
+      throw runtimeException("illegal import line", line);
     }
   }
 

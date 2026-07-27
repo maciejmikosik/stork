@@ -57,7 +57,7 @@ public class Zip {
 
   public static void check(int exitValue) {
     if (exitValue != 0) {
-      throw runtimeException("code: %d", exitValue);
+      throw runtimeException("code", exitValue);
     }
   }
 }

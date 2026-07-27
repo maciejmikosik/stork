@@ -74,7 +74,7 @@ public class SnippetSuite {
       case BigInteger i -> ExpectedType.INTEGER;
       case Boolean b -> ExpectedType.BOOLEAN;
       case String s -> ExpectedType.STRING;
-      default -> throw runtimeException("unknown type: %s", expected);
+      default -> throw runtimeException("unknown type", expected);
     };
   }
 

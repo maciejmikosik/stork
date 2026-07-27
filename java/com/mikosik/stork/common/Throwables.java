@@ -4,8 +4,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class Throwables {
-  public static RuntimeException runtimeException(String format, Object... args) {
-    return new RuntimeException(format.formatted(args));
+  public static RuntimeException runtimeException(String message) {
+    return new RuntimeException(message);
+  }
+
+  public static RuntimeException runtimeException(String key, Object value) {
+    return new RuntimeException(key + ": " + value);
   }
 
   public static LinkageError linkageError(Throwable cause) {
