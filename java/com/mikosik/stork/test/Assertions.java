@@ -1,7 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.problem.Describer.describe;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.deepEquals;
@@ -10,18 +10,18 @@ import java.util.Objects;
 
 import org.quackery.report.AssertException;
 
-import com.mikosik.stork.common.Description;
+import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compute.CannotCompute;
 
 public class Assertions {
-  public static void assertMatch(Description expected, Description actual) {
+  public static void assertMatch(Outline expected, Outline actual) {
     if (!Objects.equals(expected, actual)) {
-      throw new AssertException(description("test failed because")
-          .child(description("expected")
-              .child(expected))
-          .child(description("found")
-              .child(actual))
+      throw new AssertException(outline("test failed because")
+          .nest(outline("expected")
+              .nest(expected))
+          .nest(outline("found")
+              .nest(actual))
           .toString());
     }
   }
@@ -32,12 +32,12 @@ public class Assertions {
     }
   }
 
-  private static Description failureMessage(Outcome expected, Outcome actual) {
-    return description("test failed because")
-        .child(description("expected " + nameOf(expected))
-            .child(describeOutcome(expected)))
-        .child(description("found " + nameOf(actual))
-            .child(describeOutcome(actual)));
+  private static Outline failureMessage(Outcome expected, Outcome actual) {
+    return outline("test failed because")
+        .nest(outline("expected " + nameOf(expected))
+            .nest(describeOutcome(expected)))
+        .nest(outline("found " + nameOf(actual))
+            .nest(describeOutcome(actual)));
   }
 
   private static String nameOf(Outcome outcome) {
@@ -49,9 +49,9 @@ public class Assertions {
     };
   }
 
-  private static Description describeOutcome(Outcome outcome) {
+  private static Outline describeOutcome(Outcome outcome) {
     return switch (outcome.object) {
-      case byte[] stdout -> description(format(stdout));
+      case byte[] stdout -> outline(format(stdout));
       case CannotCompile cannotCompile -> describe(cannotCompile);
       case CannotCompute cannotCompute -> describe(cannotCompute);
       default -> throw runtimeException("" + outcome.object);

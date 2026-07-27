@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases.unit;
 
-import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.ImmutableList.list;
+import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -20,7 +20,7 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.common.Description;
+import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class TestDescriberOfCompilerProblems {
@@ -54,13 +54,13 @@ public class TestDescriberOfCompilerProblems {
             "function [a/b/c] uses undefined variable [var]"));
   }
 
-  private static Test test(CannotCompile cannotCompile, Description expected) {
+  private static Test test(CannotCompile cannotCompile, Outline expected) {
     return newCase(cannotCompile.getClass().getSimpleName(), () -> {
       assertMatch(expected, describe(cannotCompile));
     });
   }
 
   private static Test test(CannotCompile cannotCompile, String expected) {
-    return test(cannotCompile, description(expected));
+    return test(cannotCompile, outline(expected));
   }
 }

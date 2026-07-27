@@ -28,7 +28,7 @@ public class Computations {
         case Function function -> computation(
             application(function.expression, computation.expression),
             function.previous);
-        default -> throw runtimeException("unknown frame %s", frame);
+        default -> throw runtimeException("unknown frame", frame);
       };
     }
     return computation.expression;

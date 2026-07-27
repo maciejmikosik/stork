@@ -42,7 +42,7 @@ public class Decompiler {
       case Application application -> join(
           decompile(application.function),
           roundBrackets(decompile(application.argument)));
-      default -> throw runtimeException("unknown expression: %s", expression);
+      default -> throw runtimeException("unknown expression", expression);
     };
   }
 

@@ -1,15 +1,15 @@
 package com.mikosik.stork.problem;
 
-import static com.mikosik.stork.common.Description.description;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
+import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.common.text.Templater.templater;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.join;
 
-import com.mikosik.stork.common.Description;
+import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.common.text.Templater;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Variable;
@@ -27,18 +27,18 @@ public class Describer {
   private static final ProblemTemplates templates = new ProblemTemplates();
   private static final Templater templater = templater(Describer::formatArgument);
 
-  public static Description describe(CannotCompile problem) {
-    return description(templater
+  public static Outline describe(CannotCompile problem) {
+    return outline(templater
         .template(templates.get(problem))
         .model(problem));
   }
 
-  public static Description describe(CannotCompute cannotCompute) {
+  public static Outline describe(CannotCompute cannotCompute) {
     return switch (cannotCompute) {
-      case FunctionMissing problem -> description(templater
+      case FunctionMissing problem -> outline(templater
           .template("function {function} is missing")
           .model(problem));
-      default -> description("cannot compute");
+      default -> outline("cannot compute");
     };
   }
 
