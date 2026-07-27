@@ -1,7 +1,6 @@
 package com.mikosik.stork.debug;
 
 import static com.mikosik.stork.common.io.Serializables.ascii;
-import static com.mikosik.stork.compile.Bind.removeNamespaces;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.compute.Computations.depthOf;
@@ -28,7 +27,7 @@ public final class StorkTextRenderer extends TextRenderer {
     return switch (model) {
       case Computer computer -> computer.getClass().getSimpleName();
       case Computation computation -> render(asExpression(computation));
-      case Expression expression -> ascii(decompile(removeNamespaces(expression)));
+      case Expression expression -> ascii(decompile(expression));
       case Stack stack -> format("stack(%s)", depthOf(stack));
       case Map<?, ?> map -> "Map";
       default -> super.render(model);

@@ -3,7 +3,6 @@ package com.mikosik.stork.test.cases.unit;
 import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Serializables.ascii;
-import static com.mikosik.stork.compile.Bind.removeNamespaces;
 import static com.mikosik.stork.compile.op.Combinator.B;
 import static com.mikosik.stork.compile.op.Combinator.C;
 import static com.mikosik.stork.compile.op.Combinator.I;
@@ -92,7 +91,9 @@ public class TestDecompiler {
             .add(suite("variable")
                 .add(test("var", variable("var"))))
             .add(suite("identifier")
-                .add(test("iden", identifier(variable("iden")))))
+                .add(test(
+                    "a/b/c",
+                    identifier(namespace(list("a", "b")), variable("c")))))
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
             .add(suite("lambda")
@@ -120,14 +121,7 @@ public class TestDecompiler {
             .add(test("f{g}",
                 definition(
                     identifier(variable("f")),
-                    identifier(variable("g"))))))
-        .add(suite("local")
-            .add(test("function",
-                removeNamespaces(identifier(
-                    namespace(list("package", "package")),
-                    variable("function")))))
-            .add(test("function",
-                removeNamespaces(identifier(variable("function"))))));
+                    identifier(variable("g"))))));
   }
 
   private static Test test(String expected, Expression expression) {
