@@ -20,7 +20,7 @@ public class LibraryComputer extends TypedComputer<Identifier> {
     this.table = table;
   }
 
-  public static Computer computer(List<Definition> library) {
+  public static TypedComputer<Identifier> computer(List<Definition> library) {
     Map<Identifier, Expression> table = new HashMap<>();
     for (Definition definition : library) {
       table.put(definition.identifier, definition.body);

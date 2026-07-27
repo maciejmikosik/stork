@@ -9,7 +9,7 @@ public class ApplicationComputer extends TypedComputer<Application> {
     super(Application.class);
   }
 
-  public static Computer applicationComputer() {
+  public static TypedComputer<Application> applicationComputer() {
     return new ApplicationComputer();
   }
 

@@ -14,9 +14,9 @@ public class Router implements Computer {
     return new Router();
   }
 
-  public Router route(
-      Class<? extends Expression> type,
-      Computer computer) {
+  public <T extends Expression> Router route(
+      Class<T> type,
+      TypedComputer<T> computer) {
     routes.add(new Route(type, computer));
     return this;
   }

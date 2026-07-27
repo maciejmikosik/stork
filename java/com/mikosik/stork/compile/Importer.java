@@ -39,7 +39,7 @@ public class Importer {
     var imports = directories.stream()
         .map(directory -> entry(
             directory.namespace,
-            parseImports(directory.importFile.content)))
+            parseImports(directory.importFile)))
         .collect(toMapFromEntries());
     return new Importer(imports);
   }

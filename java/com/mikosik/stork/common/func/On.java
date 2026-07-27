@@ -17,7 +17,11 @@ public class On<E> {
     return on(mapping.apply(item));
   }
 
-  public E get() {
+  public E apply() {
     return item;
+  }
+
+  public <R> R apply(Function<? super E, ? extends R> mapping) {
+    return mapping.apply(item);
   }
 }
