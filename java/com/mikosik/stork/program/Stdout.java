@@ -1,8 +1,8 @@
 package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Throwables.check;
-import static com.mikosik.stork.compile.link.Bridge.REDUCE_EAGER;
-import static com.mikosik.stork.compile.link.StackOperator.EAGER;
+import static com.mikosik.stork.compile.Bridge.REDUCE_EAGER;
+import static com.mikosik.stork.compile.op.StackOperator.EAGER;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;

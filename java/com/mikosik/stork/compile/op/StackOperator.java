@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.link;
+package com.mikosik.stork.compile.op;
 
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;

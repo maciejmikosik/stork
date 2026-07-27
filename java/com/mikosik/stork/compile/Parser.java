@@ -1,11 +1,11 @@
-package com.mikosik.stork.compile.parse;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.checkSuchElement;
 import static com.mikosik.stork.common.ImmutableList.listFrom;
 import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
-import static com.mikosik.stork.compile.link.Bridge.stork;
+import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
 import static com.mikosik.stork.model.exp.Identifier.identifier;

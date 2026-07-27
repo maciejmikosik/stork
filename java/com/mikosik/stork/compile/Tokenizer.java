@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.tokenize;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.Throwables.check;

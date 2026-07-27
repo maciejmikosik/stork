@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.link;
+package com.mikosik.stork.compile.op;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.list;

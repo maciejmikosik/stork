@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
-import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
+import static com.mikosik.stork.compile.op.OperatorLibrary.operatorLibrary;
 import static java.nio.file.FileSystems.newFileSystem;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile.link;
+package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifIdentifier;
