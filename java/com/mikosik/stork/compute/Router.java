@@ -3,7 +3,7 @@ package com.mikosik.stork.compute;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 public class Router implements Computer {
   private final List<Route> routes = new LinkedList<>();

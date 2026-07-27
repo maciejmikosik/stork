@@ -4,28 +4,26 @@ import static com.mikosik.stork.common.Collections.each;
 import static com.mikosik.stork.common.Collections.toMapIgnoringDuplicates;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.func.On.on;
+import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.Importer.importer;
-import static com.mikosik.stork.compile.link.Bridge.stork;
-import static com.mikosik.stork.compile.link.Unlambda.unlambda;
-import static com.mikosik.stork.compile.link.VerifyLibrary.findLinkingProblems;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.change.Changes.deep;
-import static com.mikosik.stork.model.change.Changes.ifLambda;
-import static com.mikosik.stork.model.change.Changes.ifQuote;
-import static com.mikosik.stork.model.change.Changes.ifVariable;
-import static com.mikosik.stork.model.change.Changes.onBody;
-import static com.mikosik.stork.model.change.Changes.onIdentifier;
+import static com.mikosik.stork.compile.Unlambda.unlambda;
+import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
+import static com.mikosik.stork.model.exp.Changes.deep;
+import static com.mikosik.stork.model.exp.Changes.ifLambda;
+import static com.mikosik.stork.model.exp.Changes.ifQuote;
+import static com.mikosik.stork.model.exp.Changes.ifVariable;
+import static com.mikosik.stork.model.exp.Changes.onBody;
+import static com.mikosik.stork.model.exp.Changes.onIdentifier;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
 
 import java.util.List;
 
 import com.mikosik.stork.common.Collections;
 import com.mikosik.stork.common.func.Functions.Faa;
-import com.mikosik.stork.compile.parse.Parser;
-import com.mikosik.stork.compile.tokenize.Tokenizer;
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkDirectory;
+import com.mikosik.stork.model.disk.StorkDirectory;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Namespace;
 
 public class Compiler {
   public static List<Definition> compile(Codebase codebase) {

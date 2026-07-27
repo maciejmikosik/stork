@@ -2,16 +2,16 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.model.Namespace.namespaceRoot;
-import static com.mikosik.stork.model.StorkDirectory.storkDirectory;
-import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
-import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
+import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
+import static com.mikosik.stork.model.disk.StorkFile.ImportFile.importFile;
+import static com.mikosik.stork.model.disk.StorkFile.SourceFile.sourceFile;
+import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 
 import java.util.List;
 
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkDirectory;
+import com.mikosik.stork.model.disk.StorkDirectory;
+import com.mikosik.stork.model.exp.Namespace;
 
 // TODO rename to something better
 public class SourceReader {

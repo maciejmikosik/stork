@@ -1,9 +1,9 @@
 package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.model.Identifier.identifier;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Variable.variable;
+import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
 import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
 import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;

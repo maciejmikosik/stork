@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Operator;
 
 public class OperatorComputer extends TypedComputer<Operator> {
   private OperatorComputer() {

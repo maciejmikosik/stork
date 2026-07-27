@@ -1,17 +1,17 @@
 package com.mikosik.stork.test;
 
 import static com.mikosik.stork.common.Strings.split;
-import static com.mikosik.stork.model.Namespace.namespace;
-import static com.mikosik.stork.model.Namespace.namespaceRoot;
-import static com.mikosik.stork.model.StorkDirectory.storkDirectory;
-import static com.mikosik.stork.model.StorkFile.ImportFile.importFile;
-import static com.mikosik.stork.model.StorkFile.SourceFile.sourceFile;
+import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
+import static com.mikosik.stork.model.disk.StorkFile.ImportFile.importFile;
+import static com.mikosik.stork.model.disk.StorkFile.SourceFile.sourceFile;
+import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.mikosik.stork.model.Namespace;
-import com.mikosik.stork.model.StorkDirectory;
-import com.mikosik.stork.model.StorkFile.ImportFile;
-import com.mikosik.stork.model.StorkFile.SourceFile;
+import com.mikosik.stork.model.disk.StorkDirectory;
+import com.mikosik.stork.model.disk.StorkFile.ImportFile;
+import com.mikosik.stork.model.disk.StorkFile.SourceFile;
+import com.mikosik.stork.model.exp.Namespace;
 
 public class StorkDirectoryBuilder {
   private final Namespace namespace;

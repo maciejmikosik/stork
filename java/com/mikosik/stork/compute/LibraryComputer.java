@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Identifier;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Identifier;
 
 public class LibraryComputer extends TypedComputer<Identifier> {
   private final Map<Identifier, Expression> table;

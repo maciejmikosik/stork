@@ -2,7 +2,7 @@ package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
 
-import com.mikosik.stork.model.Application;
+import com.mikosik.stork.model.exp.Application;
 
 public class ApplicationComputer extends TypedComputer<Application> {
   private ApplicationComputer() {

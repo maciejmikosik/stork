@@ -1,7 +1,7 @@
 package com.mikosik.stork.problem.compile.link;
 
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Variable;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Variable;
 
 public class UnboundVariable extends CannotLink {
   public final Identifier location;

@@ -1,6 +1,6 @@
 package com.mikosik.stork.problem.compile.parse;
 
-import com.mikosik.stork.compile.tokenize.Token;
+import com.mikosik.stork.model.token.Token;
 
 public class UnexpectedToken extends CannotParse {
   public final Token token;

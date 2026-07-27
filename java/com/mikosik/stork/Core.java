@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
-import static com.mikosik.stork.compile.link.OperatorLibrary.operatorLibrary;
+import static com.mikosik.stork.compile.op.OperatorLibrary.operatorLibrary;
 import static java.nio.file.FileSystems.newFileSystem;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mikosik.stork.common.io.Directory;
-import com.mikosik.stork.model.Definition;
+import com.mikosik.stork.model.exp.Definition;
 
 public class Core {
   public static enum Mode {

@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Expression;
 
 public abstract class TypedComputer<E extends Expression> implements Computer {
   private final Class<E> type;

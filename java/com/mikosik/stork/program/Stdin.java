@@ -1,15 +1,15 @@
 package com.mikosik.stork.program;
 
-import static com.mikosik.stork.compile.link.Bridge.NONE;
-import static com.mikosik.stork.compile.link.Bridge.some;
+import static com.mikosik.stork.compile.Bridge.NONE;
+import static com.mikosik.stork.compile.Bridge.some;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.model.Integer.integer;
+import static com.mikosik.stork.model.exp.Integer.integer;
 
 import com.mikosik.stork.common.io.Input;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Operator;
 
 public class Stdin implements Operator {
   private final Input input;

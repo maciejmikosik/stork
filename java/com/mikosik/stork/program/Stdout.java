@@ -1,10 +1,10 @@
 package com.mikosik.stork.program;
 
 import static com.mikosik.stork.common.Throwables.check;
-import static com.mikosik.stork.compile.link.Bridge.REDUCE_EAGER;
-import static com.mikosik.stork.compile.link.StackOperator.EAGER;
+import static com.mikosik.stork.compile.Bridge.REDUCE_EAGER;
+import static com.mikosik.stork.compile.op.StackOperator.EAGER;
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
 import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
@@ -13,9 +13,9 @@ import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
 import com.mikosik.stork.compute.Stack.Argument;
 import com.mikosik.stork.compute.Stack.Function;
-import com.mikosik.stork.model.Expression;
-import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Expression;
+import com.mikosik.stork.model.exp.Integer;
+import com.mikosik.stork.model.exp.Operator;
 
 // TODO why @snippet gives warning?.
 @SuppressWarnings("javadoc")

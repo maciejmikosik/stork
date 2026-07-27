@@ -2,8 +2,8 @@ package com.mikosik.stork.program;
 
 import java.util.List;
 
-import com.mikosik.stork.model.Definition;
-import com.mikosik.stork.model.Expression;
+import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Expression;
 
 public class Program {
   public final Expression main;

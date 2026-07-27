@@ -8,17 +8,17 @@ import static com.mikosik.stork.compute.InterruptibleComputer.interruptible;
 import static com.mikosik.stork.compute.LibraryComputer.computer;
 import static com.mikosik.stork.compute.OperatorComputer.operatorComputer;
 import static com.mikosik.stork.compute.Router.router;
-import static com.mikosik.stork.model.Application.application;
+import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.CLOSE;
 import static com.mikosik.stork.program.Stdout.writeStreamTo;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack.Empty;
-import com.mikosik.stork.model.Application;
-import com.mikosik.stork.model.Identifier;
-import com.mikosik.stork.model.Integer;
-import com.mikosik.stork.model.Operator;
+import com.mikosik.stork.model.exp.Application;
+import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Integer;
+import com.mikosik.stork.model.exp.Operator;
 
 public class Runner {
   private Runner() {}
