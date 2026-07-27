@@ -26,8 +26,7 @@ import static com.mikosik.stork.test.cases.language.TestStringLiteral.testString
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
 import static com.mikosik.stork.test.cases.language.TestTokenizer.testTokenizer;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.test.cases.unit.TestDescriberOfCompilerProblems.testDescriberOfCompilerProblems;
-import static com.mikosik.stork.test.cases.unit.TestDescriberOfComputerProblems.testDescriberOfComputerProblems;
+import static com.mikosik.stork.test.cases.unit.TestDescriber.testDescriber;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static java.lang.System.exit;
 import static java.time.Duration.between;
@@ -64,8 +63,7 @@ public class RunTests {
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator()))
-        .add(testDescriberOfCompilerProblems())
-        .add(testDescriberOfComputerProblems()));
+        .add(testDescriber()));
     runAndReport(testCompilingCoreLibrary(TESTING));
     runAndReport(suite("language")
         .add(testSyntax())
