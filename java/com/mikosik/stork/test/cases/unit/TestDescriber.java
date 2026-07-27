@@ -54,27 +54,27 @@ public class TestDescriber {
         .add(newCase("fields of type Expression", () -> {
           assertMatch(
               outline("ProblemWithExpressions")
-                  .nest(outline("keyString: valueString"))
-                  .nest(outline("keyVariable: valueVariable"))
-                  .nest(outline("keyIdentifier: a/b/valueIdentifier")),
+                  .nest("keyString: valueString")
+                  .nest("keyVariable: valueVariable")
+                  .nest("keyIdentifier: a/b/valueIdentifier"),
               describe(new ProblemWithExpressions()));
         }))
         .add(newCase("fields of type byte", () -> {
           assertMatch(
               outline("ProblemWithBytes")
-                  .nest(outline("key65: ascii character [A]"))
-                  .nest(outline("key10: non-printable ascii character with decimal value of 10"))
-                  .nest(outline("key200: non-ascii character with decimal value of 200")),
+                  .nest("key65: ascii character [A]")
+                  .nest("key10: non-printable ascii character with decimal value of 10")
+                  .nest("key200: non-ascii character with decimal value of 200"),
               describe(new ProblemWithBytes()));
         }))
         .add(newCase("fields of type Token", () -> {
           assertMatch(
               outline("ProblemWithTokens")
-                  .nest(outline("keyLabel: valueLabel"))
-                  .nest(outline("keyBracket: {"))
-                  .nest(outline("keySymbol: ."))
-                  .nest(outline("keyIntegerLiteral: 123"))
-                  .nest(outline("keyStringLiteral: valueStringLiteral")),
+                  .nest("keyLabel: valueLabel")
+                  .nest("keyBracket: {")
+                  .nest("keySymbol: .")
+                  .nest("keyIntegerLiteral: 123")
+                  .nest("keyStringLiteral: valueStringLiteral"),
               describe(new ProblemWithTokens()));
         }));
   }
