@@ -11,6 +11,7 @@ import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
 import static com.mikosik.stork.model.token.Symbol.DOT;
 import static com.mikosik.stork.problem.Describer.describe;
+import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.test.Assertions.assertMatch;
 import static java.math.BigInteger.valueOf;
 import static org.quackery.Case.newCase;
@@ -25,9 +26,10 @@ import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
+import com.mikosik.stork.problem.compile.CannotCompile;
 
 public class TestDescriber {
-  public static class ProblemWithExpressions {
+  public static class ProblemWithExpressions extends CannotCompile {
     public String keyString = "valueString";
     public Variable keyVariable = variable("valueVariable");
     public Identifier keyIdentifier = identifier(
@@ -35,13 +37,13 @@ public class TestDescriber {
         variable("valueIdentifier"));
   }
 
-  public static class ProblemWithBytes {
+  public static class ProblemWithBytes extends CannotCompile {
     public byte key65 = 65;
     public byte key10 = 10;
     public byte key200 = (byte) 200;
   }
 
-  public static class ProblemWithTokens {
+  public static class ProblemWithTokens extends CannotCompile {
     public Label keyLabel = label("valueLabel");
     public Bracket keyBracket = LEFT_CURLY_BRACKET;
     public Symbol keySymbol = DOT;
@@ -57,7 +59,7 @@ public class TestDescriber {
                   .nest("keyString: valueString")
                   .nest("keyVariable: valueVariable")
                   .nest("keyIdentifier: a/b/valueIdentifier"),
-              describe(new ProblemWithExpressions()));
+              describe(exception(new ProblemWithExpressions())));
         }))
         .add(newCase("fields of type byte", () -> {
           assertMatch(
@@ -72,7 +74,7 @@ public class TestDescriber {
                   .nest(outline("key200:")
                       .nest(outline("non-ascii")
                           .nest("decimal: 200"))),
-              describe(new ProblemWithBytes()));
+              describe(exception(new ProblemWithBytes())));
         }))
         .add(newCase("fields of type Token", () -> {
           assertMatch(
@@ -82,7 +84,7 @@ public class TestDescriber {
                   .nest("keySymbol: .")
                   .nest("keyIntegerLiteral: 123")
                   .nest("keyStringLiteral: valueStringLiteral"),
-              describe(new ProblemWithTokens()));
+              describe(exception(new ProblemWithTokens())));
         }));
   }
 }

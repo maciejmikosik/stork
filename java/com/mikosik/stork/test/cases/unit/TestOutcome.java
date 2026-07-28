@@ -48,7 +48,7 @@ public class TestOutcome {
         }))
         .add(newCase("single problem", () -> {
           assertMatch(
-              describe(problem(1)),
+              describe(exception(problem(1))),
               outcome(exception(problem(1)))
                   .describe());
         }));

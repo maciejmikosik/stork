@@ -21,7 +21,7 @@ public sealed interface Outcome {
     }
 
     public Outline describe() {
-      return Describer.describe(exception.problem);
+      return Describer.describe(exception);
     }
 
     public boolean equals(Object object) {
@@ -42,7 +42,7 @@ public sealed interface Outcome {
     }
 
     public Outline describe() {
-      return Describer.describe(exception.problem);
+      return Describer.describe(exception);
     }
 
     public boolean equals(Object object) {
