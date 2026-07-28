@@ -38,8 +38,7 @@ public class Compiler {
     if (linkingProblems.isEmpty()) {
       return definitions;
     } else {
-      // TODO aggregate compiler problems
-      throw exception(linkingProblems.getFirst());
+      throw exception(linkingProblems);
     }
   }
 

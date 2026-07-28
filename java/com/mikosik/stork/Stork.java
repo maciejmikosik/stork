@@ -34,10 +34,10 @@ public class Stork {
           terminal(input(System.in), output(FileDescriptor.out))));
       System.exit(0);
     } catch (CompilerException compilerException) {
-      System.err.println(describe(compilerException.problem));
+      System.err.println(describe(compilerException));
       System.exit(1);
     } catch (ComputerException computerException) {
-      System.err.println(describe(computerException.problem));
+      System.err.println(describe(computerException));
       System.exit(1);
     } catch (UncheckedIOException e) {
       if (isMessage("Broken pipe", e)) {

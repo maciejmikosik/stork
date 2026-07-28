@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.Collections.unorderedEquals;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 
 import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.problem.Describer;
+import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compute.ComputerException;
 
@@ -21,18 +23,20 @@ public sealed interface Outcome {
     }
 
     public Outline describe() {
-      return Describer.describe(exception.problem);
+      return Describer.describe(exception);
     }
 
     public boolean equals(Object object) {
       return object instanceof NotCompiled that
-          && deepEquals(
-              this.exception.problem,
-              that.exception.problem);
+          && unorderedEquals(
+              this.exception.problems,
+              that.exception.problems);
     }
 
     public int hashCode() {
-      return exception.problem.hashCode();
+      return exception.problems.stream()
+          .mapToInt(CannotCompile::hashCode)
+          .sum();
     }
   }
 
@@ -42,7 +46,7 @@ public sealed interface Outcome {
     }
 
     public Outline describe() {
-      return Describer.describe(exception.problem);
+      return Describer.describe(exception);
     }
 
     public boolean equals(Object object) {

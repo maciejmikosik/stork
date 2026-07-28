@@ -22,9 +22,25 @@ import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
+import com.mikosik.stork.problem.compile.CompilerException;
+import com.mikosik.stork.problem.compute.ComputerException;
 
 public class Describer {
-  public static Outline describe(Object problem) {
+  public static Outline describe(CompilerException exception) {
+    var descriptions = exception.problems.stream()
+        .map(Describer::describe)
+        .toList();
+    return descriptions.size() == 1
+        ? descriptions.getFirst()
+        : outline("cannot compile")
+            .nest(descriptions);
+  }
+
+  public static Outline describe(ComputerException exception) {
+    return describe(exception.problem);
+  }
+
+  private static Outline describe(Object problem) {
     return outline(problem.getClass().getSimpleName())
         .nest(stream(problem.getClass().getFields())
             .map(field -> formatField(problem, field))

@@ -1,5 +1,7 @@
 package com.mikosik.stork.test.cases.unit;
 
+import static com.mikosik.stork.common.ImmutableList.list;
+import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.problem.Describer.describe;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
@@ -48,9 +50,21 @@ public class TestOutcome {
         }))
         .add(newCase("single problem", () -> {
           assertMatch(
-              describe(problem(1)),
+              describe(exception(problem(1))),
               outcome(exception(problem(1)))
                   .describe());
+        }))
+        .add(newCase("many problems", () -> {
+          assertMatch(
+              describe(exception(list(
+                  problem(1),
+                  problem(2),
+                  problem(3)))),
+              outcome(exception(list(
+                  problem(1),
+                  problem(2),
+                  problem(3))))
+                      .describe());
         }));
   }
 
@@ -77,7 +91,28 @@ public class TestOutcome {
               assertNotEqual(
                   outcome(exception(problem(1))),
                   outcome(exception(problem(2))));
-            })));
+            })))
+        .add(newCase("rejects different count", () -> {
+          assertNotEqual(
+              outcome(exception(list(problem(1), problem(1)))),
+              outcome(exception(single(problem(1)))));
+          assertNotEqual(
+              outcome(exception(single(problem(1)))),
+              outcome(exception(list(problem(1), problem(1)))));
+        }))
+        .add(newCase("accepts different order", () -> {
+          assertEqual(
+              outcome(exception(list(problem(1), problem(2), problem(3)))),
+              outcome(exception(list(problem(3), problem(2), problem(1)))));
+        }))
+        .add(newCase("rejects different cardinality", () -> {
+          assertNotEqual(
+              outcome(exception(list(problem(1), problem(1), problem(2)))),
+              outcome(exception(list(problem(1), problem(2), problem(2)))));
+          assertNotEqual(
+              outcome(exception(list(problem(1), problem(2), problem(2)))),
+              outcome(exception(list(problem(1), problem(1), problem(2)))));
+        }));
   }
 
   private static void assertEqual(Outcome outcomeA, Outcome outcomeB) {

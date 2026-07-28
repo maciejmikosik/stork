@@ -3,6 +3,7 @@ package com.mikosik.stork.test;
 import static com.mikosik.stork.Core.core;
 import static com.mikosik.stork.Core.Mode.DEVELOPMENT;
 import static com.mikosik.stork.Core.Mode.TESTING;
+import static com.mikosik.stork.common.ImmutableList.listFromVarargs;
 import static com.mikosik.stork.common.Singleton.singleton;
 import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
@@ -87,8 +88,12 @@ public class ProgramTest {
     return newCaseExpecting(outcome(bytes(stdout)));
   }
 
-  public Test expect(CannotCompile cannotCompile) {
-    return newCaseExpecting(outcome(exception(cannotCompile)));
+  public Test expect(List<? extends CannotCompile> problems) {
+    return newCaseExpecting(outcome(exception(problems)));
+  }
+
+  public Test expect(CannotCompile problem, CannotCompile... moreProblems) {
+    return expect(listFromVarargs(problem, moreProblems));
   }
 
   public Test expect(CannotCompute cannotCompute) {
