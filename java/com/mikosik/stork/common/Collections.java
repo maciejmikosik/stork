@@ -6,6 +6,7 @@ import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -127,5 +128,16 @@ public class Collections {
   @SuppressWarnings("unchecked")
   public static <A, B> Fab<A[], B[]> eachCell(Fab<A, B> mapping) {
     return array -> (B[]) Arrays.stream(array).map(mapping).toArray();
+  }
+
+  public static boolean unorderedEquals(List<?> first, List<?> second) {
+    if (first.size() != second.size()) {
+      return false;
+    }
+    var copy = new ArrayList<>(first);
+    for (Object element : second) {
+      copy.remove(element);
+    }
+    return copy.isEmpty();
   }
 }

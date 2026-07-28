@@ -51,6 +51,14 @@ public class TestDescriber {
     public StringLiteral keyStringLiteral = literal("valueStringLiteral");
   }
 
+  public static class Problem extends CannotCompile {
+    public int value;
+
+    private Problem(int value) {
+      this.value = value;
+    }
+  }
+
   public static Test testDescriber() {
     return suite("describer can describe problem with")
         .add(newCase("fields of type Expression", () -> {
@@ -85,6 +93,17 @@ public class TestDescriber {
                   .nest("keyIntegerLiteral: 123")
                   .nest("keyStringLiteral: valueStringLiteral"),
               describe(exception(new ProblemWithTokens())));
+        }))
+        .add(newCase("multiple problems", () -> {
+          assertMatch(
+              outline("cannot compile")
+                  .nest(describe(exception(new Problem(1))))
+                  .nest(describe(exception(new Problem(2))))
+                  .nest(describe(exception(new Problem(3)))),
+              describe(exception(list(
+                  new Problem(1),
+                  new Problem(2),
+                  new Problem(3)))));
         }));
   }
 }
