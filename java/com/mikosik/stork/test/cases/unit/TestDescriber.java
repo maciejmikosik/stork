@@ -62,9 +62,16 @@ public class TestDescriber {
         .add(newCase("fields of type byte", () -> {
           assertMatch(
               outline("ProblemWithBytes")
-                  .nest("key65: ascii character [A]")
-                  .nest("key10: non-printable ascii character with decimal value of 10")
-                  .nest("key200: non-ascii character with decimal value of 200"),
+                  .nest(outline("key65:")
+                      .nest(outline("ascii")
+                          .nest("printed: [A]")
+                          .nest("decimal: 65")))
+                  .nest(outline("key10:")
+                      .nest(outline("non-printable ascii")
+                          .nest("decimal: 10")))
+                  .nest(outline("key200:")
+                      .nest(outline("non-ascii")
+                          .nest("decimal: 200"))),
               describe(new ProblemWithBytes()));
         }))
         .add(newCase("fields of type Token", () -> {

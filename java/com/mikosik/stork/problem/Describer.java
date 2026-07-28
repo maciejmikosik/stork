@@ -11,6 +11,8 @@ import static java.lang.String.format;
 import static java.lang.String.join;
 import static java.util.Arrays.stream;
 
+import java.lang.reflect.Field;
+
 import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Variable;
@@ -25,15 +27,23 @@ public class Describer {
   public static Outline describe(Object problem) {
     return outline(problem.getClass().getSimpleName())
         .nest(stream(problem.getClass().getFields())
-            .map(field -> format(
-                "%s: %s",
-                field.getName(),
-                formatArgument(read(field, problem))))
-            .map(Outline::outline)
+            .map(field -> formatField(problem, field))
             .toList());
   }
 
-  private static String formatArgument(Object arg) {
+  private static Outline formatField(Object problem, Field field) {
+    var fieldValue = read(field, problem);
+    return switch (fieldValue) {
+      case Byte character -> outline(field.getName() + ":")
+          .nest(formatCharacter(character));
+      default -> outline(format(
+          "%s: %s",
+          field.getName(),
+          formatFieldValue(fieldValue)));
+    };
+  }
+
+  private static String formatFieldValue(Object arg) {
     return switch (arg) {
       case Token token -> switch (token) {
         case Label label -> label.string;
@@ -43,16 +53,6 @@ public class Describer {
         case StringLiteral literal -> literal.string;
         default -> "token [%s]".formatted(token.getClass().getSimpleName());
       };
-      case Byte character -> "%s character %s".formatted(
-          isAscii(character)
-              ? isPrintable(character)
-                  ? "ascii"
-                  : "non-printable ascii"
-              : "non-ascii",
-          isPrintable(character)
-              ? "[%c]".formatted(character)
-              : "with decimal value of %d"
-                  .formatted(toUnsignedInt(character)));
       case String string -> string;
       case Variable variable -> variable.name;
       case Identifier identifier -> join("/", join(
@@ -60,5 +60,18 @@ public class Describer {
           single(identifier.variable.name)));
       default -> arg.toString();
     };
+  }
+
+  private static Outline formatCharacter(byte character) {
+    var dec = toUnsignedInt(character);
+    return isAscii(character)
+        ? isPrintable(character)
+            ? outline("ascii")
+                .nest("printed: [%c]".formatted(character))
+                .nest("decimal: %d".formatted(dec))
+            : outline("non-printable ascii")
+                .nest("decimal: %d".formatted(dec))
+        : outline("non-ascii")
+            .nest("decimal: %d".formatted(dec));
   }
 }
