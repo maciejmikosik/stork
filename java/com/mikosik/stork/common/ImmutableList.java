@@ -29,6 +29,13 @@ public class ImmutableList {
     return unmodifiableList(list);
   }
 
+  public static <E> List<E> listFromVarargs(E first, E[] rest) {
+    var list = new ArrayList<E>(rest.length + 1);
+    list.add(first);
+    list.addAll(asList(rest));
+    return unmodifiableList(list);
+  }
+
   public static <E> List<E> toList(E[] elements) {
     return unmodifiableList(asList(elements));
   }
