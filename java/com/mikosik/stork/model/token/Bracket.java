@@ -14,7 +14,7 @@ public enum Bracket implements Token {
 
   public final Side side;
   public final Shape shape;
-  public final Byte character;
+  public final byte character;
 
   private Bracket(Side side, Shape shape, char character) {
     this.side = side;

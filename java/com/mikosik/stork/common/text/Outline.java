@@ -35,6 +35,10 @@ public class Outline {
     return nest(list(branchA, branchB, branches));
   }
 
+  public Outline nest(String leaf) {
+    return nest(single(outline(leaf)));
+  }
+
   public boolean equals(Object object) {
     return object instanceof Outline outline
         && text.equals(outline.text)
