@@ -10,12 +10,16 @@ import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.problem.compile.CompilerException.exception;
+import static com.mikosik.stork.problem.compute.ComputerException.exception;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
 import static com.mikosik.stork.test.Assertions.assertMatch;
-import static com.mikosik.stork.test.Outcome.outcome;
+import static com.mikosik.stork.test.Outcome.NotCompiled.outcome;
+import static com.mikosik.stork.test.Outcome.NotComputed.outcome;
+import static com.mikosik.stork.test.Outcome.Printed.outcome;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.quackery.Case.newCase;
@@ -84,11 +88,11 @@ public class ProgramTest {
   }
 
   public Test expect(CannotCompile cannotCompile) {
-    return newCaseExpecting(outcome(cannotCompile));
+    return newCaseExpecting(outcome(exception(cannotCompile)));
   }
 
   public Test expect(CannotCompute cannotCompute) {
-    return newCaseExpecting(outcome(cannotCompute));
+    return newCaseExpecting(outcome(exception(cannotCompute)));
   }
 
   private Test newCaseExpecting(Outcome expected) {
@@ -112,9 +116,9 @@ public class ProgramTest {
           terminal(input(stdin), buffer.asOutput())));
       return outcome(buffer.bytes());
     } catch (CompilerException compilerException) {
-      return outcome(compilerException.problem);
+      return outcome(compilerException);
     } catch (ComputerException computerException) {
-      return outcome(computerException.problem);
+      return outcome(computerException);
     }
   }
 
