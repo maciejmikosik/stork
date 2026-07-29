@@ -12,7 +12,7 @@ import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
+import static com.mikosik.stork.problem.compile.importing.IllegalCharacterInImport.illegalCharacterInImport;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
@@ -55,7 +55,7 @@ public class Importer {
       if (!(isAlphanumeric((byte) character)
           || character == '/'
           || character == ' ')) {
-        throw exception(illegalCharacter(line, (byte) character));
+        throw exception(illegalCharacterInImport(line, (byte) character));
       }
     });
 

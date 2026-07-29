@@ -2,7 +2,7 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
-import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
+import static com.mikosik.stork.problem.compile.importing.IllegalCharacterInImport.illegalCharacterInImport;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
@@ -39,7 +39,7 @@ public class TestImport {
     return programTest("character [%c] is illegal".formatted(character))
         .imports("ab%cde".formatted(character))
         .source("main(stdin) { 'ok' }")
-        .expect(illegalCharacter("ab%cde".formatted(character), character));
+        .expect(illegalCharacterInImport("ab%cde".formatted(character), character));
   }
 
   private static Test canImportFromSubdirectoryToRoot() {
