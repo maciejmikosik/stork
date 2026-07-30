@@ -2,7 +2,6 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.toMapFromEntries;
 import static com.mikosik.stork.common.Strings.split;
-import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -13,6 +12,7 @@ import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacterInImport.illegalCharacterInImport;
+import static com.mikosik.stork.problem.compile.importing.MalformedImport.malformedImport;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
@@ -66,7 +66,7 @@ public class Importer {
     } else if (split.length == 2) {
       return entry(variable(split[1]), identifierParse(split[0]));
     } else {
-      throw runtimeException("illegal import line", line);
+      throw exception(malformedImport(line));
     }
   }
 

@@ -3,6 +3,7 @@ package com.mikosik.stork.test.cases.language;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacterInImport.illegalCharacterInImport;
+import static com.mikosik.stork.problem.compile.importing.MalformedImport.malformedImport;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
@@ -16,7 +17,8 @@ public class TestImport {
   public static Test testImport() {
     return suite("import")
         .add(suite("validate import syntax")
-            .add(reportIllegalPrintableCharacters()))
+            .add(reportIllegalPrintableCharacters())
+            .add(reportsMalformedImport()))
         .add(suite("successful")
             .add(canImportFromSubdirectoryToRoot())
             .add(canImportFromDeepSubdirectoryToRoot())
@@ -40,6 +42,13 @@ public class TestImport {
         .imports("ab%cde".formatted(character))
         .source("main(stdin) { 'ok' }")
         .expect(illegalCharacterInImport("ab%cde".formatted(character), character));
+  }
+
+  private static Test reportsMalformedImport() {
+    return programTest("reports malformed import")
+        .imports("a b c")
+        .source("main(stdin) { 'ok' }")
+        .expect(malformedImport("a b c"));
   }
 
   private static Test canImportFromSubdirectoryToRoot() {
