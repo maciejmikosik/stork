@@ -3,6 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.each;
 import static com.mikosik.stork.common.Collections.toMapIgnoringDuplicates;
 import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.Importer.importer;
@@ -21,6 +22,7 @@ import static java.util.Objects.deepEquals;
 import java.util.List;
 
 import com.mikosik.stork.common.Collections;
+import com.mikosik.stork.common.Streamer;
 import com.mikosik.stork.common.func.Functions.Faa;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
@@ -44,7 +46,7 @@ public class Compiler {
 
   private static List<Definition> compile(List<StorkDirectory> directories) {
     // TODO aggregate compiler problems from stream
-    var compiled = directories.stream()
+    var compiled = streamer(directories)
         .map(directory -> on(directory.sourceFile)
             .map(Collections::iterator)
             .map(Tokenizer::tokenize)
@@ -57,7 +59,8 @@ public class Compiler {
                         : variable))))))))
             .map(bind(directory.namespace))
             .apply())
-        .flatMap(List::stream)
+        .map(Streamer::streamer)
+        .apply(Streamer::flatten)
         .map(onBody(unlambda))
         .map(onBody(deep(ifQuote(quote -> stork(quote.string)))))
         .toList();
