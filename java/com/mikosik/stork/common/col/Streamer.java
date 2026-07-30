@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import com.mikosik.stork.common.TypeToken;
 import com.mikosik.stork.common.func.Functions.Fab;
 
 public class Streamer<E> {
@@ -35,6 +36,20 @@ public class Streamer<E> {
   public static <E> Streamer<E> flatten(Streamer<? extends Streamer<E>> streamers) {
     return streamer(streamers.toStream()
         .flatMap(Streamer::toStream));
+  }
+
+  @SuppressWarnings("unchecked")
+  public <R> Streamer<R> filter(Class<R> type) {
+    return this
+        .filter(type::isInstance)
+        .map(element -> (R) element);
+  }
+
+  @SuppressWarnings("unchecked")
+  public <R> Streamer<R> filter(TypeToken<R> type) {
+    return this
+        .filter(element -> type.getRawClass().isInstance(element))
+        .map(element -> (R) element);
   }
 
   public <T> T apply(Fab<? super Streamer<E>, ? extends T> function) {
