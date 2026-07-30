@@ -20,6 +20,7 @@ import static org.quackery.Suite.suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
 import com.mikosik.stork.model.token.Bracket;
 import com.mikosik.stork.model.token.IntegerLiteral;
@@ -32,6 +33,7 @@ public class TestDescriber {
   public static class ProblemWithExpressions extends CannotCompile {
     public String keyString = "valueString";
     public Variable keyVariable = variable("valueVariable");
+    public Namespace keyNamespace = namespace(list("a", "b"));
     public Identifier keyIdentifier = identifier(
         namespace(list("a", "b")),
         variable("valueIdentifier"));
@@ -66,6 +68,7 @@ public class TestDescriber {
               outline("ProblemWithExpressions")
                   .nest("keyString: valueString")
                   .nest("keyVariable: valueVariable")
+                  .nest("keyNamespace: a/b")
                   .nest("keyIdentifier: a/b/valueIdentifier"),
               describe(exception(new ProblemWithExpressions())));
         }))
