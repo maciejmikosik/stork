@@ -12,6 +12,7 @@ import static java.lang.String.join;
 import static java.util.Arrays.stream;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.model.exp.Identifier;
@@ -44,15 +45,19 @@ public class Describer {
   private static Outline describe(Object problem) {
     return outline(problem.getClass().getSimpleName())
         .nest(stream(problem.getClass().getFields())
-            .map(field -> formatField(problem, field))
+            .map(field -> describeField(problem, field))
             .toList());
   }
 
-  private static Outline formatField(Object problem, Field field) {
-    var fieldValue = read(field, problem);
+  private static Outline describeField(Object instance, Field field) {
+    var fieldValue = read(field, instance);
     return switch (fieldValue) {
       case Byte character -> outline(field.getName() + ":")
           .nest(formatCharacter(character));
+      case List<?> list -> outline(field.getName() + ":")
+          .nest(list.stream()
+              .map(Describer::describe)
+              .toList());
       default -> outline(format(
           "%s: %s",
           field.getName(),

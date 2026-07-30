@@ -17,6 +17,8 @@ import static java.math.BigInteger.valueOf;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.util.List;
+
 import org.quackery.Test;
 
 import com.mikosik.stork.model.exp.Identifier;
@@ -51,6 +53,13 @@ public class TestDescriber {
     public Symbol keySymbol = DOT;
     public IntegerLiteral keyIntegerLiteral = literal(valueOf(123));
     public StringLiteral keyStringLiteral = literal("valueStringLiteral");
+  }
+
+  public static class ProblemWithList extends CannotCompile {
+    public List<Problem> keyProblems = list(
+        new Problem(1),
+        new Problem(2),
+        new Problem(3));
   }
 
   public static class Problem extends CannotCompile {
@@ -96,6 +105,18 @@ public class TestDescriber {
                   .nest("keyIntegerLiteral: 123")
                   .nest("keyStringLiteral: valueStringLiteral"),
               describe(exception(new ProblemWithTokens())));
+        }))
+        .add(newCase("fields of type List", () -> {
+          assertMatch(
+              outline("ProblemWithList")
+                  .nest(outline("keyProblems:")
+                      .nest(outline("Problem")
+                          .nest("value: 1"))
+                      .nest(outline("Problem")
+                          .nest("value: 2"))
+                      .nest(outline("Problem")
+                          .nest("value: 3"))),
+              describe(exception(new ProblemWithList())));
         }))
         .add(newCase("multiple problems", () -> {
           assertMatch(
