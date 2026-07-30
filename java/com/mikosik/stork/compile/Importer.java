@@ -1,18 +1,20 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Collections.toMapFromEntries;
+import static com.mikosik.stork.common.Result.combine;
+import static com.mikosik.stork.common.Result.Failure.failure;
+import static com.mikosik.stork.common.Result.Success.success;
+import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.Strings.split;
-import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
-import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
+import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
+import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mikosik.stork.common.Collections;
+import com.mikosik.stork.common.Result;
 import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
@@ -27,6 +31,8 @@ import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
+import com.mikosik.stork.problem.compile.CompilerException;
+import com.mikosik.stork.problem.compile.importing.MalformedImportLine;
 
 public class Importer {
   private final Map<Namespace, Map<Variable, Identifier>> imports;
@@ -36,37 +42,45 @@ public class Importer {
   }
 
   public static Importer importer(List<StorkDirectory> directories) {
-    var imports = directories.stream()
-        .map(directory -> entry(
-            directory.namespace,
-            parseImports(directory.importFile)))
-        .collect(toMapFromEntries());
-    return new Importer(imports);
+    var importsMap = streamer(directories)
+        .map(directory -> parseImports(directory.importFile)
+            .mapSuccess(map -> entry(directory.namespace, map))
+            .mapFailure(problems -> malformedImportFile(
+                directory.namespace,
+                problems)))
+        .apply(streamer -> combine(streamer.toList()))
+        .mapSuccess(Collections::mapFrom)
+        .unwrap(CompilerException::exception);
+    return new Importer(importsMap);
   }
 
-  private static Map<Variable, Identifier> parseImports(byte[] content) {
-    return input(content).bufferedReader(US_ASCII).lines()
-        .map(line -> parseImport(line.trim()))
-        .collect(toMapFromEntries());
+  private static Result<Map<Variable, Identifier>, List<MalformedImportLine>> parseImports(
+      byte[] content) {
+    return streamer(new String(content, US_ASCII).lines().toList())
+        .map(String::trim)
+        .map(Importer::parseImport)
+        .apply(streamer -> combine(streamer.toList()))
+        .mapSuccess(Collections::mapFrom);
   }
 
-  private static Entry<Variable, Identifier> parseImport(String line) {
-    line.chars().forEach(character -> {
+  private static Result<Entry<Variable, Identifier>, MalformedImportLine> parseImport(
+      String line) {
+    for (char character : line.toCharArray()) {
       if (!(isAlphanumeric((byte) character)
           || character == '/'
           || character == ' ')) {
-        throw exception(illegalCharacter(line, (byte) character));
+        return failure(illegalCharacter(line, (byte) character));
       }
-    });
+    }
 
     var split = line.split(" ");
     if (split.length == 1) {
       var identifier = identifierParse(split[0]);
-      return entry(identifier.variable, identifier);
+      return success(entry(identifier.variable, identifier));
     } else if (split.length == 2) {
-      return entry(variable(split[1]), identifierParse(split[0]));
+      return success(entry(variable(split[1]), identifierParse(split[0])));
     } else {
-      throw runtimeException("illegal import line", line);
+      return failure(malformedImportLine(line));
     }
   }
 

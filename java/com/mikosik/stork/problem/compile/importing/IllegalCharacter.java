@@ -1,15 +1,16 @@
 package com.mikosik.stork.problem.compile.importing;
 
-public class IllegalCharacter extends CannotImport {
-  public final String text;
+public class IllegalCharacter extends MalformedImportLine {
   public final byte character;
 
   private IllegalCharacter(String text, byte character) {
-    this.text = text;
+    super(text);
     this.character = character;
   }
 
-  public static IllegalCharacter illegalCharacter(String text, byte character) {
+  public static IllegalCharacter illegalCharacter(
+      String text,
+      byte character) {
     return new IllegalCharacter(text, character);
   }
 }

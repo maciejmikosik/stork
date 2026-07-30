@@ -17,9 +17,12 @@ import static java.math.BigInteger.valueOf;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
+import java.util.List;
+
 import org.quackery.Test;
 
 import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
 import com.mikosik.stork.model.token.Bracket;
 import com.mikosik.stork.model.token.IntegerLiteral;
@@ -32,6 +35,7 @@ public class TestDescriber {
   public static class ProblemWithExpressions extends CannotCompile {
     public String keyString = "valueString";
     public Variable keyVariable = variable("valueVariable");
+    public Namespace keyNamespace = namespace(list("a", "b"));
     public Identifier keyIdentifier = identifier(
         namespace(list("a", "b")),
         variable("valueIdentifier"));
@@ -51,6 +55,13 @@ public class TestDescriber {
     public StringLiteral keyStringLiteral = literal("valueStringLiteral");
   }
 
+  public static class ProblemWithList extends CannotCompile {
+    public List<Problem> keyProblems = list(
+        new Problem(1),
+        new Problem(2),
+        new Problem(3));
+  }
+
   public static class Problem extends CannotCompile {
     public int value;
 
@@ -66,6 +77,7 @@ public class TestDescriber {
               outline("ProblemWithExpressions")
                   .nest("keyString: valueString")
                   .nest("keyVariable: valueVariable")
+                  .nest("keyNamespace: a/b")
                   .nest("keyIdentifier: a/b/valueIdentifier"),
               describe(exception(new ProblemWithExpressions())));
         }))
@@ -93,6 +105,18 @@ public class TestDescriber {
                   .nest("keyIntegerLiteral: 123")
                   .nest("keyStringLiteral: valueStringLiteral"),
               describe(exception(new ProblemWithTokens())));
+        }))
+        .add(newCase("fields of type List", () -> {
+          assertMatch(
+              outline("ProblemWithList")
+                  .nest(outline("keyProblems:")
+                      .nest(outline("Problem")
+                          .nest("value: 1"))
+                      .nest(outline("Problem")
+                          .nest("value: 2"))
+                      .nest(outline("Problem")
+                          .nest("value: 3"))),
+              describe(exception(new ProblemWithList())));
         }))
         .add(newCase("multiple problems", () -> {
           assertMatch(
