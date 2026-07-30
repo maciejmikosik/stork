@@ -13,11 +13,11 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestImport {
+public class TestImporter {
   public static Test testImport() {
-    return suite("import")
+    return suite("importer")
         .add(suite("validate import syntax")
-            .add(reportIllegalPrintableCharacters())
+            .add(reportsIllegalPrintableCharacters())
             .add(reportsMalformedImport()))
         .add(suite("successful")
             .add(canImportFromSubdirectoryToRoot())
@@ -26,7 +26,7 @@ public class TestImport {
             .add(canImportFromParentDirectory()));
   }
 
-  private static Test reportIllegalPrintableCharacters() {
+  private static Test reportsIllegalPrintableCharacters() {
     var cases = range(0, 256)
         .filter(character -> isPrintable((byte) character))
         .filter(character -> !isAlphanumeric((byte) character))

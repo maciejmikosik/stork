@@ -20,7 +20,7 @@ import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteg
 import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream;
 import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
-import static com.mikosik.stork.test.cases.language.TestImport.testImport;
+import static com.mikosik.stork.test.cases.language.TestImporter.testImport;
 import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
 import static com.mikosik.stork.test.cases.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
