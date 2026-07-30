@@ -100,6 +100,10 @@ public class Collections {
     return toMap(Entry::getKey, Entry::getValue);
   }
 
+  public static <K, V> Map<K, V> mapFrom(List<Entry<K, V>> entries) {
+    return entries.stream().collect(toMapFromEntries());
+  }
+
   public static Iterator<Byte> iterator(byte[] bytes) {
     return new Iterator<Byte>() {
       private int index = 0;
@@ -139,5 +143,11 @@ public class Collections {
       copy.remove(element);
     }
     return copy.isEmpty();
+  }
+
+  public static <E> List<E> flatten(List<? extends List<E>> lists) {
+    return lists.stream()
+        .flatMap(List::stream)
+        .toList();
   }
 }
