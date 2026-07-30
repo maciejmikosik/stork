@@ -37,6 +37,20 @@ public class Streamer<E> {
         .flatMap(Streamer::toStream));
   }
 
+  @SuppressWarnings("unchecked")
+  public <R> Streamer<R> filter(Class<R> type) {
+    return this
+        .filter(type::isInstance)
+        .map(element -> (R) element);
+  }
+
+  @SuppressWarnings("unchecked")
+  public <R> Streamer<R> filter(TypeToken<R> type) {
+    return this
+        .filter(element -> type.getRawClass().isInstance(element))
+        .map(element -> (R) element);
+  }
+
   public <T> T apply(Fab<? super Streamer<E>, ? extends T> function) {
     return function.apply(this);
   }
