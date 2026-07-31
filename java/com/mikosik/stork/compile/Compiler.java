@@ -3,6 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.each;
 import static com.mikosik.stork.common.Collections.toMapIgnoringDuplicates;
 import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.Result.combine;
 import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Bridge.stork;
@@ -22,11 +23,12 @@ import static java.util.Objects.deepEquals;
 import java.util.List;
 
 import com.mikosik.stork.common.Collections;
-import com.mikosik.stork.common.Streamer;
 import com.mikosik.stork.common.func.Functions.Faa;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.problem.compile.CompilerException;
 
 public class Compiler {
   public static List<Definition> compile(Codebase codebase) {
@@ -45,31 +47,34 @@ public class Compiler {
   }
 
   private static List<Definition> compile(List<StorkDirectory> directories) {
-    // TODO aggregate compiler problems from stream
     var compiled = streamer(directories)
         .map(directory -> on(directory.sourceFile)
             .map(Collections::iterator)
             .map(Tokenizer::tokenize)
-            .map(Parser::parse)
-            .map(each(onBody(deep(ifLambda(lambda -> on(lambda)
-                .apply(deep(ifVariable(variable -> deepEquals(
-                    variable.name,
-                    lambda.parameter.name)
-                        ? lambda.parameter
-                        : variable))))))))
-            .map(bind(directory.namespace))
-            .apply())
-        .map(Streamer::streamer)
-        .apply(Streamer::flatten)
-        .map(onBody(unlambda))
-        .map(onBody(deep(ifQuote(quote -> stork(quote.string)))))
-        .toList();
+            .map(Parser::tryParse)
+            .apply()
+            .mapSuccess(each(onBody(bindLambdaParameters)))
+            .mapSuccess(bind(directory.namespace)))
+        .apply(streamer -> combine(streamer.toList()))
+        .mapSuccess(Collections::flatten)
+        .mapFailure(Collections::flatten)
+        .mapSuccess(each(onBody(unlambda)))
+        .mapSuccess(each(onBody(deep(ifQuote(quote -> stork(quote.string))))))
+        .unwrap(CompilerException::exception);
 
     var importer = importer(directories);
     return compiled.stream()
         .map(importer::injectInto)
         .toList();
   }
+
+  private static final Faa<Expression> bindLambdaParameters = deep(
+      ifLambda(lambda -> on(lambda)
+          .apply(deep(ifVariable(variable -> deepEquals(
+              variable.name,
+              lambda.parameter.name)
+                  ? lambda.parameter
+                  : variable)))));
 
   private static Faa<List<Definition>> bind(Namespace namespace) {
     return definitions -> {

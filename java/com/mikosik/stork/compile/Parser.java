@@ -3,6 +3,8 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.checkSuchElement;
 import static com.mikosik.stork.common.ImmutableList.listFrom;
 import static com.mikosik.stork.common.Peekerator.peekerator;
+import static com.mikosik.stork.common.Result.Failure.failure;
+import static com.mikosik.stork.common.Result.Success.success;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.mikosik.stork.common.Peekerator;
+import com.mikosik.stork.common.Result;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Lambda;
@@ -35,9 +38,20 @@ import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
+import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.problem.compile.CompilerException;
 
 public class Parser {
-  public static List<Definition> parse(Iterator<Token> iterator) {
+  public static Result<List<Definition>, List<CannotCompile>> tryParse(
+      Iterator<Token> iterator) {
+    try {
+      return success(parse(iterator));
+    } catch (CompilerException exception) {
+      return failure(exception.problems);
+    }
+  }
+
+  private static List<Definition> parse(Iterator<Token> iterator) {
     return parse(peekerator(checkingEOF(iterator)));
   }
 
