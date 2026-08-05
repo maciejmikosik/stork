@@ -37,6 +37,32 @@ public sealed interface Result<S, F> {
     return map(x -> x, mapping);
   }
 
+  default <S2, F2> Result<S2, F2> flatMap(
+      Fab<? super S, ? extends Result<S2, F2>> mappingSuccess,
+      Fab<? super F, ? extends Result<S2, F2>> mappingFailure) {
+    return switch (this) {
+      case Success<S, F> success -> mappingSuccess.apply(success.item());
+      case Failure<S, F> failure -> mappingFailure.apply(failure.item());
+    };
+  }
+
+  default <S2> Result<S2, F> flatMapSuccess(Fab<? super S, ? extends Result<S2, F>> mapping) {
+    return flatMap(mapping, Failure::failure);
+  }
+
+  default <F2> Result<S, F2> flatMapFailure(Fab<? super F, ? extends Result<S, F2>> mapping) {
+    return flatMap(Success::success, mapping);
+  }
+
+  default <T> T switcher(
+      Fab<S, T> successMapping,
+      Fab<F, T> failureMapping) {
+    return switch (this) {
+      case Success<S, F> success -> successMapping.apply(success.item);
+      case Failure<S, F> failure -> failureMapping.apply(failure.item);
+    };
+  }
+
   default S unwrap(Fab<F, RuntimeException> handler) {
     return switch (this) {
       case Success<S, F> success -> success.item();

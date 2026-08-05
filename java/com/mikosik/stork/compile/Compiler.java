@@ -3,11 +3,14 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.each;
 import static com.mikosik.stork.common.Collections.toMapIgnoringDuplicates;
 import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.ImmutableList.none;
 import static com.mikosik.stork.common.Result.combine;
+import static com.mikosik.stork.common.Result.Failure.failure;
+import static com.mikosik.stork.common.Result.Success.success;
 import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Bridge.stork;
-import static com.mikosik.stork.compile.Importer.importer;
+import static com.mikosik.stork.compile.Importer.tryBuildImporter;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -47,7 +50,7 @@ public class Compiler {
   }
 
   private static List<Definition> compile(List<StorkDirectory> directories) {
-    var compiled = streamer(directories)
+    var triedDefinitions = streamer(directories)
         .map(directory -> on(directory.sourceFile)
             .map(Collections::iterator)
             .map(Tokenizer::tokenize)
@@ -59,13 +62,18 @@ public class Compiler {
         .mapSuccess(Collections::flatten)
         .mapFailure(Collections::flatten)
         .mapSuccess(each(onBody(unlambda)))
-        .mapSuccess(each(onBody(deep(ifQuote(quote -> stork(quote.string))))))
-        .unwrap(CompilerException::exception);
+        .mapSuccess(each(onBody(deep(ifQuote(quote -> stork(quote.string))))));
 
-    var importer = importer(directories);
-    return compiled.stream()
-        .map(importer::injectInto)
-        .toList();
+    var triedImporter = tryBuildImporter(directories);
+
+    return triedDefinitions
+        .flatMapSuccess(definitions -> triedImporter.switcher(
+            importer -> success(each(importer::injectInto).apply(definitions)),
+            problems -> failure(none())))
+        .mapFailure(compilerProblems -> triedImporter.switcher(
+            importer -> compilerProblems,
+            importerProblems -> join(compilerProblems, importerProblems)))
+        .unwrap(CompilerException::exception);
   }
 
   private static final Faa<Expression> bindLambdaParameters = deep(
