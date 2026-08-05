@@ -2,6 +2,7 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.Collections.each;
 import static com.mikosik.stork.common.Collections.toMapIgnoringDuplicates;
+import static com.mikosik.stork.common.ImmutableList.cast;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.none;
 import static com.mikosik.stork.common.Result.combine;
@@ -20,14 +21,12 @@ import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Changes.onIdentifier;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static java.util.Objects.deepEquals;
 
 import java.util.List;
 
 import com.mikosik.stork.common.Collections;
 import com.mikosik.stork.common.func.Functions.Faa;
-import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Namespace;
@@ -35,22 +34,7 @@ import com.mikosik.stork.problem.compile.CompilerException;
 
 public class Compiler {
   public static List<Definition> compile(Codebase codebase) {
-    return verify(join(
-        compile(codebase.directories),
-        codebase.dependencies));
-  }
-
-  private static List<Definition> verify(List<Definition> definitions) {
-    var linkingProblems = findLinkingProblems(definitions);
-    if (linkingProblems.isEmpty()) {
-      return definitions;
-    } else {
-      throw exception(linkingProblems);
-    }
-  }
-
-  private static List<Definition> compile(List<StorkDirectory> directories) {
-    var triedDefinitions = streamer(directories)
+    var triedDefinitions = streamer(codebase.directories)
         .map(directory -> on(directory.sourceFile)
             .map(Collections::iterator)
             .map(Tokenizer::tokenize)
@@ -64,7 +48,7 @@ public class Compiler {
         .mapSuccess(each(onBody(unlambda)))
         .mapSuccess(each(onBody(deep(ifQuote(quote -> stork(quote.string))))));
 
-    var triedImporter = tryBuildImporter(directories);
+    var triedImporter = tryBuildImporter(codebase.directories);
 
     return triedDefinitions
         .flatMapSuccess(definitions -> triedImporter.switcher(
@@ -73,6 +57,13 @@ public class Compiler {
         .mapFailure(compilerProblems -> triedImporter.switcher(
             importer -> compilerProblems,
             importerProblems -> join(compilerProblems, importerProblems)))
+        .mapSuccess(definitions -> join(definitions, codebase.dependencies))
+        .flatMapSuccess(definitions -> {
+          var linkingProblems = findLinkingProblems(definitions);
+          return linkingProblems.isEmpty()
+              ? success(definitions)
+              : failure(cast(linkingProblems));
+        })
         .unwrap(CompilerException::exception);
   }
 
