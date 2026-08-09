@@ -20,11 +20,13 @@ import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteg
 import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream;
 import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
-import static com.mikosik.stork.test.cases.language.TestImporter.testImport;
+import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCompilerProblems;
+import static com.mikosik.stork.test.cases.language.TestImporter.testImporter;
+import static com.mikosik.stork.test.cases.language.TestImporterProblems.testImporterProblems;
 import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
 import static com.mikosik.stork.test.cases.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
-import static com.mikosik.stork.test.cases.language.TestTokenizer.testTokenizer;
+import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.unit.TestDescriber.testDescriber;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
@@ -69,10 +71,12 @@ public class RunTests {
     runAndReport(testCompilingCoreLibrary(TESTING));
     runAndReport(suite("language")
         .add(testSyntax())
-        .add(testImport())
+        .add(testImporter())
         .add(testStringLiteral())
-        .add(suite("compiler problems")
-            .add(testTokenizer())
+        .add(suite("problems")
+            .add(testTokenizerProblems())
+            .add(testImporterProblems())
+            .add(testCompilerProblems())
             .add(testLinkerProblems())));
     runAndReport(testCompilingCoreLibrary(DEVELOPMENT));
     runAndReport(suite("everything")

@@ -10,14 +10,14 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestTokenizer {
-  public static Test testTokenizer() {
+public class TestTokenizerProblems {
+  public static Test testTokenizerProblems() {
     return suite("tokenizer")
         .add(suite("reports illegal character in source code")
             .addAll(rangeClosed(0, 255)
                 .mapToObj(value -> Byte.valueOf((byte) value))
                 .filter(character -> !isLegal(character))
-                .map(TestTokenizer::reportsIllegalCharacter)
+                .map(TestTokenizerProblems::reportsIllegalCharacter)
                 .toList()));
   }
 
