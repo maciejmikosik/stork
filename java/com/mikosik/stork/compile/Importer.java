@@ -31,7 +31,7 @@ import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
-import com.mikosik.stork.problem.compile.CompilerException;
+import com.mikosik.stork.problem.compile.importing.MalformedImportFile;
 import com.mikosik.stork.problem.compile.importing.MalformedImportLine;
 
 public class Importer {
@@ -41,8 +41,9 @@ public class Importer {
     this.imports = imports;
   }
 
-  public static Importer importer(List<StorkDirectory> directories) {
-    var importsMap = streamer(directories)
+  public static Result<Importer, List<MalformedImportFile>> tryBuildImporter(
+      List<StorkDirectory> directories) {
+    return streamer(directories)
         .map(directory -> parseImports(directory.importFile)
             .mapSuccess(map -> entry(directory.namespace, map))
             .mapFailure(problems -> malformedImportFile(
@@ -50,8 +51,7 @@ public class Importer {
                 problems)))
         .apply(streamer -> combine(streamer.toList()))
         .mapSuccess(Collections::mapFrom)
-        .unwrap(CompilerException::exception);
-    return new Importer(importsMap);
+        .mapSuccess(map -> new Importer(map));
   }
 
   private static Result<Map<Variable, Identifier>, List<MalformedImportLine>> parseImports(
