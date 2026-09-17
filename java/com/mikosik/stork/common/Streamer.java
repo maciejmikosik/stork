@@ -83,4 +83,8 @@ public class Streamer<E> {
   public List<E> toList() {
     return listFrom(iterator);
   }
+
+  public Iterator<E> toIterator() {
+    return iterator;
+  }
 }
