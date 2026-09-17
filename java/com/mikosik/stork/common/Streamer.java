@@ -1,6 +1,5 @@
 package com.mikosik.stork.common;
 
-import static com.mikosik.stork.common.Collections.checkSuchElement;
 import static com.mikosik.stork.common.ImmutableList.listFrom;
 import static com.mikosik.stork.common.Peekerator.peekerator;
 import static java.util.Spliterator.ORDERED;
@@ -15,9 +14,9 @@ import java.util.stream.StreamSupport;
 import com.mikosik.stork.common.func.Functions.Fab;
 
 public class Streamer<E> {
-  protected final Iterator<E> iterator;
+  private final Iterator<E> iterator;
 
-  protected Streamer(Iterator<E> iterator) {
+  private Streamer(Iterator<E> iterator) {
     this.iterator = iterator;
   }
 
@@ -70,26 +69,11 @@ public class Streamer<E> {
     });
   }
 
-  public static <E> Streamer<E> flatten(Streamer<? extends Streamer<? extends E>> streamers) {
-    var peekerator = peekerator(streamers.iterator);
-    return streamer(new Iterator<>() {
-      public boolean hasNext() {
-        skipEmptyStreamers();
-        return peekerator.hasNext() && peekerator.peek().iterator.hasNext();
-      }
-
-      public E next() {
-        checkSuchElement(hasNext());
-        return peekerator.peek().iterator.next();
-      }
-
-      private void skipEmptyStreamers() {
-        while (peekerator.hasNext()
-            && !peekerator.peek().iterator.hasNext()) {
-          peekerator.next();
-        }
-      }
-    });
+  public static <E> Streamer<E> flatten(Streamer<? extends Streamer<E>> streamers) {
+    return new Streamer<>(streamers
+        .stream()
+        .flatMap(Streamer::stream)
+        .iterator());
   }
 
   public <T> T apply(Fab<? super Streamer<E>, ? extends T> function) {
