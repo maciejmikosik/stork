@@ -1,11 +1,5 @@
 package com.mikosik.stork.common;
 
-import static com.mikosik.stork.common.Collections.checkSuchElement;
-import static com.mikosik.stork.common.ImmutableList.listFrom;
-import static com.mikosik.stork.common.Peekerator.peekerator;
-import static java.util.Spliterator.ORDERED;
-import static java.util.Spliterators.spliteratorUnknownSize;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -15,81 +9,31 @@ import java.util.stream.StreamSupport;
 import com.mikosik.stork.common.func.Functions.Fab;
 
 public class Streamer<E> {
-  protected final Iterator<E> iterator;
+  private final Stream<E> stream;
 
-  protected Streamer(Iterator<E> iterator) {
-    this.iterator = iterator;
+  private Streamer(Stream<E> stream) {
+    this.stream = stream;
   }
 
-  private static <E> Streamer<E> streamer(Iterator<E> iterator) {
-    return new Streamer<E>(iterator);
+  private static <E> Streamer<E> streamer(Stream<E> stream) {
+    return new Streamer<E>(stream);
   }
 
   public static <E> Streamer<E> streamer(Iterable<E> iterable) {
-    return streamer(iterable.iterator());
-  }
-
-  public Stream<E> stream() {
-    boolean parallel = false;
-    return StreamSupport.stream(
-        spliteratorUnknownSize(iterator, ORDERED),
-        parallel);
+    return streamer(StreamSupport.stream(iterable.spliterator(), false));
   }
 
   public <R> Streamer<R> map(Fab<? super E, ? extends R> mapping) {
-    return streamer(new Iterator<R>() {
-
-      public boolean hasNext() {
-        return iterator.hasNext();
-      }
-
-      public R next() {
-        return mapping.apply(iterator.next());
-      }
-    });
+    return streamer(stream.map(mapping));
   }
 
   public Streamer<E> filter(Predicate<E> predicate) {
-    var peekerator = peekerator(iterator);
-    return streamer(new Iterator<E>() {
-      public boolean hasNext() {
-        skipTo(predicate, peekerator);
-        return peekerator.hasNext();
-      }
-
-      public E next() {
-        skipTo(predicate, peekerator);
-        return peekerator.next();
-      }
-
-      private void skipTo(Predicate<E> predicate, Peekerator<E> peekerator) {
-        while (peekerator.hasNext() && !predicate.test(peekerator.peek())) {
-          peekerator.next();
-        }
-      }
-    });
+    return streamer(stream.filter(predicate));
   }
 
-  public static <E> Streamer<E> flatten(Streamer<? extends Streamer<? extends E>> streamers) {
-    var peekerator = peekerator(streamers.iterator);
-    return streamer(new Iterator<>() {
-      public boolean hasNext() {
-        skipEmptyStreamers();
-        return peekerator.hasNext() && peekerator.peek().iterator.hasNext();
-      }
-
-      public E next() {
-        checkSuchElement(hasNext());
-        return peekerator.peek().iterator.next();
-      }
-
-      private void skipEmptyStreamers() {
-        while (peekerator.hasNext()
-            && !peekerator.peek().iterator.hasNext()) {
-          peekerator.next();
-        }
-      }
-    });
+  public static <E> Streamer<E> flatten(Streamer<? extends Streamer<E>> streamers) {
+    return streamer(streamers.toStream()
+        .flatMap(Streamer::toStream));
   }
 
   public <T> T apply(Fab<? super Streamer<E>, ? extends T> function) {
@@ -97,6 +41,14 @@ public class Streamer<E> {
   }
 
   public List<E> toList() {
-    return listFrom(iterator);
+    return stream.toList();
+  }
+
+  public Stream<E> toStream() {
+    return stream;
+  }
+
+  public Iterator<E> toIterator() {
+    return stream.iterator();
   }
 }
