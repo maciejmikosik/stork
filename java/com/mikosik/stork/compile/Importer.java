@@ -11,16 +11,13 @@ import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.disk.StorkDirectory;
@@ -51,9 +48,8 @@ public class Importer {
   private static Map<Variable, Identifier> parseImportFile(StorkDirectory directory) {
     var lines = new String(directory.importFile, US_ASCII).lines().toList();
     var problems = streamer(lines)
-        .map(Importer::findProblem)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .filter(Importer::isMalformed)
+        .map(MalformedImportLine::malformedImportLine)
         .toList();
     if (problems.isEmpty()) {
       return streamer(lines)
@@ -64,19 +60,16 @@ public class Importer {
     }
   }
 
-  private static Optional<MalformedImportLine> findProblem(String line) {
+  private static boolean isMalformed(String line) {
     for (char character : line.toCharArray()) {
       if (!(isAlphanumeric((byte) character)
           || character == '/'
           || character == ' ')) {
-        return Optional.of(illegalCharacter(line, (byte) character));
+        return true;
       }
     }
     var split = line.split(" ");
-    if (split.length < 1 || 2 < split.length) {
-      return Optional.of(malformedImportLine(line));
-    }
-    return Optional.empty();
+    return split.length < 1 || 2 < split.length;
   }
 
   private static Entry<Variable, Identifier> parse(String line) {

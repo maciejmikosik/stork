@@ -5,7 +5,6 @@ import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
-import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
 import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -44,7 +43,7 @@ public class TestImporterProblems {
         .source("main(stdin) { 'ok' }")
         .expect(malformedImportFile(
             namespace(list("a", "b")),
-            single(illegalCharacter("ab%cde".formatted(character), character))));
+            single(malformedImportLine("ab%cde".formatted(character)))));
   }
 
   private static Test reportsMalformedImport() {
