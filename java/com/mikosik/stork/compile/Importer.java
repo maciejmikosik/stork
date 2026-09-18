@@ -1,8 +1,6 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Result.combine;
-import static com.mikosik.stork.common.Result.Failure.failure;
-import static com.mikosik.stork.common.Result.Success.success;
+import static com.mikosik.stork.common.Collections.mapFrom;
 import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.Strings.split;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
@@ -12,6 +10,7 @@ import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.problem.compile.importing.IllegalCharacter.illegalCharacter;
 import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
 import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
@@ -21,9 +20,8 @@ import static java.util.Map.entry;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
-import com.mikosik.stork.common.Collections;
-import com.mikosik.stork.common.Result;
 import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
@@ -31,7 +29,7 @@ import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
-import com.mikosik.stork.problem.compile.importing.MalformedImportFile;
+import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compile.importing.MalformedImportLine;
 
 public class Importer {
@@ -41,50 +39,59 @@ public class Importer {
     this.imports = imports;
   }
 
-  public static Result<Importer, List<MalformedImportFile>> tryBuildImporter(
-      List<StorkDirectory> directories) {
+  public static Importer buildImporter(List<StorkDirectory> directories) {
     return streamer(directories)
-        .map(directory -> parseImports(directory.importFile)
-            .mapSuccess(map -> entry(directory.namespace, map))
-            .mapFailure(problems -> malformedImportFile(
-                directory.namespace,
-                problems)))
-        .apply(streamer -> combine(streamer.toList()))
-        .mapSuccess(Collections::mapFrom)
-        .mapSuccess(map -> new Importer(map));
+        .map(directory -> entry(
+            directory.namespace,
+            parseImportFile(directory)))
+        .apply(CompilerException::gatherCompilerProblems)
+        .apply(streamer -> new Importer(mapFrom(streamer.toList())));
   }
 
-  private static Result<Map<Variable, Identifier>, List<MalformedImportLine>> parseImports(
-      byte[] content) {
-    return streamer(new String(content, US_ASCII).lines().toList())
-        .map(String::trim)
-        .map(Importer::parseImport)
-        .apply(streamer -> combine(streamer.toList()))
-        .mapSuccess(Collections::mapFrom);
+  private static Map<Variable, Identifier> parseImportFile(StorkDirectory directory) {
+    var lines = new String(directory.importFile, US_ASCII).lines().toList();
+    var problems = streamer(lines)
+        .map(Importer::findProblem)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+    if (problems.isEmpty()) {
+      return streamer(lines)
+          .map(Importer::parse)
+          .apply(streamer -> mapFrom(streamer.toList()));
+    } else {
+      throw exception(malformedImportFile(directory.namespace, problems));
+    }
   }
 
-  private static Result<Entry<Variable, Identifier>, MalformedImportLine> parseImport(
-      String line) {
+  private static Optional<MalformedImportLine> findProblem(String line) {
     for (char character : line.toCharArray()) {
       if (!(isAlphanumeric((byte) character)
           || character == '/'
           || character == ' ')) {
-        return failure(illegalCharacter(line, (byte) character));
+        return Optional.of(illegalCharacter(line, (byte) character));
       }
     }
+    var split = line.split(" ");
+    if (split.length < 1 || 2 < split.length) {
+      return Optional.of(malformedImportLine(line));
+    }
+    return Optional.empty();
+  }
 
+  private static Entry<Variable, Identifier> parse(String line) {
     var split = line.split(" ");
     if (split.length == 1) {
       var identifier = identifierParse(split[0]);
-      return success(entry(identifier.variable, identifier));
+      return entry(identifier.variable, identifier);
     } else if (split.length == 2) {
-      return success(entry(variable(split[1]), identifierParse(split[0])));
+      return entry(variable(split[1]), identifierParse(split[0]));
     } else {
-      return failure(malformedImportLine(line));
+      throw new RuntimeException("should be validated");
     }
   }
 
-  public static Identifier identifierParse(String name) {
+  private static Identifier identifierParse(String name) {
     var components = split("/", name);
     return identifier(
         namespace(components.subList(0, components.size() - 1)),
