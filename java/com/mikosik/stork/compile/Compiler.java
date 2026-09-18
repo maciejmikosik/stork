@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Bridge.stork;
-import static com.mikosik.stork.compile.Importer.tryBuildImporter;
+import static com.mikosik.stork.compile.Importer.buildImporter;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -65,11 +65,6 @@ public class Compiler {
         .map(each(onBody(unlambda)))
         .map(each(onBody(deep(ifQuote(quote -> stork(quote.string))))))
         .apply();
-  }
-
-  private static Importer buildImporter(List<StorkDirectory> directories) {
-    return tryBuildImporter(directories)
-        .unwrap(CompilerException::exception);
   }
 
   private static List<Definition> link(List<Definition> definitions) {
