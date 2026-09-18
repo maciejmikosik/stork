@@ -42,6 +42,11 @@ public class Ascii {
     return character == '\"';
   }
 
+  public static boolean isNewline(byte character) {
+    return character == '\n'
+        || character == '\r';
+  }
+
   public static boolean isWhitespace(byte character) {
     return character == ' '
         || character == '\n'

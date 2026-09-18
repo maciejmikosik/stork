@@ -43,6 +43,7 @@ public class SourceReader {
       Namespace namespace) {
     return storkDirectory(
         namespace,
+        // TODO report non-ascii characters
         directory.file("import.stork")
             .tryInput()
             .readAllBytes(),
