@@ -3,7 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.mapFrom;
 import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.Strings.split;
-import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
+import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
@@ -48,7 +48,7 @@ public class Importer {
   private static Map<Variable, Identifier> parseImportFile(StorkDirectory directory) {
     var lines = new String(directory.importFile, US_ASCII).lines().toList();
     var problems = streamer(lines)
-        .filter(Importer::isMalformed)
+        .filter(line -> !line.matches(IMPORT_LINE))
         .map(MalformedImportLine::malformedImportLine)
         .toList();
     if (problems.isEmpty()) {
@@ -58,18 +58,6 @@ public class Importer {
     } else {
       throw exception(malformedImportFile(directory.namespace, problems));
     }
-  }
-
-  private static boolean isMalformed(String line) {
-    for (char character : line.toCharArray()) {
-      if (!(isAlphanumeric((byte) character)
-          || character == '/'
-          || character == ' ')) {
-        return true;
-      }
-    }
-    var split = line.split(" ");
-    return split.length < 1 || 2 < split.length;
   }
 
   private static Entry<Variable, Identifier> parse(String line) {
