@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import com.mikosik.stork.common.TypeToken;
 import com.mikosik.stork.common.func.Functions.Fab;
 
 public class Streamer<E> {

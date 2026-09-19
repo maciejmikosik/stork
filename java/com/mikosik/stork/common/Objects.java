@@ -1,6 +1,6 @@
 package com.mikosik.stork.common;
 
-import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.err.Throwables.runtimeException;
 
 import java.util.Arrays;
 
