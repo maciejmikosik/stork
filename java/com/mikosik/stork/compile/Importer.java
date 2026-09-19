@@ -1,8 +1,9 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Collections.mapFrom;
+import static com.mikosik.stork.common.Collections.functionFrom;
 import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.Strings.split;
+import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
@@ -16,7 +17,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import com.mikosik.stork.common.func.Functions.Fab;
@@ -30,10 +30,10 @@ import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compile.importing.MalformedImportLine;
 
 public class Importer {
-  private final Map<Namespace, Map<Variable, Identifier>> imports;
+  private final Fab<Namespace, Fab<Variable, Expression>> mapping;
 
-  private Importer(Map<Namespace, Map<Variable, Identifier>> imports) {
-    this.imports = imports;
+  private Importer(Fab<Namespace, Fab<Variable, Expression>> mapping) {
+    this.mapping = mapping;
   }
 
   public static Importer buildImporter(List<StorkDirectory> directories) {
@@ -42,10 +42,12 @@ public class Importer {
             directory.namespace,
             parseImportFile(directory)))
         .apply(CompilerException::gatherCompilerProblems)
-        .apply(streamer -> new Importer(mapFrom(streamer.toList())));
+        .apply(streamer -> new Importer(functionFrom(
+            streamer.toList(),
+            namespace -> variable -> variable)));
   }
 
-  private static Map<Variable, Identifier> parseImportFile(StorkDirectory directory) {
+  private static Fab<Variable, Expression> parseImportFile(StorkDirectory directory) {
     var lines = new String(directory.importFile, US_ASCII).lines().toList();
     var problems = streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
@@ -54,13 +56,15 @@ public class Importer {
     if (problems.isEmpty()) {
       return streamer(lines)
           .map(Importer::parse)
-          .apply(streamer -> mapFrom(streamer.toList()));
+          .apply(streamer -> functionFrom(
+              streamer.toList(),
+              variable -> variable));
     } else {
       throw exception(malformedImportFile(directory.namespace, problems));
     }
   }
 
-  private static Entry<Variable, Identifier> parse(String line) {
+  private static Entry<Variable, Expression> parse(String line) {
     var split = line.split(" ");
     if (split.length == 1) {
       var identifier = identifierParse(split[0]);
@@ -80,22 +84,9 @@ public class Importer {
   }
 
   public Definition injectInto(Definition definition) {
-    return onBody(
-        deep(ifVariable(importsFor(definition.identifier.namespace))))
-            .apply(definition);
-  }
-
-  private Fab<Variable, Expression> importsFor(Namespace namespace) {
-    if (imports.containsKey(namespace)) {
-      var namespaceImports = imports.get(namespace);
-      return variable -> {
-        if (namespaceImports.containsKey(variable)) {
-          return namespaceImports.get(variable);
-        }
-        return variable;
-      };
-    } else {
-      return variable -> variable;
-    }
+    return on(definition)
+        .apply(onBody(deep(ifVariable(variable -> mapping
+            .apply(definition.identifier.namespace)
+            .apply(variable)))));
   }
 }

@@ -104,6 +104,20 @@ public class Collections {
     return entries.stream().collect(toMapFromEntries());
   }
 
+  public static <K, V> Fab<K, V> functionFrom(
+      Map<K, V> map,
+      Fab<K, V> defaults) {
+    return key -> map.containsKey(key)
+        ? map.get(key)
+        : defaults.apply(key);
+  }
+
+  public static <K, V> Fab<K, V> functionFrom(
+      List<Entry<K, V>> entries,
+      Fab<K, V> defaults) {
+    return functionFrom(mapFrom(entries), defaults);
+  }
+
   public static Iterator<Byte> iterator(byte[] bytes) {
     return new Iterator<Byte>() {
       private int index = 0;
