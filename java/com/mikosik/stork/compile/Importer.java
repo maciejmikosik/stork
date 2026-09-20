@@ -12,7 +12,7 @@ import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
+import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
@@ -27,7 +27,6 @@ import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
 import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compile.importing.MalformedImportLine;
 
 public class Importer {
   private final Fab<Namespace, Fab<Variable, Expression>> mapping;
@@ -51,10 +50,10 @@ public class Importer {
     var lines = new String(directory.importFile, US_ASCII).lines().toList();
     streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
-        .map(MalformedImportLine::malformedImportLine)
+        .map(line -> malformedImportLine(directory.namespace, line))
         .toListAndConsume(problems -> {
           if (!problems.isEmpty()) {
-            throw exception(malformedImportFile(directory.namespace, problems));
+            throw exception(problems);
           }
         });
     return streamer(lines)
