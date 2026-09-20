@@ -44,6 +44,10 @@ public class Streamer<E> {
     return stream.toList();
   }
 
+  public <T> T toListAndApply(Fab<? super List<E>, ? extends T> function) {
+    return function.apply(this.toList());
+  }
+
   public Stream<E> toStream() {
     return stream;
   }

@@ -42,8 +42,8 @@ public class Importer {
             directory.namespace,
             parseImportFile(directory)))
         .apply(CompilerException::gatherCompilerProblems)
-        .apply(streamer -> new Importer(functionFrom(
-            streamer.toList(),
+        .toListAndApply(entries -> new Importer(functionFrom(
+            entries,
             namespace -> variable -> variable)));
   }
 
@@ -56,8 +56,8 @@ public class Importer {
     if (problems.isEmpty()) {
       return streamer(lines)
           .map(Importer::parse)
-          .apply(streamer -> functionFrom(
-              streamer.toList(),
+          .toListAndApply(entries -> functionFrom(
+              entries,
               variable -> variable));
     } else {
       throw exception(malformedImportFile(directory.namespace, problems));
