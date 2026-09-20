@@ -11,13 +11,11 @@ import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
+import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.disk.StorkDirectory;
@@ -27,7 +25,6 @@ import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
 import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compile.importing.MalformedImportLine;
 
 public class Importer {
   private final Fab<Namespace, Fab<Variable, Expression>> mapping;
@@ -42,38 +39,41 @@ public class Importer {
             directory.namespace,
             parseImportFile(directory)))
         .apply(CompilerException::gatherCompilerProblems)
-        .apply(streamer -> new Importer(functionFrom(
-            streamer.toList(),
+        .toListAndApply(entries -> new Importer(functionFrom(
+            entries,
             namespace -> variable -> variable)));
   }
 
   private static Fab<Variable, Expression> parseImportFile(StorkDirectory directory) {
-    var lines = new String(directory.importFile, US_ASCII).lines().toList();
-    var problems = streamer(lines)
-        .filter(line -> !line.matches(IMPORT_LINE))
-        .map(MalformedImportLine::malformedImportLine)
-        .toList();
-    if (problems.isEmpty()) {
-      return streamer(lines)
-          .map(Importer::parse)
-          .apply(streamer -> functionFrom(
-              streamer.toList(),
-              variable -> variable));
-    } else {
-      throw exception(malformedImportFile(directory.namespace, problems));
-    }
+    return asMappingFunction(parseImportLines(directory));
   }
 
-  private static Entry<Variable, Expression> parse(String line) {
-    var split = line.split(" ");
-    if (split.length == 1) {
-      var identifier = identifierParse(split[0]);
-      return entry(identifier.variable, identifier);
-    } else if (split.length == 2) {
-      return entry(variable(split[1]), identifierParse(split[0]));
-    } else {
-      throw new RuntimeException("should be validated");
-    }
+  private static Fab<Variable, Expression> asMappingFunction(List<Line> importLines) {
+    return streamer(importLines)
+        .map(line -> entry(line.variable, (Expression) line.identifier))
+        .toListAndApply(entries -> functionFrom(
+            entries,
+            variable -> variable));
+  }
+
+  private static List<Line> parseImportLines(StorkDirectory directory) {
+    var lines = new String(directory.importFile, US_ASCII).lines().toList();
+    streamer(lines)
+        .filter(line -> !line.matches(IMPORT_LINE))
+        .map(line -> malformedImportLine(directory.namespace, line))
+        .toListAndConsume(CompilerException::verifyNoProblems);
+    return streamer(lines)
+        .map(Importer::parse)
+        .toList();
+  }
+
+  private static Line parse(String line) {
+    var tokens = line.split(" ");
+    var identifier = identifierParse(tokens[0]);
+    var variable = tokens.length == 2
+        ? variable(tokens[1])
+        : identifier.variable;
+    return new Line(line, identifier, variable);
   }
 
   private static Identifier identifierParse(String name) {
@@ -88,5 +88,21 @@ public class Importer {
         .apply(onBody(deep(ifVariable(variable -> mapping
             .apply(definition.identifier.namespace)
             .apply(variable)))));
+  }
+
+  private static class Line {
+    @SuppressWarnings("unused")
+    public final String line;
+    public final Identifier identifier;
+    public final Variable variable;
+
+    private Line(
+        String line,
+        Identifier identifier,
+        Variable variable) {
+      this.line = line;
+      this.identifier = identifier;
+      this.variable = variable;
+    }
   }
 }

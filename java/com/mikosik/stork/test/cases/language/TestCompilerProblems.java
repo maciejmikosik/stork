@@ -1,9 +1,7 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.token.Symbol.DOT;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportFile.malformedImportFile;
 import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
 import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
 import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
@@ -27,9 +25,7 @@ public class TestCompilerProblems {
         .source("main(stdin) { ! }")
         .add(path("x").source("func ."))
         .expect(
-            malformedImportFile(
-                namespaceRoot(),
-                single(malformedImportLine("x xx xxx"))),
+            malformedImportLine(namespaceRoot(), "x xx xxx"),
             illegalCharacterInCode((byte) '!'),
             unexpected(DOT));
   }
