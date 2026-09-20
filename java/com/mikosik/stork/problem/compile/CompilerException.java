@@ -47,4 +47,10 @@ public class CompilerException extends RuntimeException {
       throw exception(problems);
     }
   }
+
+  public static void verifyNoProblems(List<? extends CannotCompile> problems) {
+    if (!problems.isEmpty()) {
+      throw exception(problems);
+    }
+  }
 }
