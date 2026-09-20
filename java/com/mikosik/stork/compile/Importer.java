@@ -16,7 +16,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.model.disk.StorkDirectory;
@@ -46,26 +45,35 @@ public class Importer {
   }
 
   private static Fab<Variable, Expression> parseImportFile(StorkDirectory directory) {
-    var lines = new String(directory.importFile, US_ASCII).lines().toList();
-    streamer(lines)
-        .filter(line -> !line.matches(IMPORT_LINE))
-        .map(line -> malformedImportLine(directory.namespace, line))
-        .toListAndConsume(CompilerException::verifyNoProblems);
+    return asMappingFunction(parseImportLines(directory));
+  }
 
-    return streamer(lines)
-        .map(Importer::parse)
+  private static Fab<Variable, Expression> asMappingFunction(List<Line> importLines) {
+    return streamer(importLines)
+        .map(line -> entry(line.variable, (Expression) line.identifier))
         .toListAndApply(entries -> functionFrom(
             entries,
             variable -> variable));
   }
 
-  private static Entry<Variable, Expression> parse(String line) {
+  private static List<Line> parseImportLines(StorkDirectory directory) {
+    var lines = new String(directory.importFile, US_ASCII).lines().toList();
+    streamer(lines)
+        .filter(line -> !line.matches(IMPORT_LINE))
+        .map(line -> malformedImportLine(directory.namespace, line))
+        .toListAndConsume(CompilerException::verifyNoProblems);
+    return streamer(lines)
+        .map(Importer::parse)
+        .toList();
+  }
+
+  private static Line parse(String line) {
     var tokens = line.split(" ");
     var identifier = identifierParse(tokens[0]);
     var variable = tokens.length == 2
         ? variable(tokens[1])
         : identifier.variable;
-    return entry(variable, identifier);
+    return new Line(line, identifier, variable);
   }
 
   private static Identifier identifierParse(String name) {
@@ -80,5 +88,21 @@ public class Importer {
         .apply(onBody(deep(ifVariable(variable -> mapping
             .apply(definition.identifier.namespace)
             .apply(variable)))));
+  }
+
+  private static class Line {
+    @SuppressWarnings("unused")
+    public final String line;
+    public final Identifier identifier;
+    public final Variable variable;
+
+    private Line(
+        String line,
+        Identifier identifier,
+        Variable variable) {
+      this.line = line;
+      this.identifier = identifier;
+      this.variable = variable;
+    }
   }
 }
