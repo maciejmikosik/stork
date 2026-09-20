@@ -2,6 +2,7 @@ package com.mikosik.stork.common;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -40,12 +41,20 @@ public class Streamer<E> {
     return function.apply(this);
   }
 
+  public void consume(Consumer<? super Streamer<E>> consumer) {
+    consumer.accept(this);
+  }
+
   public List<E> toList() {
     return stream.toList();
   }
 
   public <T> T toListAndApply(Fab<? super List<E>, ? extends T> function) {
     return function.apply(this.toList());
+  }
+
+  public void toListAndConsume(Consumer<? super List<E>> consumer) {
+    consumer.accept(this.toList());
   }
 
   public Stream<E> toStream() {

@@ -49,19 +49,19 @@ public class Importer {
 
   private static Fab<Variable, Expression> parseImportFile(StorkDirectory directory) {
     var lines = new String(directory.importFile, US_ASCII).lines().toList();
-    var problems = streamer(lines)
+    streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
         .map(MalformedImportLine::malformedImportLine)
-        .toList();
-    if (problems.isEmpty()) {
-      return streamer(lines)
-          .map(Importer::parse)
-          .toListAndApply(entries -> functionFrom(
-              entries,
-              variable -> variable));
-    } else {
-      throw exception(malformedImportFile(directory.namespace, problems));
-    }
+        .toListAndConsume(problems -> {
+          if (!problems.isEmpty()) {
+            throw exception(malformedImportFile(directory.namespace, problems));
+          }
+        });
+    return streamer(lines)
+        .map(Importer::parse)
+        .toListAndApply(entries -> functionFrom(
+            entries,
+            variable -> variable));
   }
 
   private static Entry<Variable, Expression> parse(String line) {
