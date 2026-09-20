@@ -65,15 +65,12 @@ public class Importer {
   }
 
   private static Entry<Variable, Expression> parse(String line) {
-    var split = line.split(" ");
-    if (split.length == 1) {
-      var identifier = identifierParse(split[0]);
-      return entry(identifier.variable, identifier);
-    } else if (split.length == 2) {
-      return entry(variable(split[1]), identifierParse(split[0]));
-    } else {
-      throw new RuntimeException("should be validated");
-    }
+    var tokens = line.split(" ");
+    var identifier = identifierParse(tokens[0]);
+    var variable = tokens.length == 2
+        ? variable(tokens[1])
+        : identifier.variable;
+    return entry(variable, identifier);
   }
 
   private static Identifier identifierParse(String name) {
