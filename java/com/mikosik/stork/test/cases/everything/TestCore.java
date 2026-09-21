@@ -1,10 +1,8 @@
 package com.mikosik.stork.test.cases.everything;
 
-import static com.mikosik.stork.common.ImmutableList.list;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
-import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
+import static com.mikosik.stork.problem.compile.Problems.duplicatedFunction;
+import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
@@ -29,7 +27,8 @@ public class TestCore {
     return programTest("cannot override core function")
         .add(path("lang/stream")
             .source("length(stream) { 0 }"))
-        .expect(duplicatedFunction(
-            identifier(namespace(list("lang", "stream")), variable("length"))));
+        .expect(duplicatedFunction()
+            .location(namespace("lang/stream"))
+            .object(variable("length")));
   }
 }

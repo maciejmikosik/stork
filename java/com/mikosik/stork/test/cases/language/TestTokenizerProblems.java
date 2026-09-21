@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
+import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.rangeClosed;
@@ -24,7 +24,8 @@ public class TestTokenizerProblems {
   private static Test reportsIllegalCharacter(byte character) {
     return programTest("[%d]".formatted(character))
         .source(sourceCodeWith(character))
-        .expect(illegalCharacterInCode(character));
+        .expect(illegalCharacterInCode()
+            .character(character));
   }
 
   private static byte[] sourceCodeWith(byte character) {

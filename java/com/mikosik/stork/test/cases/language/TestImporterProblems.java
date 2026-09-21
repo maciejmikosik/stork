@@ -5,7 +5,7 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNewline;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
+import static com.mikosik.stork.problem.compile.Problems.malformedImportLine;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
@@ -58,7 +58,9 @@ public class TestImporterProblems {
     return programTest(line)
         .imports(line + "\n")
         .source("main(stdin) { 'ok' }")
-        .expect(malformedImportLine(root, line));
+        .expect(malformedImportLine()
+            .location(root)
+            .object(line));
   }
 
   private static Suite reportsMultipleProblems() {
@@ -67,9 +69,15 @@ public class TestImporterProblems {
             .imports("!\n@\n#\n")
             .source("main(stdin) { 'ok' }")
             .expect(
-                malformedImportLine(root, "!"),
-                malformedImportLine(root, "@"),
-                malformedImportLine(root, "#")))
+                malformedImportLine()
+                    .location(root)
+                    .object("!"),
+                malformedImportLine()
+                    .location(root)
+                    .object("@"),
+                malformedImportLine()
+                    .location(root)
+                    .object("#")))
         .add(programTest("in different files")
             .add(path("a")
                 .imports("!"))
@@ -79,15 +87,15 @@ public class TestImporterProblems {
                 .imports("#"))
             .source("main(stdin) { 'ok' }")
             .expect(
-                malformedImportLine(
-                    namespace(single("a")),
-                    "!"),
-                malformedImportLine(
-                    namespace(single("b")),
-                    "@"),
-                malformedImportLine(
-                    namespace(single("c")),
-                    "#")));
+                malformedImportLine()
+                    .location(namespace(single("a")))
+                    .object("!"),
+                malformedImportLine()
+                    .location(namespace(single("b")))
+                    .object("@"),
+                malformedImportLine()
+                    .location(namespace(single("c")))
+                    .object("#")));
   }
 
   private static ProgramTest programTest(String name) {

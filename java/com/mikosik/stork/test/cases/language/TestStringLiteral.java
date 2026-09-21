@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
+import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInString;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.concat;
@@ -24,7 +24,8 @@ public class TestStringLiteral {
   private static Test reportsIllegalCharacter(byte character) {
     return programTest("[%d]".formatted(character))
         .source(stringLiteralWith(character))
-        .expect(illegalCharacterInString(character));
+        .expect(illegalCharacterInString()
+            .character(character));
   }
 
   private static byte[] stringLiteralWith(byte character) {

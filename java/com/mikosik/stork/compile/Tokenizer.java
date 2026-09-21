@@ -15,8 +15,8 @@ import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
 import static com.mikosik.stork.model.token.Symbol.DOT;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInString.illegalCharacterInString;
+import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInCode;
+import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInString;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -58,7 +58,9 @@ public class Tokenizer implements Iterator<Token> {
       iterator.next();
       return DOT;
     } else {
-      throw exception(illegalCharacterInCode(iterator.next()));
+      throw exception(illegalCharacterInCode()
+          .character(iterator.next())
+          .build());
     }
   }
 
@@ -74,7 +76,9 @@ public class Tokenizer implements Iterator<Token> {
     while (iterator.hasNext() && !isDoubleQuote(iterator.peek())) {
       var nextByte = iterator.next().byteValue();
       if (!isPrintable(nextByte)) {
-        throw exception(illegalCharacterInString(nextByte));
+        throw exception(illegalCharacterInString()
+            .character(nextByte)
+            .build());
       }
       builder.append((char) nextByte);
     }

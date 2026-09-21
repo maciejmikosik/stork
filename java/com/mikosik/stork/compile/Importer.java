@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
+import static com.mikosik.stork.problem.compile.Problems.malformedImportLine;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
@@ -60,7 +60,10 @@ public class Importer {
     var lines = new String(directory.importFile, US_ASCII).lines().toList();
     streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
-        .map(line -> malformedImportLine(directory.namespace, line))
+        .map(line -> malformedImportLine()
+            .location(directory.namespace)
+            .object(line)
+            .build())
         .toListAndConsume(CompilerException::verifyNoProblems);
     return streamer(lines)
         .map(Importer::parse)

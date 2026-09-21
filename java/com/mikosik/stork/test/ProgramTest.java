@@ -32,6 +32,7 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.compile.Problem;
+import com.mikosik.stork.compile.Problem.ProblemBuilder;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.problem.compile.CompilerException;
@@ -94,6 +95,12 @@ public class ProgramTest {
 
   public Test expect(Problem problem, Problem... moreProblems) {
     return expect(listFromVarargs(problem, moreProblems));
+  }
+
+  public Test expect(ProblemBuilder problem, ProblemBuilder... moreProblems) {
+    return expect(listFromVarargs(problem, moreProblems).stream()
+        .map(ProblemBuilder::build)
+        .toList());
   }
 
   public Test expect(CannotCompute cannotCompute) {

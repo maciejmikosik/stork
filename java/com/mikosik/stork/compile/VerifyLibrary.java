@@ -3,8 +3,8 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.Collections.filter;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.model.exp.Changes.walk;
-import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
-import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
+import static com.mikosik.stork.problem.compile.Problems.duplicatedFunction;
+import static com.mikosik.stork.problem.compile.Problems.undefinedFunction;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -15,7 +15,7 @@ import java.util.List;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Variable;
-import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
+import com.mikosik.stork.problem.compile.Problems;
 
 public class VerifyLibrary {
   public static List<Problem> findLinkingProblems(List<Definition> library) {
@@ -29,7 +29,10 @@ public class VerifyLibrary {
     return library.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
-            .map(variable -> unboundVariable(definition.identifier, variable)))
+            .map(variable -> Problems.unboundVariable()
+                .location(definition.identifier)
+                .object(variable)
+                .build()))
         .toList();
   }
 
@@ -41,7 +44,10 @@ public class VerifyLibrary {
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
-            .map(identifier -> undefinedFunction(definition.identifier, identifier)))
+            .map(identifier -> undefinedFunction()
+                .location(definition.identifier)
+                .object(identifier)
+                .build()))
         .toList();
   }
 
@@ -52,7 +58,10 @@ public class VerifyLibrary {
     return histogram.entrySet().stream()
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
-        .map(DuplicatedFunction::duplicatedFunction)
+        .map(function -> duplicatedFunction()
+            .location(function.namespace)
+            .object(function.variable)
+            .build())
         .toList();
   }
 }
