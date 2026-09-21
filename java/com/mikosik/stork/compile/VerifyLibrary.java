@@ -15,20 +15,18 @@ import java.util.List;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Variable;
-import com.mikosik.stork.problem.compile.link.CannotLink;
+import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.link.DuplicatedFunction;
-import com.mikosik.stork.problem.compile.link.UnboundVariable;
-import com.mikosik.stork.problem.compile.link.UndefinedFunction;
 
 public class VerifyLibrary {
-  public static List<CannotLink> findLinkingProblems(List<Definition> library) {
+  public static List<CannotCompile> findLinkingProblems(List<Definition> library) {
     return join(
         findUnboundVariable(library),
         findUndefinedFunction(library),
         findDuplicatedFunction(library));
   }
 
-  private static List<UnboundVariable> findUnboundVariable(
+  private static List<? extends CannotCompile> findUnboundVariable(
       List<Definition> library) {
     return library.stream()
         .flatMap(definition -> walk(definition.body)
@@ -37,7 +35,7 @@ public class VerifyLibrary {
         .toList();
   }
 
-  private static List<UndefinedFunction> findUndefinedFunction(
+  private static List<? extends CannotCompile> findUndefinedFunction(
       List<Definition> library) {
     var definedIdentifiers = library.stream()
         .map(definition -> definition.identifier)
@@ -50,7 +48,7 @@ public class VerifyLibrary {
         .toList();
   }
 
-  private static List<DuplicatedFunction> findDuplicatedFunction(
+  private static List<? extends CannotCompile> findDuplicatedFunction(
       List<Definition> library) {
     var histogram = library.stream()
         .map(definition -> definition.identifier)

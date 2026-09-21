@@ -1,21 +1,17 @@
 package com.mikosik.stork.problem.compile.importing;
 
+import static com.mikosik.stork.compile.Problem.problem;
+
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.exp.Namespace;
 
-public class MalformedImportLine extends CannotImport {
-  public final Namespace namespace;
-  public final String line;
-
-  protected MalformedImportLine(
+public class MalformedImportLine {
+  public static Problem malformedImportLine(
       Namespace namespace,
       String line) {
-    this.namespace = namespace;
-    this.line = line;
-  }
-
-  public static MalformedImportLine malformedImportLine(
-      Namespace namespace,
-      String line) {
-    return new MalformedImportLine(namespace, line);
+    return problem("malformed import")
+        .location(namespace)
+        .object(line)
+        .build();
   }
 }

@@ -1,15 +1,14 @@
 package com.mikosik.stork.problem.compile.parse;
 
+import static com.mikosik.stork.compile.Problem.problem;
+
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.token.Token;
 
-public class UnexpectedToken extends CannotParse {
-  public final Token token;
-
-  private UnexpectedToken(Token token) {
-    this.token = token;
-  }
-
-  public static UnexpectedToken unexpected(Token token) {
-    return new UnexpectedToken(token);
+public class UnexpectedToken {
+  public static Problem unexpected(Token token) {
+    return problem("unexpected token")
+        .object(token)
+        .build();
   }
 }

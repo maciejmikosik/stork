@@ -1,13 +1,13 @@
 package com.mikosik.stork.problem.compile.tokenize;
 
-public class IllegalCharacterInString extends CannotTokenize {
-  public final byte character;
+import static com.mikosik.stork.compile.Problem.problem;
 
-  protected IllegalCharacterInString(byte character) {
-    this.character = character;
-  }
+import com.mikosik.stork.compile.Problem;
 
-  public static IllegalCharacterInString illegalCharacterInString(byte character) {
-    return new IllegalCharacterInString(character);
+public class IllegalCharacterInString {
+  public static Problem illegalCharacterInString(byte character) {
+    return problem("illegal character in string")
+        .character(character)
+        .build();
   }
 }

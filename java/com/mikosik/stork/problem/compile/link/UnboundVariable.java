@@ -1,24 +1,18 @@
 package com.mikosik.stork.problem.compile.link;
 
+import static com.mikosik.stork.compile.Problem.problem;
+
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Variable;
 
-public class UnboundVariable extends CannotLink {
-  public final Identifier location;
-  public final Variable variable;
-
-  private UnboundVariable(
+public class UnboundVariable {
+  public static Problem unboundVariable(
       Identifier location,
       Variable variable) {
-    this.location = location;
-    this.variable = variable;
-  }
-
-  public static UnboundVariable unboundVariable(
-      Identifier location,
-      Variable variable) {
-    return new UnboundVariable(
-        location,
-        variable);
+    return problem("unbound variable")
+        .location(location)
+        .object(variable)
+        .build();
   }
 }
