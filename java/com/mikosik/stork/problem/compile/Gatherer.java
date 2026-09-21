@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.mikosik.stork.compile.Problem;
+
 public class Gatherer {
-  private final List<CannotCompile> problems = new ArrayList<>();
+  private final List<Problem> problems = new ArrayList<>();
 
   private Gatherer() {}
 

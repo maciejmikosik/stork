@@ -9,8 +9,8 @@ import static java.util.Objects.deepEquals;
 import java.util.Arrays;
 
 import com.mikosik.stork.common.text.Outline;
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.problem.Describer;
-import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compute.ComputerException;
 
@@ -35,7 +35,7 @@ public sealed interface Outcome {
 
     public int hashCode() {
       return exception.problems.stream()
-          .mapToInt(CannotCompile::hashCode)
+          .mapToInt(Problem::hashCode)
           .sum();
     }
   }

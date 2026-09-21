@@ -2,9 +2,9 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.token.Symbol.DOT;
-import static com.mikosik.stork.problem.compile.importing.MalformedImportLine.malformedImportLine;
-import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
+import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInCode;
+import static com.mikosik.stork.problem.compile.Problems.malformedImportLine;
+import static com.mikosik.stork.problem.compile.Problems.unexpectedToken;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
@@ -25,9 +25,13 @@ public class TestCompilerProblems {
         .source("main(stdin) { ! }")
         .add(path("x").source("func ."))
         .expect(
-            malformedImportLine(namespaceRoot(), "x xx xxx"),
-            illegalCharacterInCode((byte) '!'),
-            unexpected(DOT));
+            malformedImportLine()
+                .location(namespaceRoot())
+                .object("x xx xxx"),
+            illegalCharacterInCode()
+                .character((byte) '!'),
+            unexpectedToken()
+                .object(DOT));
   }
 
   private static ProgramTest programTest(String name) {

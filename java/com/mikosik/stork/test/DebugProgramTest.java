@@ -1,8 +1,8 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.compile.Problem.problem;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.tokenize.IllegalCharacterInCode.illegalCharacterInCode;
 import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 
@@ -14,13 +14,16 @@ public class DebugProgramTest {
   public static void main(String... args) {
     report((Case) minimalProgramTest("cannot compile / cannot compile")
         .source("main(stdin){ / }")
-        .expect(illegalCharacterInCode((byte) '?')));
+        .expect(problem("illegal character in code")
+            .character((byte) '?')));
     report((Case) minimalProgramTest("cannot compile / cannot compute")
         .source("main(stdin){ 2 }")
-        .expect(illegalCharacterInCode((byte) '?')));
+        .expect(problem("illegal character in code")
+            .character((byte) '?')));
     report((Case) minimalProgramTest("cannot compile / stdout")
         .source("main(stdin){ stdin }")
-        .expect(illegalCharacterInCode((byte) '?')));
+        .expect(problem("illegal character in code")
+            .character((byte) '?')));
     report((Case) minimalProgramTest("cannot compute / cannot compile")
         .source("main(stdin){ ? }")
         .expect(functionMissing(identifier(variable("x")))));

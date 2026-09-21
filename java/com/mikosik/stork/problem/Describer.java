@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
@@ -43,25 +44,39 @@ public class Describer {
   }
 
   private static Outline describe(Object problem) {
-    return outline(problem.getClass().getSimpleName())
-        .nest(stream(problem.getClass().getFields())
-            .map(field -> describeField(problem, field))
-            .toList());
+    if (problem instanceof Problem p) {
+      return outline(p.name)
+          .nest(p.description.entrySet().stream()
+              .map(entry -> describeEntry(
+                  entry.getKey(),
+                  entry.getValue()))
+              .toList());
+    } else {
+      return outline(problem.getClass().getSimpleName())
+          .nest(stream(problem.getClass().getFields())
+              .map(field -> describeField(problem, field))
+              .toList());
+    }
   }
 
   private static Outline describeField(Object instance, Field field) {
-    var fieldValue = read(field, instance);
-    return switch (fieldValue) {
-      case Byte character -> outline(field.getName() + ":")
+    return describeEntry(
+        field.getName(),
+        read(field, instance));
+  }
+
+  private static Outline describeEntry(String key, Object value) {
+    return switch (value) {
+      case Byte character -> outline(key + ":")
           .nest(formatCharacter(character));
-      case List<?> list -> outline(field.getName() + ":")
+      case List<?> list -> outline(key + ":")
           .nest(list.stream()
               .map(Describer::describe)
               .toList());
       default -> outline(format(
           "%s: %s",
-          field.getName(),
-          formatFieldValue(fieldValue)));
+          key,
+          formatFieldValue(value)));
     };
   }
 

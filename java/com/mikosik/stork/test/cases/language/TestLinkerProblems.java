@@ -1,9 +1,10 @@
 package com.mikosik.stork.test.cases.language;
 
+import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.link.DuplicatedFunction.duplicatedFunction;
-import static com.mikosik.stork.problem.compile.link.UnboundVariable.unboundVariable;
-import static com.mikosik.stork.problem.compile.link.UndefinedFunction.undefinedFunction;
+import static com.mikosik.stork.problem.compile.Problems.duplicatedFunction;
+import static com.mikosik.stork.problem.compile.Problems.unboundVariable;
+import static com.mikosik.stork.problem.compile.Problems.undefinedFunction;
 import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
@@ -26,18 +27,18 @@ public class TestLinkerProblems {
     return suite("unbound variable")
         .add(programTest("once")
             .source("func { var }")
-            .expect(unboundVariable(
-                identifier("func"),
-                variable("var"))))
+            .expect(unboundVariable()
+                .location(identifier("func"))
+                .object(variable("var"))))
         .add(programTest("multiple times in same function")
             .source("func { var(var) }")
             .expect(
-                unboundVariable(
-                    identifier("func"),
-                    variable("var")),
-                unboundVariable(
-                    identifier("func"),
-                    variable("var"))));
+                unboundVariable()
+                    .location(identifier("func"))
+                    .object(variable("var")),
+                unboundVariable()
+                    .location(identifier("func"))
+                    .object(variable("var"))));
   }
 
   private static Suite reportsUndefinedFunction() {
@@ -46,20 +47,20 @@ public class TestLinkerProblems {
             .add(path("a/aa")
                 .imports("b/bb/funcB")
                 .source("funcA { funcB }"))
-            .expect(undefinedFunction(
-                identifier("a/aa/funcA"),
-                identifier("b/bb/funcB"))))
+            .expect(undefinedFunction()
+                .location(identifier("a/aa/funcA"))
+                .object(identifier("b/bb/funcB"))))
         .add(programTest("multiple times in same function")
             .add(path("a/aa")
                 .imports("b/bb/funcB")
                 .source("funcA { funcB(funcB) }"))
             .expect(
-                undefinedFunction(
-                    identifier("a/aa/funcA"),
-                    identifier("b/bb/funcB")),
-                undefinedFunction(
-                    identifier("a/aa/funcA"),
-                    identifier("b/bb/funcB"))));
+                undefinedFunction()
+                    .location(identifier("a/aa/funcA"))
+                    .object(identifier("b/bb/funcB")),
+                undefinedFunction()
+                    .location(identifier("a/aa/funcA"))
+                    .object(identifier("b/bb/funcB"))));
   }
 
   private static Test reportsDuplicatedFunction() {
@@ -69,8 +70,9 @@ public class TestLinkerProblems {
                 func { 1 }
                 func { 2 }
                 """)
-            .expect(duplicatedFunction(
-                identifier("func"))))
+            .expect(duplicatedFunction()
+                .location(namespaceRoot())
+                .object(variable("func"))))
         .add(programTest("multiple times in same namespace")
             .source("""
                 funcA { 1 }
@@ -79,10 +81,12 @@ public class TestLinkerProblems {
                 funcB { 2 }
                 """)
             .expect(
-                duplicatedFunction(
-                    identifier("funcA")),
-                duplicatedFunction(
-                    identifier("funcB"))));
+                duplicatedFunction()
+                    .location(namespaceRoot())
+                    .object(variable("funcA")),
+                duplicatedFunction()
+                    .location(namespaceRoot())
+                    .object(variable("funcB"))));
   }
 
   private static ProgramTest programTest(String name) {

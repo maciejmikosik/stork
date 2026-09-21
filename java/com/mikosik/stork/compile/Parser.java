@@ -19,7 +19,7 @@ import static com.mikosik.stork.model.token.Bracket.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Bracket.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Symbol.DOT;
 import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.parse.UnexpectedToken.unexpected;
+import static com.mikosik.stork.problem.compile.Problems.unexpectedToken;
 
 import java.util.Iterator;
 import java.util.List;
@@ -182,7 +182,9 @@ public class Parser {
   }
 
   private static <T> T failUnexpected(Token token) {
-    throw exception(unexpected(token));
+    throw exception(unexpectedToken()
+        .object(token)
+        .build());
   }
 
   private static <E> Iterator<E> checkingEOF(Iterator<E> iterator) {
