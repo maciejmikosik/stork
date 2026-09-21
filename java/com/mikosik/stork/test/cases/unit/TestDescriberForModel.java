@@ -31,7 +31,7 @@ import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.problem.compile.CannotCompile;
 
-public class TestDescriber {
+public class TestDescriberForModel {
   public static class ProblemWithExpressions extends CannotCompile {
     public String keyString = "valueString";
     public Variable keyVariable = variable("valueVariable");
@@ -70,7 +70,7 @@ public class TestDescriber {
     }
   }
 
-  public static Test testDescriber() {
+  public static Test testDescriberForModel() {
     return suite("describer can describe problem with")
         .add(newCase("fields of type Expression", () -> {
           assertMatch(
