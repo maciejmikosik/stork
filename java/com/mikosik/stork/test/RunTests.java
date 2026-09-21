@@ -28,6 +28,7 @@ import static com.mikosik.stork.test.cases.language.TestStringLiteral.testString
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
 import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
+import static com.mikosik.stork.test.cases.unit.TestDescriber.testDescriber;
 import static com.mikosik.stork.test.cases.unit.TestDescriberForModel.testDescriberForModel;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static com.mikosik.stork.test.cases.unit.TestOutcome.testOutcome;
@@ -67,6 +68,7 @@ public class RunTests {
             .add(testDecompiler())
             .add(testLogbuddyDecorator()))
         .add(testDescriberForModel())
+        .add(testDescriber())
         .add(testOutcome()));
     runAndReport(testCompilingCoreLibrary(TESTING));
     runAndReport(suite("language")
