@@ -8,26 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mikosik.stork.common.Streamer;
+import com.mikosik.stork.compile.Problem;
 
 public class CompilerException extends RuntimeException {
-  public final List<CannotCompile> problems;
+  public final List<Problem> problems;
 
-  private CompilerException(List<CannotCompile> problems) {
+  private CompilerException(List<Problem> problems) {
     this.problems = problems;
   }
 
-  public static CompilerException exception(
-      List<? extends CannotCompile> problems) {
+  public static CompilerException exception(List<Problem> problems) {
     return new CompilerException(cast(problems));
   }
 
-  public static CompilerException exception(CannotCompile problem) {
+  public static CompilerException exception(Problem problem) {
     return new CompilerException(single(problem));
   }
 
   public static <E> Streamer<E> gatherCompilerProblems(Streamer<E> streamer) {
     var elements = new ArrayList<E>();
-    var problems = new ArrayList<CannotCompile>();
+    var problems = new ArrayList<Problem>();
 
     var iterator = streamer.toIterator();
     while (true) {
@@ -48,7 +48,7 @@ public class CompilerException extends RuntimeException {
     }
   }
 
-  public static void verifyNoProblems(List<? extends CannotCompile> problems) {
+  public static void verifyNoProblems(List<Problem> problems) {
     if (!problems.isEmpty()) {
       throw exception(problems);
     }

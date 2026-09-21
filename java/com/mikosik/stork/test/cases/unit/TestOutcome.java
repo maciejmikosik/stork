@@ -9,7 +9,6 @@ import static com.mikosik.stork.test.Assertions.assertMatch;
 import static com.mikosik.stork.test.Outcome.NotCompiled.outcome;
 import static com.mikosik.stork.test.Outcome.Printed.outcome;
 import static com.mikosik.stork.test.QuackeryHelper.assertException;
-import static com.mikosik.stork.test.cases.unit.TestOutcome.Problem.problem;
 import static java.util.Objects.deepEquals;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -17,23 +16,11 @@ import static org.quackery.Suite.suite;
 import org.quackery.Suite;
 import org.quackery.Test;
 
-import com.mikosik.stork.problem.compile.CannotCompile;
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.test.Outcome;
 
 //TODO add tests for stdout outcome and computer problems
 public class TestOutcome {
-  public static class Problem extends CannotCompile {
-    public final int value;
-
-    private Problem(int value) {
-      this.value = value;
-    }
-
-    public static Problem problem(int value) {
-      return new Problem(value);
-    }
-  }
-
   public static Test testOutcome() {
     return suite("outcome")
         .add(testDescribe())
@@ -113,6 +100,10 @@ public class TestOutcome {
               outcome(exception(list(problem(1), problem(2), problem(2)))),
               outcome(exception(list(problem(1), problem(1), problem(2)))));
         }));
+  }
+
+  private static Problem problem(int id) {
+    return Problem.problem(Integer.toString(id)).build();
   }
 
   private static void assertEqual(Outcome outcomeA, Outcome outcomeB) {

@@ -31,9 +31,9 @@ import java.util.function.Supplier;
 
 import org.quackery.Test;
 
+import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
-import com.mikosik.stork.problem.compile.CannotCompile;
 import com.mikosik.stork.problem.compile.CompilerException;
 import com.mikosik.stork.problem.compute.CannotCompute;
 import com.mikosik.stork.problem.compute.ComputerException;
@@ -88,11 +88,11 @@ public class ProgramTest {
     return newCaseExpecting(outcome(bytes(stdout)));
   }
 
-  public Test expect(List<? extends CannotCompile> problems) {
+  public Test expect(List<Problem> problems) {
     return newCaseExpecting(outcome(exception(problems)));
   }
 
-  public Test expect(CannotCompile problem, CannotCompile... moreProblems) {
+  public Test expect(Problem problem, Problem... moreProblems) {
     return expect(listFromVarargs(problem, moreProblems));
   }
 

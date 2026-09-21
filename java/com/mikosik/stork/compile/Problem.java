@@ -9,9 +9,8 @@ import java.util.Map;
 
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
-import com.mikosik.stork.problem.compile.CannotCompile;
 
-public class Problem extends CannotCompile {
+public class Problem {
   public final String name;
   public final Map<String, Object> description;
 

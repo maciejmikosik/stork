@@ -29,7 +29,6 @@ import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
 import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.cases.unit.TestDescriber.testDescriber;
-import static com.mikosik.stork.test.cases.unit.TestDescriberForModel.testDescriberForModel;
 import static com.mikosik.stork.test.cases.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
 import static com.mikosik.stork.test.cases.unit.TestOutcome.testOutcome;
 import static java.lang.System.exit;
@@ -67,7 +66,6 @@ public class RunTests {
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator()))
-        .add(testDescriberForModel())
         .add(testDescriber())
         .add(testOutcome()));
     runAndReport(testCompilingCoreLibrary(TESTING));
