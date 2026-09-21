@@ -9,7 +9,7 @@ import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.Importer.buildImporter;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
-import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.CompilerException.verifyNoProblems;
 import static com.mikosik.stork.compile.err.Gatherer.gatherer;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifLambda;
@@ -68,12 +68,8 @@ public class Compiler {
   }
 
   private static List<Definition> link(List<Definition> definitions) {
-    var problems = findLinkingProblems(definitions);
-    if (problems.isEmpty()) {
-      return definitions;
-    } else {
-      throw exception(problems);
-    }
+    verifyNoProblems(findLinkingProblems(definitions));
+    return definitions;
   }
 
   private static final Faa<Expression> bindLambdaParameters = deep(

@@ -40,11 +40,8 @@ public class CompilerException extends RuntimeException {
         problems.addAll(exception.problems);
       }
     }
-    if (problems.isEmpty()) {
-      return streamer(elements);
-    } else {
-      throw exception(problems);
-    }
+    verifyNoProblems(problems);
+    return streamer(elements);
   }
 
   public static void verifyNoProblems(List<Problem> problems) {
