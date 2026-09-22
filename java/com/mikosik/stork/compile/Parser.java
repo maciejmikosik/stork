@@ -194,6 +194,7 @@ public class Parser {
       }
 
       public E next() {
+        // TODO throw dedicated problem or at least use check(hasNext())
         try {
           return iterator.next();
         } catch (NoSuchElementException e) {
