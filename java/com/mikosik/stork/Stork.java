@@ -32,7 +32,7 @@ import com.mikosik.stork.compute.err.ComputerException;
 import com.mikosik.stork.model.disk.StorkDirectory;
 
 public class Stork {
-  public static void main(String[] args) {
+  public static void main(String... args) {
     try {
       if (args.length == 1) {
         runSnippet(args[0]);
