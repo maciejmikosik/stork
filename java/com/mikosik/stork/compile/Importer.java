@@ -5,6 +5,7 @@ import static com.mikosik.stork.common.col.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
+import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
@@ -14,6 +15,7 @@ import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
+import static java.util.stream.Collectors.groupingBy;
 
 import java.util.List;
 
@@ -45,7 +47,20 @@ public class Importer {
   }
 
   private static Fab<Variable, Expression> parseImportFile(StorkDirectory directory) {
-    return asMappingFunction(parseImportLines(directory));
+    var lines = parseImportLines(directory);
+    var linesByVariable = lines.stream()
+        .collect(groupingBy(line -> line.variable));
+    streamer(linesByVariable.entrySet())
+        .filter(entry -> entry.getValue().size() > 1)
+        .map(entry -> importCollision()
+            .location(directory.namespace)
+            .object(entry.getValue().stream()
+                .map(line -> line.source)
+                .toList())
+            .variable(entry.getKey())
+            .build())
+        .toListAndConsume(CompilerException::verifyNoProblems);
+    return asMappingFunction(lines);
   }
 
   private static Fab<Variable, Expression> asMappingFunction(List<Line> importLines) {
@@ -94,16 +109,15 @@ public class Importer {
   }
 
   private static class Line {
-    @SuppressWarnings("unused")
-    public final String line;
+    public final String source;
     public final Identifier identifier;
     public final Variable variable;
 
     private Line(
-        String line,
+        String source,
         Identifier identifier,
         Variable variable) {
-      this.line = line;
+      this.source = source;
       this.identifier = identifier;
       this.variable = variable;
     }

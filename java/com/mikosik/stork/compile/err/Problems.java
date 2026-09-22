@@ -9,6 +9,10 @@ public class Problems {
     return problem("malformed import");
   }
 
+  public static ProblemBuilder importCollision() {
+    return problem("import collision");
+  }
+
   public static ProblemBuilder unexpectedToken() {
     return problem("unexpected token");
   }
