@@ -1,9 +1,16 @@
 package com.mikosik.stork.problem.compute;
 
-import com.mikosik.stork.common.Model;
-
-public class CannotCompute extends Model {
+public class CannotCompute {
   public static CannotCompute cannotCompute() {
     return new CannotCompute();
+  }
+
+  public boolean equals(Object that) {
+    return that != null
+        && that.getClass() == this.getClass();
+  }
+
+  public int hashCode() {
+    return 123;
   }
 }

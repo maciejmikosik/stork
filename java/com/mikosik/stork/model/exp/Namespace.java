@@ -3,12 +3,12 @@ package com.mikosik.stork.model.exp;
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.none;
 import static com.mikosik.stork.common.ImmutableList.single;
+import static java.util.Objects.deepEquals;
+import static java.util.Objects.hash;
 
 import java.util.List;
 
-import com.mikosik.stork.common.Model;
-
-public class Namespace extends Model {
+public class Namespace {
   public final List<String> components;
 
   private Namespace(List<String> components) {
@@ -25,5 +25,18 @@ public class Namespace extends Model {
 
   public Namespace add(String component) {
     return namespace(join(components, single(component)));
+  }
+
+  public boolean equals(Object that) {
+    return that instanceof Namespace namespace
+        && equals(namespace);
+  }
+
+  private boolean equals(Namespace that) {
+    return deepEquals(this.components, that.components);
+  }
+
+  public int hashCode() {
+    return hash(components);
   }
 }
