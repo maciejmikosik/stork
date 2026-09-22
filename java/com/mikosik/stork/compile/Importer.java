@@ -6,6 +6,7 @@ import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
 import static com.mikosik.stork.compile.err.CompilerException.inject;
+import static com.mikosik.stork.compile.err.CompilerException.verifyNoProblems;
 import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import com.mikosik.stork.common.func.Functions.Fab;
 import com.mikosik.stork.compile.err.CompilerException;
+import com.mikosik.stork.compile.err.Problem;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
@@ -49,17 +51,7 @@ public class Importer {
 
   private static Fab<Variable, Expression> parse(byte[] source) {
     var lines = parseLines(source);
-    var linesByVariable = lines.stream()
-        .collect(groupingBy(line -> line.variable));
-    streamer(linesByVariable.entrySet())
-        .filter(entry -> entry.getValue().size() > 1)
-        .map(entry -> importCollision()
-            .object(entry.getValue().stream()
-                .map(line -> line.source)
-                .toList())
-            .variable(entry.getKey())
-            .build())
-        .toListAndConsume(CompilerException::verifyNoProblems);
+    verifyNoProblems(findImportCollisions(lines));
     return asMappingFunction(lines);
   }
 
@@ -73,12 +65,7 @@ public class Importer {
 
   private static List<Line> parseLines(byte[] source) {
     var lines = new String(source, US_ASCII).lines().toList();
-    streamer(lines)
-        .filter(line -> !line.matches(IMPORT_LINE))
-        .map(line -> malformedImportLine()
-            .object(line)
-            .build())
-        .toListAndConsume(CompilerException::verifyNoProblems);
+    verifyNoProblems(findMalformedImports(lines));
     return streamer(lines)
         .map(Importer::parse)
         .toList();
@@ -105,6 +92,29 @@ public class Importer {
         .apply(onBody(deep(ifVariable(variable -> mapping
             .apply(definition.identifier.namespace)
             .apply(variable)))));
+  }
+
+  private static List<Problem> findMalformedImports(List<String> lines) {
+    return streamer(lines)
+        .filter(line -> !line.matches(IMPORT_LINE))
+        .map(line -> malformedImportLine()
+            .object(line)
+            .build())
+        .toList();
+  }
+
+  private static List<Problem> findImportCollisions(List<Line> lines) {
+    var linesByVariable = lines.stream()
+        .collect(groupingBy(line -> line.variable));
+    return streamer(linesByVariable.entrySet())
+        .filter(entry -> entry.getValue().size() > 1)
+        .map(entry -> importCollision()
+            .object(entry.getValue().stream()
+                .map(line -> line.source)
+                .toList())
+            .variable(entry.getKey())
+            .build())
+        .toList();
   }
 
   private static class Line {
