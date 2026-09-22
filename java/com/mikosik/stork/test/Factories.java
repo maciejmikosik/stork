@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Strings.split;
+import static com.mikosik.stork.common.text.Strings.split;
 
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;

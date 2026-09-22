@@ -1,13 +1,13 @@
 package com.mikosik.stork.compile.err;
 
-import static com.mikosik.stork.common.ImmutableList.cast;
-import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.Streamer.streamer;
+import static com.mikosik.stork.common.col.ImmutableList.cast;
+import static com.mikosik.stork.common.col.ImmutableList.single;
+import static com.mikosik.stork.common.col.Streamer.streamer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mikosik.stork.common.Streamer;
+import com.mikosik.stork.common.col.Streamer;
 
 public class CompilerException extends RuntimeException {
   public final List<Problem> problems;

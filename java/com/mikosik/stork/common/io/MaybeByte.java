@@ -1,6 +1,6 @@
 package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 

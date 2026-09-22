@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.UncheckedInterruptedException.uncheckedInterruptedException;
+import static com.mikosik.stork.common.err.UncheckedInterruptedException.uncheckedInterruptedException;
 
 public class InterruptibleComputer implements Computer {
   private final Computer computer;

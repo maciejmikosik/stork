@@ -1,6 +1,6 @@
 package com.mikosik.stork.common.io;
 
-import static com.mikosik.stork.common.Collections.stream;
+import static com.mikosik.stork.common.col.Collections.stream;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

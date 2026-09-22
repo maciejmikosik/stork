@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile.op;
 
-import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.list;
+import static com.mikosik.stork.common.col.ImmutableList.join;
+import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.model.exp.Definition.definition;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;

@@ -1,6 +1,6 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compile.op.Combinator.B;
 import static com.mikosik.stork.compile.op.Combinator.C;
 import static com.mikosik.stork.compile.op.Combinator.I;

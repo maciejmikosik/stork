@@ -1,7 +1,7 @@
 package com.mikosik.stork.compute.err;
 
-import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.col.ImmutableList.join;
+import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static java.lang.String.join;
 import static java.util.Objects.deepEquals;

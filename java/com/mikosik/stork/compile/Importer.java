@@ -1,9 +1,9 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Collections.functionFrom;
-import static com.mikosik.stork.common.Streamer.streamer;
-import static com.mikosik.stork.common.Strings.split;
+import static com.mikosik.stork.common.col.Collections.functionFrom;
+import static com.mikosik.stork.common.col.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
+import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;

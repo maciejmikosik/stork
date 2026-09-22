@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.err;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

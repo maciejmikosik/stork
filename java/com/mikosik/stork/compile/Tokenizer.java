@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Peekerator.peekerator;
-import static com.mikosik.stork.common.Throwables.check;
+import static com.mikosik.stork.common.col.Peekerator.peekerator;
+import static com.mikosik.stork.common.err.Throwables.check;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
@@ -21,7 +21,7 @@ import static com.mikosik.stork.model.token.Symbol.DOT;
 import java.math.BigInteger;
 import java.util.Iterator;
 
-import com.mikosik.stork.common.Peekerator;
+import com.mikosik.stork.common.col.Peekerator;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;

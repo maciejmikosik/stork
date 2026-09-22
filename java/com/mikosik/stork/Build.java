@@ -1,11 +1,11 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.Text.text;
 import static com.mikosik.stork.common.io.Directories.homeDirectory;
 import static com.mikosik.stork.common.io.Directories.newTemporaryDirectory;
 import static com.mikosik.stork.common.proc.Javac.javac;
 import static com.mikosik.stork.common.proc.Zip.zip;
+import static com.mikosik.stork.common.text.Text.text;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
 

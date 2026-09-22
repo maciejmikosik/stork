@@ -1,7 +1,7 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Throwables.messageOf;
-import static com.mikosik.stork.common.Throwables.stackTraceOf;
+import static com.mikosik.stork.common.err.Throwables.messageOf;
+import static com.mikosik.stork.common.err.Throwables.stackTraceOf;
 
 import java.util.List;
 

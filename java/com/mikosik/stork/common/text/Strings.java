@@ -1,6 +1,6 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.text;
 
-import static com.mikosik.stork.common.ImmutableList.toList;
+import static com.mikosik.stork.common.col.ImmutableList.toList;
 
 import java.util.List;
 import java.util.function.Predicate;

@@ -1,9 +1,9 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Regex.atLeastOne;
-import static com.mikosik.stork.common.Regex.letter;
-import static com.mikosik.stork.common.Regex.maybe;
-import static com.mikosik.stork.common.Regex.separated;
+import static com.mikosik.stork.common.text.Regex.atLeastOne;
+import static com.mikosik.stork.common.text.Regex.letter;
+import static com.mikosik.stork.common.text.Regex.maybe;
+import static com.mikosik.stork.common.text.Regex.separated;
 
 public interface Patterns {
   String VARIABLE = atLeastOne(letter);

@@ -1,7 +1,7 @@
 package com.mikosik.stork;
 
 import static com.mikosik.stork.Project.project;
-import static com.mikosik.stork.common.Throwables.linkageError;
+import static com.mikosik.stork.common.err.Throwables.linkageError;
 import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;

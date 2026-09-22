@@ -1,12 +1,12 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.Slot.slot;
+import static com.mikosik.stork.common.col.Slot.slot;
 import static com.mikosik.stork.compute.Computation.computation;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.mikosik.stork.common.Slot;
+import com.mikosik.stork.common.col.Slot;
 import com.mikosik.stork.model.exp.Expression;
 
 public class CachingComputer implements Computer {

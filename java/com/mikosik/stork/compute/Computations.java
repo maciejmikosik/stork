@@ -1,6 +1,6 @@
 package com.mikosik.stork.compute;
 
-import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.model.exp.Application.application;
 

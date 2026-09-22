@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.unit;
 
-import static com.mikosik.stork.common.ImmutableList.none;
+import static com.mikosik.stork.common.col.ImmutableList.none;
 import static com.mikosik.stork.common.io.InputOutput.delete;
 import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
 import static com.mikosik.stork.compute.CachingComputer.caching;
