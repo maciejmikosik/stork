@@ -2,16 +2,13 @@ package com.mikosik.stork.problem;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.Reflection.read;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 import static java.lang.String.join;
-import static java.util.Arrays.stream;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
@@ -38,26 +35,13 @@ public class Describer {
             .nest(descriptions);
   }
 
-  private static Outline describe(Object problem) {
-    if (problem instanceof Problem p) {
-      return outline(p.name)
-          .nest(p.description.entrySet().stream()
-              .map(entry -> describeEntry(
-                  entry.getKey(),
-                  entry.getValue()))
-              .toList());
-    } else {
-      return outline(problem.getClass().getSimpleName())
-          .nest(stream(problem.getClass().getFields())
-              .map(field -> describeField(problem, field))
-              .toList());
-    }
-  }
-
-  private static Outline describeField(Object instance, Field field) {
-    return describeEntry(
-        field.getName(),
-        read(field, instance));
+  private static Outline describe(Problem problem) {
+    return outline(problem.name)
+        .nest(problem.description.entrySet().stream()
+            .map(entry -> describeEntry(
+                entry.getKey(),
+                entry.getValue()))
+            .toList());
   }
 
   private static Outline describeEntry(String key, Object value) {
@@ -66,16 +50,17 @@ public class Describer {
           .nest(formatCharacter(character));
       case List<?> list -> outline(key + ":")
           .nest(list.stream()
-              .map(Describer::describe)
+              .map(Describer::formatValue)
+              .map(Outline::outline)
               .toList());
       default -> outline(format(
           "%s: %s",
           key,
-          formatFieldValue(value)));
+          formatValue(value)));
     };
   }
 
-  private static String formatFieldValue(Object arg) {
+  private static String formatValue(Object arg) {
     return switch (arg) {
       case Token token -> switch (token) {
         case Label label -> label.string;
