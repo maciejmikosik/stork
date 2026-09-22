@@ -40,15 +40,15 @@ public class Importer {
     return streamer(directories)
         .map(directory -> entry(
             directory.namespace,
-            inject(directory.namespace, () -> parseImportFile(directory))))
+            inject(directory.namespace, () -> parse(directory.importFile))))
         .apply(CompilerException::gatherCompilerProblems)
         .toListAndApply(entries -> new Importer(functionFrom(
             entries,
             namespace -> variable -> variable)));
   }
 
-  private static Fab<Variable, Expression> parseImportFile(StorkDirectory directory) {
-    var lines = parseImportLines(directory);
+  private static Fab<Variable, Expression> parse(byte[] source) {
+    var lines = parseLines(source);
     var linesByVariable = lines.stream()
         .collect(groupingBy(line -> line.variable));
     streamer(linesByVariable.entrySet())
@@ -71,8 +71,8 @@ public class Importer {
             variable -> variable));
   }
 
-  private static List<Line> parseImportLines(StorkDirectory directory) {
-    var lines = new String(directory.importFile, US_ASCII).lines().toList();
+  private static List<Line> parseLines(byte[] source) {
+    var lines = new String(source, US_ASCII).lines().toList();
     streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
         .map(line -> malformedImportLine()
