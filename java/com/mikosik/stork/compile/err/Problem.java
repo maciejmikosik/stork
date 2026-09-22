@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.model.exp.Variable;
 
 public class Problem {
   public final String name;
@@ -64,6 +65,10 @@ public class Problem {
 
     public ProblemBuilder character(byte character) {
       return describe("character", character);
+    }
+
+    public ProblemBuilder variable(Variable variable) {
+      return describe("variable", variable);
     }
 
     public Problem build() {

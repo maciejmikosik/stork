@@ -1,11 +1,15 @@
 package com.mikosik.stork.test.cases.language;
 
+import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNewline;
+import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
@@ -22,6 +26,7 @@ public class TestImporterProblems {
   public static Test testImporterProblems() {
     return suite("importer reports")
         .add(reportsMalformedLines())
+        .add(reportsCollisions())
         .add(reportsMultipleProblems());
   }
 
@@ -66,6 +71,61 @@ public class TestImporterProblems {
         .expect(malformedImportLine()
             .location(root)
             .object(line));
+  }
+
+  private static Test reportsCollisions() {
+    return suite("collision")
+        .add(programTest("same exact import")
+            .imports("""
+                a/b/c
+                a/b/c
+                """)
+            .source("main(stdin) { 'ok' }")
+            .expect(importCollision()
+                .location(namespaceRoot())
+                .object(list("a/b/c", "a/b/c"))
+                .variable(variable("c"))))
+        .add(programTest("same variable from different directory")
+            .imports("""
+                a/b/c
+                a/x/c
+                """)
+            .source("main(stdin) { 'ok' }")
+            .expect(importCollision()
+                .location(namespaceRoot())
+                .object(list("a/b/c", "a/x/c"))
+                .variable(variable("c"))))
+        .add(programTest("of renamed variable")
+            .imports("""
+                a/b/c
+                a/b/d c
+                """)
+            .source("main(stdin) { 'ok' }")
+            .expect(importCollision()
+                .location(namespaceRoot())
+                .object(list("a/b/c", "a/b/d c"))
+                .variable(variable("c"))))
+        .add(programTest("includes namespaces")
+            .add(path("a/b")
+                .imports("""
+                    x/y/z
+                    x/y/z
+                    """))
+            .add(path("a/c")
+                .imports("""
+                    x/y/v
+                    x/y/v
+                    """))
+            .source("main(stdin) { 'ok' }")
+            .expect(
+                importCollision()
+                    .location(namespace("a/b"))
+                    .object(list("x/y/z", "x/y/z"))
+                    .variable(variable("z")),
+                importCollision()
+                    .location(namespace("a/c"))
+                    .object(list("x/y/v", "x/y/v"))
+                    .variable(variable("v"))));
   }
 
   private static Test reportsMultipleProblems() {
