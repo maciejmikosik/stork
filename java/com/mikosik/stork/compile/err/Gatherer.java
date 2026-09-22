@@ -1,6 +1,6 @@
 package com.mikosik.stork.compile.err;
 
-import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.CompilerException.verifyNoProblems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,6 @@ public class Gatherer {
   }
 
   public void verify() {
-    if (!problems.isEmpty()) {
-      throw exception(problems);
-    }
+    verifyNoProblems(problems);
   }
 }
