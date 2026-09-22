@@ -95,15 +95,15 @@ public class Importer {
 
   private static class Line {
     @SuppressWarnings("unused")
-    public final String line;
+    public final String source;
     public final Identifier identifier;
     public final Variable variable;
 
     private Line(
-        String line,
+        String source,
         Identifier identifier,
         Variable variable) {
-      this.line = line;
+      this.source = source;
       this.identifier = identifier;
       this.variable = variable;
     }
