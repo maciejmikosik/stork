@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.col;
 
 public class Slot<E> {
   public E value;

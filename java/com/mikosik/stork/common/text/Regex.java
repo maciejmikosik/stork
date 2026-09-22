@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.text;
 
 public class Regex {
   public static final String letter = "[A-Za-z]";

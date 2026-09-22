@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Collections.filter;
-import static com.mikosik.stork.common.ImmutableList.join;
+import static com.mikosik.stork.common.col.Collections.filter;
+import static com.mikosik.stork.common.col.ImmutableList.join;
 import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
 import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
 import static com.mikosik.stork.model.exp.Changes.walk;

@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Collections.unorderedEquals;
+import static com.mikosik.stork.common.col.Collections.unorderedEquals;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;

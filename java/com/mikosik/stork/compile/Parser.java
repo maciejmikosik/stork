@@ -1,10 +1,10 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.Collections.checkSuchElement;
-import static com.mikosik.stork.common.ImmutableList.listFrom;
-import static com.mikosik.stork.common.Peekerator.peekerator;
-import static com.mikosik.stork.common.Throwables.check;
-import static com.mikosik.stork.common.Throwables.runtimeException;
+import static com.mikosik.stork.common.col.Collections.checkSuchElement;
+import static com.mikosik.stork.common.col.ImmutableList.listFrom;
+import static com.mikosik.stork.common.col.Peekerator.peekerator;
+import static com.mikosik.stork.common.err.Throwables.check;
+import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.mikosik.stork.common.Peekerator;
+import com.mikosik.stork.common.col.Peekerator;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Lambda;

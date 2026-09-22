@@ -1,9 +1,9 @@
 package com.mikosik.stork.common.text;
 
-import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.list;
-import static com.mikosik.stork.common.ImmutableList.none;
-import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.col.ImmutableList.join;
+import static com.mikosik.stork.common.col.ImmutableList.list;
+import static com.mikosik.stork.common.col.ImmutableList.none;
+import static com.mikosik.stork.common.col.ImmutableList.single;
 import static java.util.Objects.hash;
 
 import java.util.List;

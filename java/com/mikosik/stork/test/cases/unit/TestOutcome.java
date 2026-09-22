@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases.unit;
 
-import static com.mikosik.stork.common.ImmutableList.list;
-import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.col.ImmutableList.list;
+import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Describer.describe;

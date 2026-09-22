@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile.err;
 
-import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.col.ImmutableList.join;
+import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.text.Outline.outline;

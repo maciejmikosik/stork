@@ -1,6 +1,6 @@
 package com.mikosik.stork.model.token;
 
-import static com.mikosik.stork.common.Throwables.check;
+import static com.mikosik.stork.common.err.Throwables.check;
 import static com.mikosik.stork.model.token.Bracket.Shape.CURLY;
 import static com.mikosik.stork.model.token.Bracket.Shape.ROUND;
 import static com.mikosik.stork.model.token.Bracket.Side.LEFT;

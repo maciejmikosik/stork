@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.unit;
 
-import static com.mikosik.stork.common.ImmutableList.list;
+import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.op.Combinator.B;

@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.ImmutableList.join;
-import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.col.ImmutableList.join;
+import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 

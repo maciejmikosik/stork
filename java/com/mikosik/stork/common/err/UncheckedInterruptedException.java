@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.err;
 
 public class UncheckedInterruptedException extends RuntimeException {
   public UncheckedInterruptedException() {}

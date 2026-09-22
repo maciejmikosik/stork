@@ -1,4 +1,4 @@
-package com.mikosik.stork.common;
+package com.mikosik.stork.common.text;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;

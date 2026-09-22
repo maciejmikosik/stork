@@ -1,7 +1,7 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.Strings.reverse;
+import static com.mikosik.stork.common.col.ImmutableList.single;
+import static com.mikosik.stork.common.text.Strings.reverse;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Integer.integer;

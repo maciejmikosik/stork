@@ -1,7 +1,7 @@
 package com.mikosik.stork.common.proc;
 
-import static com.mikosik.stork.common.Throwables.runtimeException;
-import static com.mikosik.stork.common.UncheckedInterruptedException.unchecked;
+import static com.mikosik.stork.common.err.Throwables.runtimeException;
+import static com.mikosik.stork.common.err.UncheckedInterruptedException.unchecked;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 import static java.lang.String.join;
 import static java.util.Arrays.asList;

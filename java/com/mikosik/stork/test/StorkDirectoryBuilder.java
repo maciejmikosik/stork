@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.common.Strings.split;
+import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;

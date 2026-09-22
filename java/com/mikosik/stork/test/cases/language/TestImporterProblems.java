@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.common.ImmutableList.single;
+import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNewline;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
