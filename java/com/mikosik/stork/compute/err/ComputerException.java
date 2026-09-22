@@ -1,4 +1,4 @@
-package com.mikosik.stork.problem.compute;
+package com.mikosik.stork.compute.err;
 
 public class ComputerException extends RuntimeException {
   public final CannotCompute problem;

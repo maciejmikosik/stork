@@ -1,4 +1,4 @@
-package com.mikosik.stork.problem;
+package com.mikosik.stork.compile.err;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
@@ -12,7 +12,6 @@ import static java.lang.String.join;
 import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
@@ -22,7 +21,6 @@ import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
-import com.mikosik.stork.problem.compile.CompilerException;
 
 public class Describer {
   public static Outline describe(CompilerException exception) {

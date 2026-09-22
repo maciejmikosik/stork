@@ -9,6 +9,8 @@ import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.Importer.buildImporter;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.Gatherer.gatherer;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifLambda;
 import static com.mikosik.stork.model.exp.Changes.ifQuote;
@@ -16,8 +18,6 @@ import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Changes.onIdentifier;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.Gatherer.gatherer;
 import static java.util.Objects.deepEquals;
 
 import java.util.List;
@@ -25,11 +25,11 @@ import java.util.List;
 import com.mikosik.stork.common.Collections;
 import com.mikosik.stork.common.Streamer;
 import com.mikosik.stork.common.func.Functions.Faa;
+import com.mikosik.stork.compile.err.CompilerException;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Namespace;
-import com.mikosik.stork.problem.compile.CompilerException;
 
 public class Compiler {
   public static List<Definition> compile(Codebase codebase) {

@@ -1,12 +1,10 @@
-package com.mikosik.stork.problem.compile;
+package com.mikosik.stork.compile.err;
 
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
-import com.mikosik.stork.compile.Problem;
 
 public class Gatherer {
   private final List<Problem> problems = new ArrayList<>();

@@ -1,4 +1,4 @@
-package com.mikosik.stork.problem.compute;
+package com.mikosik.stork.compute.err;
 
 import static com.mikosik.stork.common.text.Outline.outline;
 

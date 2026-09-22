@@ -9,10 +9,10 @@ import static com.mikosik.stork.common.io.Buffer.newBuffer;
 import static com.mikosik.stork.common.io.Input.input;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compute.err.ComputerException.exception;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compute.ComputerException.exception;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -31,13 +31,13 @@ import java.util.function.Supplier;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.compile.Problem;
-import com.mikosik.stork.compile.Problem.ProblemBuilder;
+import com.mikosik.stork.compile.err.CompilerException;
+import com.mikosik.stork.compile.err.Problem;
+import com.mikosik.stork.compile.err.Problem.ProblemBuilder;
+import com.mikosik.stork.compute.err.CannotCompute;
+import com.mikosik.stork.compute.err.ComputerException;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
-import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compute.CannotCompute;
-import com.mikosik.stork.problem.compute.ComputerException;
 
 public class ProgramTest {
   private static final Supplier<List<Definition>> CORE = singleton(() -> core(DEVELOPMENT));

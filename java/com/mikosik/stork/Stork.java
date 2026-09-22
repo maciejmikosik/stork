@@ -8,9 +8,9 @@ import static com.mikosik.stork.common.io.Output.output;
 import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
+import static com.mikosik.stork.compile.err.Describer.describe;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.Describer.describe;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
 import static com.mikosik.stork.program.Task.task;
@@ -19,8 +19,8 @@ import static com.mikosik.stork.program.Terminal.terminal;
 import java.io.FileDescriptor;
 import java.io.UncheckedIOException;
 
-import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compute.ComputerException;
+import com.mikosik.stork.compile.err.CompilerException;
+import com.mikosik.stork.compute.err.ComputerException;
 
 public class Stork {
   public static void main(String[] args) {
