@@ -1,4 +1,4 @@
-package com.mikosik.stork.compile;
+package com.mikosik.stork.compile.err;
 
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Objects.deepEquals;

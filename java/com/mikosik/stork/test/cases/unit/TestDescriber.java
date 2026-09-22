@@ -1,15 +1,15 @@
 package com.mikosik.stork.test.cases.unit;
 
 import static com.mikosik.stork.common.text.Outline.outline;
-import static com.mikosik.stork.compile.Problem.problem;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.Describer.describe;
+import static com.mikosik.stork.compile.err.Problem.problem;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Bracket.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
 import static com.mikosik.stork.model.token.Symbol.DOT;
-import static com.mikosik.stork.problem.Describer.describe;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
 import static com.mikosik.stork.test.Assertions.assertMatch;
 import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.Factories.namespace;
@@ -20,7 +20,7 @@ import static org.quackery.Suite.suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.compile.Problem;
+import com.mikosik.stork.compile.err.Problem;
 
 public class TestDescriber {
   public static Test testDescriber() {
@@ -77,7 +77,8 @@ public class TestDescriber {
   private static Test test(String name, Problem problem, Outline outline) {
     return newCase(name, () -> {
       assertMatch(
-          outline,
+          outline("cannot compile")
+              .nest(outline),
           describe(exception(problem)));
     });
   }

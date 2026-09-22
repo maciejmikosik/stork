@@ -1,8 +1,8 @@
 package com.mikosik.stork.compute;
 
 import static com.mikosik.stork.compute.Computation.computation;
-import static com.mikosik.stork.problem.compute.ComputerException.exception;
-import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
+import static com.mikosik.stork.compute.err.ComputerException.exception;
+import static com.mikosik.stork.compute.err.FunctionMissing.functionMissing;
 
 import java.util.HashMap;
 import java.util.List;

@@ -3,8 +3,8 @@ package com.mikosik.stork.test.cases.unit;
 import static com.mikosik.stork.common.ImmutableList.list;
 import static com.mikosik.stork.common.ImmutableList.single;
 import static com.mikosik.stork.common.text.Outline.outline;
-import static com.mikosik.stork.problem.Describer.describe;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.Describer.describe;
 import static com.mikosik.stork.test.Assertions.assertMatch;
 import static com.mikosik.stork.test.Outcome.NotCompiled.outcome;
 import static com.mikosik.stork.test.Outcome.Printed.outcome;
@@ -16,7 +16,7 @@ import static org.quackery.Suite.suite;
 import org.quackery.Suite;
 import org.quackery.Test;
 
-import com.mikosik.stork.compile.Problem;
+import com.mikosik.stork.compile.err.Problem;
 import com.mikosik.stork.test.Outcome;
 
 //TODO add tests for stdout outcome and computer problems

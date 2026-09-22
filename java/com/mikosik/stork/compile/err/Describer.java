@@ -1,21 +1,17 @@
-package com.mikosik.stork.problem;
+package com.mikosik.stork.compile.err;
 
 import static com.mikosik.stork.common.ImmutableList.join;
 import static com.mikosik.stork.common.ImmutableList.single;
-import static com.mikosik.stork.common.Reflection.read;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
 import static java.lang.String.join;
-import static java.util.Arrays.stream;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.compile.Problem;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
@@ -25,44 +21,22 @@ import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
-import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compute.ComputerException;
 
 public class Describer {
   public static Outline describe(CompilerException exception) {
-    var descriptions = exception.problems.stream()
-        .map(Describer::describe)
-        .toList();
-    return descriptions.size() == 1
-        ? descriptions.getFirst()
-        : outline("cannot compile")
-            .nest(descriptions);
+    return outline("cannot compile")
+        .nest(exception.problems.stream()
+            .map(Describer::describe)
+            .toList());
   }
 
-  public static Outline describe(ComputerException exception) {
-    return describe(exception.problem);
-  }
-
-  private static Outline describe(Object problem) {
-    if (problem instanceof Problem p) {
-      return outline(p.name)
-          .nest(p.description.entrySet().stream()
-              .map(entry -> describeEntry(
-                  entry.getKey(),
-                  entry.getValue()))
-              .toList());
-    } else {
-      return outline(problem.getClass().getSimpleName())
-          .nest(stream(problem.getClass().getFields())
-              .map(field -> describeField(problem, field))
-              .toList());
-    }
-  }
-
-  private static Outline describeField(Object instance, Field field) {
-    return describeEntry(
-        field.getName(),
-        read(field, instance));
+  private static Outline describe(Problem problem) {
+    return outline(problem.name)
+        .nest(problem.description.entrySet().stream()
+            .map(entry -> describeEntry(
+                entry.getKey(),
+                entry.getValue()))
+            .toList());
   }
 
   private static Outline describeEntry(String key, Object value) {
@@ -71,16 +45,17 @@ public class Describer {
           .nest(formatCharacter(character));
       case List<?> list -> outline(key + ":")
           .nest(list.stream()
-              .map(Describer::describe)
+              .map(Describer::formatValue)
+              .map(Outline::outline)
               .toList());
       default -> outline(format(
           "%s: %s",
           key,
-          formatFieldValue(value)));
+          formatValue(value)));
     };
   }
 
-  private static String formatFieldValue(Object arg) {
+  private static String formatValue(Object arg) {
     return switch (arg) {
       case Token token -> switch (token) {
         case Label label -> label.string;
@@ -93,6 +68,7 @@ public class Describer {
       case String string -> string;
       case Variable variable -> variable.name;
       case Namespace namespace -> join("/", namespace.components);
+      // TODO create utils for formatting and parsing
       case Identifier identifier -> join("/", join(
           identifier.namespace.components,
           single(identifier.variable.name)));

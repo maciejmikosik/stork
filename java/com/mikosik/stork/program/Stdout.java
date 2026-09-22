@@ -4,9 +4,9 @@ import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.compile.Bridge.REDUCE_EAGER;
 import static com.mikosik.stork.compile.op.StackOperator.EAGER;
 import static com.mikosik.stork.compute.Computation.computation;
+import static com.mikosik.stork.compute.err.CannotCompute.cannotCompute;
+import static com.mikosik.stork.compute.err.ComputerException.exception;
 import static com.mikosik.stork.model.exp.Application.application;
-import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
-import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.common.io.Output;
 import com.mikosik.stork.compute.Computation;

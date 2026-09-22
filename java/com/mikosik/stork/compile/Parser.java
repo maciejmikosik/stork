@@ -6,6 +6,8 @@ import static com.mikosik.stork.common.Peekerator.peekerator;
 import static com.mikosik.stork.common.Throwables.check;
 import static com.mikosik.stork.common.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
@@ -18,8 +20,6 @@ import static com.mikosik.stork.model.token.Bracket.LEFT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Bracket.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Bracket.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Symbol.DOT;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.Problems.unexpectedToken;
 
 import java.util.Iterator;
 import java.util.List;

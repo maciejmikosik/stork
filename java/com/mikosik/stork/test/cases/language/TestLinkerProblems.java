@@ -1,10 +1,10 @@
 package com.mikosik.stork.test.cases.language;
 
+import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
+import static com.mikosik.stork.compile.err.Problems.unboundVariable;
+import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.Problems.duplicatedFunction;
-import static com.mikosik.stork.problem.compile.Problems.unboundVariable;
-import static com.mikosik.stork.problem.compile.Problems.undefinedFunction;
 import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;

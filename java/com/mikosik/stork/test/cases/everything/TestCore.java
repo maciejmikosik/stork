@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.cases.everything;
 
+import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.Problems.duplicatedFunction;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;

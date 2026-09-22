@@ -5,26 +5,26 @@ import static com.mikosik.stork.common.Streamer.streamer;
 import static com.mikosik.stork.common.Strings.split;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
+import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compile.Problems.malformedImportLine;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
 
 import java.util.List;
 
 import com.mikosik.stork.common.func.Functions.Fab;
+import com.mikosik.stork.compile.err.CompilerException;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
-import com.mikosik.stork.problem.compile.CompilerException;
 
 public class Importer {
   private final Fab<Namespace, Fab<Variable, Expression>> mapping;

@@ -1,8 +1,8 @@
-package com.mikosik.stork.problem.compile;
+package com.mikosik.stork.compile.err;
 
-import static com.mikosik.stork.compile.Problem.problem;
+import static com.mikosik.stork.compile.err.Problem.problem;
 
-import com.mikosik.stork.compile.Problem.ProblemBuilder;
+import com.mikosik.stork.compile.err.Problem.ProblemBuilder;
 
 public class Problems {
   public static ProblemBuilder malformedImportLine() {

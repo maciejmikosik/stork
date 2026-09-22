@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.everything;
 
-import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
+import static com.mikosik.stork.compute.err.CannotCompute.cannotCompute;
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
 

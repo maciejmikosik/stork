@@ -8,15 +8,15 @@ import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
+import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
+import static com.mikosik.stork.compile.err.Problems.illegalCharacterInString;
 import static com.mikosik.stork.model.token.Bracket.bracket;
 import static com.mikosik.stork.model.token.Bracket.isBracket;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
 import static com.mikosik.stork.model.token.Symbol.DOT;
-import static com.mikosik.stork.problem.compile.CompilerException.exception;
-import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInCode;
-import static com.mikosik.stork.problem.compile.Problems.illegalCharacterInString;
 
 import java.math.BigInteger;
 import java.util.Iterator;

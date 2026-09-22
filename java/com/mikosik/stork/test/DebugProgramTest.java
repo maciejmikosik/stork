@@ -1,9 +1,9 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.compile.Problem.problem;
+import static com.mikosik.stork.compile.err.Problem.problem;
+import static com.mikosik.stork.compute.err.FunctionMissing.functionMissing;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.problem.compute.FunctionMissing.functionMissing;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 
 import org.quackery.Case;

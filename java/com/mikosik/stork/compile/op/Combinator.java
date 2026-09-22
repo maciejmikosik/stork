@@ -1,9 +1,9 @@
 package com.mikosik.stork.compile.op;
 
 import static com.mikosik.stork.compute.Computation.computation;
+import static com.mikosik.stork.compute.err.CannotCompute.cannotCompute;
+import static com.mikosik.stork.compute.err.ComputerException.exception;
 import static com.mikosik.stork.model.exp.Application.application;
-import static com.mikosik.stork.problem.compute.CannotCompute.cannotCompute;
-import static com.mikosik.stork.problem.compute.ComputerException.exception;
 
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
