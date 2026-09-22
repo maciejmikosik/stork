@@ -24,13 +24,10 @@ import com.mikosik.stork.model.token.Token;
 
 public class Describer {
   public static Outline describe(CompilerException exception) {
-    var descriptions = exception.problems.stream()
-        .map(Describer::describe)
-        .toList();
-    return descriptions.size() == 1
-        ? descriptions.getFirst()
-        : outline("cannot compile")
-            .nest(descriptions);
+    return outline("cannot compile")
+        .nest(exception.problems.stream()
+            .map(Describer::describe)
+            .toList());
   }
 
   private static Outline describe(Problem problem) {

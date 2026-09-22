@@ -77,7 +77,8 @@ public class TestDescriber {
   private static Test test(String name, Problem problem, Outline outline) {
     return newCase(name, () -> {
       assertMatch(
-          outline,
+          outline("cannot compile")
+              .nest(outline),
           describe(exception(problem)));
     });
   }
