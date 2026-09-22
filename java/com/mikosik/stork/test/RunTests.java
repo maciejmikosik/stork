@@ -124,7 +124,7 @@ public class RunTests {
     }
   }
 
-  public static float inSeconds(Duration duration) {
+  private static float inSeconds(Duration duration) {
     return duration.getSeconds() + duration.getNano() * 1E-9f;
   }
 
