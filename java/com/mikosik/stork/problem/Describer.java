@@ -26,7 +26,6 @@ import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
 import com.mikosik.stork.problem.compile.CompilerException;
-import com.mikosik.stork.problem.compute.ComputerException;
 
 public class Describer {
   public static Outline describe(CompilerException exception) {
@@ -37,10 +36,6 @@ public class Describer {
         ? descriptions.getFirst()
         : outline("cannot compile")
             .nest(descriptions);
-  }
-
-  public static Outline describe(ComputerException exception) {
-    return describe(exception.problem);
   }
 
   private static Outline describe(Object problem) {
@@ -93,6 +88,7 @@ public class Describer {
       case String string -> string;
       case Variable variable -> variable.name;
       case Namespace namespace -> join("/", namespace.components);
+      // TODO create utils for formatting and parsing
       case Identifier identifier -> join("/", join(
           identifier.namespace.components,
           single(identifier.variable.name)));

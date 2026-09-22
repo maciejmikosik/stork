@@ -37,7 +37,7 @@ public class Stork {
       System.err.println(describe(compilerException));
       System.exit(1);
     } catch (ComputerException computerException) {
-      System.err.println(describe(computerException));
+      System.err.println(computerException.problem.toOutline());
       System.exit(1);
     } catch (UncheckedIOException e) {
       if (isMessage("Broken pipe", e)) {

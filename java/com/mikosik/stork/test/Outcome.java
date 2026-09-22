@@ -46,7 +46,7 @@ public sealed interface Outcome {
     }
 
     public Outline describe() {
-      return Describer.describe(exception);
+      return exception.problem.toOutline();
     }
 
     public boolean equals(Object object) {
