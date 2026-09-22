@@ -21,7 +21,11 @@ public class Problem {
   }
 
   public static ProblemBuilder problem(String name) {
-    return new ProblemBuilder(name);
+    return new ProblemBuilder(name, new LinkedHashMap<>());
+  }
+
+  public ProblemBuilder edit() {
+    return new ProblemBuilder(name, new LinkedHashMap<>(description));
   }
 
   public boolean equals(Object that) {
@@ -40,10 +44,11 @@ public class Problem {
 
   public static class ProblemBuilder {
     private final String name;
-    private final Map<String, Object> description = new LinkedHashMap<>();
+    private final Map<String, Object> description;
 
-    private ProblemBuilder(String name) {
+    private ProblemBuilder(String name, Map<String, Object> description) {
       this.name = name;
+      this.description = description;
     }
 
     private ProblemBuilder describe(String key, Object value) {
