@@ -5,6 +5,7 @@ import static com.mikosik.stork.common.col.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
+import static com.mikosik.stork.compile.err.CompilerException.inject;
 import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -39,7 +40,7 @@ public class Importer {
     return streamer(directories)
         .map(directory -> entry(
             directory.namespace,
-            parseImportFile(directory)))
+            inject(directory.namespace, () -> parseImportFile(directory))))
         .apply(CompilerException::gatherCompilerProblems)
         .toListAndApply(entries -> new Importer(functionFrom(
             entries,
@@ -53,7 +54,6 @@ public class Importer {
     streamer(linesByVariable.entrySet())
         .filter(entry -> entry.getValue().size() > 1)
         .map(entry -> importCollision()
-            .location(directory.namespace)
             .object(entry.getValue().stream()
                 .map(line -> line.source)
                 .toList())
@@ -76,7 +76,6 @@ public class Importer {
     streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
         .map(line -> malformedImportLine()
-            .location(directory.namespace)
             .object(line)
             .build())
         .toListAndConsume(CompilerException::verifyNoProblems);
