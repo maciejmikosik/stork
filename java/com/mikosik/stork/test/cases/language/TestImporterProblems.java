@@ -11,7 +11,6 @@ import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
 import static org.quackery.Suite.suite;
 
-import org.quackery.Suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.model.exp.Namespace;
@@ -22,39 +21,45 @@ public class TestImporterProblems {
 
   public static Test testImporterProblems() {
     return suite("importer reports")
+        .add(reportsMalformedLines())
+        .add(reportsMultipleProblems());
+  }
+
+  private static Test reportsMalformedLines() {
+    return suite("malformed lines")
         .add(suite("illegal characters")
             .addAll(range(0, 128)
                 .filter(character -> !isLetter((byte) character))
                 .filter(character -> !isNewline((byte) character))
-                .mapToObj(character -> singleLine(Character.toString(character)))
+                .mapToObj(character -> testMalformedLine(
+                    Character.toString(character)))
                 .toList()))
         .add(suite("illegal slashes")
-            .add(singleLine("/a/b"))
-            .add(singleLine("a//b"))
-            .add(singleLine("a/b/"))
-            .add(singleLine("/a/b c"))
-            .add(singleLine("a//b c"))
-            .add(singleLine("a/b/ c"))
-            .add(singleLine("a/b /c"))
-            .add(singleLine("a/b c/d"))
-            .add(singleLine("a/b c/"))
-            .add(singleLine("/"))
-            .add(singleLine("//"))
-            .add(singleLine("/ /")))
+            .add(testMalformedLine("/a/b"))
+            .add(testMalformedLine("a//b"))
+            .add(testMalformedLine("a/b/"))
+            .add(testMalformedLine("/a/b c"))
+            .add(testMalformedLine("a//b c"))
+            .add(testMalformedLine("a/b/ c"))
+            .add(testMalformedLine("a/b /c"))
+            .add(testMalformedLine("a/b c/d"))
+            .add(testMalformedLine("a/b c/"))
+            .add(testMalformedLine("/"))
+            .add(testMalformedLine("//"))
+            .add(testMalformedLine("/ /")))
         .add(suite("illegal spaces")
-            .add(singleLine(" a/b"))
-            .add(singleLine("a/b "))
-            .add(singleLine(" a/b c"))
-            .add(singleLine("a/b  c"))
-            .add(singleLine("a/b c ")))
+            .add(testMalformedLine(" a/b"))
+            .add(testMalformedLine("a/b "))
+            .add(testMalformedLine(" a/b c"))
+            .add(testMalformedLine("a/b  c"))
+            .add(testMalformedLine("a/b c ")))
         .add(suite("wrong number of tokens")
-            .add(singleLine(""))
-            .add(singleLine(" "))
-            .add(singleLine("a b c")))
-        .add(reportsMultipleProblems());
+            .add(testMalformedLine(""))
+            .add(testMalformedLine(" "))
+            .add(testMalformedLine("a b c")));
   }
 
-  private static Test singleLine(String line) {
+  private static Test testMalformedLine(String line) {
     return programTest(line)
         .imports(line + "\n")
         .source("main(stdin) { 'ok' }")
@@ -63,7 +68,7 @@ public class TestImporterProblems {
             .object(line));
   }
 
-  private static Suite reportsMultipleProblems() {
+  private static Test reportsMultipleProblems() {
     return suite("multiple problems")
         .add(programTest("in same file")
             .imports("!\n@\n#\n")
