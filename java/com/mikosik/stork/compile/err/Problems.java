@@ -21,8 +21,8 @@ public class Problems {
     return problem("illegal character in code");
   }
 
-  public static ProblemBuilder illegalCharacterInString() {
-    return problem("unexpected token");
+  public static ProblemBuilder illegalCharacterInStringLiteral() {
+    return problem("illegal character in string literal");
   }
 
   public static ProblemBuilder unboundVariable() {

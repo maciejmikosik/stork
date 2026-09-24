@@ -10,7 +10,7 @@ import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInString;
+import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.model.token.Bracket.bracket;
 import static com.mikosik.stork.model.token.Bracket.isBracket;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
@@ -76,7 +76,7 @@ public class Tokenizer implements Iterator<Token> {
     while (iterator.hasNext() && !isDoubleQuote(iterator.peek())) {
       var nextByte = iterator.next().byteValue();
       if (!isPrintable(nextByte)) {
-        throw exception(illegalCharacterInString()
+        throw exception(illegalCharacterInStringLiteral()
             .character(nextByte)
             .build());
       }
