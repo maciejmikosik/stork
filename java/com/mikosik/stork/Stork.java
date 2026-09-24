@@ -40,17 +40,14 @@ public class Stork {
         runMain();
       }
     } catch (CompilerException compilerException) {
-      System.err.println(describe(compilerException));
-      System.exit(1);
+      exit(1, describe(compilerException).toString());
     } catch (ComputerException computerException) {
-      System.err.println(computerException.problem.toOutline());
-      System.exit(1);
+      exit(1, computerException.problem.toOutline().toString());
     } catch (UncheckedIOException e) {
       if ("Broken pipe".equals(e.getCause().getMessage())) {
-        System.exit(128 + 13);
+        exit(128 + 13, "broken pipe");
       } else if (e.getCause() instanceof AccessDeniedException ade) {
-        System.err.println("access denied to %s".formatted(ade.getMessage()));
-        System.exit(77);
+        exit(77, "access denied to %s".formatted(ade.getMessage()));
       } else {
         throw e;
       }
@@ -61,9 +58,7 @@ public class Stork {
     var workingDirectory = workingDirectory();
     var mainSourceFile = workingDirectory.file(SOURCE_FILENAME);
     if (!mainSourceFile.exists()) {
-      System.err.println("file %s does not exist"
-          .formatted(mainSourceFile));
-      System.exit(1);
+      exit(1, "file %s does not exist".formatted(mainSourceFile));
     }
     var library = compile(codebase()
         .directories(sourceReader().read(workingDirectory))
@@ -72,26 +67,21 @@ public class Stork {
     runner().run(task(
         program(identifier(variable("main")), library),
         terminal(input(System.in), output(FileDescriptor.out))));
-    System.exit(0);
   }
 
   private static void runSnippet(String snippet) {
     var envKey = "STORK_PATH";
     var envValue = System.getenv(envKey);
     if (envValue == null) {
-      System.err.println("%s is not defined".formatted(envKey));
-      System.exit(1);
+      exit(1, "%s is not defined".formatted(envKey));
     }
     var storkDirectoryPath = Path.of(envValue);
     if (!storkDirectoryPath.isAbsolute()) {
-      System.err.println("%s=%s is not absolute"
-          .formatted(envKey, envValue));
-      System.exit(1);
+      exit(1, "%s=%s is not absolute".formatted(envKey, envValue));
     }
     var storkDirectory = directory(storkDirectoryPath);
     if (!storkDirectory.exists()) {
-      System.err.println("%s does not exist".formatted(storkDirectory));
-      System.exit(1);
+      exit(1, "%s does not exist".formatted(storkDirectory));
     }
 
     var library = compile(codebase()
@@ -101,7 +91,6 @@ public class Stork {
     runner().run(task(
         program(identifier(variable("main")), library),
         terminal(input(System.in), output(FileDescriptor.out))));
-    System.exit(0);
   }
 
   private static List<StorkDirectory> injectSnippet(
@@ -124,5 +113,10 @@ public class Stork {
         new String(sourceFile, US_ASCII),
         snippet)
         .getBytes(US_ASCII);
+  }
+
+  private static void exit(int code, String message) {
+    System.err.println(message);
+    System.exit(code);
   }
 }
