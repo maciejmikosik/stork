@@ -23,6 +23,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.FileDescriptor;
 import java.io.UncheckedIOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -45,10 +46,11 @@ public class Stork {
       System.err.println(computerException.problem.toOutline());
       System.exit(1);
     } catch (UncheckedIOException e) {
-      if (isMessage("Broken pipe", e)) {
-        var sig = 128;
-        var pipe = 13;
-        System.exit(sig + pipe);
+      if ("Broken pipe".equals(e.getCause().getMessage())) {
+        System.exit(128 + 13);
+      } else if (e.getCause() instanceof AccessDeniedException ade) {
+        System.err.println("access denied to %s".formatted(ade.getMessage()));
+        System.exit(77);
       } else {
         throw e;
       }
@@ -122,11 +124,5 @@ public class Stork {
         new String(sourceFile, US_ASCII),
         snippet)
         .getBytes(US_ASCII);
-  }
-
-  private static boolean isMessage(
-      String message,
-      UncheckedIOException exception) {
-    return message.equals(exception.getCause().getMessage());
   }
 }
