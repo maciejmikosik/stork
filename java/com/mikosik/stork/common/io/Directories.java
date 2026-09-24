@@ -4,7 +4,6 @@ import static com.mikosik.stork.common.io.Directory.directory;
 import static com.mikosik.stork.common.io.InputOutput.unchecked;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -25,18 +24,18 @@ public class Directories {
   }
 
   public static Directory homeDirectory() {
-    var fileSystem = FileSystems.getDefault();
-    var userHome = System.getProperty("user.home");
-    return directory(fileSystem.getPath(userHome));
+    return directoryFromProperty("user.home");
   }
 
   public static Directory workingDirectory() {
-    var fileSystem = FileSystems.getDefault();
-    var path = fileSystem.getPath(".").toAbsolutePath();
-    return directory(path);
+    return directoryFromProperty("user.dir");
   }
 
   public static Directory systemTemporaryDirectory() {
-    return directory(Path.of(System.getProperty("java.io.tmpdir")));
+    return directoryFromProperty("java.io.tmpdir");
+  }
+
+  private static Directory directoryFromProperty(String key) {
+    return directory(Path.of(System.getProperty(key)));
   }
 }
