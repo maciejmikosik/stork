@@ -13,6 +13,9 @@ import com.mikosik.stork.model.exp.Namespace;
 
 // TODO rename to something better
 public class SourceReader {
+  public static final String IMPORT_FILENAME = "import.stork";
+  public static final String SOURCE_FILENAME = "source.stork";
+
   private SourceReader() {}
 
   public static SourceReader sourceReader() {
@@ -44,10 +47,10 @@ public class SourceReader {
     return storkDirectory(
         namespace,
         // TODO report non-ascii characters
-        directory.file("import.stork")
+        directory.file(IMPORT_FILENAME)
             .tryInput()
             .readAllBytes(),
-        directory.file("source.stork")
+        directory.file(SOURCE_FILENAME)
             .tryInput()
             .readAllBytes());
   }

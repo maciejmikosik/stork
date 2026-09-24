@@ -61,7 +61,7 @@ import com.mikosik.stork.Core.Mode;
  */
 @SuppressWarnings("javadoc")
 public class RunTests {
-  public static void main(String[] args) {
+  public static void main(String... args) {
     runAndReport(suite("unit tests")
         .add(suite("debug tools")
             .add(testDecompiler())

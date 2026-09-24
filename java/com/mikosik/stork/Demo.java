@@ -16,7 +16,7 @@ import static com.mikosik.stork.program.Task.task;
 import static com.mikosik.stork.program.Terminal.terminal;
 
 public class Demo {
-  public static void main(String[] args) {
+  public static void main(String... args) {
     var demoDirectory = project().demoDirectory.directory("greeting");
     var library = compile(codebase()
         .directories(sourceReader().read(demoDirectory))
