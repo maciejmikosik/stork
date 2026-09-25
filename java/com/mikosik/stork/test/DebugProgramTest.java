@@ -15,15 +15,15 @@ public class DebugProgramTest {
     report((Case) minimalProgramTest("cannot compile / cannot compile")
         .source("main(stdin){ / }")
         .expect(problem("illegal character in code")
-            .character((byte) '?')));
+            .object((byte) '?')));
     report((Case) minimalProgramTest("cannot compile / cannot compute")
         .source("main(stdin){ 2 }")
         .expect(problem("illegal character in code")
-            .character((byte) '?')));
+            .object((byte) '?')));
     report((Case) minimalProgramTest("cannot compile / stdout")
         .source("main(stdin){ stdin }")
         .expect(problem("illegal character in code")
-            .character((byte) '?')));
+            .object((byte) '?')));
     report((Case) minimalProgramTest("cannot compute / cannot compile")
         .source("main(stdin){ ? }")
         .expect(functionMissing(identifier(variable("x")))));

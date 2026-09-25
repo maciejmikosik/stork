@@ -59,7 +59,7 @@ public class Tokenizer implements Iterator<Token> {
       return DOT;
     } else {
       throw exception(illegalCharacterInCode()
-          .character(iterator.next())
+          .object(iterator.next())
           .build());
     }
   }
@@ -77,7 +77,7 @@ public class Tokenizer implements Iterator<Token> {
       var nextByte = iterator.next().byteValue();
       if (!isPrintable(nextByte)) {
         throw exception(illegalCharacterInStringLiteral()
-            .character(nextByte)
+            .object(nextByte)
             .build());
       }
       builder.append((char) nextByte);

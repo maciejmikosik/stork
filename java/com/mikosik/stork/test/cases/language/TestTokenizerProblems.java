@@ -25,7 +25,7 @@ public class TestTokenizerProblems {
     return programTest("[%d]".formatted(character))
         .source(sourceCodeWith(character))
         .expect(illegalCharacterInCode()
-            .character(character));
+            .object(character));
   }
 
   private static byte[] sourceCodeWith(byte character) {

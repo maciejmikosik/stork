@@ -25,7 +25,7 @@ public class TestStringLiteral {
     return programTest("[%d]".formatted(character))
         .source(stringLiteralWith(character))
         .expect(illegalCharacterInStringLiteral()
-            .character(character));
+            .object(character));
   }
 
   private static byte[] stringLiteralWith(byte character) {
