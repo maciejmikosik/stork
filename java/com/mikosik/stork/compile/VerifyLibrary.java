@@ -3,6 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.col.Collections.filter;
 import static com.mikosik.stork.common.col.ImmutableList.join;
 import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
+import static com.mikosik.stork.compile.err.Problems.unboundVariable;
 import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
 import static com.mikosik.stork.model.exp.Changes.walk;
 import static java.util.function.Function.identity;
@@ -13,7 +14,6 @@ import static java.util.stream.Collectors.toSet;
 import java.util.List;
 
 import com.mikosik.stork.compile.err.Problem;
-import com.mikosik.stork.compile.err.Problems;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Variable;
@@ -30,7 +30,7 @@ public class VerifyLibrary {
     return library.stream()
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
-            .map(variable -> Problems.unboundVariable()
+            .map(variable -> unboundVariable()
                 .location(definition.identifier)
                 .object(variable)
                 .build()))

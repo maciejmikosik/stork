@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.cases.language;
 
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInString;
+import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.concat;
@@ -14,18 +14,22 @@ import com.mikosik.stork.test.ProgramTest;
 public class TestStringLiteral {
   public static Test testStringLiteral() {
     return suite("string literal")
-        .add(suite("cannot have illegal characters")
-            .addAll(concat(rangeClosed(0, 31), rangeClosed(127, 255))
-                .mapToObj(value -> Byte.valueOf((byte) value))
-                .map(TestStringLiteral::reportsIllegalCharacter)
-                .toList()));
+        .add(reportsIllegalCharacters());
   }
 
-  private static Test reportsIllegalCharacter(byte character) {
+  private static Test reportsIllegalCharacters() {
+    return suite("reports illegal characters")
+        .addAll(concat(rangeClosed(0, 31), rangeClosed(127, 255))
+            .mapToObj(value -> Byte.valueOf((byte) value))
+            .map(TestStringLiteral::reportsIllegal)
+            .toList());
+  }
+
+  private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
         .source(stringLiteralWith(character))
-        .expect(illegalCharacterInString()
-            .character(character));
+        .expect(illegalCharacterInStringLiteral()
+            .object(character));
   }
 
   private static byte[] stringLiteralWith(byte character) {

@@ -68,10 +68,6 @@ public class Problem {
       return describe("object", object);
     }
 
-    public ProblemBuilder character(byte character) {
-      return describe("character", character);
-    }
-
     public ProblemBuilder variable(Variable variable) {
       return describe("variable", variable);
     }

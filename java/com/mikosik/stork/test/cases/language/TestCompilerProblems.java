@@ -29,7 +29,7 @@ public class TestCompilerProblems {
                 .location(namespaceRoot())
                 .object("x xx xxx"),
             illegalCharacterInCode()
-                .character((byte) '!'),
+                .object((byte) '!'),
             unexpectedToken()
                 .object(DOT));
   }
