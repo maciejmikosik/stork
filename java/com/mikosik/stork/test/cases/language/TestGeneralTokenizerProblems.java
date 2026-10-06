@@ -1,5 +1,7 @@
 package com.mikosik.stork.test.cases.language;
 
+import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
+import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -45,10 +47,9 @@ public class TestGeneralTokenizerProblems {
   }
 
   private static boolean isLegal(byte character) {
-    return 'A' <= character && character <= 'Z'
-        || 'a' <= character && character <= 'z'
-        || '0' <= character && character <= '9'
-        || "+-(){}.\"\t\r\n ".indexOf(character) >= 0;
+    return isAlphanumeric(character)
+        || isWhitespace(character)
+        || "(){}.\"".indexOf(character) >= 0;
   }
 
   private static ProgramTest programTest(String name) {
