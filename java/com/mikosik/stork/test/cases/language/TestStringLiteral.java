@@ -14,14 +14,18 @@ import com.mikosik.stork.test.ProgramTest;
 public class TestStringLiteral {
   public static Test testStringLiteral() {
     return suite("string literal")
-        .add(suite("cannot have illegal characters")
-            .addAll(concat(rangeClosed(0, 31), rangeClosed(127, 255))
-                .mapToObj(value -> Byte.valueOf((byte) value))
-                .map(TestStringLiteral::reportsIllegalCharacter)
-                .toList()));
+        .add(reportsIllegalCharacters());
   }
 
-  private static Test reportsIllegalCharacter(byte character) {
+  private static Test reportsIllegalCharacters() {
+    return suite("reports illegal characters")
+        .addAll(concat(rangeClosed(0, 31), rangeClosed(127, 255))
+            .mapToObj(value -> Byte.valueOf((byte) value))
+            .map(TestStringLiteral::reportsIllegal)
+            .toList());
+  }
+
+  private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
         .source(stringLiteralWith(character))
         .expect(illegalCharacterInStringLiteral()

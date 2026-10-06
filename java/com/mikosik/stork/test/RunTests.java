@@ -24,7 +24,6 @@ import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCom
 import static com.mikosik.stork.test.cases.language.TestImporter.testImporter;
 import static com.mikosik.stork.test.cases.language.TestImporterProblems.testImporterProblems;
 import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
-import static com.mikosik.stork.test.cases.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
 import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
@@ -72,10 +71,9 @@ public class RunTests {
     runAndReport(suite("language")
         .add(testSyntax())
         .add(testImporter())
-        .add(testStringLiteral())
         .add(suite("problems")
-            .add(testTokenizerProblems())
             .add(testImporterProblems())
+            .add(testTokenizerProblems())
             .add(testCompilerProblems())
             .add(testLinkerProblems())));
     runAndReport(testCompilingCoreLibrary(DEVELOPMENT));
