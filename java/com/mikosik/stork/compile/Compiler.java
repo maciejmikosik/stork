@@ -23,6 +23,7 @@ import static java.util.Objects.deepEquals;
 import java.util.List;
 
 import com.mikosik.stork.common.col.Collections;
+import com.mikosik.stork.common.col.ImmutableList;
 import com.mikosik.stork.common.col.Streamer;
 import com.mikosik.stork.common.func.Functions.Faa;
 import com.mikosik.stork.compile.err.CompilerException;
@@ -60,6 +61,7 @@ public class Compiler {
         .map(Collections::iterator)
         .map(Tokenizer::tokenize)
         .map(Parser::parse)
+        .map(ImmutableList::listFrom)
         .map(each(onBody(bindLambdaParameters)))
         .map(bind(directory.namespace))
         .map(each(onBody(unlambda)))
