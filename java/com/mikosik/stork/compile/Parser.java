@@ -67,7 +67,7 @@ public class Parser implements Iterator<Definition> {
   }
 
   private Expression parsePipe() {
-    var parameter = parameter("pipeParameter");
+    var parameter = parameter("synthetic_pipe_parameter");
     Expression body = parameter;
     while (input.peek() == DOT) {
       input.next();
