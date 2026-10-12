@@ -16,6 +16,10 @@ public class IntegerLiteral implements Token {
     return new IntegerLiteral(value);
   }
 
+  public static IntegerLiteral literal(long value) {
+    return literal(BigInteger.valueOf(value));
+  }
+
   public boolean equals(Object that) {
     return that instanceof IntegerLiteral
         && equals((IntegerLiteral) that);
