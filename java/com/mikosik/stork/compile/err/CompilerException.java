@@ -3,6 +3,7 @@ package com.mikosik.stork.compile.err;
 import static com.mikosik.stork.common.col.ImmutableList.cast;
 import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.col.Streamer.streamer;
+import static com.mikosik.stork.compile.err.Describer.describe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public class CompilerException extends RuntimeException {
 
   public static CompilerException exception(Problem problem) {
     return new CompilerException(single(problem));
+  }
+
+  public String getMessage() {
+    return describe(this).toString();
   }
 
   public static <E> Streamer<E> gatherCompilerProblems(Streamer<E> streamer) {
