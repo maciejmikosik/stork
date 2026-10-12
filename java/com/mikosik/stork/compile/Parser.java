@@ -15,11 +15,11 @@ import static com.mikosik.stork.model.exp.Lambda.lambda;
 import static com.mikosik.stork.model.exp.Parameter.parameter;
 import static com.mikosik.stork.model.exp.Quote.quote;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.model.token.Bracket.LEFT_CURLY_BRACKET;
-import static com.mikosik.stork.model.token.Bracket.LEFT_ROUND_BRACKET;
-import static com.mikosik.stork.model.token.Bracket.RIGHT_CURLY_BRACKET;
-import static com.mikosik.stork.model.token.Bracket.RIGHT_ROUND_BRACKET;
-import static com.mikosik.stork.model.token.Symbol.DOT;
+import static com.mikosik.stork.model.token.Punctuator.DOT;
+import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 
 import java.util.Iterator;
 import java.util.List;
@@ -29,11 +29,10 @@ import com.mikosik.stork.common.col.Peekerator;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Lambda;
-import com.mikosik.stork.model.token.Bracket;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
+import com.mikosik.stork.model.token.Punctuator;
 import com.mikosik.stork.model.token.StringLiteral;
-import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
 
 public class Parser {
@@ -66,7 +65,7 @@ public class Parser {
 
   private static Expression parseExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Symbol symbol when symbol == DOT -> parsePipe(input);
+      case DOT -> parsePipe(input);
       default -> parseChain(input);
     };
   }
@@ -93,10 +92,7 @@ public class Parser {
   private static Expression parseUnchainedExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
       case Label label -> parseInvocation(input);
-      case Bracket bracket -> switch (bracket) {
-        case LEFT_ROUND_BRACKET -> parseLambda(input);
-        default -> failUnexpected(bracket);
-      };
+      case LEFT_ROUND_BRACKET -> parseLambda(input);
       default -> switch (input.next()) {
         case StringLiteral literal -> quote(literal.string);
         case IntegerLiteral literal -> stork(literal.value);
@@ -118,10 +114,7 @@ public class Parser {
       Expression function,
       Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Bracket bracket -> switch (bracket) {
-        case LEFT_ROUND_BRACKET -> parseSomeArguments(function, input);
-        default -> function;
-      };
+      case LEFT_ROUND_BRACKET -> parseSomeArguments(function, input);
       default -> function;
     };
   }
@@ -135,34 +128,31 @@ public class Parser {
   }
 
   private static Expression parseArgument(Peekerator<Token> input) {
-    checkNextBracket(LEFT_ROUND_BRACKET, input);
+    checkNext(LEFT_ROUND_BRACKET, input);
     var argument = parseExpression(input);
-    checkNextBracket(RIGHT_ROUND_BRACKET, input);
+    checkNext(RIGHT_ROUND_BRACKET, input);
     return argument;
   }
 
   private static Lambda parseLambda(Peekerator<Token> input) {
-    checkNextBracket(LEFT_ROUND_BRACKET, input);
+    checkNext(LEFT_ROUND_BRACKET, input);
     var parameter = parameter(parseName(input));
-    checkNextBracket(RIGHT_ROUND_BRACKET, input);
+    checkNext(RIGHT_ROUND_BRACKET, input);
     return lambda(parameter, parseBody(input));
   }
 
   private static Expression parseBody(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Bracket bracket -> switch (bracket) {
-        case LEFT_ROUND_BRACKET -> parseLambda(input);
-        case LEFT_CURLY_BRACKET -> parseScope(input);
-        default -> failUnexpected(bracket);
-      };
+      case LEFT_ROUND_BRACKET -> parseLambda(input);
+      case LEFT_CURLY_BRACKET -> parseScope(input);
       case Token token -> failUnexpected(token);
     };
   }
 
   private static Expression parseScope(Peekerator<Token> input) {
-    checkNextBracket(LEFT_CURLY_BRACKET, input);
+    checkNext(LEFT_CURLY_BRACKET, input);
     var body = parseExpression(input);
-    checkNextBracket(RIGHT_CURLY_BRACKET, input);
+    checkNext(RIGHT_CURLY_BRACKET, input);
     return body;
   }
 
@@ -170,8 +160,8 @@ public class Parser {
     return next(Label.class, input).string;
   }
 
-  private static void checkNextBracket(Bracket bracket, Peekerator<Token> input) {
-    check(next(Bracket.class, input) == bracket);
+  private static void checkNext(Punctuator punctuator, Peekerator<Token> input) {
+    check(next(Punctuator.class, input) == punctuator);
   }
 
   private static <T extends Token> T next(Class<T> type, Peekerator<Token> input) {

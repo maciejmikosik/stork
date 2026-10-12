@@ -15,12 +15,10 @@ import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
-import com.mikosik.stork.model.token.Bracket;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
+import com.mikosik.stork.model.token.Punctuator;
 import com.mikosik.stork.model.token.StringLiteral;
-import com.mikosik.stork.model.token.Symbol;
-import com.mikosik.stork.model.token.Token;
 
 public class Describer {
   public static Outline describe(CompilerException exception) {
@@ -57,14 +55,16 @@ public class Describer {
 
   private static String formatValue(Object arg) {
     return switch (arg) {
-      case Token token -> switch (token) {
-        case Label label -> label.string;
-        case Bracket bracket -> "" + (char) bracket.character;
-        case Symbol symbol -> "" + (char) symbol.character;
-        case IntegerLiteral literal -> "" + literal.value;
-        case StringLiteral literal -> literal.string;
-        default -> "token [%s]".formatted(token.getClass().getSimpleName());
+      case Label label -> label.string;
+      case Punctuator punctuator -> switch (punctuator) {
+        case LEFT_ROUND_BRACKET -> "(";
+        case RIGHT_ROUND_BRACKET -> ")";
+        case LEFT_CURLY_BRACKET -> "{";
+        case RIGHT_CURLY_BRACKET -> "}";
+        case DOT -> ".";
       };
+      case IntegerLiteral literal -> "" + literal.value;
+      case StringLiteral literal -> literal.string;
       case String string -> string;
       case Variable variable -> variable.name;
       case Namespace namespace -> join("/", namespace.components);

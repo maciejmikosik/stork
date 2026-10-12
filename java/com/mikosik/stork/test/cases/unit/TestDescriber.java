@@ -5,11 +5,14 @@ import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Describer.describe;
 import static com.mikosik.stork.compile.err.Problem.problem;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.model.token.Bracket.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Label.label;
+import static com.mikosik.stork.model.token.Punctuator.DOT;
+import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
-import static com.mikosik.stork.model.token.Symbol.DOT;
 import static com.mikosik.stork.test.Assertions.assertMatch;
 import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.Factories.namespace;
@@ -47,7 +50,10 @@ public class TestDescriber {
                         .nest("decimal: 200"))))
             .add(suite("token")
                 .add(test(label("label"), "label"))
+                .add(test(LEFT_ROUND_BRACKET, "("))
+                .add(test(RIGHT_ROUND_BRACKET, ")"))
                 .add(test(LEFT_CURLY_BRACKET, "{"))
+                .add(test(RIGHT_CURLY_BRACKET, "}"))
                 .add(test(DOT, "."))
                 .add(test(literal(valueOf(123)), "123"))
                 .add(test(literal("stringLiteral"), "stringLiteral"))));
