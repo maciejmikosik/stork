@@ -26,6 +26,10 @@ public class CompilerException extends RuntimeException {
     return new CompilerException(single(problem));
   }
 
+  public String getMessage() {
+    return Describer.describe(this).toString();
+  }
+
   public static <E> Streamer<E> gatherCompilerProblems(Streamer<E> streamer) {
     var elements = new ArrayList<E>();
     var problems = new ArrayList<Problem>();
