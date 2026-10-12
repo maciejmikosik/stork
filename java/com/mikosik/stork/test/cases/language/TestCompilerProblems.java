@@ -4,7 +4,7 @@ import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
-import static com.mikosik.stork.model.token.Symbol.DOT;
+import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;

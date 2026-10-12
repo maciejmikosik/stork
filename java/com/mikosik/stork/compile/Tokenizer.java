@@ -11,12 +11,14 @@ import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
-import static com.mikosik.stork.model.token.Bracket.bracket;
-import static com.mikosik.stork.model.token.Bracket.isBracket;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Label.label;
+import static com.mikosik.stork.model.token.Punctuator.DOT;
+import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
+import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
-import static com.mikosik.stork.model.token.Symbol.DOT;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -52,15 +54,17 @@ public class Tokenizer implements Iterator<Token> {
       return nextLabel();
     } else if (isNumeric(firstByte)) {
       return nextIntegerLiteral();
-    } else if (isBracket(firstByte)) {
-      return bracket(iterator.next());
-    } else if (firstByte == (byte) '.') {
-      iterator.next();
-      return DOT;
     } else {
-      throw exception(illegalCharacterInCode()
-          .object(iterator.next())
-          .build());
+      return switch (iterator.next()) {
+        case '(' -> LEFT_ROUND_BRACKET;
+        case ')' -> RIGHT_ROUND_BRACKET;
+        case '{' -> LEFT_CURLY_BRACKET;
+        case '}' -> RIGHT_CURLY_BRACKET;
+        case '.' -> DOT;
+        default -> throw exception(illegalCharacterInCode()
+            .object(firstByte)
+            .build());
+      };
     }
   }
 
