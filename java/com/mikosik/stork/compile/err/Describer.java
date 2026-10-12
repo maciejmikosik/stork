@@ -57,14 +57,13 @@ public class Describer {
 
   private static String formatValue(Object arg) {
     return switch (arg) {
-      case Token token -> switch (token) {
-        case Label label -> label.string;
-        case Bracket bracket -> "" + (char) bracket.character;
-        case Symbol symbol -> "" + (char) symbol.character;
-        case IntegerLiteral literal -> "" + literal.value;
-        case StringLiteral literal -> literal.string;
-        default -> "token [%s]".formatted(token.getClass().getSimpleName());
-      };
+      case Label label -> label.string;
+      case Bracket bracket -> "" + (char) bracket.character;
+      case Symbol symbol -> "" + (char) symbol.character;
+      case IntegerLiteral literal -> "" + literal.value;
+      case StringLiteral literal -> literal.string;
+      case Token token -> "token [%s]"
+          .formatted(token.getClass().getSimpleName());
       case String string -> string;
       case Variable variable -> variable.name;
       case Namespace namespace -> join("/", namespace.components);

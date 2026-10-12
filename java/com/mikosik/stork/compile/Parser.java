@@ -33,7 +33,6 @@ import com.mikosik.stork.model.token.Bracket;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
-import com.mikosik.stork.model.token.Symbol;
 import com.mikosik.stork.model.token.Token;
 
 public class Parser {
@@ -66,7 +65,7 @@ public class Parser {
 
   private static Expression parseExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Symbol symbol when symbol == DOT -> parsePipe(input);
+      case DOT -> parsePipe(input);
       default -> parseChain(input);
     };
   }
@@ -93,10 +92,7 @@ public class Parser {
   private static Expression parseUnchainedExpression(Peekerator<Token> input) {
     return switch (input.peek()) {
       case Label label -> parseInvocation(input);
-      case Bracket bracket -> switch (bracket) {
-        case LEFT_ROUND_BRACKET -> parseLambda(input);
-        default -> failUnexpected(bracket);
-      };
+      case LEFT_ROUND_BRACKET -> parseLambda(input);
       default -> switch (input.next()) {
         case StringLiteral literal -> quote(literal.string);
         case IntegerLiteral literal -> stork(literal.value);
@@ -118,10 +114,7 @@ public class Parser {
       Expression function,
       Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Bracket bracket -> switch (bracket) {
-        case LEFT_ROUND_BRACKET -> parseSomeArguments(function, input);
-        default -> function;
-      };
+      case LEFT_ROUND_BRACKET -> parseSomeArguments(function, input);
       default -> function;
     };
   }
@@ -150,11 +143,8 @@ public class Parser {
 
   private static Expression parseBody(Peekerator<Token> input) {
     return switch (input.peek()) {
-      case Bracket bracket -> switch (bracket) {
-        case LEFT_ROUND_BRACKET -> parseLambda(input);
-        case LEFT_CURLY_BRACKET -> parseScope(input);
-        default -> failUnexpected(bracket);
-      };
+      case LEFT_ROUND_BRACKET -> parseLambda(input);
+      case LEFT_CURLY_BRACKET -> parseScope(input);
       case Token token -> failUnexpected(token);
     };
   }
