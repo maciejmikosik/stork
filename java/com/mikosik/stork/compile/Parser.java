@@ -98,25 +98,15 @@ public class Parser implements Iterator<Definition> {
   }
 
   private Expression parseInvocation() {
-    var function = parseVariable();
-    return parseArguments(function);
+    var invocation = parseVariable();
+    while (input.peek() == LEFT_ROUND_BRACKET) {
+      invocation = application(invocation, parseArgument());
+    }
+    return invocation;
   }
 
   private Expression parseVariable() {
     return variable(parseName());
-  }
-
-  private Expression parseArguments(Expression function) {
-    return switch (input.peek()) {
-      case LEFT_ROUND_BRACKET -> parseSomeArguments(function);
-      default -> function;
-    };
-  }
-
-  private Expression parseSomeArguments(Expression function) {
-    var argument = parseArgument();
-    var application = application(function, argument);
-    return parseArguments(application);
   }
 
   private Expression parseArgument() {
