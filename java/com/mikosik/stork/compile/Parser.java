@@ -2,7 +2,6 @@ package com.mikosik.stork.compile;
 
 import static com.mikosik.stork.common.col.Collections.checkSuchElement;
 import static com.mikosik.stork.common.col.Peekerator.peekerator;
-import static com.mikosik.stork.common.err.Throwables.check;
 import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
@@ -19,6 +18,7 @@ import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
+import static java.util.Objects.deepEquals;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -29,7 +29,6 @@ import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Lambda;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
-import com.mikosik.stork.model.token.Punctuator;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Token;
 
@@ -142,8 +141,13 @@ public class Parser implements Iterator<Definition> {
     return next(Label.class).string;
   }
 
-  private void checkNext(Punctuator punctuator) {
-    check(next(Punctuator.class) == punctuator);
+  private void checkNext(Token expected) {
+    var actual = input.next();
+    if (!deepEquals(actual, expected)) {
+      throw exception(unexpectedToken()
+          .object(actual)
+          .build());
+    }
   }
 
   private <T extends Token> T next(Class<T> type) {
