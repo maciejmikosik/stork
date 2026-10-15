@@ -5,6 +5,7 @@ import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
+import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
@@ -21,16 +22,24 @@ public class TestCompilerProblems {
 
   private static Test aggregatesAllProblems() {
     return programTest("aggregates all problems")
-        .imports("x xx xxx")
-        .source("main(stdin) { ! }")
-        .add(path("x").source("func ."))
+        .add(path()
+            .imports("x xx xxx")
+            .source("main(stdin) { ! }"))
+        .add(path("a/aa")
+            .imports("y yy yyy")
+            .source("func ."))
         .expect(
             malformedImportLine()
                 .in(root)
                 .object("x xx xxx"),
             illegalCharacterInCode()
+                .in(root)
                 .object((byte) '!'),
+            malformedImportLine()
+                .in(namespace("a/aa"))
+                .object("y yy yyy"),
             unexpectedToken()
+                .in(namespace("a/aa"))
                 .object(DOT));
   }
 

@@ -2,6 +2,7 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.common.io.AsciiSubset.asciiSubset;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.rangeClosed;
@@ -39,6 +40,7 @@ public class TestGeneralTokenizerProblems {
     return programTest("[%d]".formatted(character))
         .source(sourceCodeWith(character))
         .expect(illegalCharacterInCode()
+            .in(root)
             .object(character));
   }
 

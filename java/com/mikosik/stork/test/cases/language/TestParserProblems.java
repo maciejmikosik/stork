@@ -1,6 +1,7 @@
 package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
@@ -79,13 +80,16 @@ public class TestParserProblems {
   private static Test snippet(String snippet, Token token) {
     return programTest(snippet)
         .source(("main(stdin) { %s }").formatted(snippet))
-        .expect(unexpectedToken().object(token));
+        .expect(unexpectedToken()
+            .in(root)
+            .object(token));
   }
 
   private static Test source(String definition, Token token) {
     return programTest(definition)
         .source(definition)
         .expect(unexpectedToken()
+            .in(root)
             .object(token));
   }
 
