@@ -5,6 +5,7 @@ import static com.mikosik.stork.common.col.Peekerator.peekerator;
 import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
+import static com.mikosik.stork.compile.err.Context.in;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
@@ -53,9 +54,10 @@ public class Parser implements Iterator<Definition> {
   }
 
   private Definition parseDefinition() {
+    var name = variable(parseName());
     return definition(
-        identifier(variable(parseName())),
-        parseBody());
+        identifier(name),
+        in(name).run(this::parseBody));
   }
 
   private Expression parseExpression() {

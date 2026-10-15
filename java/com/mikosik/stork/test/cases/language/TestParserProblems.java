@@ -2,6 +2,7 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Namespace.root;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
@@ -29,8 +30,7 @@ public class TestParserProblems {
                 .add(snippet("f(x}", RIGHT_CURLY_BRACKET))
                 .add(snippet("f(x 8", eight)))
             .add(suite("body")
-                .add(snippet("f(x))", RIGHT_ROUND_BRACKET))
-                .add(snippet("f(x)}", RIGHT_CURLY_BRACKET))))
+                .add(snippet("f(x))", RIGHT_ROUND_BRACKET))))
         .add(suite("lambda")
             .add(suite("parameter")
                 .add(snippet("(8", eight))
@@ -73,8 +73,9 @@ public class TestParserProblems {
             .add(source("{", LEFT_CURLY_BRACKET))
             .add(source("}", RIGHT_CURLY_BRACKET))
             .add(source(".", DOT))
-            .add(source("main(stdin) y", y))
-            .add(source("main(stdin) { x y", y)));
+            .add(sourceWithMain("main(stdin) }", RIGHT_CURLY_BRACKET))
+            .add(sourceWithMain("main(stdin) y", y))
+            .add(sourceWithMain("main(stdin) { x y", y)));
   }
 
   private static Test snippet(String snippet, Token token) {
@@ -82,6 +83,16 @@ public class TestParserProblems {
         .source(("main(stdin) { %s }").formatted(snippet))
         .expect(unexpectedToken()
             .in(root)
+            .in(variable("main"))
+            .object(token));
+  }
+
+  private static Test sourceWithMain(String definition, Token token) {
+    return programTest(definition)
+        .source(definition)
+        .expect(unexpectedToken()
+            .in(root)
+            .in(variable("main"))
             .object(token));
   }
 

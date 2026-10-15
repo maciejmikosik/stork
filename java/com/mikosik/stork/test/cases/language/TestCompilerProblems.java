@@ -4,6 +4,7 @@ import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Namespace.root;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -34,12 +35,14 @@ public class TestCompilerProblems {
                 .object("x xx xxx"),
             illegalCharacterInCode()
                 .in(root)
+                .in(variable("main"))
                 .object((byte) '!'),
             malformedImportLine()
                 .in(namespace("a/aa"))
                 .object("y yy yyy"),
             unexpectedToken()
                 .in(namespace("a/aa"))
+                .in(variable("func"))
                 .object(DOT));
   }
 
