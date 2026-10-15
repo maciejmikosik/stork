@@ -56,12 +56,17 @@ public class Problem {
       return this;
     }
 
-    public ProblemBuilder location(Namespace namespace) {
-      return describe("location", namespace);
+    public ProblemBuilder in(Namespace namespace) {
+      return describe("inNamespace", namespace);
     }
 
-    public ProblemBuilder location(Identifier identifier) {
-      return describe("location", identifier);
+    public ProblemBuilder in(Variable variable) {
+      return describe("inFunction", variable);
+    }
+
+    public ProblemBuilder in(Identifier identifier) {
+      return in(identifier.namespace)
+          .in(identifier.variable);
     }
 
     public ProblemBuilder object(Object object) {

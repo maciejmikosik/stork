@@ -10,6 +10,7 @@ import static com.mikosik.stork.compile.Importer.buildImporter;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
 import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
 import static com.mikosik.stork.compile.err.CompilerException.verifyNoProblems;
+import static com.mikosik.stork.compile.err.Context.in;
 import static com.mikosik.stork.compile.err.Gatherer.gatherer;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifLambda;
@@ -61,7 +62,7 @@ public class Compiler {
         .map(Collections::iterator)
         .map(Tokenizer::tokenize)
         .map(Parser::parse)
-        .map(ImmutableList::listFrom)
+        .map(in(directory.namespace).wrap(ImmutableList::listFrom))
         .map(each(onBody(bindLambdaParameters)))
         .map(bind(directory.namespace))
         .map(each(onBody(unlambda)))

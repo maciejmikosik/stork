@@ -3,7 +3,7 @@ package com.mikosik.stork.compile;
 import static com.mikosik.stork.common.col.ImmutableList.join;
 import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class SourceReader {
   }
 
   public List<StorkDirectory> read(Directory directory) {
-    return readDeep(directory, namespaceRoot());
+    return readDeep(directory, root);
   }
 
   private static List<StorkDirectory> readDeep(

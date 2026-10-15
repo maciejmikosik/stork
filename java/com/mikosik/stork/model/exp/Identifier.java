@@ -1,6 +1,6 @@
 package com.mikosik.stork.model.exp;
 
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static java.util.Objects.deepEquals;
 import static java.util.Objects.hash;
 
@@ -18,7 +18,7 @@ public class Identifier implements Expression {
   }
 
   public static Identifier identifier(Variable variable) {
-    return new Identifier(namespaceRoot(), variable);
+    return new Identifier(root, variable);
   }
 
   public boolean equals(Object that) {

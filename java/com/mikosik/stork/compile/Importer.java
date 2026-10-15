@@ -5,8 +5,8 @@ import static com.mikosik.stork.common.col.Streamer.streamer;
 import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
-import static com.mikosik.stork.compile.err.CompilerException.inject;
 import static com.mikosik.stork.compile.err.CompilerException.verifyNoProblems;
+import static com.mikosik.stork.compile.err.Context.in;
 import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -42,7 +42,7 @@ public class Importer {
     return streamer(directories)
         .map(directory -> entry(
             directory.namespace,
-            inject(directory.namespace, () -> parse(directory.importFile))))
+            in(directory.namespace).run(() -> parse(directory.importFile))))
         .apply(CompilerException::gatherCompilerProblems)
         .toListAndApply(entries -> new Importer(functionFrom(
             entries,

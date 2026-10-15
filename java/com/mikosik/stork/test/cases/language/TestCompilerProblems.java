@@ -3,8 +3,10 @@ package com.mikosik.stork.test.cases.language;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
+import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
+import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
@@ -21,16 +23,26 @@ public class TestCompilerProblems {
 
   private static Test aggregatesAllProblems() {
     return programTest("aggregates all problems")
-        .imports("x xx xxx")
-        .source("main(stdin) { ! }")
-        .add(path("x").source("func ."))
+        .add(path()
+            .imports("x xx xxx")
+            .source("main(stdin) { ! }"))
+        .add(path("a/aa")
+            .imports("y yy yyy")
+            .source("func ."))
         .expect(
             malformedImportLine()
-                .location(namespaceRoot())
+                .in(root)
                 .object("x xx xxx"),
             illegalCharacterInCode()
+                .in(root)
+                .in(variable("main"))
                 .object((byte) '!'),
+            malformedImportLine()
+                .in(namespace("a/aa"))
+                .object("y yy yyy"),
             unexpectedToken()
+                .in(namespace("a/aa"))
+                .in(variable("func"))
                 .object(DOT));
   }
 

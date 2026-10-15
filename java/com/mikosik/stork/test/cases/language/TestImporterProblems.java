@@ -7,7 +7,7 @@ import static com.mikosik.stork.common.io.Ascii.isNewline;
 import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -17,12 +17,9 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.test.ProgramTest;
 
 public class TestImporterProblems {
-  private static final Namespace root = namespaceRoot();
-
   public static Test testImporterProblems() {
     return suite("importer reports")
         .add(reportsMalformedLines())
@@ -69,7 +66,7 @@ public class TestImporterProblems {
         .imports(line + "\n")
         .source("main(stdin) { 'ok' }")
         .expect(malformedImportLine()
-            .location(root)
+            .in(root)
             .object(line));
   }
 
@@ -82,7 +79,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .location(namespaceRoot())
+                .in(root)
                 .object(list("a/b/c", "a/b/c"))
                 .variable(variable("c"))))
         .add(programTest("same variable from different directory")
@@ -92,7 +89,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .location(namespaceRoot())
+                .in(root)
                 .object(list("a/b/c", "a/x/c"))
                 .variable(variable("c"))))
         .add(programTest("of renamed variable")
@@ -102,7 +99,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .location(namespaceRoot())
+                .in(root)
                 .object(list("a/b/c", "a/b/d c"))
                 .variable(variable("c"))))
         .add(programTest("includes namespaces")
@@ -119,11 +116,11 @@ public class TestImporterProblems {
             .source("main(stdin) { 'ok' }")
             .expect(
                 importCollision()
-                    .location(namespace("a/b"))
+                    .in(namespace("a/b"))
                     .object(list("x/y/z", "x/y/z"))
                     .variable(variable("z")),
                 importCollision()
-                    .location(namespace("a/c"))
+                    .in(namespace("a/c"))
                     .object(list("x/y/v", "x/y/v"))
                     .variable(variable("v"))));
   }
@@ -135,13 +132,13 @@ public class TestImporterProblems {
             .source("main(stdin) { 'ok' }")
             .expect(
                 malformedImportLine()
-                    .location(root)
+                    .in(root)
                     .object("!"),
                 malformedImportLine()
-                    .location(root)
+                    .in(root)
                     .object("@"),
                 malformedImportLine()
-                    .location(root)
+                    .in(root)
                     .object("#")))
         .add(programTest("in different files")
             .add(path("a")
@@ -153,13 +150,13 @@ public class TestImporterProblems {
             .source("main(stdin) { 'ok' }")
             .expect(
                 malformedImportLine()
-                    .location(namespace(single("a")))
+                    .in(namespace(single("a")))
                     .object("!"),
                 malformedImportLine()
-                    .location(namespace(single("b")))
+                    .in(namespace(single("b")))
                     .object("@"),
                 malformedImportLine()
-                    .location(namespace(single("c")))
+                    .in(namespace(single("c")))
                     .object("#")));
   }
 

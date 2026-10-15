@@ -28,7 +28,7 @@ public class TestCore {
         .add(path("lang/stream")
             .source("length(stream) { 0 }"))
         .expect(duplicatedFunction()
-            .location(namespace("lang/stream"))
+            .in(namespace("lang/stream"))
             .object(variable("length")));
   }
 }
