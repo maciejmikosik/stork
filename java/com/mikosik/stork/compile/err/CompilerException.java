@@ -63,7 +63,7 @@ public class CompilerException extends RuntimeException {
   private static List<Problem> inject(Namespace namespace, List<Problem> problems) {
     return problems.stream()
         .map(problem -> problem.edit()
-            .location(namespace)
+            .in(namespace)
             .build())
         .toList();
   }

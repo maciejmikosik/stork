@@ -31,7 +31,7 @@ public class VerifyLibrary {
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
             .map(variable -> unboundVariable()
-                .location(definition.identifier)
+                .in(definition.identifier)
                 .object(variable)
                 .build()))
         .toList();
@@ -46,7 +46,7 @@ public class VerifyLibrary {
             .flatMap(filter(Identifier.class))
             .filter(identifier -> !definedIdentifiers.contains(identifier))
             .map(identifier -> undefinedFunction()
-                .location(definition.identifier)
+                .in(definition.identifier)
                 .object(identifier)
                 .build()))
         .toList();
@@ -60,7 +60,7 @@ public class VerifyLibrary {
         .filter(entry -> entry.getValue() > 1)
         .map(entry -> entry.getKey())
         .map(function -> duplicatedFunction()
-            .location(function.namespace)
+            .in(function.namespace)
             .object(function.variable)
             .build())
         .toList();

@@ -26,7 +26,7 @@ public class TestCompilerProblems {
         .add(path("x").source("func ."))
         .expect(
             malformedImportLine()
-                .location(namespaceRoot())
+                .in(namespaceRoot())
                 .object("x xx xxx"),
             illegalCharacterInCode()
                 .object((byte) '!'),

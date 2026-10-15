@@ -69,7 +69,7 @@ public class TestImporterProblems {
         .imports(line + "\n")
         .source("main(stdin) { 'ok' }")
         .expect(malformedImportLine()
-            .location(root)
+            .in(root)
             .object(line));
   }
 
@@ -82,7 +82,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .location(namespaceRoot())
+                .in(namespaceRoot())
                 .object(list("a/b/c", "a/b/c"))
                 .variable(variable("c"))))
         .add(programTest("same variable from different directory")
@@ -92,7 +92,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .location(namespaceRoot())
+                .in(namespaceRoot())
                 .object(list("a/b/c", "a/x/c"))
                 .variable(variable("c"))))
         .add(programTest("of renamed variable")
@@ -102,7 +102,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .location(namespaceRoot())
+                .in(namespaceRoot())
                 .object(list("a/b/c", "a/b/d c"))
                 .variable(variable("c"))))
         .add(programTest("includes namespaces")
@@ -119,11 +119,11 @@ public class TestImporterProblems {
             .source("main(stdin) { 'ok' }")
             .expect(
                 importCollision()
-                    .location(namespace("a/b"))
+                    .in(namespace("a/b"))
                     .object(list("x/y/z", "x/y/z"))
                     .variable(variable("z")),
                 importCollision()
-                    .location(namespace("a/c"))
+                    .in(namespace("a/c"))
                     .object(list("x/y/v", "x/y/v"))
                     .variable(variable("v"))));
   }
@@ -135,13 +135,13 @@ public class TestImporterProblems {
             .source("main(stdin) { 'ok' }")
             .expect(
                 malformedImportLine()
-                    .location(root)
+                    .in(root)
                     .object("!"),
                 malformedImportLine()
-                    .location(root)
+                    .in(root)
                     .object("@"),
                 malformedImportLine()
-                    .location(root)
+                    .in(root)
                     .object("#")))
         .add(programTest("in different files")
             .add(path("a")
@@ -153,13 +153,13 @@ public class TestImporterProblems {
             .source("main(stdin) { 'ok' }")
             .expect(
                 malformedImportLine()
-                    .location(namespace(single("a")))
+                    .in(namespace(single("a")))
                     .object("!"),
                 malformedImportLine()
-                    .location(namespace(single("b")))
+                    .in(namespace(single("b")))
                     .object("@"),
                 malformedImportLine()
-                    .location(namespace(single("c")))
+                    .in(namespace(single("c")))
                     .object("#")));
   }
 

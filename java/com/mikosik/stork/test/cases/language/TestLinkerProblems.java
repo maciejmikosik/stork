@@ -28,16 +28,16 @@ public class TestLinkerProblems {
         .add(programTest("once")
             .source("func { var }")
             .expect(unboundVariable()
-                .location(identifier("func"))
+                .in(identifier("func"))
                 .object(variable("var"))))
         .add(programTest("multiple times in same function")
             .source("func { var(var) }")
             .expect(
                 unboundVariable()
-                    .location(identifier("func"))
+                    .in(identifier("func"))
                     .object(variable("var")),
                 unboundVariable()
-                    .location(identifier("func"))
+                    .in(identifier("func"))
                     .object(variable("var"))));
   }
 
@@ -48,7 +48,7 @@ public class TestLinkerProblems {
                 .imports("b/bb/funcB")
                 .source("funcA { funcB }"))
             .expect(undefinedFunction()
-                .location(identifier("a/aa/funcA"))
+                .in(identifier("a/aa/funcA"))
                 .object(identifier("b/bb/funcB"))))
         .add(programTest("multiple times in same function")
             .add(path("a/aa")
@@ -56,10 +56,10 @@ public class TestLinkerProblems {
                 .source("funcA { funcB(funcB) }"))
             .expect(
                 undefinedFunction()
-                    .location(identifier("a/aa/funcA"))
+                    .in(identifier("a/aa/funcA"))
                     .object(identifier("b/bb/funcB")),
                 undefinedFunction()
-                    .location(identifier("a/aa/funcA"))
+                    .in(identifier("a/aa/funcA"))
                     .object(identifier("b/bb/funcB"))));
   }
 
@@ -71,7 +71,7 @@ public class TestLinkerProblems {
                 func { 2 }
                 """)
             .expect(duplicatedFunction()
-                .location(namespaceRoot())
+                .in(namespaceRoot())
                 .object(variable("func"))))
         .add(programTest("multiple times in same namespace")
             .source("""
@@ -82,10 +82,10 @@ public class TestLinkerProblems {
                 """)
             .expect(
                 duplicatedFunction()
-                    .location(namespaceRoot())
+                    .in(namespaceRoot())
                     .object(variable("funcA")),
                 duplicatedFunction()
-                    .location(namespaceRoot())
+                    .in(namespaceRoot())
                     .object(variable("funcB"))));
   }
 
