@@ -7,7 +7,7 @@ import static com.mikosik.stork.common.io.Ascii.isNewline;
 import static com.mikosik.stork.compile.err.Problems.importCollision;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -17,12 +17,9 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.test.ProgramTest;
 
 public class TestImporterProblems {
-  private static final Namespace root = namespaceRoot();
-
   public static Test testImporterProblems() {
     return suite("importer reports")
         .add(reportsMalformedLines())
@@ -82,7 +79,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .in(namespaceRoot())
+                .in(root)
                 .object(list("a/b/c", "a/b/c"))
                 .variable(variable("c"))))
         .add(programTest("same variable from different directory")
@@ -92,7 +89,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .in(namespaceRoot())
+                .in(root)
                 .object(list("a/b/c", "a/x/c"))
                 .variable(variable("c"))))
         .add(programTest("of renamed variable")
@@ -102,7 +99,7 @@ public class TestImporterProblems {
                 """)
             .source("main(stdin) { 'ok' }")
             .expect(importCollision()
-                .in(namespaceRoot())
+                .in(root)
                 .object(list("a/b/c", "a/b/d c"))
                 .variable(variable("c"))))
         .add(programTest("includes namespaces")

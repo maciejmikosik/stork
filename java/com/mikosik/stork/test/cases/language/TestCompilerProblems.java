@@ -3,7 +3,7 @@ package com.mikosik.stork.test.cases.language;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
@@ -26,7 +26,7 @@ public class TestCompilerProblems {
         .add(path("x").source("func ."))
         .expect(
             malformedImportLine()
-                .in(namespaceRoot())
+                .in(root)
                 .object("x xx xxx"),
             illegalCharacterInCode()
                 .object((byte) '!'),

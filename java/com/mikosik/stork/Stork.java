@@ -13,7 +13,7 @@ import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.err.Describer.describe;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
 import static com.mikosik.stork.model.exp.Identifier.identifier;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
@@ -97,7 +97,7 @@ public class Stork {
       String snippet,
       List<StorkDirectory> directories) {
     return directories.stream()
-        .map(directory -> directory.namespace.equals(namespaceRoot())
+        .map(directory -> directory.namespace.equals(root)
             ? storkDirectory(
                 directory.namespace,
                 directory.importFile,

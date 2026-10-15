@@ -3,7 +3,7 @@ package com.mikosik.stork.test.cases.language;
 import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
 import static com.mikosik.stork.compile.err.Problems.unboundVariable;
 import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
-import static com.mikosik.stork.model.exp.Namespace.namespaceRoot;
+import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -71,7 +71,7 @@ public class TestLinkerProblems {
                 func { 2 }
                 """)
             .expect(duplicatedFunction()
-                .in(namespaceRoot())
+                .in(root)
                 .object(variable("func"))))
         .add(programTest("multiple times in same namespace")
             .source("""
@@ -82,10 +82,10 @@ public class TestLinkerProblems {
                 """)
             .expect(
                 duplicatedFunction()
-                    .in(namespaceRoot())
+                    .in(root)
                     .object(variable("funcA")),
                 duplicatedFunction()
-                    .in(namespaceRoot())
+                    .in(root)
                     .object(variable("funcB"))));
   }
 

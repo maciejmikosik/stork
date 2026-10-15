@@ -9,14 +9,12 @@ import static java.util.Objects.hash;
 import java.util.List;
 
 public class Namespace {
+  public static final Namespace root = namespace(none());
+
   public final List<String> components;
 
   private Namespace(List<String> components) {
     this.components = components;
-  }
-
-  public static Namespace namespaceRoot() {
-    return namespace(none());
   }
 
   public static Namespace namespace(List<String> components) {
