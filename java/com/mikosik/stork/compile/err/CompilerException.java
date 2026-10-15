@@ -6,10 +6,8 @@ import static com.mikosik.stork.common.col.Streamer.streamer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.mikosik.stork.common.col.Streamer;
-import com.mikosik.stork.model.exp.Namespace;
 
 public class CompilerException extends RuntimeException {
   public final List<Problem> problems;
@@ -50,21 +48,5 @@ public class CompilerException extends RuntimeException {
     if (!problems.isEmpty()) {
       throw exception(problems);
     }
-  }
-
-  public static <T> T inject(Namespace namespace, Supplier<T> supplier) {
-    try {
-      return supplier.get();
-    } catch (CompilerException exception) {
-      throw exception(inject(namespace, exception.problems));
-    }
-  }
-
-  private static List<Problem> inject(Namespace namespace, List<Problem> problems) {
-    return problems.stream()
-        .map(problem -> problem.edit()
-            .in(namespace)
-            .build())
-        .toList();
   }
 }
