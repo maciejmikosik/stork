@@ -10,14 +10,12 @@
 
   hasSome(stream) {
     stream
-      ((head)(tail) {
-        true
-      })
+      ((head)(tail) { true })
       (false)
   }
 
-  hasNone(stream) {
-    not(hasSome(stream))
+  hasNone {
+    hasSome.negate
   }
 
 
@@ -33,7 +31,7 @@
 
   cycle(stream) {
     hasSome(stream)
-      (prepend(stream)(cycle(stream)))
+      (stream.append(cycle(stream)))
       (none)
   }
 
@@ -48,8 +46,8 @@
     stream
       ((head)(tail) {
         some
-          (transform(head))
-          (each(transform)(tail))
+          (head.transform)
+          (tail.each(transform))
       })
       (none)
   }
@@ -80,8 +78,8 @@
     stream
       ((head)(tail) {
         predicate(head)
-          (some(head)(filter(predicate)(tail)))
-          (filter(predicate)(tail))
+          (some(head)(tail.filter(predicate)))
+          (tail.filter(predicate))
       })
       (none)
   }
@@ -90,7 +88,7 @@
     moreThan(0)(n)
       (stream
         ((head)(tail) {
-          some(head)(limit(decrement(n))(tail))
+          some(head)(tail.limit(n.decrement))
         })
         (none))
       (none)
@@ -100,7 +98,7 @@
     moreThan(0)(n)
       (stream
         ((head)(tail) {
-          skip(decrement(n))(tail)
+          tail.skip(n.decrement)
         })
         (none))
       (stream)
@@ -110,7 +108,7 @@
     stream
       ((head)(tail) {
         predicate(head)
-          (some(head)(while(predicate)(tail)))
+          (some(head)(tail.while(predicate)))
           (none)
       })
       (none)
@@ -121,15 +119,16 @@
       ((head)(tail) {
         predicate(head)
           (some(head)(none))
-          (some(head)(until(predicate)(tail)))
+          (some(head)(tail.until(predicate)))
       })
       (none)
   }
 
+
   append(secondStream)(stream) {
     stream
       ((head)(tail) {
-        some(head)(append(secondStream)(tail))
+        some(head)(tail.append(secondStream))
       })
       (secondStream)
   }
@@ -141,7 +140,7 @@
   flatten(streams) {
     streams
       ((head)(tail) {
-        prepend(head)(flatten(tail))
+        head.append(tail.flatten)
       })
       (none)
   }
@@ -191,7 +190,7 @@
     reduce(0)(constant(increment))
   }
 
-  contains(predicate)(stream){
+  contains(predicate)(stream) {
     stream
       .filter(predicate)
       .hasSome
@@ -206,7 +205,7 @@
       ((head)(tail) {
         single(head)
           .prepend(tail
-            .filter(negate(comparator(head)))
+            .filter(comparator(head).negate)
             .sort(comparator))
           .append(tail
             .filter(comparator(head))
