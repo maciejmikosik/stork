@@ -81,18 +81,18 @@ public class RunTests {
             .add(testCompilerProblems())
             .add(testLinkerProblems())));
     runAndReport(testCompilingCoreLibrary(DEVELOPMENT));
-    runAndReport(suite("everything")
+    runAndReport(suite("program")
         .add(testMainFunction())
         .add(testStdio())
         .add(testCore())
-        .add(testMathOperators())
-        .add(suite("core library")
-            .add(testBoolean())
-            .add(testFunction())
-            .add(testInteger())
-            .add(testStream())
-            .add(testStreamCount())
-            .add(testMaybe())));
+        .add(testMathOperators()));
+    runAndReport(suite("core library")
+        .add(testBoolean())
+        .add(testFunction())
+        .add(testInteger())
+        .add(testStream())
+        .add(testStreamCount())
+        .add(testMaybe()));
 
     System.out.println("done!");
     exit(0);
