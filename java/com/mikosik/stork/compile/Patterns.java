@@ -1,12 +1,12 @@
 package com.mikosik.stork.compile;
 
-import static com.mikosik.stork.common.text.Regex.atLeastOne;
-import static com.mikosik.stork.common.text.Regex.letter;
-import static com.mikosik.stork.common.text.Regex.maybe;
-import static com.mikosik.stork.common.text.Regex.separated;
+import static com.mikosik.stork.common.text.Regex.oneOrMore;
+import static com.mikosik.stork.common.text.Regex.LETTER;
+import static com.mikosik.stork.common.text.Regex.zeroOrOne;
+import static com.mikosik.stork.common.text.Regex.separatedBy;
 
 public interface Patterns {
-  String VARIABLE = atLeastOne(letter);
-  String REFERENCE = separated("/", VARIABLE);
-  String IMPORT_LINE = REFERENCE + maybe(" " + VARIABLE);
+  String VARIABLE = oneOrMore(LETTER);
+  String REFERENCE = separatedBy("/", VARIABLE);
+  String IMPORT_LINE = REFERENCE + zeroOrOne(" " + VARIABLE);
 }
