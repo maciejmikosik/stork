@@ -17,12 +17,12 @@ import static com.mikosik.stork.compile.op.MathOperator.NEGATE;
 import static com.mikosik.stork.compile.op.StackOperator.EAGER;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Integer.integer;
 import static com.mikosik.stork.model.exp.Lambda.lambda;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Parameter.parameter;
 import static com.mikosik.stork.model.exp.Quote.quote;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.program.Stdin.stdin;
 import static com.mikosik.stork.program.Stdout.CLOSE;
@@ -90,10 +90,10 @@ public class TestDecompiler {
                     .add(test("$STDIN(0)", stdin(input(new byte[0]))))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
-            .add(suite("identifier")
+            .add(suite("reference")
                 .add(test(
                     "a/b/c",
-                    identifier(namespace(list("a", "b")), variable("c")))))
+                    reference(namespace(list("a", "b")), variable("c")))))
             .add(suite("parameter")
                 .add(test("param", parameter("param"))))
             .add(suite("lambda")
@@ -102,26 +102,26 @@ public class TestDecompiler {
             .add(suite("application")
                 .add(test("f(x)",
                     application(
-                        identifier(variable("f")),
-                        identifier(variable("x")))))
+                        reference(variable("f")),
+                        reference(variable("x")))))
                 .add(test("f(x)(y)",
                     application(
-                        identifier(variable("f")),
-                        identifier(variable("x")),
-                        identifier(variable("y")))))))
+                        reference(variable("f")),
+                        reference(variable("x")),
+                        reference(variable("y")))))))
         .add(suite("definition")
             .add(test("f(x){x}",
                 definition(
-                    identifier(variable("f")),
+                    reference(variable("f")),
                     lambda(x, x))))
             .add(test("f(x)(y){x}",
                 definition(
-                    identifier(variable("f")),
+                    reference(variable("f")),
                     lambda(x, y, x))))
             .add(test("f{g}",
                 definition(
-                    identifier(variable("f")),
-                    identifier(variable("g"))))));
+                    reference(variable("f")),
+                    reference(variable("g"))))));
   }
 
   private static Test test(String expected, Expression expression) {

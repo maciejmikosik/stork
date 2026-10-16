@@ -6,7 +6,7 @@ import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.compute.Computations.depthOf;
 import static com.mikosik.stork.debug.Decompiler.decompile;
 import static com.mikosik.stork.model.exp.Application.application;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static java.lang.String.format;
 
@@ -40,7 +40,7 @@ public final class StorkTextRenderer extends TextRenderer {
 
   private static Computation mark(Computation computation) {
     return computation(
-        application(identifier(variable("@")), computation.expression),
+        application(reference(variable("@")), computation.expression),
         computation.stack);
   }
 }

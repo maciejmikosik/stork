@@ -12,8 +12,8 @@ import static java.lang.String.join;
 import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.model.exp.Reference;
 import com.mikosik.stork.model.exp.Variable;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Label;
@@ -69,9 +69,9 @@ public class Describer {
       case Variable variable -> variable.name;
       case Namespace namespace -> join("/", namespace.components);
       // TODO create utils for formatting and parsing
-      case Identifier identifier -> join("/", join(
-          identifier.namespace.components,
-          single(identifier.variable.name)));
+      case Reference reference -> join("/", join(
+          reference.namespace.components,
+          single(reference.variable.name)));
       default -> arg.toString();
     };
   }

@@ -17,8 +17,8 @@ import static com.mikosik.stork.model.exp.Changes.ifLambda;
 import static com.mikosik.stork.model.exp.Changes.ifQuote;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
-import static com.mikosik.stork.model.exp.Changes.onIdentifier;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Changes.onReference;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static java.util.Objects.deepEquals;
 
 import java.util.List;
@@ -86,13 +86,13 @@ public class Compiler {
   private static Faa<List<Definition>> bind(Namespace namespace) {
     return definitions -> {
       var table = definitions.stream()
-          .map(definition -> definition.identifier.variable)
+          .map(definition -> definition.reference.variable)
           .collect(toMapIgnoringDuplicates(
               variable -> variable,
-              variable -> identifier(namespace, variable)));
+              variable -> reference(namespace, variable)));
 
       return definitions.stream()
-          .map(onIdentifier(identifier -> table.get(identifier.variable)))
+          .map(onReference(reference -> table.get(reference.variable)))
           .map(onBody(deep(ifVariable(variable -> table.containsKey(variable)
               ? table.get(variable)
               : variable))))

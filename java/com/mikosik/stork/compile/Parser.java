@@ -9,10 +9,10 @@ import static com.mikosik.stork.compile.err.Context.in;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Lambda.lambda;
 import static com.mikosik.stork.model.exp.Parameter.parameter;
 import static com.mikosik.stork.model.exp.Quote.quote;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
@@ -56,7 +56,7 @@ public class Parser implements Iterator<Definition> {
   private Definition parseDefinition() {
     var name = variable(parseName());
     return definition(
-        identifier(name),
+        reference(name),
         in(name).run(this::parseBody));
   }
 

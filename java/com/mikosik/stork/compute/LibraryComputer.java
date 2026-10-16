@@ -10,31 +10,31 @@ import java.util.Map;
 
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
-import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Reference;
 
-public class LibraryComputer extends TypedComputer<Identifier> {
-  private final Map<Identifier, Expression> table;
+public class LibraryComputer extends TypedComputer<Reference> {
+  private final Map<Reference, Expression> table;
 
-  private LibraryComputer(Map<Identifier, Expression> table) {
-    super(Identifier.class);
+  private LibraryComputer(Map<Reference, Expression> table) {
+    super(Reference.class);
     this.table = table;
   }
 
-  public static TypedComputer<Identifier> computer(List<Definition> library) {
-    Map<Identifier, Expression> table = new HashMap<>();
+  public static TypedComputer<Reference> computer(List<Definition> library) {
+    Map<Reference, Expression> table = new HashMap<>();
     for (Definition definition : library) {
-      table.put(definition.identifier, definition.body);
+      table.put(definition.reference, definition.body);
     }
     return new LibraryComputer(table);
   }
 
-  public Computation compute(Identifier identifier, Stack stack) {
-    if (table.containsKey(identifier)) {
+  public Computation compute(Reference reference, Stack stack) {
+    if (table.containsKey(reference)) {
       return computation(
-          table.get(identifier),
+          table.get(reference),
           stack);
     } else {
-      throw exception(functionMissing(identifier));
+      throw exception(functionMissing(reference));
     }
   }
 }

@@ -3,8 +3,8 @@ package com.mikosik.stork.compile.op;
 import static com.mikosik.stork.common.col.ImmutableList.join;
 import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.model.exp.Definition.definition;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static java.util.Arrays.stream;
 
@@ -24,7 +24,7 @@ public class OperatorLibrary {
   private static List<Definition> asLibrary(Class<? extends Operator> enumClass) {
     return stream(enumClass.getEnumConstants())
         .map(operator -> definition(
-            identifier(NAMESPACE, variable(operator.toString())),
+            reference(NAMESPACE, variable(operator.toString())),
             operator))
         .toList();
   }

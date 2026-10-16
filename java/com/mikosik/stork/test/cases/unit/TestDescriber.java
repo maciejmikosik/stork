@@ -14,8 +14,8 @@ import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
 import static com.mikosik.stork.test.Assertions.assertMatch;
-import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.Factories.namespace;
+import static com.mikosik.stork.test.Factories.reference;
 import static java.math.BigInteger.valueOf;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -33,7 +33,7 @@ public class TestDescriber {
             .add(suite("expression")
                 .add(test(variable("variable"), "variable"))
                 .add(test(namespace("a/b/c"), "a/b/c"))
-                .add(test(identifier("a/b/c/d"), "a/b/c/d")))
+                .add(test(reference("a/b/c/d"), "a/b/c/d")))
             .add(suite("character")
                 .add(test(
                     (byte) 65,

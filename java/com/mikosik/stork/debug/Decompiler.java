@@ -11,25 +11,25 @@ import com.mikosik.stork.common.io.Serializable;
 import com.mikosik.stork.model.exp.Application;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
-import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Integer;
 import com.mikosik.stork.model.exp.Lambda;
 import com.mikosik.stork.model.exp.Operator;
 import com.mikosik.stork.model.exp.Parameter;
 import com.mikosik.stork.model.exp.Quote;
+import com.mikosik.stork.model.exp.Reference;
 import com.mikosik.stork.model.exp.Variable;
 
 public class Decompiler {
   public static Serializable decompile(Definition definition) {
     return join(
-        serializable(print(definition.identifier)),
+        serializable(print(definition.reference)),
         decompileBody(definition.body));
   }
 
   public static Serializable decompile(Expression expression) {
     return switch (expression) {
       case Variable variable -> serializable(variable.name);
-      case Identifier identifier -> serializable(print(identifier));
+      case Reference reference -> serializable(print(reference));
       case Integer integer -> serializable(integer.value.toString());
       case Quote quote -> quoteBrackets(serializable(quote.string));
       case Operator operator -> join(
@@ -76,9 +76,9 @@ public class Decompiler {
   }
 
   // TODO rewrite using serializables
-  private static String print(Identifier identifier) {
+  private static String print(Reference reference) {
     return join("/", join(
-        identifier.namespace.components,
-        single(identifier.variable.name)));
+        reference.namespace.components,
+        single(reference.variable.name)));
   }
 }

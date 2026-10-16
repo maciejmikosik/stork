@@ -12,8 +12,8 @@ import static com.mikosik.stork.compile.SourceReader.SOURCE_FILENAME;
 import static com.mikosik.stork.compile.SourceReader.sourceReader;
 import static com.mikosik.stork.compile.err.Describer.describe;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.root;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
@@ -65,7 +65,7 @@ public class Stork {
         .dependencies(core(PRODUCTION))
         .build());
     runner().run(task(
-        program(identifier(variable("main")), library),
+        program(reference(variable("main")), library),
         terminal(input(System.in), output(FileDescriptor.out))));
   }
 
@@ -89,7 +89,7 @@ public class Stork {
         .dependencies(core(PRODUCTION))
         .build());
     runner().run(task(
-        program(identifier(variable("main")), library),
+        program(reference(variable("main")), library),
         terminal(input(System.in), output(FileDescriptor.out))));
   }
 

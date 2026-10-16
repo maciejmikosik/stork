@@ -7,6 +7,6 @@ import static com.mikosik.stork.common.text.Regex.separated;
 
 public interface Patterns {
   String VARIABLE = atLeastOne(letter);
-  String IDENTIFIER = separated("/", VARIABLE);
-  String IMPORT_LINE = IDENTIFIER + maybe(" " + VARIABLE);
+  String REFERENCE = separated("/", VARIABLE);
+  String IMPORT_LINE = REFERENCE + maybe(" " + VARIABLE);
 }
