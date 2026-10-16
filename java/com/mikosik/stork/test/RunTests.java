@@ -24,8 +24,8 @@ import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCom
 import static com.mikosik.stork.test.cases.language.TestImporter.testImporter;
 import static com.mikosik.stork.test.cases.language.TestImporterProblems.testImporterProblems;
 import static com.mikosik.stork.test.cases.language.TestLinkerProblems.testLinkerProblems;
+import static com.mikosik.stork.test.cases.language.TestParser.testParser;
 import static com.mikosik.stork.test.cases.language.TestParserProblems.testParserProblems;
-import static com.mikosik.stork.test.cases.language.TestSyntax.testSyntax;
 import static com.mikosik.stork.test.cases.language.TestTokenizer.testTokenizer;
 import static com.mikosik.stork.test.cases.language.TestTokenizerProblems.testTokenizerProblems;
 import static com.mikosik.stork.test.cases.unit.TestDecompiler.testDecompiler;
@@ -72,7 +72,7 @@ public class RunTests {
     runAndReport(testCompilingCoreLibrary(TESTING));
     runAndReport(suite("language")
         .add(testTokenizer())
-        .add(testSyntax())
+        .add(testParser())
         .add(testImporter())
         .add(suite("problems")
             .add(testImporterProblems())
@@ -81,18 +81,21 @@ public class RunTests {
             .add(testCompilerProblems())
             .add(testLinkerProblems())));
     runAndReport(testCompilingCoreLibrary(DEVELOPMENT));
-    runAndReport(suite("everything")
+    runAndReport(suite("program")
         .add(testMainFunction())
         .add(testStdio())
         .add(testCore())
-        .add(testMathOperators())
-        .add(suite("core library")
-            .add(testBoolean())
-            .add(testFunction())
-            .add(testInteger())
-            .add(testStream())
-            .add(testStreamCount())
-            .add(testMaybe())));
+        .add(testMathOperators()));
+    runAndReport(suite("core library")
+        .add(testBoolean())
+        .add(testFunction())
+        .add(testInteger())
+        .add(testStream())
+        .add(testStreamCount())
+        .add(testMaybe()));
+
+    System.out.println("done!");
+    exit(0);
   }
 
   private static void runAndReport(Test test) {
@@ -126,7 +129,7 @@ public class RunTests {
     }
   }
 
-  public static float inSeconds(Duration duration) {
+  private static float inSeconds(Duration duration) {
     return duration.getSeconds() + duration.getNano() * 1E-9f;
   }
 

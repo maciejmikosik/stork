@@ -7,8 +7,8 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestSyntax {
-  public static Test testSyntax() {
+public class TestParser {
+  public static Test testParser() {
     return suite("syntax")
         .add(enablesStringLiterals())
         .add(suite("function")

@@ -10,12 +10,13 @@ import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
-import static com.mikosik.stork.test.ProgramTest.programTest;
+import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
 import com.mikosik.stork.model.token.Token;
+import com.mikosik.stork.test.ProgramTest;
 
 public class TestParserProblems {
   public static Test testParserProblems() {
@@ -104,4 +105,7 @@ public class TestParserProblems {
             .object(token));
   }
 
+  private static ProgramTest programTest(String name) {
+    return minimalProgramTest(name);
+  }
 }
