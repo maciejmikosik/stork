@@ -8,16 +8,16 @@ import static java.util.Objects.deepEquals;
 import static java.util.Objects.hash;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Reference;
 
 public class FunctionMissing extends CannotCompute {
-  public final Identifier function;
+  public final Reference function;
 
-  private FunctionMissing(Identifier function) {
+  private FunctionMissing(Reference function) {
     this.function = function;
   }
 
-  public static FunctionMissing functionMissing(Identifier function) {
+  public static FunctionMissing functionMissing(Reference function) {
     return new FunctionMissing(function);
   }
 
@@ -40,9 +40,9 @@ public class FunctionMissing extends CannotCompute {
   }
 
   // TODO create utils for formatting and parsing
-  private String format(Identifier identifier) {
+  private String format(Reference reference) {
     return join("/", join(
-        identifier.namespace.components,
-        single(identifier.variable.name)));
+        reference.namespace.components,
+        single(reference.variable.name)));
   }
 }

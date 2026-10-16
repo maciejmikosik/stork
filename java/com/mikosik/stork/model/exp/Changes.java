@@ -2,8 +2,8 @@ package com.mikosik.stork.model.exp;
 
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Lambda.lambda;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static java.util.stream.Stream.concat;
 
 import java.util.stream.Stream;
@@ -12,22 +12,22 @@ import com.mikosik.stork.common.func.Functions.Faa;
 import com.mikosik.stork.common.func.Functions.Fab;
 
 public class Changes {
-  public static Faa<Definition> onIdentifier(Faa<Identifier> change) {
+  public static Faa<Definition> onReference(Faa<Reference> change) {
     return definition -> definition(
-        change.apply(definition.identifier),
+        change.apply(definition.reference),
         definition.body);
   }
 
   public static Faa<Definition> onBody(Faa<Expression> change) {
     return definition -> definition(
-        definition.identifier,
+        definition.reference,
         change.apply(definition.body));
   }
 
-  public static Faa<Identifier> onNamespace(Faa<Namespace> change) {
-    return identifier -> identifier(
-        change.apply(identifier.namespace),
-        identifier.variable);
+  public static Faa<Reference> onNamespace(Faa<Namespace> change) {
+    return reference -> reference(
+        change.apply(reference.namespace),
+        reference.variable);
   }
 
   public static Faa<Expression> deep(Faa<Expression> change) {
@@ -42,9 +42,9 @@ public class Changes {
     };
   }
 
-  public static Faa<Expression> ifIdentifier(Fab<Identifier, Expression> change) {
+  public static Faa<Expression> ifReference(Fab<Reference, Expression> change) {
     return expression -> switch (expression) {
-      case Identifier identifier -> change.apply(identifier);
+      case Reference reference -> change.apply(reference);
       default -> expression;
     };
   }

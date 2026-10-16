@@ -4,15 +4,16 @@ import static com.mikosik.stork.common.col.Peekerator.peekerator;
 import static com.mikosik.stork.common.err.Throwables.check;
 import static com.mikosik.stork.common.io.Ascii.isAlphanumeric;
 import static com.mikosik.stork.common.io.Ascii.isDoubleQuote;
-import static com.mikosik.stork.common.io.Ascii.isLetter;
-import static com.mikosik.stork.common.io.Ascii.isNumeric;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.io.Ascii.isWhitespace;
+import static com.mikosik.stork.compile.Patterns.IDENTIFIER;
+import static com.mikosik.stork.compile.Patterns.INTEGER_LITERAL;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
+import static com.mikosik.stork.compile.err.Problems.malformedWord;
+import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
-import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
@@ -24,8 +25,6 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import com.mikosik.stork.common.col.Peekerator;
-import com.mikosik.stork.model.token.IntegerLiteral;
-import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Token;
 
@@ -50,10 +49,8 @@ public class Tokenizer implements Iterator<Token> {
     var firstByte = iterator.peek();
     if (isDoubleQuote(firstByte)) {
       return nextStringLiteral();
-    } else if (isLetter(firstByte)) {
-      return nextLabel();
-    } else if (isNumeric(firstByte)) {
-      return nextIntegerLiteral();
+    } else if (isAlphanumeric(firstByte)) {
+      return nextWord();
     } else {
       return switch (iterator.next()) {
         case '(' -> LEFT_ROUND_BRACKET;
@@ -90,19 +87,21 @@ public class Tokenizer implements Iterator<Token> {
     return literal(builder.toString());
   }
 
-  private Label nextLabel() {
+  private Token nextWord() {
     var builder = new StringBuilder();
     while (iterator.hasNext() && isAlphanumeric(iterator.peek())) {
       builder.append((char) iterator.next().byteValue());
     }
-    return label(builder.toString());
-  }
+    var word = builder.toString();
 
-  private IntegerLiteral nextIntegerLiteral() {
-    var builder = new StringBuilder();
-    while (iterator.hasNext() && isNumeric(iterator.peek())) {
-      builder.append((char) iterator.next().byteValue());
+    if (word.matches(INTEGER_LITERAL)) {
+      return literal(new BigInteger(word));
+    } else if (word.matches(IDENTIFIER)) {
+      return identifier(word);
+    } else {
+      throw exception(malformedWord()
+          .object(word)
+          .build());
     }
-    return literal(new BigInteger(builder.toString()));
   }
 }

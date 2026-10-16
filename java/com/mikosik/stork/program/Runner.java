@@ -16,9 +16,9 @@ import static com.mikosik.stork.program.Stdout.writeStreamTo;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack.Empty;
 import com.mikosik.stork.model.exp.Application;
-import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Integer;
 import com.mikosik.stork.model.exp.Operator;
+import com.mikosik.stork.model.exp.Reference;
 
 public class Runner {
   private Runner() {}
@@ -29,7 +29,7 @@ public class Runner {
 
   public void run(Task task) {
     var computer = interruptible(caching(router()
-        .route(Identifier.class, computer(task.program.library))
+        .route(Reference.class, computer(task.program.library))
         .route(Operator.class, operatorComputer())
         .route(Application.class, applicationComputer())
         .route(Integer.class, integerComputer())));

@@ -17,9 +17,9 @@ import org.quackery.Test;
 
 import com.mikosik.stork.compute.Computer;
 import com.mikosik.stork.model.exp.Application;
-import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Integer;
 import com.mikosik.stork.model.exp.Operator;
+import com.mikosik.stork.model.exp.Reference;
 
 public class TestLogbuddyDecorator {
   public static Test testLogbuddyDecorator() {
@@ -32,7 +32,7 @@ public class TestLogbuddyDecorator {
 
   private static Computer buildComputer() {
     return interruptible(caching(router()
-        .route(Identifier.class, computer(none()))
+        .route(Reference.class, computer(none()))
         .route(Operator.class, operatorComputer())
         .route(Application.class, applicationComputer())
         .route(Integer.class, integerComputer())));

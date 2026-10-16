@@ -7,8 +7,8 @@ import static java.util.Objects.hash;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.model.exp.Reference;
 import com.mikosik.stork.model.exp.Variable;
 
 public class Problem {
@@ -64,9 +64,9 @@ public class Problem {
       return describe("inFunction", variable);
     }
 
-    public ProblemBuilder in(Identifier identifier) {
-      return in(identifier.namespace)
-          .in(identifier.variable);
+    public ProblemBuilder in(Reference reference) {
+      return in(reference.namespace)
+          .in(reference.variable);
     }
 
     public ProblemBuilder object(Object object) {

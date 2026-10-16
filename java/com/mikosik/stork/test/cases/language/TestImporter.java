@@ -14,7 +14,8 @@ public class TestImporter {
         .add(canImportFromSubdirectoryToRoot())
         .add(canImportFromDeepSubdirectoryToRoot())
         .add(canImportFromSiblingDirectory())
-        .add(canImportFromParentDirectory());
+        .add(canImportFromParentDirectory())
+        .add(canImportReferenceWithDigits());
   }
 
   private static Test canImportFromSubdirectoryToRoot() {
@@ -60,6 +61,16 @@ public class TestImporter {
             .source("messageB { messageA }"))
         .add(path("dirA")
             .source("messageA { 'ok' }"))
+        .stdout("ok");
+  }
+
+  private static Test canImportReferenceWithDigits() {
+    return programTest("can import reference with digits")
+        .add(path()
+            .imports("dir1/dir2/message3")
+            .source("main(stdin) { message3 }"))
+        .add(path("dir1/dir2")
+            .source("message3 { 'ok' }"))
         .stdout("ok");
   }
 

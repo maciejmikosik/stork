@@ -9,10 +9,10 @@ import static com.mikosik.stork.compile.err.Context.in;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Lambda.lambda;
 import static com.mikosik.stork.model.exp.Parameter.parameter;
 import static com.mikosik.stork.model.exp.Quote.quote;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
@@ -28,8 +28,8 @@ import com.mikosik.stork.common.col.Peekerator;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Lambda;
+import com.mikosik.stork.model.token.Identifier;
 import com.mikosik.stork.model.token.IntegerLiteral;
-import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Token;
 
@@ -56,7 +56,7 @@ public class Parser implements Iterator<Definition> {
   private Definition parseDefinition() {
     var name = variable(parseName());
     return definition(
-        identifier(name),
+        reference(name),
         in(name).run(this::parseBody));
   }
 
@@ -88,7 +88,7 @@ public class Parser implements Iterator<Definition> {
 
   private Expression parseUnchainedExpression() {
     return switch (input.peek()) {
-      case Label label -> parseInvocation();
+      case Identifier identifier -> parseInvocation();
       case LEFT_ROUND_BRACKET -> parseLambda();
       default -> switch (input.next()) {
         case StringLiteral literal -> quote(literal.string);
@@ -140,7 +140,7 @@ public class Parser implements Iterator<Definition> {
   }
 
   private String parseName() {
-    return next(Label.class).string;
+    return next(Identifier.class).string;
   }
 
   private void checkNext(Token expected) {

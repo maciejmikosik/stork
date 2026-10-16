@@ -5,7 +5,7 @@ import static com.mikosik.stork.compile.err.Problems.unboundVariable;
 import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
-import static com.mikosik.stork.test.Factories.identifier;
+import static com.mikosik.stork.test.Factories.reference;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
 import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
@@ -28,16 +28,16 @@ public class TestLinkerProblems {
         .add(programTest("once")
             .source("func { var }")
             .expect(unboundVariable()
-                .in(identifier("func"))
+                .in(reference("func"))
                 .object(variable("var"))))
         .add(programTest("multiple times in same function")
             .source("func { var(var) }")
             .expect(
                 unboundVariable()
-                    .in(identifier("func"))
+                    .in(reference("func"))
                     .object(variable("var")),
                 unboundVariable()
-                    .in(identifier("func"))
+                    .in(reference("func"))
                     .object(variable("var"))));
   }
 
@@ -48,19 +48,19 @@ public class TestLinkerProblems {
                 .imports("b/bb/funcB")
                 .source("funcA { funcB }"))
             .expect(undefinedFunction()
-                .in(identifier("a/aa/funcA"))
-                .object(identifier("b/bb/funcB"))))
+                .in(reference("a/aa/funcA"))
+                .object(reference("b/bb/funcB"))))
         .add(programTest("multiple times in same function")
             .add(path("a/aa")
                 .imports("b/bb/funcB")
                 .source("funcA { funcB(funcB) }"))
             .expect(
                 undefinedFunction()
-                    .in(identifier("a/aa/funcA"))
-                    .object(identifier("b/bb/funcB")),
+                    .in(reference("a/aa/funcA"))
+                    .object(reference("b/bb/funcB")),
                 undefinedFunction()
-                    .in(identifier("a/aa/funcA"))
-                    .object(identifier("b/bb/funcB"))));
+                    .in(reference("a/aa/funcA"))
+                    .object(reference("b/bb/funcB"))));
   }
 
   private static Test reportsDuplicatedFunction() {

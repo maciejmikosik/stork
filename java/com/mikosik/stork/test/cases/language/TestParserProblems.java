@@ -3,8 +3,8 @@ package com.mikosik.stork.test.cases.language;
 import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
-import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
@@ -19,7 +19,7 @@ import com.mikosik.stork.model.token.Token;
 
 public class TestParserProblems {
   public static Test testParserProblems() {
-    var y = label("y");
+    var y = identifier("y");
     var eight = literal(8);
     return suite("parser reports unexpected token in")
         .add(suite("invocation")

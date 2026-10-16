@@ -11,7 +11,7 @@ import static com.mikosik.stork.compile.Codebase.codebase;
 import static com.mikosik.stork.compile.Compiler.compile;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compute.err.ComputerException.exception;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.program.Program.program;
 import static com.mikosik.stork.program.Runner.runner;
@@ -124,7 +124,7 @@ public class ProgramTest {
           .build());
       var buffer = newBuffer();
       runner().run(task(
-          program(identifier(variable("main")), library),
+          program(reference(variable("main")), library),
           terminal(input(stdin), buffer.asOutput())));
       return outcome(buffer.bytes());
     } catch (CompilerException compilerException) {

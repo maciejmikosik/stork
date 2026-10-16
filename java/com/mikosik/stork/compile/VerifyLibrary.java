@@ -15,7 +15,7 @@ import java.util.List;
 
 import com.mikosik.stork.compile.err.Problem;
 import com.mikosik.stork.model.exp.Definition;
-import com.mikosik.stork.model.exp.Identifier;
+import com.mikosik.stork.model.exp.Reference;
 import com.mikosik.stork.model.exp.Variable;
 
 public class VerifyLibrary {
@@ -31,30 +31,30 @@ public class VerifyLibrary {
         .flatMap(definition -> walk(definition.body)
             .flatMap(filter(Variable.class))
             .map(variable -> unboundVariable()
-                .in(definition.identifier)
+                .in(definition.reference)
                 .object(variable)
                 .build()))
         .toList();
   }
 
   private static List<Problem> findUndefinedFunction(List<Definition> library) {
-    var definedIdentifiers = library.stream()
-        .map(definition -> definition.identifier)
+    var definedReferences = library.stream()
+        .map(definition -> definition.reference)
         .collect(toSet());
     return library.stream()
         .flatMap(definition -> walk(definition.body)
-            .flatMap(filter(Identifier.class))
-            .filter(identifier -> !definedIdentifiers.contains(identifier))
-            .map(identifier -> undefinedFunction()
-                .in(definition.identifier)
-                .object(identifier)
+            .flatMap(filter(Reference.class))
+            .filter(reference -> !definedReferences.contains(reference))
+            .map(reference -> undefinedFunction()
+                .in(definition.reference)
+                .object(reference)
                 .build()))
         .toList();
   }
 
   private static List<Problem> findDuplicatedFunction(List<Definition> library) {
     var histogram = library.stream()
-        .map(definition -> definition.identifier)
+        .map(definition -> definition.reference)
         .collect(groupingBy(identity(), counting()));
     return histogram.entrySet().stream()
         .filter(entry -> entry.getValue() > 1)

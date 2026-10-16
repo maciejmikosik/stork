@@ -12,8 +12,8 @@ import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
-import static com.mikosik.stork.model.exp.Identifier.identifier;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
+import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.util.Map.entry;
@@ -27,8 +27,8 @@ import com.mikosik.stork.compile.err.Problem;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
-import com.mikosik.stork.model.exp.Identifier;
 import com.mikosik.stork.model.exp.Namespace;
+import com.mikosik.stork.model.exp.Reference;
 import com.mikosik.stork.model.exp.Variable;
 
 public class Importer {
@@ -57,7 +57,7 @@ public class Importer {
 
   private static Fab<Variable, Expression> asMappingFunction(List<Line> importLines) {
     return streamer(importLines)
-        .map(line -> entry(line.variable, (Expression) line.identifier))
+        .map(line -> entry(line.variable, (Expression) line.reference))
         .toListAndApply(entries -> functionFrom(
             entries,
             variable -> variable));
@@ -73,16 +73,16 @@ public class Importer {
 
   private static Line parse(String line) {
     var tokens = line.split(" ");
-    var identifier = identifierParse(tokens[0]);
+    var reference = referenceParse(tokens[0]);
     var variable = tokens.length == 2
         ? variable(tokens[1])
-        : identifier.variable;
-    return new Line(line, identifier, variable);
+        : reference.variable;
+    return new Line(line, reference, variable);
   }
 
-  private static Identifier identifierParse(String name) {
+  private static Reference referenceParse(String name) {
     var components = split("/", name);
-    return identifier(
+    return reference(
         namespace(components.subList(0, components.size() - 1)),
         variable(components.getLast()));
   }
@@ -90,7 +90,7 @@ public class Importer {
   public Definition injectInto(Definition definition) {
     return on(definition)
         .apply(onBody(deep(ifVariable(variable -> mapping
-            .apply(definition.identifier.namespace)
+            .apply(definition.reference.namespace)
             .apply(variable)))));
   }
 
@@ -119,15 +119,15 @@ public class Importer {
 
   private static class Line {
     public final String source;
-    public final Identifier identifier;
+    public final Reference reference;
     public final Variable variable;
 
     private Line(
         String source,
-        Identifier identifier,
+        Reference reference,
         Variable variable) {
       this.source = source;
-      this.identifier = identifier;
+      this.reference = reference;
       this.variable = variable;
     }
   }

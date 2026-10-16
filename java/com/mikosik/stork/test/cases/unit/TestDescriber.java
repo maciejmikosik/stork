@@ -5,8 +5,8 @@ import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Describer.describe;
 import static com.mikosik.stork.compile.err.Problem.problem;
 import static com.mikosik.stork.model.exp.Variable.variable;
+import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
-import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
@@ -14,8 +14,8 @@ import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.StringLiteral.literal;
 import static com.mikosik.stork.test.Assertions.assertMatch;
-import static com.mikosik.stork.test.Factories.identifier;
 import static com.mikosik.stork.test.Factories.namespace;
+import static com.mikosik.stork.test.Factories.reference;
 import static java.math.BigInteger.valueOf;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
@@ -33,7 +33,7 @@ public class TestDescriber {
             .add(suite("expression")
                 .add(test(variable("variable"), "variable"))
                 .add(test(namespace("a/b/c"), "a/b/c"))
-                .add(test(identifier("a/b/c/d"), "a/b/c/d")))
+                .add(test(reference("a/b/c/d"), "a/b/c/d")))
             .add(suite("character")
                 .add(test(
                     (byte) 65,
@@ -49,7 +49,7 @@ public class TestDescriber {
                     outline("non-ascii")
                         .nest("decimal: 200"))))
             .add(suite("token")
-                .add(test(label("label"), "label"))
+                .add(test(identifier("name"), "name"))
                 .add(test(LEFT_ROUND_BRACKET, "("))
                 .add(test(RIGHT_ROUND_BRACKET, ")"))
                 .add(test(LEFT_CURLY_BRACKET, "{"))

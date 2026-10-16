@@ -25,6 +25,10 @@ public class Problems {
     return problem("illegal character in string literal");
   }
 
+  public static ProblemBuilder malformedWord() {
+    return problem("malformed word");
+  }
+
   public static ProblemBuilder unboundVariable() {
     return problem("unbound variable");
   }
