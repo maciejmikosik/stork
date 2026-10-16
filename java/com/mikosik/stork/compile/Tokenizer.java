@@ -11,6 +11,7 @@ import static com.mikosik.stork.compile.Patterns.INTEGER_LITERAL;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
+import static com.mikosik.stork.compile.err.Problems.malformedWord;
 import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
@@ -98,8 +99,9 @@ public class Tokenizer implements Iterator<Token> {
     } else if (word.matches(IDENTIFIER)) {
       return identifier(word);
     } else {
-      // TODO report malformed word
-      throw new RuntimeException();
+      throw exception(malformedWord()
+          .object(word)
+          .build());
     }
   }
 }

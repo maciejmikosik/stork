@@ -2,6 +2,7 @@ package com.mikosik.stork.test.cases.language;
 
 import static com.mikosik.stork.common.io.AsciiSubset.asciiSubset;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
+import static com.mikosik.stork.compile.err.Problems.malformedWord;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -18,7 +19,8 @@ import com.mikosik.stork.test.ProgramTest;
 public class TestGeneralTokenizerProblems {
   public static Test testGeneralTokenizerProblems() {
     return suite("tokenizer")
-        .add(reportsIllegalCharacters());
+        .add(reportsIllegalCharacters())
+        .add(reportsMalformedTokens());
   }
 
   private static Suite reportsIllegalCharacters() {
@@ -55,6 +57,32 @@ public class TestGeneralTokenizerProblems {
       }
     }
     return bytes;
+  }
+
+  private static Test reportsMalformedTokens() {
+    return suite("reports malformed tokens")
+        .add(suite("of integer literals")
+            .add(reportsMalformed("123x"))
+            .add(reportsMalformed("+123x"))
+            .add(reportsMalformed("123-"))
+            .add(reportsMalformed("1x23"))
+            .add(reportsMalformed("1+23"))
+            .add(reportsMalformed("+-"))
+            .add(reportsMalformed("+123-")))
+        .add(suite("of identifiers")
+            .add(reportsMalformed("abc+"))
+            .add(reportsMalformed("abc-"))
+            .add(reportsMalformed("ab+c"))
+            .add(reportsMalformed("ab-c")));
+  }
+
+  private static Test reportsMalformed(String token) {
+    return programTest(token)
+        .source("main(stdin) { %s }".formatted(token))
+        .expect(malformedWord()
+            .in(root)
+            .in(variable("main"))
+            .object(token));
   }
 
   private static ProgramTest programTest(String name) {
