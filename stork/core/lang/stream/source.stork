@@ -20,17 +20,6 @@
     not(hasSome(stream))
   }
 
-  maybeHead(stream) {
-    stream
-      ((head)(tail) { something(head) })
-      (nothing)
-  }
-
-  maybeTail(stream) {
-    stream
-      ((head)(tail) { something(tail) })
-      (nothing)
-  }
 
   single(element) {
     some(element)(none)
@@ -61,18 +50,6 @@
         some
           (transform(head))
           (each(transform)(tail))
-      })
-      (none)
-  }
-
-  eachMaybe(transform)(stream) {
-    stream
-      ((head)(tail) {
-        transform(head)
-          ((element) {
-            some(element)(eachMaybe(transform)(tail))
-          })
-          (eachMaybe(transform)(tail))
       })
       (none)
   }
@@ -172,9 +149,13 @@
   transpose(streams) {
     hasSome(streams)
       (some
-        (streams.eachMaybe(maybeHead))
-        (streams.eachMaybe(maybeTail).transpose)
-      )
+        (streams
+           .each(limit(1))
+           .flatten)
+        (streams
+          .each(skip(1))
+          .filter(hasSome)
+          .transpose))
       (none)
   }
 
@@ -234,8 +215,3 @@
       (none)
   }
 
-  maybeAt(index)(stream) {
-    atLeast(0)(index)
-      (stream.skip(index).maybeHead)
-      (nothing)
-  }
