@@ -11,8 +11,8 @@ import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
+import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
-import static com.mikosik.stork.model.token.Label.label;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
@@ -24,8 +24,8 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import com.mikosik.stork.common.col.Peekerator;
+import com.mikosik.stork.model.token.Identifier;
 import com.mikosik.stork.model.token.IntegerLiteral;
-import com.mikosik.stork.model.token.Label;
 import com.mikosik.stork.model.token.StringLiteral;
 import com.mikosik.stork.model.token.Token;
 
@@ -51,7 +51,7 @@ public class Tokenizer implements Iterator<Token> {
     if (isDoubleQuote(firstByte)) {
       return nextStringLiteral();
     } else if (isLetter(firstByte)) {
-      return nextLabel();
+      return nextIdentifier();
     } else if (isNumeric(firstByte)) {
       return nextIntegerLiteral();
     } else {
@@ -90,12 +90,12 @@ public class Tokenizer implements Iterator<Token> {
     return literal(builder.toString());
   }
 
-  private Label nextLabel() {
+  private Identifier nextIdentifier() {
     var builder = new StringBuilder();
     while (iterator.hasNext() && isAlphanumeric(iterator.peek())) {
       builder.append((char) iterator.next().byteValue());
     }
-    return label(builder.toString());
+    return identifier(builder.toString());
   }
 
   private IntegerLiteral nextIntegerLiteral() {
