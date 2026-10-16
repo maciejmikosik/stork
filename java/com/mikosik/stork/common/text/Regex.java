@@ -2,6 +2,7 @@ package com.mikosik.stork.common.text;
 
 public class Regex {
   public static final String LETTER = "[A-Za-z]";
+  public static final String SIGN = "[+-]";
   public static final String DIGIT = "[0-9]";
 
   public static String oneOrMore(String pattern) {
