@@ -93,6 +93,9 @@ public class RunTests {
             .add(testStream())
             .add(testStreamCount())
             .add(testMaybe())));
+
+    System.out.println("done!");
+    exit(0);
   }
 
   private static void runAndReport(Test test) {
