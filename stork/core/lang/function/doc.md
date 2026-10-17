@@ -8,8 +8,8 @@
 `constant` - always returns first argument, ignoring second.
    - `constant(x)(y)` = `x`
 
-`compose(f)(g)` - composes functions `f` and `g`. `g` will be applied first, then `f`.
-   - `compose(f)(g)(x)` = `f(g(x))`
+`then(after)(before)` - composes functions `after` and `before`. `before` will be applied first, then `after`.
+   - `before.then(after)` = `.before.after`
 
 `flip(f)` - swaps first and second arguments applied to function `f`.
    - `flip(f)(x)(y)` = `f(y)(x)`
