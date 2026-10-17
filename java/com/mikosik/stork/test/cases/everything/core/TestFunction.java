@@ -24,12 +24,12 @@ public class TestFunction {
             .test("flip(      (x)(y){x}  )('1')('2')", "2")
             .test("flip(flip( (x)(y){x} ))('1')('2')", "1")
             .build())
-        .add(snippetSuite("compose")
-            .importing("lang/function/compose")
-            .test("compose((x){ x })((x){ x })('0')", "0")
-            .test("compose((x){'1'})((x){ x })('0')", "1")
-            .test("compose((x){ x })((x){'2'})('0')", "2")
-            .test("compose((x){'1'})((x){'2'})('0')", "1")
+        .add(snippetSuite("then")
+            .importing("lang/function/then")
+            .test("then((x){ x })((x){ x })('0')", "0")
+            .test("then((x){'1'})((x){ x })('0')", "1")
+            .test("then((x){ x })((x){'2'})('0')", "2")
+            .test("then((x){'1'})((x){'2'})('0')", "1")
             .build());
   }
 }

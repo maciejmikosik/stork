@@ -25,15 +25,6 @@ Stream is similar to singly linked list. This means accessing random element is 
    - `hasNone(some(head)(tail))` = `false`
    - `hasNone(none)` = `true`
 
-
-`maybeHead(stream)` - returns `something(head)` or `nothing` if stream is `none`.
-   - `maybeHead("abcde")` = `something(97)`
-   - `maybeHead("")` = `nothing`
-
-`maybeTail(stream)` - returns `something(tail)` or `nothing` if stream is `none`.
-   - `maybeTail("abcde")` = `something("bcde")`
-   - `maybeTail("")` = `nothing`
-
 ##### creating #####
 
 `single(element)` - creates stream of length 1, containing only `element`.
@@ -49,8 +40,6 @@ Stream is similar to singly linked list. This means accessing random element is 
 
 `each(transform)(stream)` - goes through all elements in `stream` and replaces each of them by applying `transform` function.
    - `each(add(1))("ace")` = `"bdf"`
-
-`eachMaybe(transform)(stream)` - goes through all elements in `stream` and applies `transform` function, that returns maybe elements. Then it removes all `nothing` elements. Then it unpacks elements wrapped in `something`.
 
 `reduce(seed)(accumulator)(stream)` - goes through all elements in `stream` and invokes a 2 parameter function `accumulator` on each element. First parameter of `accumulator` is element from `stream`. Second argument is `seed` with elements previously accumulated. It is similar to `foldl` and `foldr` in haskell. `reduce` goes through `stream` starting from first element like `foldl`, but element from stream is the first argument to `accumulator` like in `foldr`. Reducing an infinite stream hangs the program.
    - `reduce(1)(multiply)(some(2)(some(3)(some(5)(none))))` = `30`
@@ -125,8 +114,3 @@ Stream is similar to singly linked list. This means accessing random element is 
 `sort(comparator)(stream)` - sorts elements in `stream` in order defined by `comparator`.
    - `sort(moreThan)("1928374650")` = `"0123456789"`
 
- `maybeAt(index)(stream)` - returns element at `index` position. First element in `stream` has `index` = `0`. Last element has `index` = n-1, where n is `length(stream)`. If `index` is within that range, an instance of `something` is returned. Otherwise an instance of `nothing` is returned.
-   - `maybeAt(0)("abcde")` = `something(97)`
-   - `maybeAt(4)("abcde")` = `something(101)`
-   - `maybeAt(5)("abcde")` = `nothing`
-   - `maybeAt(-1)("abcde")` = `nothing`

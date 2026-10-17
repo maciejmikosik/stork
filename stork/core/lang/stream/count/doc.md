@@ -2,23 +2,30 @@
 
 ### Functions ###
 
-`count` - creates an infinite stream of integers starting from `0`.
-   - `count` : `0`, `1`, `2`, `3`, ...
+`count` - creates an infinite stream of integers increasing from `0` upwards.
+   - `count` : `0`, `1`, `2`, ...
 
-`countFrom(n)` - creates an infinite stream of integers starting from `n`.
+`countFrom(n)` - creates an infinite stream of integers increasing from `n` upwards.
    - `countFrom(5)` : `5`, `6`, `7`, ...
 
-`countTo(n)` - creates a finite stream of `n` integers from `0` (inclusively) to `n` (exclusively)
-   - `countTo(5)` : `0`, `1`, `2`, `3`, `4`
-
-`countDownFrom(n)` - creates a finite stream of `n` integers from `n` (exclusively) to `0` (inclusively)
-   - `countDownFrom(5)` : `4`, `3`, `2`, `1`, `0`
+`countDownFrom(n)` - creates an infinite stream of integers decreasing from `n` downwards.
+   - `countDownFrom(5)` : `4`, `3`, `2`, ...
 
 ### Idioms ###
 
-There are no functions to iterate over ranges of integers. Those functions are often confusing about inclusivity/exclusivity of bounds. Instead more explicit alternative is available using `while` and `until` functions.
+There are no functions to iterate over ranges of integers. Those functions are often confusing about inclusivity/exclusivity of bounds. Instead you can combine `count` with other stream functions.
 
-To iterate over following ranges use given idiom.
+To achieve something similiar to imperative loop
+
+    for(int i = 0; i < n; i++) {
+      ...
+    }
+
+use
+
+    count.limit(n)
+
+To iterate over ranges, combine function.
 
  - `[a` - `countFrom(a)`
  - `(a` - `countFrom(a).skip(1)`

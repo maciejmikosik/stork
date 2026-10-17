@@ -33,8 +33,10 @@ Binary. They have 2 boolean parameters and return boolean
 
 To convert boolean value to string use `format(bool)`. It returns either `"true"` or `"false"`.
 
-`negate(predicate)` - negates predicate.
- - `negate(atLeast(5))` = `lessThan(5)`
+### Idioms ###
+
+To negate a predicate use pipes. `.predicate.not`.
+ - `.atLeast(5).not` = `lessThan(5)`
 
 ### Short-circuiting ###
 

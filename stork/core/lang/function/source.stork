@@ -7,8 +7,9 @@
     value
   }
 
-  compose(f)(g)(x) {
-    f(g(x))
+  then(after)(before) {
+    .before
+    .after
   }
 
   flip(f)(x)(y) {
