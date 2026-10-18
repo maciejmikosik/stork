@@ -114,6 +114,16 @@
       (none)
   }
 
+  since(predicate)(stream) {
+    stream
+      ((head)(tail) {
+        predicate(head)
+          (stream)
+          (since(predicate)(tail))
+      })
+      (none)
+  }
+
   until(predicate)(stream) {
     stream
       ((head)(tail) {
@@ -124,6 +134,14 @@
       (none)
   }
 
+  before(predicate) {
+    while(.predicate.not)
+  }
+
+  after(predicate) {
+    .since(predicate)
+    .skip(1)
+  }
 
   append(secondStream)(stream) {
     stream

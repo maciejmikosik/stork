@@ -1,5 +1,6 @@
 package com.mikosik.stork.test.cases.everything.core;
 
+import static com.mikosik.stork.test.ProgramTest.programTest;
 import static com.mikosik.stork.test.SnippetSuite.snippetSuite;
 import static org.quackery.Suite.suite;
 
@@ -99,16 +100,34 @@ public class TestStream {
             .test("while(lessThan(110))('x')", "")
             .test("while(lessThan(110))('')", "")
             .build())
-        .add(snippetSuite("until")
-            .importing("lang/stream/until")
-            .importing("lang/integer/equal")
-            .test("until(equal(33))('abcde')", "abcde")
-            .test("until(equal(33))('!abcde')", "!")
-            .test("until(equal(33))('abc!de')", "abc!")
-            .test("until(equal(33))('abcde!')", "abcde!")
-            .test("until(equal(33))('!')", "!")
-            .test("until(equal(33))('')", "")
-            .build())
+        .add(suite("since")
+            .add(cuts("since", "abcd", ""))
+            .add(cuts("since", "!abcd", "!abcd"))
+            .add(cuts("since", "ab!de", "!de"))
+            .add(cuts("since", "abcd!", "!"))
+            .add(cuts("since", "!", "!"))
+            .add(cuts("since", "", "")))
+        .add(suite("until")
+            .add(cuts("until", "abcd", "abcd"))
+            .add(cuts("until", "!abcd", "!"))
+            .add(cuts("until", "ab!de", "ab!"))
+            .add(cuts("until", "abcd!", "abcd!"))
+            .add(cuts("until", "!", "!"))
+            .add(cuts("until", "", "")))
+        .add(suite("before")
+            .add(cuts("before", "abcd", "abcd"))
+            .add(cuts("before", "!abcd", ""))
+            .add(cuts("before", "ab!de", "ab"))
+            .add(cuts("before", "abcd!", "abcd"))
+            .add(cuts("before", "!", ""))
+            .add(cuts("before", "", "")))
+        .add(suite("after")
+            .add(cuts("after", "abcd", ""))
+            .add(cuts("after", "!abcd", "abcd"))
+            .add(cuts("after", "ab!de", "de"))
+            .add(cuts("after", "abcd!", ""))
+            .add(cuts("after", "!", ""))
+            .add(cuts("after", "", "")))
         .add(snippetSuite("append")
             .importing("lang/stream/append")
             .test("append('x')('abc')", "abcx")
@@ -199,5 +218,20 @@ public class TestStream {
             .test("sort(moreThan)('0')", "0")
             .test("sort(moreThan)('')", "")
             .build());
+  }
+
+  private static Test cuts(
+      String function,
+      String stream,
+      String expected) {
+    return programTest(stream + " " + expected)
+        .imports("""
+            lang/stream/%s
+            lang/integer/equal
+            """
+            .formatted(function))
+        .source("main(stdin) { %s(equal(33))('%s') }"
+            .formatted(function, stream))
+        .stdout(expected);
   }
 }
