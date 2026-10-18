@@ -134,6 +134,14 @@
       (none)
   }
 
+  before(predicate) {
+    while(.predicate.not)
+  }
+
+  after(predicate) {
+    .since(predicate)
+    .skip(1)
+  }
 
   append(secondStream)(stream) {
     stream
