@@ -189,8 +189,8 @@
     hasSome(lists)
       (some
         (lists
-           .each(limit(1))
-           .flatten)
+          .each(limit(1))
+          .flatten)
         (lists
           .each(skip(1))
           .filter(hasSome)
