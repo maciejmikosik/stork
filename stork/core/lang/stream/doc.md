@@ -46,14 +46,6 @@ Stream is similar to singly linked list. This means accessing random element is 
     stream ●●○●○●●○○●○●○●●○○○
     filter ●● ● ●●  ● ● ●●
 
-    (E➝Boolean)(Stream<E>) ➝ Stream<E>
-
-    ▏ while ▕
-    ●●●●●●●●●○●●●●●●●●●
-
-    ▏ until  ▕
-    ○○○○○○○○○●○○○○○○○○○
-
 ##### cutting #####
 
     (Integer)(Stream<E>) ➝ Stream<E>
@@ -62,6 +54,17 @@ Stream is similar to singly linked list. This means accessing random element is 
          skip(3)(stream) =    ○○○○
 
 If `Integer` is out of range, it is clamped.
+
+    (E➝Boolean)(Stream<E>) ➝ Stream<E>
+    
+    ▏ while ▕
+    ●●●●●●●●●○●●●●●●●●●
+    
+    ▏ before▕▏  since ▕
+    ○○○○○○○○○●○○○○○○○○○
+    ▏ until  ▕▏ after ▕
+
+`before` and `until` returns the entire stream if no matching element was found.
 
 ##### processing #####
 
