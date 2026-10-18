@@ -138,6 +138,14 @@ public class TestList {
             .test("prepend('x')('abc')", "xabc")
             .test("prepend('x')('')", "x")
             .build())
+        .add(suite("splitAround")
+            .add(split("Around", "abcd", "abcd."))
+            .add(split("Around", "ab!cd", "ab.cd."))
+            .add(split("Around", "a!b!c!d", "a.b.c.d."))
+            .add(split("Around", "!ab!cd!", ".ab.cd.."))
+            .add(split("Around", "!!", "..."))
+            .add(split("Around", "!", ".."))
+            .add(split("Around", "", ".")))
         .add(snippetSuite("flatten")
             .importing("lang/list/flatten")
             .importing("lang/list/some")
@@ -231,6 +239,31 @@ public class TestList {
             """
             .formatted(function))
         .source("main(stdin) { %s(equal(33))('%s') }"
+            .formatted(function, list))
+        .stdout(expected);
+  }
+
+  private static Test split(
+      String suffix,
+      String list,
+      String expected) {
+    var function = "split" + suffix;
+    return programTest(function + " " + list + " " + expected)
+        .imports("""
+            lang/list/%s
+            lang/integer/equal
+            lang/list/each
+            lang/list/append
+            lang/list/flatten
+            """
+            .formatted(function))
+        .source("""
+            main(stdin) {
+              %s(equal(33))('%s')
+                .each(append('.'))
+                .flatten
+            }
+            """
             .formatted(function, list))
         .stdout(expected);
   }

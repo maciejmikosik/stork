@@ -155,6 +155,28 @@
     flip(append)
   }
 
+  splitAround(separator)(list) {
+    some
+      (list
+        .before(separator))
+      (list
+        .since(separator)
+        .splitAround2(separator))
+  }
+
+  splitAround2(separator)(list) {
+    hasSome(list)
+      (some
+        (list
+          .skip(1)
+          .before(separator))
+        (list
+          .skip(1)
+          .since(separator)
+          .splitAround2(separator)))
+      (none)
+  }
+
   flatten(lists) {
     lists
       ((head)(tail) {

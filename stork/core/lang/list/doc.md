@@ -82,6 +82,11 @@ If `Integer` is out of range, it is clamped.
           append(○○○)(●●●) = ●●●○○○
          prepend(○○○)(●●●) = ○○○●●●
 
+      (E->Boolean)(List<E>) ➝ List<List<E>>
+    splitAround(●)(①❷③④❺❻⑦) = ①,③④,|,⑦
+        splitAround(●)(❶❷❸) = |,|,|,|
+        splitAround(●)(①②③) = ①②③
+
         List<List<E>> ➝ List<E>
     flatten(❶❷❸,❹,❺❻) = ❶❷❸❹❺❻
 
