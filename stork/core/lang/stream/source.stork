@@ -114,6 +114,16 @@
       (none)
   }
 
+  since(predicate)(stream) {
+    stream
+      ((head)(tail) {
+        predicate(head)
+          (stream)
+          (since(predicate)(tail))
+      })
+      (none)
+  }
+
   until(predicate)(stream) {
     stream
       ((head)(tail) {
