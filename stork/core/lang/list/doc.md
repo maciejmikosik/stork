@@ -97,6 +97,16 @@ If `Integer` is out of range, it is clamped.
     prefixes(❶❷❸) = |,❶,❶❷,❶❷❸
     suffixes(❶❷❸) = ❶❷❸,❷❸,❸,|
 
+    (List<E➝Boolean>)(List<E>) ➝ Boolean
+           hasPrefix(●●)(❶❷③④) = true
+           hasPrefix(●○)(❶❷③④) = false
+            hasInfix(●●)(❶❷③④) = true
+            hasInfix(●○)(❶❷③④) = true
+            hasInfix(○○)(❶❷③④) = true
+            hasInfix(○●)(❶❷③④) = false
+           hasSuffix(○○)(❶❷③④) = true
+           hasSuffix(●○)(❶❷③④) = false
+
 ##### other #####
 
         List<?> ➝ Integer
@@ -111,13 +121,6 @@ If `Integer` is out of range, it is clamped.
    - `equal(equalInteger)("abc")("abc")` = `true`
    - `equal(equalInteger)("abc")("abx")` = `false`
    - `equal(equalInteger)("abc")("ab")` = `false`
-
-`startsWith(equal)(prefix)(list)` - checks if `list` starts with `prefix` list. Function `equal` is used to compare elements in those listss.
-   - `startsWith(equalInteger)("a")("abc")` = `true`
-   - `startsWith(equalInteger)("a")("a")` = `true`
-   - `startsWith(equalInteger)("a")("xyz")` = `false`
-   - `startsWith(equalInteger)("abc")("a")` = `false`
-   - `startsWith(equalInteger)("")("abc")` = `true`
 
 `contains(predicate)(list)` - checks if `list` has any element that matches `predicate`.
    - `contains(isDigit)("ab8cd")` = `true`

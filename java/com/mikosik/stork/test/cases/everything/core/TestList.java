@@ -193,6 +193,35 @@ public class TestList {
             .test("suffixes('').flatten", "")
             .test("suffixes('').length", 1)
             .build())
+        .add(suite("hasPrefix")
+            .add(has("Prefix", "abc", "abc", true))
+            .add(has("Prefix", "ab", "abc", true))
+            .add(has("Prefix", "a", "abc", true))
+            .add(has("Prefix", "", "abc", true))
+            .add(has("Prefix", "x", "abc", false))
+            .add(has("Prefix", "abcx", "abc", false))
+            .add(has("Prefix", "xx", "x", false))
+            .add(has("Prefix", "x", "", false)))
+        .add(suite("hasInfix")
+            .add(has("Infix", "abc", "abc", true))
+            .add(has("Infix", "ab", "abc", true))
+            .add(has("Infix", "bc", "abc", true))
+            .add(has("Infix", "a", "abc", true))
+            .add(has("Infix", "b", "abc", true))
+            .add(has("Infix", "c", "abc", true))
+            .add(has("Infix", "", "abc", true))
+            .add(has("Infix", "x", "abc", false))
+            .add(has("Infix", "xx", "x", false))
+            .add(has("Infix", "x", "", false)))
+        .add(suite("hasSuffix")
+            .add(has("Suffix", "abc", "abc", true))
+            .add(has("Suffix", "bc", "abc", true))
+            .add(has("Suffix", "c", "abc", true))
+            .add(has("Suffix", "", "abc", true))
+            .add(has("Suffix", "x", "abc", false))
+            .add(has("Suffix", "xabc", "abc", false))
+            .add(has("Suffix", "xx", "x", false))
+            .add(has("Suffix", "x", "", false)))
         .add(snippetSuite("equal")
             .importing("lang/list/some")
             .importing("lang/list/none")
@@ -211,15 +240,6 @@ public class TestList {
             .test("equal(eq)('abc')('ab')", false)
             .test("equal(eq)('ab')('abc')", false)
             .test("equal(eq)('abc')('abd')", false)
-            .build())
-        .add(snippetSuite("startsWith")
-            .importing("lang/integer/equal")
-            .importing("lang/list/startsWith")
-            .test("startsWith(equal)('a')('abc')", true)
-            .test("startsWith(equal)('a')('a')", true)
-            .test("startsWith(equal)('a')('xyz')", false)
-            .test("startsWith(equal)('abc')('a')", false)
-            .test("startsWith(equal)('')('abc')", true)
             .build())
         .add(snippetSuite("length")
             .importing("lang/list/length")
@@ -288,5 +308,29 @@ public class TestList {
             """
             .formatted(function, list))
         .stdout(expected);
+  }
+
+  private static Test has(
+      String what,
+      String xfix,
+      String list,
+      boolean expected) {
+    var function = "has" + what;
+    return programTest("%s(%s)(%s)=%s"
+        .formatted(function, xfix, list, expected))
+            .imports("""
+                lang/list/%s
+                lang/integer/equal
+                lang/list/each
+                lang/boolean/format
+                """
+                .formatted(function))
+            .source("""
+                main(stdin) {
+                    %s("%s".each(equal))("%s").format
+                }
+                """
+                .formatted(function, xfix, list))
+            .stdout(Boolean.toString(expected));
   }
 }

@@ -217,6 +217,32 @@
       (single(none))
   }
 
+  hasPrefix(prefix)(list) {
+    prefix
+      ((prefixHead)(prefixTail) {
+        list
+          ((listHead)(listTail) {
+            and
+              (prefixHead(listHead))
+              (hasPrefix(prefixTail)(listTail))
+          })
+          (false)
+      })
+      (true)
+  }
+
+  hasInfix(infix)(list) {
+    list.suffixes
+      .filter(hasPrefix(infix))
+      .hasSome
+  }
+
+  hasSuffix(suffix)(list) {
+    hasPrefix
+      (reverse(suffix))
+      (reverse(list))
+  }
+
   equal(equalElements)(listA)(listB) {
     listA
       ((headA)(tailA) {
@@ -229,20 +255,6 @@
           (false)
       })
       (hasNone(listB))
-  }
-
-  startsWith(equal)(prefix)(list) {
-    prefix
-      ((prefixHead)(prefixTail) {
-        list
-          ((head)(tail) {
-            and
-              (equal(prefixHead)(head))
-              (startsWith(equal)(prefixTail)(tail))
-          })
-          (false)
-      })
-      (true)
   }
 
   length {
