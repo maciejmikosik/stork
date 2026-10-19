@@ -198,6 +198,25 @@
       (none)
   }
 
+  prefixes(list) {
+    list
+      ((head)(tail) {
+        some
+          (none)
+          (prefixes(tail)
+            .each(prepend(single(head))))
+      })
+      (single(none))
+  }
+
+  suffixes(list) {
+    list
+      ((head)(tail) {
+        some(list)(suffixes(tail))
+      })
+      (single(none))
+  }
+
   equal(equalElements)(listA)(listB) {
     listA
       ((headA)(tailA) {

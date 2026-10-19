@@ -93,6 +93,10 @@ If `Integer` is out of range, it is clamped.
           List<List<E>> ➝ List<List<E>>
     transpose(❶❷❸,❹,❺❻) = ❶❹❺,❷❻,❸
 
+          List<E> ➝ List<List<E>
+    prefixes(❶❷❸) = |,❶,❶❷,❶❷❸
+    suffixes(❶❷❸) = ❶❷❸,❷❸,❸,|
+
 ##### other #####
 
         List<?> ➝ Integer
