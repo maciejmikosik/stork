@@ -38,11 +38,11 @@ There is no need for `return` keyword since function definition contains single 
 ### Namespace ###
 Full doc: [Namespace](namespace.md).
 
-Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing streams. To import a function from core library, create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
+Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing lists. To import a function from core library, create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
 
 `import.stork`
 
-    lang/stream/append
+    lang/list/append
 
 Now you can use `append` function in your `source.stork` file.
 
@@ -102,13 +102,13 @@ Chain of instance calls can be composed into pipe.
 
 ### Standard I/O ###
 
-String literal like `"Hello World!"` is [stream](../stork/core/lang/stream/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return stream of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is stream of integers representing bytes from standard input.
+String literal like `"Hello World!"` is [list](../stork/core/lang/list/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return list of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is list of integers representing bytes from standard input.
 
 Running
 
 `import.stork`
 
-    lang/stream/append
+    lang/list/append
 
 `source.stork`
 
@@ -124,12 +124,12 @@ console:
 
     printf "Hello World" | ~/stork
 
-Since strings are stream of integers, you can perform integer arithmetics on characters.
+Since strings are list of integers, you can perform integer arithmetics on characters.
 
 `import.stork`
 
     lang/integer/add
-    lang/stream/each
+    lang/list/each
 
 `source.stork`
 

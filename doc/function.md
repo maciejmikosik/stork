@@ -2,7 +2,7 @@
 
 ### Application ###
 
-Syntax for calling function `f` with single argument `x` is `f(x)`. For example, function `lang/stream/reverse` has one parameter of type stream. It reverses order of elements of that stream.
+Syntax for calling function `f` with single argument `x` is `f(x)`. For example, function `lang/list/reverse` has one parameter of type list. It reverses order of elements of that list.
 
     main(stdin) {
       reverse("!dlroW olleH")
@@ -10,7 +10,7 @@ Syntax for calling function `f` with single argument `x` is `f(x)`. For example,
 
 prints `Hello World!`.
 
-Syntax for calling a function `f` with 2 arguments `x`, `y` is `f(x)(y)`. For example `lang/stream/append` has 2 parameters. First is a stream to append at the end of second stream parameter.
+Syntax for calling a function `f` with 2 arguments `x`, `y` is `f(x)(y)`. For example `lang/list/append` has 2 parameters. First is a list to append at the end of second list parameter.
 
     main(stdin) {
       append("!")("Hello World")
@@ -105,7 +105,7 @@ This can greatly simplify your code. Let's rewrite previous example.
       message.prepend(affix).append(affix)
     }
 
-Notice again that order of parameters matters. For example, functions operating on streams have stream as its last parameter. This allows creation of readable chain of invocations.
+Notice again that order of parameters matters. For example, functions operating on lists have list as its last parameter. This allows creation of readable chain of invocations.
 
     main(stdin) {
       shoutTimes(3)("Hello World")

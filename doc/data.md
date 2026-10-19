@@ -160,7 +160,7 @@ Consider function that takes maybe string `maybeUser` and reports what was found
  - `found(something("John"))` returns `"found user: John"`.
  - `found(nothing)` returns `"user not found"`.
 
-Another example is [stream](../stork/core/lang/stream/doc.md). Stream has 2 constructors. First constructor `some` takes 2 parameters: `head` which is the first element of the stream and `tail` which is a stream containing remaining elements. Second constructor `none` is parameterless and returns empty stream.
+Another example is [list](../stork/core/lang/list/doc.md). List has 2 constructors. First constructor `some` takes 2 parameters: `head` which is the first element of the list and `tail` which is a list containing remaining elements. Second constructor `none` is parameterless and returns empty list.
 
     some(head)(tail)(vSome)(vNone) {
       vSome(head)(tail)

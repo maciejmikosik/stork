@@ -76,7 +76,7 @@ public class TestParser {
 
   private static Test functionCanDelegate() {
     return programTest("can delegate")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               function("mock")
@@ -95,7 +95,7 @@ public class TestParser {
 
   private static Test applicationArgumentCanBeInteger() {
     return programTest("argument can be integer")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               function(33)
@@ -115,7 +115,7 @@ public class TestParser {
    */
   private static Test applicationArgumentCanBeLambda() {
     return programTest("argument can be lambda")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               apply((string){some(33)(string)})("mock")
@@ -130,7 +130,7 @@ public class TestParser {
 
   private static Test chainCanStartWithInteger() {
     return programTest("can start with integer")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               33.function
@@ -145,7 +145,7 @@ public class TestParser {
 
   private static Test chainCanStartWithString() {
     return programTest("can start with string")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               "mock".function
@@ -160,7 +160,7 @@ public class TestParser {
 
   private static Test chainCanStartWithApplication() {
     return programTest("can start with application")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               functionA("mock").functionB
@@ -179,7 +179,7 @@ public class TestParser {
 
   private static Test chainCanBeLong() {
     return programTest("can be long")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               "mock".functionA.functionB.functionC
@@ -202,7 +202,7 @@ public class TestParser {
 
   private static Test chainCanHaveApplication() {
     return programTest("can have application")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               "mock".function(65)(66)
@@ -217,7 +217,7 @@ public class TestParser {
 
   private static Test chainCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               function(65)("mock").function(66).function(67)
@@ -232,7 +232,7 @@ public class TestParser {
 
   private static Test chainCanBeArgument() {
     return programTest("can be argument")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               functionB("mock".functionA)
@@ -251,7 +251,7 @@ public class TestParser {
 
   private static Test pipeCanHaveSingleFunction() {
     return programTest("can have single function")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               pipe("mock")
@@ -270,7 +270,7 @@ public class TestParser {
 
   private static Test pipeCanHaveApplication() {
     return programTest("can have application")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               pipe("mock")
@@ -285,7 +285,7 @@ public class TestParser {
 
   private static Test pipeCanBeLongAndHaveApplications() {
     return programTest("can be long and have applications")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               pipe("mock")
@@ -302,7 +302,7 @@ public class TestParser {
 
   private static Test pipeCanBeArgument() {
     return programTest("can be argument")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               identity(.some(65))("mock")
@@ -378,7 +378,7 @@ public class TestParser {
 
   private static Test cachesDuplicatedArgument() {
     return programTest("caches duplicated arguments")
-        .imports("lang/stream/some")
+        .imports("lang/list/some")
         .source("""
             main(stdin) {
               longCalculation("")

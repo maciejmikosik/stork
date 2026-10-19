@@ -8,6 +8,6 @@ lang/op/DIVIDE
 lang/function/flip
 lang/function/doubly
 lang/boolean/not
-lang/stream/single
-lang/stream/prepend
-lang/stream/append
+lang/list/single
+lang/list/prepend
+lang/list/append

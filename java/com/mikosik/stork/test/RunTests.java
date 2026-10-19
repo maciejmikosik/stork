@@ -18,8 +18,8 @@ import static com.mikosik.stork.test.cases.everything.core.TestBoolean.testBoole
 import static com.mikosik.stork.test.cases.everything.core.TestFunction.testFunction;
 import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteger;
 import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
-import static com.mikosik.stork.test.cases.everything.core.TestStream.testStream;
-import static com.mikosik.stork.test.cases.everything.core.TestStreamCount.testStreamCount;
+import static com.mikosik.stork.test.cases.everything.core.TestList.testList;
+import static com.mikosik.stork.test.cases.everything.core.TestListCount.testListCount;
 import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCompilerProblems;
 import static com.mikosik.stork.test.cases.language.TestImporter.testImporter;
 import static com.mikosik.stork.test.cases.language.TestImporterProblems.testImporterProblems;
@@ -90,8 +90,8 @@ public class RunTests {
         .add(testBoolean())
         .add(testFunction())
         .add(testInteger())
-        .add(testStream())
-        .add(testStreamCount())
+        .add(testList())
+        .add(testListCount())
         .add(testMaybe()));
 
     System.out.println("done!");
