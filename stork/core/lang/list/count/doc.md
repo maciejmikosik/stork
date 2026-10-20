@@ -2,14 +2,12 @@
 
 ### Functions ###
 
-`count` - creates an infinite list of integers increasing from `0` upwards.
-   - `count` : `0`, `1`, `2`, ...
+creates an infinite lists of integers
 
-`countFrom(n)` - creates an infinite list of integers increasing from `n` upwards.
-   - `countFrom(5)` : `5`, `6`, `7`, ...
-
-`countDownFrom(n)` - creates an infinite list of integers decreasing from `n` downwards.
-   - `countDownFrom(5)` : `4`, `3`, `2`, ...
+                       List<Integer>
+               count = 0, 1, 2, 3, ...
+        countFrom(3) = 3, 4, 5, 6, ...
+    countDownFrom(5) = 5, 4, 3, 2, ...
 
 ### Idioms ###
 
