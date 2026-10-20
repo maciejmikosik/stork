@@ -6,76 +6,76 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestStream {
-  public static Test testStream() {
-    return suite("stream")
+public class TestList {
+  public static Test testList() {
+    return suite("list")
         .add(snippetSuite("constructor")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
             .test("some(120)(some(121)(some(122)(none)))", "xyz")
             .test("none", "")
             .build())
         .add(snippetSuite("hasSome")
-            .importing("lang/stream/hasSome")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
+            .importing("lang/list/hasSome")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
             .test("hasSome(none)", false)
             .test("hasSome(some(1)(none))", true)
             .test("hasSome(some(1)(some(2)(some(3)(none))))", true)
             .build())
         .add(snippetSuite("hasNone")
-            .importing("lang/stream/hasNone")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
+            .importing("lang/list/hasNone")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
             .test("hasNone(none)", true)
             .test("hasNone(some(1)(none))", false)
             .test("hasNone(some(1)(some(2)(some(3)(none))))", false)
             .build())
         .add(snippetSuite("single")
-            .importing("lang/stream/single")
+            .importing("lang/list/single")
             .test("single(120)", "x")
             .build())
         .add(snippetSuite("repeat")
-            .importing("lang/stream/repeat")
-            .importing("lang/stream/limit")
+            .importing("lang/list/repeat")
+            .importing("lang/list/limit")
             .test("limit(5)(repeat(120))", "xxxxx")
             .build())
         .add(snippetSuite("cycle")
-            .importing("lang/stream/cycle")
-            .importing("lang/stream/limit")
+            .importing("lang/list/cycle")
+            .importing("lang/list/limit")
             .test("limit(10)(cycle('abc'))", "abcabcabca")
             .test("limit(10)(cycle('a'))", "aaaaaaaaaa")
             .test("cycle('')", "")
             .build())
         .add(snippetSuite("iterate")
-            .importing("lang/stream/iterate")
-            .importing("lang/stream/limit")
+            .importing("lang/list/iterate")
+            .importing("lang/list/limit")
             .importing("lang/integer/add")
             .test("limit(10)(iterate(add(1))(97))", "abcdefghij")
             .build())
         .add(snippetSuite("each")
-            .importing("lang/stream/each")
+            .importing("lang/list/each")
             .importing("lang/integer/add")
             .test("each(add(1))('ace')", "bdf")
             .test("each(add(1))('')", "")
             .build())
         .add(snippetSuite("reduce")
-            .importing("lang/stream/reduce")
-            .importing("lang/stream/append")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
+            .importing("lang/list/reduce")
+            .importing("lang/list/append")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
             .test("reduce('a')(append)(some('x')(some('y')(some('z')(none))))", "axyz")
             .test("reduce('')(append)(none)", "")
             .build())
         .add(snippetSuite("filter")
-            .importing("lang/stream/filter")
+            .importing("lang/list/filter")
             .importing("lang/integer/moreThan")
             .test("filter(moreThan(100))('axbycz')", "xyz")
             .test("filter(moreThan(100))('xyz')", "xyz")
             .test("filter(moreThan(100))('')", "")
             .build())
         .add(snippetSuite("limit")
-            .importing("lang/stream/limit")
+            .importing("lang/list/limit")
             .test("limit(5)('abcde')", "abcde")
             .test("limit(4)('abcde')", "abcd")
             .test("limit(6)('abcde')", "abcde")
@@ -83,7 +83,7 @@ public class TestStream {
             .test("limit(0)('')", "")
             .build())
         .add(snippetSuite("skip")
-            .importing("lang/stream/skip")
+            .importing("lang/list/skip")
             .test("skip(4)('abcde')", "e")
             .test("skip(5)('abcde')", "")
             .test("skip(6)('abcde')", "")
@@ -91,7 +91,7 @@ public class TestStream {
             .test("skip(-1)('abcde')", "abcde")
             .build())
         .add(snippetSuite("while")
-            .importing("lang/stream/while")
+            .importing("lang/list/while")
             .importing("lang/integer/lessThan")
             .test("while(lessThan(110))('abcde')", "abcde")
             .test("while(lessThan(110))('xabcde')", "")
@@ -129,19 +129,27 @@ public class TestStream {
             .add(cuts("after", "!", ""))
             .add(cuts("after", "", "")))
         .add(snippetSuite("append")
-            .importing("lang/stream/append")
+            .importing("lang/list/append")
             .test("append('x')('abc')", "abcx")
             .test("append('x')('')", "x")
             .build())
         .add(snippetSuite("prepend")
-            .importing("lang/stream/prepend")
+            .importing("lang/list/prepend")
             .test("prepend('x')('abc')", "xabc")
             .test("prepend('x')('')", "x")
             .build())
+        .add(suite("splitAround")
+            .add(split("Around", "abcd", "abcd."))
+            .add(split("Around", "ab!cd", "ab.cd."))
+            .add(split("Around", "a!b!c!d", "a.b.c.d."))
+            .add(split("Around", "!ab!cd!", ".ab.cd.."))
+            .add(split("Around", "!!", "..."))
+            .add(split("Around", "!", ".."))
+            .add(split("Around", "", ".")))
         .add(snippetSuite("flatten")
-            .importing("lang/stream/flatten")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
+            .importing("lang/list/flatten")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
             .test("flatten(some('abc')(some('de')(some('f')(none))))", "abcdef")
             .test("flatten(some('abc')(none))", "abc")
             .test("flatten(some('')(some('')(some('')(none))))", "")
@@ -150,10 +158,10 @@ public class TestStream {
             .test("flatten(none)", "")
             .build())
         .add(snippetSuite("transpose")
-            .importing("lang/stream/transpose")
-            .importing("lang/stream/flatten")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
+            .importing("lang/list/transpose")
+            .importing("lang/list/flatten")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
             .test("some('abc')(some('def')(some('ghi')(none))).transpose.flatten", "adgbehcfi")
             .test("some('abc')(some('de')(some('f')(none))).transpose.flatten", "adfbec")
             .test("some('abc')(none).transpose.flatten", "abc")
@@ -163,10 +171,61 @@ public class TestStream {
             .test("some('abc')(some('')(some('def')(none))).transpose.flatten", "adbecf")
             .test("none.transpose.flatten", "")
             .build())
+        .add(snippetSuite("prefixes")
+            .importing("lang/list/prefixes")
+            .importing("lang/list/flatten")
+            .importing("lang/list/length")
+            .test("prefixes('abc').flatten", "aababc")
+            .test("prefixes('abc').length", 4)
+            .test("prefixes('a').flatten", "a")
+            .test("prefixes('a').length", 2)
+            .test("prefixes('').flatten", "")
+            .test("prefixes('').length", 1)
+            .build())
+        .add(snippetSuite("suffixes")
+            .importing("lang/list/suffixes")
+            .importing("lang/list/flatten")
+            .importing("lang/list/length")
+            .test("suffixes('abc').flatten", "abcbcc")
+            .test("suffixes('abc').length", 4)
+            .test("suffixes('a').flatten", "a")
+            .test("suffixes('a').length", 2)
+            .test("suffixes('').flatten", "")
+            .test("suffixes('').length", 1)
+            .build())
+        .add(suite("hasPrefix")
+            .add(has("Prefix", "abc", "abc", true))
+            .add(has("Prefix", "ab", "abc", true))
+            .add(has("Prefix", "a", "abc", true))
+            .add(has("Prefix", "", "abc", true))
+            .add(has("Prefix", "x", "abc", false))
+            .add(has("Prefix", "abcx", "abc", false))
+            .add(has("Prefix", "xx", "x", false))
+            .add(has("Prefix", "x", "", false)))
+        .add(suite("hasInfix")
+            .add(has("Infix", "abc", "abc", true))
+            .add(has("Infix", "ab", "abc", true))
+            .add(has("Infix", "bc", "abc", true))
+            .add(has("Infix", "a", "abc", true))
+            .add(has("Infix", "b", "abc", true))
+            .add(has("Infix", "c", "abc", true))
+            .add(has("Infix", "", "abc", true))
+            .add(has("Infix", "x", "abc", false))
+            .add(has("Infix", "xx", "x", false))
+            .add(has("Infix", "x", "", false)))
+        .add(suite("hasSuffix")
+            .add(has("Suffix", "abc", "abc", true))
+            .add(has("Suffix", "bc", "abc", true))
+            .add(has("Suffix", "c", "abc", true))
+            .add(has("Suffix", "", "abc", true))
+            .add(has("Suffix", "x", "abc", false))
+            .add(has("Suffix", "xabc", "abc", false))
+            .add(has("Suffix", "xx", "x", false))
+            .add(has("Suffix", "x", "", false)))
         .add(snippetSuite("equal")
-            .importing("lang/stream/some")
-            .importing("lang/stream/none")
-            .importing("lang/stream/equal")
+            .importing("lang/list/some")
+            .importing("lang/list/none")
+            .importing("lang/list/equal")
             .importing("lang/integer/equal eq")
             .test("equal(eq)('')('')", true)
             .test("equal(eq)('a')('a')", true)
@@ -182,33 +241,24 @@ public class TestStream {
             .test("equal(eq)('ab')('abc')", false)
             .test("equal(eq)('abc')('abd')", false)
             .build())
-        .add(snippetSuite("startsWith")
-            .importing("lang/integer/equal")
-            .importing("lang/stream/startsWith")
-            .test("startsWith(equal)('a')('abc')", true)
-            .test("startsWith(equal)('a')('a')", true)
-            .test("startsWith(equal)('a')('xyz')", false)
-            .test("startsWith(equal)('abc')('a')", false)
-            .test("startsWith(equal)('')('abc')", true)
-            .build())
         .add(snippetSuite("length")
-            .importing("lang/stream/length")
+            .importing("lang/list/length")
             .test("length('')", 0)
             .test("length('xyz')", 3)
             .build())
         .add(snippetSuite("contains")
             .importing("lang/integer/equal")
-            .importing("lang/stream/contains")
+            .importing("lang/list/contains")
             .test("contains(equal(0))('xyz')", false)
             .test("contains(equal(120))('xyz')", true)
             .build())
         .add(snippetSuite("reverse")
-            .importing("lang/stream/reverse")
+            .importing("lang/list/reverse")
             .test("reverse('abcde')", "edcba")
             .test("reverse('')", "")
             .build())
         .add(snippetSuite("sort")
-            .importing("lang/stream/sort")
+            .importing("lang/list/sort")
             .importing("lang/integer/moreThan")
             .test("sort(moreThan)('1928374650')", "0123456789")
             .test("sort(moreThan)('0123456789')", "0123456789")
@@ -222,16 +272,65 @@ public class TestStream {
 
   private static Test cuts(
       String function,
-      String stream,
+      String list,
       String expected) {
-    return programTest(stream + " " + expected)
+    return programTest(list + " " + expected)
         .imports("""
-            lang/stream/%s
+            lang/list/%s
             lang/integer/equal
             """
             .formatted(function))
         .source("main(stdin) { %s(equal(33))('%s') }"
-            .formatted(function, stream))
+            .formatted(function, list))
         .stdout(expected);
+  }
+
+  private static Test split(
+      String suffix,
+      String list,
+      String expected) {
+    var function = "split" + suffix;
+    return programTest(function + " " + list + " " + expected)
+        .imports("""
+            lang/list/%s
+            lang/integer/equal
+            lang/list/each
+            lang/list/append
+            lang/list/flatten
+            """
+            .formatted(function))
+        .source("""
+            main(stdin) {
+              %s(equal(33))('%s')
+                .each(append('.'))
+                .flatten
+            }
+            """
+            .formatted(function, list))
+        .stdout(expected);
+  }
+
+  private static Test has(
+      String what,
+      String xfix,
+      String list,
+      boolean expected) {
+    var function = "has" + what;
+    return programTest("%s(%s)(%s)=%s"
+        .formatted(function, xfix, list, expected))
+            .imports("""
+                lang/list/%s
+                lang/integer/equal
+                lang/list/each
+                lang/boolean/format
+                """
+                .formatted(function))
+            .source("""
+                main(stdin) {
+                    %s("%s".each(equal))("%s").format
+                }
+                """
+                .formatted(function, xfix, list))
+            .stdout(Boolean.toString(expected));
   }
 }

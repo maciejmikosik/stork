@@ -18,17 +18,17 @@ public class TestCore {
 
   private static Test importsCoreFunction() {
     return programTest("can import core function")
-        .imports("lang/stream/append")
+        .imports("lang/list/append")
         .source("main(stdin) { append('!')('Hello World') }")
         .stdout("Hello World!");
   }
 
   private static Test cannotOverrideCoreFunction() {
     return programTest("cannot override core function")
-        .add(path("lang/stream")
-            .source("length(stream) { 0 }"))
+        .add(path("lang/list")
+            .source("length(list) { 0 }"))
         .expect(duplicatedFunction()
-            .in(namespace("lang/stream"))
+            .in(namespace("lang/list"))
             .object(variable("length")));
   }
 }

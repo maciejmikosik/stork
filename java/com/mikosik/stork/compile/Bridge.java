@@ -21,17 +21,17 @@ public class Bridge {
   public static final Reference TRUE = reference(bool, variable("true"));
   public static final Reference FALSE = reference(bool, variable("false"));
 
-  private static final Namespace stream = lang.add("stream");
-  public static final Reference SOME = reference(stream, variable("some"));
-  public static final Reference NONE = reference(stream, variable("none"));
-  public static final Reference REDUCE_EAGER = reference(stream, variable("reduceEager"));
+  private static final Namespace list = lang.add("list");
+  public static final Reference SOME = reference(list, variable("some"));
+  public static final Reference NONE = reference(list, variable("none"));
+  public static final Reference REDUCE_EAGER = reference(list, variable("reduceEager"));
 
   public static Expression stork(String string) {
-    Expression stream = NONE;
+    Expression list = NONE;
     for (char character : reverse(string).toCharArray()) {
-      stream = some(integer(character), stream);
+      list = some(integer(character), list);
     }
-    return stream;
+    return list;
   }
 
   public static Expression some(Expression head, Expression tail) {

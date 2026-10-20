@@ -15,11 +15,7 @@ Predicates can be defined as standalone function.
 
 They can be built by currying binary integer operators: `equal(3)`, `atLeast(5)`. 
 
-They are used in stream functions `filter`, `while`, `contains`.
-
-### Equal ###
-
-Equal is a function with 2 parameters that returns boolean. It tells if 2 arguments are equal. Objects in stork don't have built-in equality function, so some higher-order function require providing explicit function. For example function that tests equality of streams `lang/stream/equal` requires providing function for testing equality of elements in those streams.
+They are used in list functions `filter`, `while`, `contains`.
 
 ### Comparator ###
 

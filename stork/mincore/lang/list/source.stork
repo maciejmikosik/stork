@@ -7,8 +7,8 @@
     vNone
   }
 
-  reduceEager(sum)(add)(stream) {
-    stream
+  reduceEager(sum)(add)(list) {
+    list
       ((head)(tail) {
         EAGER(reduceEager)
           (add(head)(sum))

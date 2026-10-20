@@ -8,8 +8,8 @@
   }
 
 
-  hasSome(stream) {
-    stream
+  hasSome(list) {
+    list
       ((head)(tail) { true })
       (false)
   }
@@ -29,9 +29,9 @@
       (repeat(element))
   }
 
-  cycle(stream) {
-    hasSome(stream)
-      (stream.append(cycle(stream)))
+  cycle(list) {
+    hasSome(list)
+      (list.append(cycle(list)))
       (none)
   }
 
@@ -42,8 +42,8 @@
   }
 
 
-  each(transform)(stream) {
-    stream
+  each(transform)(list) {
+    list
       ((head)(tail) {
         some
           (head.transform)
@@ -52,8 +52,8 @@
       (none)
   }
 
-  reduce(seed)(accumulator)(stream) {
-    stream
+  reduce(seed)(accumulator)(list) {
+    list
       ((head)(tail) {
         reduce
           (accumulator(head)(seed))
@@ -63,8 +63,8 @@
       (seed)
   }
 
-  reduceEager(sum)(add)(stream) {
-    stream
+  reduceEager(sum)(add)(list) {
+    list
       ((head)(tail) {
         EAGER(reduceEager)
           (add(head)(sum))
@@ -74,8 +74,8 @@
       (sum)
   }
 
-  filter(predicate)(stream) {
-    stream
+  filter(predicate)(list) {
+    list
       ((head)(tail) {
         predicate(head)
           (some(head)(tail.filter(predicate)))
@@ -84,9 +84,9 @@
       (none)
   }
 
-  limit(n)(stream) {
+  limit(n)(list) {
     moreThan(0)(n)
-      (stream
+      (list
         ((head)(tail) {
           some(head)(tail.limit(n.decrement))
         })
@@ -94,18 +94,18 @@
       (none)
   }
 
-  skip(n)(stream) {
+  skip(n)(list) {
     moreThan(0)(n)
-      (stream
+      (list
         ((head)(tail) {
           tail.skip(n.decrement)
         })
         (none))
-      (stream)
+      (list)
   }
 
-  while(predicate)(stream) {
-    stream
+  while(predicate)(list) {
+    list
       ((head)(tail) {
         predicate(head)
           (some(head)(tail.while(predicate)))
@@ -114,18 +114,18 @@
       (none)
   }
 
-  since(predicate)(stream) {
-    stream
+  since(predicate)(list) {
+    list
       ((head)(tail) {
         predicate(head)
-          (stream)
+          (list)
           (since(predicate)(tail))
       })
       (none)
   }
 
-  until(predicate)(stream) {
-    stream
+  until(predicate)(list) {
+    list
       ((head)(tail) {
         predicate(head)
           (some(head)(none))
@@ -143,43 +143,110 @@
     .skip(1)
   }
 
-  append(secondStream)(stream) {
-    stream
+  append(suffix)(list) {
+    list
       ((head)(tail) {
-        some(head)(tail.append(secondStream))
+        some(head)(tail.append(suffix))
       })
-      (secondStream)
+      (suffix)
   }
 
   prepend {
     flip(append)
   }
 
-  flatten(streams) {
-    streams
+  splitAround(separator)(list) {
+    some
+      (list
+        .before(separator))
+      (list
+        .since(separator)
+        .splitAround2(separator))
+  }
+
+  splitAround2(separator)(list) {
+    hasSome(list)
+      (some
+        (list
+          .skip(1)
+          .before(separator))
+        (list
+          .skip(1)
+          .since(separator)
+          .splitAround2(separator)))
+      (none)
+  }
+
+  flatten(lists) {
+    lists
       ((head)(tail) {
         head.append(tail.flatten)
       })
       (none)
   }
 
-  transpose(streams) {
-    hasSome(streams)
+  transpose(lists) {
+    hasSome(lists)
       (some
-        (streams
+        (lists
            .each(limit(1))
            .flatten)
-        (streams
+        (lists
           .each(skip(1))
           .filter(hasSome)
           .transpose))
       (none)
   }
 
-  equal(equalElements)(streamA)(streamB) {
-    streamA
+  prefixes(list) {
+    list
+      ((head)(tail) {
+        some
+          (none)
+          (prefixes(tail)
+            .each(prepend(single(head))))
+      })
+      (single(none))
+  }
+
+  suffixes(list) {
+    list
+      ((head)(tail) {
+        some(list)(suffixes(tail))
+      })
+      (single(none))
+  }
+
+  hasPrefix(prefix)(list) {
+    prefix
+      ((prefixHead)(prefixTail) {
+        list
+          ((listHead)(listTail) {
+            and
+              (prefixHead(listHead))
+              (hasPrefix(prefixTail)(listTail))
+          })
+          (false)
+      })
+      (true)
+  }
+
+  hasInfix(infix)(list) {
+    list.suffixes
+      .filter(hasPrefix(infix))
+      .hasSome
+  }
+
+  hasSuffix(suffix)(list) {
+    hasPrefix
+      (reverse(suffix))
+      (reverse(list))
+  }
+
+  equal(equalElements)(listA)(listB) {
+    listA
       ((headA)(tailA) {
-        streamB
+        listB
           ((headB)(tailB) {
             and
               (equalElements(headA)(headB))
@@ -187,29 +254,15 @@
           })
           (false)
       })
-      (hasNone(streamB))
-  }
-
-  startsWith(equal)(prefix)(stream) {
-    prefix
-      ((prefixHead)(prefixTail) {
-        stream
-          ((head)(tail) {
-            and
-              (equal(prefixHead)(head))
-              (startsWith(equal)(prefixTail)(tail))
-          })
-          (false)
-      })
-      (true)
+      (hasNone(listB))
   }
 
   length {
     reduce(0)(constant(increment))
   }
 
-  contains(predicate)(stream) {
-    stream
+  contains(predicate)(list) {
+    list
       .filter(predicate)
       .hasSome
   }
@@ -218,8 +271,8 @@
     reduce(none)(some)
   }
 
-  sort(comparator)(stream) {
-    stream
+  sort(comparator)(list) {
+    list
       ((head)(tail) {
         single(head)
           .prepend(tail

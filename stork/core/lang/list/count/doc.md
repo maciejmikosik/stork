@@ -1,19 +1,19 @@
-# lang/stream/count/* #
+# lang/list/count/* #
 
 ### Functions ###
 
-`count` - creates an infinite stream of integers increasing from `0` upwards.
+`count` - creates an infinite list of integers increasing from `0` upwards.
    - `count` : `0`, `1`, `2`, ...
 
-`countFrom(n)` - creates an infinite stream of integers increasing from `n` upwards.
+`countFrom(n)` - creates an infinite list of integers increasing from `n` upwards.
    - `countFrom(5)` : `5`, `6`, `7`, ...
 
-`countDownFrom(n)` - creates an infinite stream of integers decreasing from `n` downwards.
+`countDownFrom(n)` - creates an infinite list of integers decreasing from `n` downwards.
    - `countDownFrom(5)` : `4`, `3`, `2`, ...
 
 ### Idioms ###
 
-There are no functions to iterate over ranges of integers. Those functions are often confusing about inclusivity/exclusivity of bounds. Instead you can combine `count` with other stream functions.
+There are no functions to iterate over ranges of integers. Those functions are often confusing about inclusivity/exclusivity of bounds. Instead you can combine `count` with other list functions.
 
 To achieve something similiar to imperative loop
 

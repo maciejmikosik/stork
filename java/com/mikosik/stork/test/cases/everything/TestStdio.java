@@ -30,7 +30,7 @@ public class TestStdio {
 
   private static Test prependsStdin() {
     return programTest("prepends stdin")
-        .imports("lang/stream/prepend")
+        .imports("lang/list/prepend")
         .source("main(stdin) { prepend('!')(stdin) }")
         .stdin("ok")
         .stdout("!ok");
@@ -38,7 +38,7 @@ public class TestStdio {
 
   private static Test appendsStdin() {
     return programTest("appends stdin")
-        .imports("lang/stream/append")
+        .imports("lang/list/append")
         .source("main(stdin) { append('!')(stdin) }")
         .stdin("ok")
         .stdout("ok!");
@@ -47,8 +47,8 @@ public class TestStdio {
   private static Test processesStdinTwice() {
     return programTest("processes stdin twice")
         .imports("""
-            lang/stream/append
-            lang/stream/reverse
+            lang/list/append
+            lang/list/reverse
             """)
         .source("""
             main(stdin) {
