@@ -42,16 +42,16 @@ List is singly linked. This means accessing random element is not constant-time 
 
 ##### filtering #####
 
-      (E➝Boolean)(List<E>) ➝ List<E>
-      list ●●○●○●●○○●○●○●●○○○
-    filter ●● ● ●●  ● ● ●●
+    (E➝Boolean)(List<E>) ➝ List<E>
+                    list = ❶❷①❸②❹❺③④❻⑤❼⑥❽❾⑦⑧⑨
+         filter(●)(list) = ❶❷❸❹❺❻❼❽❾
 
 ##### cutting #####
 
       (Integer)(List<E>) ➝ List<E>
-                    list = ○○○○○○○
-          limit(3)(list) = ○○○
-           skip(3)(list) =    ○○○○
+                    list = ❶❷❸❹❺❻❼❽❾
+          limit(3)(list) = ❶❷❸
+           skip(3)(list) = ❹❺❻❼❽❾
 
 If `Integer` is out of range, it is clamped.
 
