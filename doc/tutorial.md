@@ -138,3 +138,9 @@ Since strings are list of integers, you can perform integer arithmetics on chara
     }
 
 prints `IBM`.
+
+
+### other concepts ###
+
+ - [Data](data.md)
+ - [Interface](interface.md)
