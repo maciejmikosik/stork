@@ -10,6 +10,7 @@ import static com.mikosik.stork.test.QuackeryHelper.deep;
 import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
+import static com.mikosik.stork.test.cases.TestDocumentation.testDocumentation;
 import static com.mikosik.stork.test.cases.everything.TestCore.testCore;
 import static com.mikosik.stork.test.cases.everything.TestMainFunction.testMainFunction;
 import static com.mikosik.stork.test.cases.everything.TestMathOperators.testMathOperators;
@@ -17,9 +18,9 @@ import static com.mikosik.stork.test.cases.everything.TestStdio.testStdio;
 import static com.mikosik.stork.test.cases.everything.core.TestBoolean.testBoolean;
 import static com.mikosik.stork.test.cases.everything.core.TestFunction.testFunction;
 import static com.mikosik.stork.test.cases.everything.core.TestInteger.testInteger;
-import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.everything.core.TestList.testList;
 import static com.mikosik.stork.test.cases.everything.core.TestListCount.testListCount;
+import static com.mikosik.stork.test.cases.everything.core.TestMaybe.testMaybe;
 import static com.mikosik.stork.test.cases.language.TestCompilerProblems.testCompilerProblems;
 import static com.mikosik.stork.test.cases.language.TestImporter.testImporter;
 import static com.mikosik.stork.test.cases.language.TestImporterProblems.testImporterProblems;
@@ -93,6 +94,7 @@ public class RunTests {
         .add(testList())
         .add(testListCount())
         .add(testMaybe()));
+    runAndReport(testDocumentation());
 
     System.out.println("done!");
     exit(0);

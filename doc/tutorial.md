@@ -6,9 +6,8 @@ This Tutorial teaches you basic features of stork:
    - using core library
    - imports and namespaces
    - functions: definition, currying
-   - standard I/O
 
-All programs in this tutorial print `Hello World!`, unless specified otherwise.
+All programs in this tutorial print `Hello World!`
 
 ### Hello World! ###
 
@@ -100,47 +99,8 @@ Chain of instance calls can be composed into pipe.
       .append("!")
     }
 
-### Standard I/O ###
-
-String literal like `"Hello World!"` is [list](../stork/core/lang/list/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return list of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is list of integers representing bytes from standard input.
-
-Running
-
-`import.stork`
-
-    lang/list/append
-
-`source.stork`
-
-    main(stdin) {
-      shout(stdin)
-    }
-    
-    shout {
-      append("!")
-    }
-
-console:
-
-    printf "Hello World" | ~/stork
-
-Since strings are list of integers, you can perform integer arithmetics on characters.
-
-`import.stork`
-
-    lang/integer/add
-    lang/list/each
-
-`source.stork`
-
-    main(stdin) {
-      "HAL".each(add(1))
-    }
-
-prints `IBM`.
-
-
 ### other concepts ###
 
+ - [Stdio](stdio.md)
  - [Data](data.md)
  - [Interface](interface.md)
