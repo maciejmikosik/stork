@@ -52,7 +52,7 @@ Now you can use `append` function in your `source.stork` file.
 ### Function ###
 Full doc: [Function](function.md).
 
-Syntax for calling a function `f` with argument `x` is `f(x)`. Syntax for calling a function with many arguments is `f(x)(y)(z)`.
+Syntax for calling function `f` with argument `x` is `f(x)`. Syntax for calling function with many arguments is `f(x)(y)(z)`. Syntax for defining function `f` with parameter `x` is `function(x) { ... }`. Syntax for defining function with many arguments is `function(x)(y)(z) { ... }`.
 
 Let's define `shout` function that appends exclamation mark.
 
@@ -74,7 +74,7 @@ Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can app
       append("!")
     }
 
-Functions, although they are static, can still be called like instance methods. Instance call is converted to static call and instance becomes its last argument.
+Functions are static-like, but they can be called like instance methods.
 
     main(stdin) {
       "Hello World".append("!")
@@ -88,7 +88,7 @@ Instance calls can be chained.
         .append("!")
     }
 
-Chain of instance calls can be composed into pipe.
+Chain of instance calls can be composed into a pipe.
 
     main(stdin) {
       greet("World")
