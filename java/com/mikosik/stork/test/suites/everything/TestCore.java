@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases.everything;
+package com.mikosik.stork.test.suites.everything;
 
 import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
 import static com.mikosik.stork.model.exp.Variable.variable;

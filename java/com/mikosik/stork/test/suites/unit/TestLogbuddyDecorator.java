@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases.unit;
+package com.mikosik.stork.test.suites.unit;
 
 import static com.mikosik.stork.common.col.ImmutableList.none;
 import static com.mikosik.stork.common.io.InputOutput.delete;

@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases.language;
+package com.mikosik.stork.test.suites.language;
 
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.model.exp.Namespace.root;

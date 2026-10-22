@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.cases.unit;
+package com.mikosik.stork.test.suites.unit;
 
 import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.compile.err.CompilerException.exception;

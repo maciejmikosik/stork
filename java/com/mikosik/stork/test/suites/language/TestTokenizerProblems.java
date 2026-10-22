@@ -1,7 +1,7 @@
-package com.mikosik.stork.test.cases.language;
+package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.test.cases.language.TestGeneralTokenizerProblems.testGeneralTokenizerProblems;
-import static com.mikosik.stork.test.cases.language.TestStringLiteral.testStringLiteral;
+import static com.mikosik.stork.test.suites.language.TestGeneralTokenizerProblems.testGeneralTokenizerProblems;
+import static com.mikosik.stork.test.suites.language.TestStringLiteral.testStringLiteral;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
