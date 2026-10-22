@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.suites.everything.core;
+package com.mikosik.stork.test.suites.core;
 
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static com.mikosik.stork.test.SnippetSuite.snippetSuite;

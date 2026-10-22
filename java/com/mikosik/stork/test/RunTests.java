@@ -11,33 +11,14 @@ import static com.mikosik.stork.test.QuackeryHelper.filterFailed;
 import static com.mikosik.stork.test.QuackeryHelper.ifCase;
 import static com.mikosik.stork.test.QuackeryHelper.nameOf;
 import static com.mikosik.stork.test.suites.TestDocumentation.testDocumentation;
-import static com.mikosik.stork.test.suites.everything.TestCore.testCore;
-import static com.mikosik.stork.test.suites.everything.TestMainFunction.testMainFunction;
-import static com.mikosik.stork.test.suites.everything.TestMathOperators.testMathOperators;
-import static com.mikosik.stork.test.suites.everything.TestStdio.testStdio;
-import static com.mikosik.stork.test.suites.everything.core.TestBoolean.testBoolean;
-import static com.mikosik.stork.test.suites.everything.core.TestFunction.testFunction;
-import static com.mikosik.stork.test.suites.everything.core.TestInteger.testInteger;
-import static com.mikosik.stork.test.suites.everything.core.TestList.testList;
-import static com.mikosik.stork.test.suites.everything.core.TestListCount.testListCount;
-import static com.mikosik.stork.test.suites.everything.core.TestMaybe.testMaybe;
-import static com.mikosik.stork.test.suites.language.TestCompilerProblems.testCompilerProblems;
-import static com.mikosik.stork.test.suites.language.TestImporter.testImporter;
-import static com.mikosik.stork.test.suites.language.TestImporterProblems.testImporterProblems;
-import static com.mikosik.stork.test.suites.language.TestLinkerProblems.testLinkerProblems;
-import static com.mikosik.stork.test.suites.language.TestParser.testParser;
-import static com.mikosik.stork.test.suites.language.TestParserProblems.testParserProblems;
-import static com.mikosik.stork.test.suites.language.TestTokenizer.testTokenizer;
-import static com.mikosik.stork.test.suites.language.TestTokenizerProblems.testTokenizerProblems;
-import static com.mikosik.stork.test.suites.unit.TestDecompiler.testDecompiler;
-import static com.mikosik.stork.test.suites.unit.TestDescriber.testDescriber;
-import static com.mikosik.stork.test.suites.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
-import static com.mikosik.stork.test.suites.unit.TestOutcome.testOutcome;
+import static com.mikosik.stork.test.suites.core.TestCoreLibrary.testCoreLibrary;
+import static com.mikosik.stork.test.suites.language.TestLanguage.testLanguage;
+import static com.mikosik.stork.test.suites.program.TestProgram.testProgram;
+import static com.mikosik.stork.test.suites.unit.TestUnit.testUnit;
 import static java.lang.System.exit;
 import static java.time.Duration.between;
 import static java.time.Duration.ofSeconds;
 import static org.quackery.Case.newCase;
-import static org.quackery.Suite.suite;
 import static org.quackery.report.Reports.format;
 import static org.quackery.run.Runners.run;
 import static org.quackery.run.Runners.timeout;
@@ -64,36 +45,12 @@ import com.mikosik.stork.Core.Mode;
 @SuppressWarnings("javadoc")
 public class RunTests {
   public static void main(String... args) {
-    runAndReport(suite("unit tests")
-        .add(suite("debug tools")
-            .add(testDecompiler())
-            .add(testLogbuddyDecorator()))
-        .add(testDescriber())
-        .add(testOutcome()));
+    runAndReport(testUnit());
     runAndReport(testCompilingCoreLibrary(TESTING));
-    runAndReport(suite("language")
-        .add(testTokenizer())
-        .add(testParser())
-        .add(testImporter())
-        .add(suite("problems")
-            .add(testImporterProblems())
-            .add(testTokenizerProblems())
-            .add(testParserProblems())
-            .add(testCompilerProblems())
-            .add(testLinkerProblems())));
+    runAndReport(testLanguage());
     runAndReport(testCompilingCoreLibrary(DEVELOPMENT));
-    runAndReport(suite("program")
-        .add(testMainFunction())
-        .add(testStdio())
-        .add(testCore())
-        .add(testMathOperators()));
-    runAndReport(suite("core library")
-        .add(testBoolean())
-        .add(testFunction())
-        .add(testInteger())
-        .add(testList())
-        .add(testListCount())
-        .add(testMaybe()));
+    runAndReport(testProgram());
+    runAndReport(testCoreLibrary());
     runAndReport(testDocumentation());
 
     System.out.println("done!");

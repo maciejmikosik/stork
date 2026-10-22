@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.suites.everything;
+package com.mikosik.stork.test.suites.program;
 
 import static com.mikosik.stork.compute.err.FunctionMissing.functionMissing;
 import static com.mikosik.stork.model.exp.Reference.reference;

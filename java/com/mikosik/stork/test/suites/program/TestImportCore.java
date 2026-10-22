@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.suites.everything;
+package com.mikosik.stork.test.suites.program;
 
 import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -9,9 +9,9 @@ import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
 
-public class TestCore {
-  public static Test testCore() {
-    return suite("core")
+public class TestImportCore {
+  public static Test testImportCore() {
+    return suite("import core")
         .add(importsCoreFunction())
         .add(cannotOverrideCoreFunction());
   }

@@ -1,4 +1,4 @@
-package com.mikosik.stork.test.suites.everything;
+package com.mikosik.stork.test.suites.program;
 
 import static com.mikosik.stork.test.ProgramTest.programTest;
 import static org.quackery.Suite.suite;
