@@ -14,6 +14,7 @@ import org.quackery.Test;
 public class SnippetSuite {
   private final String name;
   private String linkage = "";
+  private boolean escape = false;
   private final List<Test> cases = new LinkedList<>();
 
   private SnippetSuite(String name) {
@@ -29,8 +30,19 @@ public class SnippetSuite {
     return this;
   }
 
+  public SnippetSuite escape() {
+    escape = true;
+    return this;
+  }
+
+  private String escape(String snippet) {
+    return escape
+        ? snippet.replace('\'', '\"')
+        : snippet;
+  }
+
   public SnippetSuite test(String snippet, Object expected) {
-    cases.add(buildCase(snippet.replace('\'', '\"'), expected));
+    cases.add(buildCase(escape(snippet), expected));
     return this;
   }
 
