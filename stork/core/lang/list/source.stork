@@ -261,12 +261,6 @@
     reduce(0)(constant(increment))
   }
 
-  contains(predicate)(list) {
-    list
-      .filter(predicate)
-      .hasSome
-  }
-
   reverse {
     reduce(none)(some)
   }

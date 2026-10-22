@@ -118,9 +118,5 @@ If `Integer` is out of range, it is clamped.
 
 ##### experimental #####
 
-`contains(predicate)(list)` - checks if `list` has any element that matches `predicate`.
-   - `contains(isDigit)("ab8cd")` = `true`
-   - `contains(isDigit)("abcd")` = `false`
-
 `sort(comparator)(list)` - sorts elements in `list` in order defined by `comparator`.
    - `sort(moreThan)("1928374650")` = `"0123456789"`
