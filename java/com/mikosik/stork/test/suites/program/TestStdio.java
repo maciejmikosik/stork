@@ -17,7 +17,9 @@ public class TestStdio {
 
   private static Test stdoutCanBeEmpty() {
     return programTest("stdout can be empty")
-        .source("main(stdin) { '' }")
+        .source("""
+            main(stdin) { "" }
+            """)
         .stdout("");
   }
 
@@ -31,7 +33,9 @@ public class TestStdio {
   private static Test prependsStdin() {
     return programTest("prepends stdin")
         .imports("lang/list/prepend")
-        .source("main(stdin) { prepend('!')(stdin) }")
+        .source("""
+            main(stdin) { prepend("!")(stdin) }
+            """)
         .stdin("ok")
         .stdout("!ok");
   }
@@ -39,7 +43,9 @@ public class TestStdio {
   private static Test appendsStdin() {
     return programTest("appends stdin")
         .imports("lang/list/append")
-        .source("main(stdin) { append('!')(stdin) }")
+        .source("""
+            main(stdin) { append("!")(stdin) }
+            """)
         .stdin("ok")
         .stdout("ok!");
   }

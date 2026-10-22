@@ -24,7 +24,9 @@ public class TestImporter {
             .imports("sub/message")
             .source("main(stdin) { message }"))
         .add(path("sub")
-            .source("message { 'ok' }"))
+            .source("""
+                message { "ok" }
+                """))
         .stdout("ok");
   }
 
@@ -34,7 +36,9 @@ public class TestImporter {
             .imports("subA/subB/message")
             .source("main(stdin) { message }"))
         .add(path("subA/subB")
-            .source("message { 'ok' }"))
+            .source("""
+                message { "ok" }
+                """))
         .stdout("ok");
   }
 
@@ -47,7 +51,9 @@ public class TestImporter {
             .imports("dirB/messageB")
             .source("messageA { messageB }"))
         .add(path("dirB")
-            .source("messageB { 'ok' }"))
+            .source("""
+                messageB { "ok" }
+                """))
         .stdout("ok");
   }
 
@@ -60,7 +66,9 @@ public class TestImporter {
             .imports("dirA/messageA")
             .source("messageB { messageA }"))
         .add(path("dirA")
-            .source("messageA { 'ok' }"))
+            .source("""
+                messageA { "ok" }
+                """))
         .stdout("ok");
   }
 
@@ -70,7 +78,9 @@ public class TestImporter {
             .imports("dir1/dir2/message3")
             .source("main(stdin) { message3 }"))
         .add(path("dir1/dir2")
-            .source("message3 { 'ok' }"))
+            .source("""
+                message3 { "ok" }
+                """))
         .stdout("ok");
   }
 

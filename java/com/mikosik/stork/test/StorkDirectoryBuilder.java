@@ -38,7 +38,6 @@ public class StorkDirectoryBuilder {
 
   public StorkDirectoryBuilder source(String source) {
     return source(source
-        .replace('\'', '\"')
         .getBytes(UTF_8));
   }
 

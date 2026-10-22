@@ -268,7 +268,9 @@ public class TestList {
             lang/integer/equal
             """
             .formatted(function))
-        .source("main(stdin) { %s(equal(33))('%s') }"
+        .source("""
+            main(stdin) { %s(equal(33))("%s") }
+            """
             .formatted(function, list))
         .stdout(expected);
   }
@@ -289,8 +291,8 @@ public class TestList {
             .formatted(function))
         .source("""
             main(stdin) {
-              %s(equal(33))('%s')
-                .each(append('.'))
+              %s(equal(33))("%s")
+                .each(append("."))
                 .flatten
             }
             """
