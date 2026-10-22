@@ -198,6 +198,7 @@ public class TestList {
             .add(has("Prefix", "ab", "abc", true))
             .add(has("Prefix", "a", "abc", true))
             .add(has("Prefix", "", "abc", true))
+            .add(has("Prefix", "", "", true))
             .add(has("Prefix", "x", "abc", false))
             .add(has("Prefix", "abcx", "abc", false))
             .add(has("Prefix", "xx", "x", false))
@@ -210,6 +211,7 @@ public class TestList {
             .add(has("Infix", "b", "abc", true))
             .add(has("Infix", "c", "abc", true))
             .add(has("Infix", "", "abc", true))
+            .add(has("Infix", "", "", true))
             .add(has("Infix", "x", "abc", false))
             .add(has("Infix", "xx", "x", false))
             .add(has("Infix", "x", "", false)))
@@ -218,39 +220,25 @@ public class TestList {
             .add(has("Suffix", "bc", "abc", true))
             .add(has("Suffix", "c", "abc", true))
             .add(has("Suffix", "", "abc", true))
+            .add(has("Suffix", "", "", true))
             .add(has("Suffix", "x", "abc", false))
             .add(has("Suffix", "xabc", "abc", false))
             .add(has("Suffix", "xx", "x", false))
             .add(has("Suffix", "x", "", false)))
-        .add(snippetSuite("equal")
-            .importing("lang/list/some")
-            .importing("lang/list/none")
-            .importing("lang/list/equal")
-            .importing("lang/integer/equal eq")
-            .test("equal(eq)('')('')", true)
-            .test("equal(eq)('a')('a')", true)
-            .test("equal(eq)('ab')('ab')", true)
-            .test("equal(eq)('abc')('abc')", true)
-            .test("equal(eq)('a')('')", false)
-            .test("equal(eq)('')('a')", false)
-            .test("equal(eq)('a')('b')", false)
-            .test("equal(eq)('ab')('a')", false)
-            .test("equal(eq)('a')('ab')", false)
-            .test("equal(eq)('ab')('ac')", false)
-            .test("equal(eq)('abc')('ab')", false)
-            .test("equal(eq)('ab')('abc')", false)
-            .test("equal(eq)('abc')('abd')", false)
-            .build())
+        .add(suite("matches")
+            .add(matches("abc", "abc", true))
+            .add(matches("bc", "abc", false))
+            .add(matches("c", "abc", false))
+            .add(matches("", "abc", false))
+            .add(matches("", "", true))
+            .add(matches("x", "abc", false))
+            .add(matches("xabc", "abc", false))
+            .add(matches("xx", "x", false))
+            .add(matches("x", "", false)))
         .add(snippetSuite("length")
             .importing("lang/list/length")
             .test("length('')", 0)
             .test("length('xyz')", 3)
-            .build())
-        .add(snippetSuite("contains")
-            .importing("lang/integer/equal")
-            .importing("lang/list/contains")
-            .test("contains(equal(0))('xyz')", false)
-            .test("contains(equal(120))('xyz')", true)
             .build())
         .add(snippetSuite("reverse")
             .importing("lang/list/reverse")
@@ -315,7 +303,21 @@ public class TestList {
       String xfix,
       String list,
       boolean expected) {
-    var function = "has" + what;
+    return testMatch("has" + what, xfix, list, expected);
+  }
+
+  private static Test matches(
+      String xfix,
+      String list,
+      boolean expected) {
+    return testMatch("matches", xfix, list, expected);
+  }
+
+  private static Test testMatch(
+      String function,
+      String xfix,
+      String list,
+      boolean expected) {
     return programTest("%s(%s)(%s)=%s"
         .formatted(function, xfix, list, expected))
             .imports("""

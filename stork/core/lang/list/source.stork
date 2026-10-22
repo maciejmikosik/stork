@@ -243,28 +243,22 @@
       (reverse(list))
   }
 
-  equal(equalElements)(listA)(listB) {
-    listA
-      ((headA)(tailA) {
-        listB
-          ((headB)(tailB) {
+  matches(pattern)(list) {
+    pattern
+      ((patternHead)(patternTail) {
+        list
+          ((listHead)(listTail) {
             and
-              (equalElements(headA)(headB))
-              (equal(equalElements)(tailA)(tailB))
+              (patternHead(listHead))
+              (matches(patternTail)(listTail))
           })
           (false)
       })
-      (hasNone(listB))
+      (list.hasNone)
   }
 
   length {
     reduce(0)(constant(increment))
-  }
-
-  contains(predicate)(list) {
-    list
-      .filter(predicate)
-      .hasSome
   }
 
   reverse {

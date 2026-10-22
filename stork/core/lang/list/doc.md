@@ -106,6 +106,7 @@ If `Integer` is out of range, it is clamped.
             hasInfix(○●)(❶❷③④) = false
            hasSuffix(○○)(❶❷③④) = true
            hasSuffix(●○)(❶❷③④) = false
+           matches(●●○○)(❶❷③④) = true
 
 ##### other #####
 
@@ -115,16 +116,5 @@ If `Integer` is out of range, it is clamped.
          List<E> ➝ List<E>
     reverse(❶❷❸) = ❸❷❶
 
-##### experimental #####
-
-`equal(equalElements)(listA)(listB)` - returns true if `listA` and `listB` contain the same elements in the same order. `equalElements` function is used to compare elements. It takes 2 parameters and returns boolean. It is intended to use with finite lists since infinite lists that are equal would hang the program.
-   - `equal(equalInteger)("abc")("abc")` = `true`
-   - `equal(equalInteger)("abc")("abx")` = `false`
-   - `equal(equalInteger)("abc")("ab")` = `false`
-
-`contains(predicate)(list)` - checks if `list` has any element that matches `predicate`.
-   - `contains(isDigit)("ab8cd")` = `true`
-   - `contains(isDigit)("abcd")` = `false`
-
-`sort(comparator)(list)` - sorts elements in `list` in order defined by `comparator`.
-   - `sort(moreThan)("1928374650")` = `"0123456789"`
+    ((E)(E)➝Boolean)(List<E>) ➝ List<E>
+    sort(moreThan)(❽❼❹❷❶❸❻❾❺) = ❶❷❸❹❺❻❼❽❾
