@@ -116,7 +116,5 @@ If `Integer` is out of range, it is clamped.
          List<E> ➝ List<E>
     reverse(❶❷❸) = ❸❷❶
 
-##### experimental #####
-
-`sort(comparator)(list)` - sorts elements in `list` in order defined by `comparator`.
-   - `sort(moreThan)("1928374650")` = `"0123456789"`
+    ((E)(E)➝Boolean)(List<E>) ➝ List<E>
+    sort(moreThan)(❽❼❹❷❶❸❻❾❺) = ❶❷❸❹❺❻❼❽❾
