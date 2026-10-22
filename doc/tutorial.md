@@ -6,9 +6,8 @@ This Tutorial teaches you basic features of stork:
    - using core library
    - imports and namespaces
    - functions: definition, currying
-   - standard I/O
 
-All programs in this tutorial print `Hello World!`, unless specified otherwise.
+All programs in this tutorial print `Hello World!`
 
 ### Hello World! ###
 
@@ -35,8 +34,7 @@ By default stork binary searches for file named `source.stork` in current direct
 
 There is no need for `return` keyword since function definition contains single expression of what is returned. There are no local variables. Function has no return type since stork is untyped.
 
-### Namespace ###
-Full doc: [Namespace](namespace.md).
+### [Namespace](namespace.md) ###
 
 Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing lists. To import a function from core library, create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
 
@@ -50,10 +48,9 @@ Now you can use `append` function in your `source.stork` file.
       append("!")("Hello World")
     }
 
-### Function ###
-Full doc: [Function](function.md).
+### [Function](function.md) ###
 
-Syntax for calling a function `f` with argument `x` is `f(x)`. Syntax for calling a function with many arguments is `f(x)(y)(z)`.
+Syntax for calling function `f` with argument `x` is `f(x)`. Syntax for calling function with many arguments is `f(x)(y)(z)`. Syntax for defining function `f` with parameter `x` is `function(x) { ... }`. Syntax for defining function with many arguments is `function(x)(y)(z) { ... }`.
 
 Let's define `shout` function that appends exclamation mark.
 
@@ -75,7 +72,7 @@ Stork supports [currying](https://en.wikipedia.org/wiki/Currying) so you can app
       append("!")
     }
 
-Functions, although they are static, can still be called like instance methods. Instance call is converted to static call and instance becomes its last argument.
+Functions are static-like, but they can be called like instance methods.
 
     main(stdin) {
       "Hello World".append("!")
@@ -89,7 +86,7 @@ Instance calls can be chained.
         .append("!")
     }
 
-Chain of instance calls can be composed into pipe.
+Chain of instance calls can be composed into a pipe.
 
     main(stdin) {
       greet("World")
@@ -100,41 +97,8 @@ Chain of instance calls can be composed into pipe.
       .append("!")
     }
 
-### Standard I/O ###
+### other concepts ###
 
-String literal like `"Hello World!"` is [list](../stork/core/lang/list/doc.md) of [integers](../stork/core/lang/integer/doc.md) from ASCII table. However, `main` function is expected to return list of bytes. Since string literals contain only ascii characters, you can return them from `main` to be printed on standard output without encoding. `stdin` is list of integers representing bytes from standard input.
-
-Running
-
-`import.stork`
-
-    lang/list/append
-
-`source.stork`
-
-    main(stdin) {
-      shout(stdin)
-    }
-    
-    shout {
-      append("!")
-    }
-
-console:
-
-    printf "Hello World" | ~/stork
-
-Since strings are list of integers, you can perform integer arithmetics on characters.
-
-`import.stork`
-
-    lang/integer/add
-    lang/list/each
-
-`source.stork`
-
-    main(stdin) {
-      "HAL".each(add(1))
-    }
-
-prints `IBM`.
+ - [Stdio](stdio.md)
+ - [Data](data.md)
+ - [Interface](interface.md)
