@@ -34,8 +34,7 @@ By default stork binary searches for file named `source.stork` in current direct
 
 There is no need for `return` keyword since function definition contains single expression of what is returned. There are no local variables. Function has no return type since stork is untyped.
 
-### Namespace ###
-Full doc: [Namespace](namespace.md).
+### [Namespace](namespace.md) ###
 
 Stork ships with [core library](../stork/core/lang/doc.md) for basic operations like integer math, boolean operators, processing lists. To import a function from core library, create a file named `import.stork` in the same directory as `source.stork` file and specify fully qualified name of a function you want to import.
 
@@ -49,8 +48,7 @@ Now you can use `append` function in your `source.stork` file.
       append("!")("Hello World")
     }
 
-### Function ###
-Full doc: [Function](function.md).
+### [Function](function.md) ###
 
 Syntax for calling function `f` with argument `x` is `f(x)`. Syntax for calling function with many arguments is `f(x)(y)(z)`. Syntax for defining function `f` with parameter `x` is `function(x) { ... }`. Syntax for defining function with many arguments is `function(x)(y)(z) { ... }`.
 
