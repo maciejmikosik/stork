@@ -1,0 +1,40 @@
+package com.mikosik.stork.test.suites.unit;
+
+import static com.mikosik.stork.common.col.ImmutableList.none;
+import static com.mikosik.stork.common.io.InputOutput.delete;
+import static com.mikosik.stork.compute.ApplicationComputer.applicationComputer;
+import static com.mikosik.stork.compute.CachingComputer.caching;
+import static com.mikosik.stork.compute.IntegerComputer.integerComputer;
+import static com.mikosik.stork.compute.InterruptibleComputer.interruptible;
+import static com.mikosik.stork.compute.LibraryComputer.computer;
+import static com.mikosik.stork.compute.OperatorComputer.operatorComputer;
+import static com.mikosik.stork.compute.Router.router;
+import static com.mikosik.stork.debug.Debug.configuredDecorator;
+import static java.nio.file.Files.createTempFile;
+import static org.quackery.Case.newCase;
+
+import org.quackery.Test;
+
+import com.mikosik.stork.compute.Computer;
+import com.mikosik.stork.model.exp.Application;
+import com.mikosik.stork.model.exp.Integer;
+import com.mikosik.stork.model.exp.Operator;
+import com.mikosik.stork.model.exp.Reference;
+
+public class TestLogbuddyDecorator {
+  public static Test testLogbuddyDecorator() {
+    return newCase("logbuddy can decorate computers", () -> {
+      var logFile = createTempFile("stork_test_", "");
+      configuredDecorator(logFile).decorate(buildComputer());
+      delete(logFile);
+    });
+  }
+
+  private static Computer buildComputer() {
+    return interruptible(caching(router()
+        .route(Reference.class, computer(none()))
+        .route(Operator.class, operatorComputer())
+        .route(Application.class, applicationComputer())
+        .route(Integer.class, integerComputer())));
+  }
+}
