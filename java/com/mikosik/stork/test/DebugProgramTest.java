@@ -40,7 +40,9 @@ public class DebugProgramTest {
         .source("main(stdin){ 2 }")
         .stdout(""));
     report((Case) minimalProgramTest("stdout / stdout")
-        .source("main(stdin){ 'a' }")
+        .source("""
+            main(stdin){ "a" }
+            """)
         .stdout("b"));
   }
 

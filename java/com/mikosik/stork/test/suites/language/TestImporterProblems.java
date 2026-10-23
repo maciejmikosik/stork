@@ -64,7 +64,9 @@ public class TestImporterProblems {
   private static Test testMalformedLine(String line) {
     return programTest(line)
         .imports(line + "\n")
-        .source("main(stdin) { 'ok' }")
+        .source("""
+            main(stdin) { "ok" }
+            """)
         .expect(malformedImportLine()
             .in(root)
             .object(line));
@@ -77,7 +79,9 @@ public class TestImporterProblems {
                 a/b/c
                 a/b/c
                 """)
-            .source("main(stdin) { 'ok' }")
+            .source("""
+                main(stdin) { "ok" }
+                """)
             .expect(importCollision()
                 .in(root)
                 .object(list("a/b/c", "a/b/c"))
@@ -87,7 +91,9 @@ public class TestImporterProblems {
                 a/b/c
                 a/x/c
                 """)
-            .source("main(stdin) { 'ok' }")
+            .source("""
+                main(stdin) { "ok" }
+                """)
             .expect(importCollision()
                 .in(root)
                 .object(list("a/b/c", "a/x/c"))
@@ -97,7 +103,9 @@ public class TestImporterProblems {
                 a/b/c
                 a/b/d c
                 """)
-            .source("main(stdin) { 'ok' }")
+            .source("""
+                main(stdin) { "ok" }
+                """)
             .expect(importCollision()
                 .in(root)
                 .object(list("a/b/c", "a/b/d c"))
@@ -113,7 +121,9 @@ public class TestImporterProblems {
                     x/y/v
                     x/y/v
                     """))
-            .source("main(stdin) { 'ok' }")
+            .source("""
+                main(stdin) { "ok" }
+                """)
             .expect(
                 importCollision()
                     .in(namespace("a/b"))
@@ -129,7 +139,9 @@ public class TestImporterProblems {
     return suite("multiple problems")
         .add(programTest("in same file")
             .imports("!\n@\n#\n")
-            .source("main(stdin) { 'ok' }")
+            .source("""
+                main(stdin) { "ok" }
+                """)
             .expect(
                 malformedImportLine()
                     .in(root)
@@ -147,7 +159,9 @@ public class TestImporterProblems {
                 .imports("@"))
             .add(path("c")
                 .imports("#"))
-            .source("main(stdin) { 'ok' }")
+            .source("""
+                main(stdin) { "ok" }
+                """)
             .expect(
                 malformedImportLine()
                     .in(namespace(single("a")))

@@ -19,7 +19,9 @@ public class TestImportCore {
   private static Test importsCoreFunction() {
     return programTest("can import core function")
         .imports("lang/list/append")
-        .source("main(stdin) { append('!')('Hello World') }")
+        .source("""
+            main(stdin) { append("!")("Hello World") }
+            """)
         .stdout("Hello World!");
   }
 

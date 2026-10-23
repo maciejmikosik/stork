@@ -42,7 +42,9 @@ public class TestParser {
 
   private static Test enablesStringLiterals() {
     return programTest("enables string literals")
-        .source("main(stdin) { 'Hello World!' }")
+        .source("""
+            main(stdin) { "Hello World!" }
+            """)
         .stdout("Hello World!");
   }
 

@@ -25,14 +25,14 @@ public class TestTokenizer {
     return suite(name)
         .add(programTest("as function name")
             .source("""
-                main(stdin) { 'ok' }
+                main(stdin) { "ok" }
                 %s(x) { %s(x) }
                 """
                 .formatted(name, name))
             .stdout("ok"))
         .add(programTest("as function parameter")
             .source("""
-                main(stdin) { 'ok' }
+                main(stdin) { "ok" }
                 f(%s) { %s }
                 """
                 .formatted(name, name))
