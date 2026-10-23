@@ -53,7 +53,7 @@ public class TestParserProblems {
                 .add(snippet("(x) { x y", y)))
             .add(suite("application")
                 // TODO this should be degraded to warning
-                .add(snippet("(x){x}('ok')", LEFT_ROUND_BRACKET))))
+                .add(snippet("(x){x} (", LEFT_ROUND_BRACKET))))
         .add(suite("chain")
             .add(snippet("x.)", RIGHT_ROUND_BRACKET))
             .add(snippet("x.{", LEFT_CURLY_BRACKET))
