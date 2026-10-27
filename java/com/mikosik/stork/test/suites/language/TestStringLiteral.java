@@ -1,10 +1,10 @@
 package com.mikosik.stork.test.suites.language;
 
+import static com.mikosik.stork.common.io.BytesBuilder.bytesBuilder;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.IntStream.concat;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;
@@ -29,22 +29,19 @@ public class TestStringLiteral {
 
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
-        .source(stringLiteralWith(character))
+        .source(mainWithStringLiteralWith(character))
         .expect(illegalCharacterInStringLiteral()
             .in(root)
             .in(variable("main"))
             .object(character));
   }
 
-  private static byte[] stringLiteralWith(byte character) {
-    var bytes = "main(stdin) { \"?\" }".getBytes(UTF_8);
-    byte questionMark = '?';
-    for (int i = 0; i < bytes.length; i++) {
-      if (bytes[i] == questionMark) {
-        bytes[i] = character;
-      }
-    }
-    return bytes;
+  private static byte[] mainWithStringLiteralWith(byte character) {
+    return bytesBuilder()
+        .appendAscii("main(stdin) { \"")
+        .append(character)
+        .appendAscii("\" }")
+        .build();
   }
 
   private static ProgramTest programTest(String name) {
