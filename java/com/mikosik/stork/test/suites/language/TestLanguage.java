@@ -6,6 +6,7 @@ import static com.mikosik.stork.test.suites.language.TestImporterProblems.testIm
 import static com.mikosik.stork.test.suites.language.TestLinkerProblems.testLinkerProblems;
 import static com.mikosik.stork.test.suites.language.TestParser.testParser;
 import static com.mikosik.stork.test.suites.language.TestParserProblems.testParserProblems;
+import static com.mikosik.stork.test.suites.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.suites.language.TestTokenizer.testTokenizer;
 import static com.mikosik.stork.test.suites.language.TestTokenizerProblems.testTokenizerProblems;
 import static org.quackery.Suite.suite;
@@ -15,6 +16,7 @@ import org.quackery.Test;
 public class TestLanguage {
   public static Test testLanguage() {
     return suite("language")
+        .add(testStringLiteral())
         .add(testTokenizer())
         .add(testParser())
         .add(testImporter())
