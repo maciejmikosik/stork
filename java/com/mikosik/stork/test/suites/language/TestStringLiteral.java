@@ -16,7 +16,35 @@ import com.mikosik.stork.test.ProgramTest;
 public class TestStringLiteral {
   public static Test testStringLiteral() {
     return suite("string literal")
+        .add(allowsLegalCharacters())
         .add(reportsIllegalCharacters());
+  }
+
+  private static Test allowsLegalCharacters() {
+    var legalCharacters = legalCharacters();
+    return suite("allows legal characters")
+        .addAll(legalCharacters.chars()
+            .mapToObj(character -> (byte) character)
+            .map(character -> programTest("%c".formatted(character))
+                .source(mainWithStringLiteralWith(character))
+                .stdout("%c".formatted(character)))
+            .toList())
+        .add(programTest("all in one string")
+            .source("""
+                main(stdin) {
+                  "%s"
+                }
+                """
+                .formatted(legalCharacters))
+            .stdout(legalCharacters));
+  }
+
+  private static String legalCharacters() {
+    var builder = new StringBuilder();
+    rangeClosed(32, 126)
+        .filter(character -> character != '\"')
+        .forEach(character -> builder.append((char) character));
+    return builder.toString();
   }
 
   private static Test reportsIllegalCharacters() {
