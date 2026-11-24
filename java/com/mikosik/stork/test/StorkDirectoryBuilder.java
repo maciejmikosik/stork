@@ -1,5 +1,6 @@
 package com.mikosik.stork.test;
 
+import static com.mikosik.stork.common.io.AsciiStrings.tryToAsciiBytesOrFail;
 import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.model.disk.StorkDirectory.storkDirectory;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
@@ -37,8 +38,7 @@ public class StorkDirectoryBuilder {
   }
 
   public StorkDirectoryBuilder source(String source) {
-    return source(source
-        .getBytes(UTF_8));
+    return source(tryToAsciiBytesOrFail(source));
   }
 
   public StorkDirectory build() {

@@ -1,5 +1,6 @@
 package com.mikosik.stork.test.suites.unit;
 
+import static com.mikosik.stork.test.suites.unit.TestAsciiStringsSafetyChecks.asciiStringsSafetyChecks;
 import static com.mikosik.stork.test.suites.unit.TestDecompiler.testDecompiler;
 import static com.mikosik.stork.test.suites.unit.TestDescriber.testDescriber;
 import static com.mikosik.stork.test.suites.unit.TestLogbuddyDecorator.testLogbuddyDecorator;
@@ -11,6 +12,7 @@ import org.quackery.Test;
 public class TestUnit {
   public static Test testUnit() {
     return suite("unit")
+        .add(asciiStringsSafetyChecks())
         .add(suite("debug tools")
             .add(testDecompiler())
             .add(testLogbuddyDecorator()))
