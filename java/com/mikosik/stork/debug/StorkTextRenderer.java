@@ -1,10 +1,9 @@
 package com.mikosik.stork.debug;
 
-import static com.mikosik.stork.common.io.Serializables.ascii;
+import static com.mikosik.stork.compile.Decompiler.decompile;
 import static com.mikosik.stork.compute.Computation.computation;
 import static com.mikosik.stork.compute.Computations.abort;
 import static com.mikosik.stork.compute.Computations.depthOf;
-import static com.mikosik.stork.debug.Decompiler.decompile;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -27,7 +26,7 @@ public final class StorkTextRenderer extends TextRenderer {
     return switch (model) {
       case Computer computer -> computer.getClass().getSimpleName();
       case Computation computation -> render(asExpression(computation));
-      case Expression expression -> ascii(decompile(expression));
+      case Expression expression -> decompile(expression);
       case Stack stack -> format("stack(%s)", depthOf(stack));
       case Map<?, ?> map -> "Map";
       default -> super.render(model);

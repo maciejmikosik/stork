@@ -2,7 +2,6 @@ package com.mikosik.stork.test.suites.unit;
 
 import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Serializables.ascii;
 import static com.mikosik.stork.compile.op.Combinator.B;
 import static com.mikosik.stork.compile.op.Combinator.C;
 import static com.mikosik.stork.compile.op.Combinator.I;
@@ -36,10 +35,9 @@ import java.util.function.Function;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.common.io.Serializable;
+import com.mikosik.stork.compile.Decompiler;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
-import com.mikosik.stork.debug.Decompiler;
 import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Operator;
@@ -132,9 +130,9 @@ public class TestDecompiler {
     return test(expected, definition, Decompiler::decompile);
   }
 
-  private static <M> Test test(String expected, M model, Function<M, Serializable> decompiler) {
+  private static <M> Test test(String expected, M model, Function<M, String> decompiler) {
     return newCase(expected, () -> {
-      String actual = ascii(decompiler.apply(model));
+      String actual = decompiler.apply(model);
       if (!expected.equals(actual)) {
         throw assertException("""
             expected
