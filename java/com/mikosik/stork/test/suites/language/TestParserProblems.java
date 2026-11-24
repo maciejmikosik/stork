@@ -11,6 +11,7 @@ import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
+import static com.mikosik.stork.test.SourceBuilder.mainWithBody;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -81,7 +82,7 @@ public class TestParserProblems {
 
   private static Test snippet(String snippet, Token token) {
     return programTest(snippet)
-        .source(("main(stdin) { %s }").formatted(snippet))
+        .source(mainWithBody(snippet))
         .expect(unexpectedToken()
             .in(root)
             .in(variable("main"))

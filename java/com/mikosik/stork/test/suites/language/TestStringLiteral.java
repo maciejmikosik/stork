@@ -1,10 +1,11 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.common.io.BytesBuilder.bytesBuilder;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
+import static com.mikosik.stork.test.SourceBuilder.mainWithBody;
+import static com.mikosik.stork.test.SourceBuilder.stringLiteral;
 import static java.util.stream.IntStream.concat;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;
@@ -26,7 +27,7 @@ public class TestStringLiteral {
         .addAll(legalCharacters.chars()
             .mapToObj(character -> (byte) character)
             .map(character -> programTest("%c".formatted(character))
-                .source(mainWithStringLiteralWith(character))
+                .source(mainWithBody(stringLiteral(character)))
                 .stdout("%c".formatted(character)))
             .toList())
         .add(programTest("all in one string")
@@ -57,19 +58,11 @@ public class TestStringLiteral {
 
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
-        .source(mainWithStringLiteralWith(character))
+        .source(mainWithBody(stringLiteral(character)))
         .expect(illegalCharacterInStringLiteral()
             .in(root)
             .in(variable("main"))
             .object(character));
-  }
-
-  private static byte[] mainWithStringLiteralWith(byte character) {
-    return bytesBuilder()
-        .appendAscii("main(stdin) { \"")
-        .append(character)
-        .appendAscii("\" }")
-        .build();
   }
 
   private static ProgramTest programTest(String name) {
