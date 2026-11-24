@@ -16,6 +16,11 @@ public class BytesBuilder {
     return this;
   }
 
+  public BytesBuilder append(byte[] bytes) {
+    output.writeBytes(bytes);
+    return this;
+  }
+
   public BytesBuilder append(byte oneByte) {
     output.write(oneByte);
     return this;
