@@ -23,4 +23,8 @@ public class SourceBuilder {
         .appendAscii("\"")
         .build();
   }
+
+  public static byte[] stringLiteral(String content) {
+    return stringLiteral(tryToAsciiBytesOrFail(content));
+  }
 }

@@ -21,6 +21,9 @@ public class TestAsciiStringsSafetyChecks {
                 () -> bytesBuilder().appendAscii("München")))
             .add(newCase(
                 "SourceBuilder.mainWithBody",
+                () -> mainWithBody("München")))
+            .add(newCase(
+                "SourceBuilder.stringLiteral",
                 () -> mainWithBody("München"))));
   }
 }

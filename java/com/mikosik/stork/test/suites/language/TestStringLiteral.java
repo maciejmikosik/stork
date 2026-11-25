@@ -10,6 +10,8 @@ import static java.util.stream.IntStream.concat;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;
 
+import java.util.LinkedList;
+
 import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
@@ -22,30 +24,25 @@ public class TestStringLiteral {
   }
 
   private static Test allowsLegalCharacters() {
-    var legalCharacters = legalCharacters();
-    return suite("allows legal characters")
-        .addAll(legalCharacters.chars()
-            .mapToObj(character -> (byte) character)
-            .map(character -> programTest("%c".formatted(character))
-                .source(mainWithBody(stringLiteral(character)))
-                .stdout("%c".formatted(character)))
-            .toList())
-        .add(programTest("all in one string")
-            .source("""
-                main(stdin) {
-                  "%s"
-                }
-                """
-                .formatted(legalCharacters))
-            .stdout(legalCharacters));
-  }
+    var legalCharacterTests = new LinkedList<Test>();
+    var legalStringBuilder = new StringBuilder();
 
-  private static String legalCharacters() {
-    var builder = new StringBuilder();
-    rangeClosed(32, 126)
-        .filter(character -> character != '\"')
-        .forEach(character -> builder.append((char) character));
-    return builder.toString();
+    for (byte character = 32; character <= 126; character++) {
+      if (character != '"') {
+        legalCharacterTests.add(programTest(Character.toString(character))
+            .source(mainWithBody(stringLiteral(character)))
+            .stdout(Character.toString(character)));
+        legalStringBuilder.append((char) character);
+      }
+    }
+    var legalString = legalStringBuilder.toString();
+
+    return suite("allows legal characters")
+        .add(suite("single character")
+            .addAll(legalCharacterTests))
+        .add(programTest("all in one string")
+            .source(mainWithBody(stringLiteral(legalString)))
+            .stdout(legalString));
   }
 
   private static Test reportsIllegalCharacters() {
