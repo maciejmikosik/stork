@@ -1,8 +1,8 @@
 package com.mikosik.stork.test.suites.unit;
 
 import static com.mikosik.stork.common.io.BytesBuilder.bytesBuilder;
-import static com.mikosik.stork.test.SourceBuilder.mainWithBody;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
+import static com.mikosik.stork.test.build.SourceBuilder.mainWithBody;
+import static com.mikosik.stork.test.build.StorkDirectoryBuilder.path;
 import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 import static org.quackery.run.Runners.expect;

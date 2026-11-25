@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.token.Punctuator.LEFT_ROUND_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_CURLY_BRACKET;
 import static com.mikosik.stork.model.token.Punctuator.RIGHT_ROUND_BRACKET;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.SourceBuilder.mainWithBody;
+import static com.mikosik.stork.test.build.SourceBuilder.mainWithBody;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;

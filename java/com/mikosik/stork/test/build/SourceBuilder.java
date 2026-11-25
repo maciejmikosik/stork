@@ -1,4 +1,4 @@
-package com.mikosik.stork.test;
+package com.mikosik.stork.test.build;
 
 import static com.mikosik.stork.common.io.AsciiStrings.tryToAsciiBytesOrFail;
 import static com.mikosik.stork.common.io.BytesBuilder.bytesBuilder;

@@ -4,8 +4,8 @@ import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLit
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.SourceBuilder.mainWithBody;
-import static com.mikosik.stork.test.SourceBuilder.stringLiteral;
+import static com.mikosik.stork.test.build.SourceBuilder.mainWithBody;
+import static com.mikosik.stork.test.build.SourceBuilder.stringLiteral;
 import static java.util.stream.IntStream.concat;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;

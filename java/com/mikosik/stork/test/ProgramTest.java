@@ -21,7 +21,7 @@ import static com.mikosik.stork.test.Assertions.assertMatch;
 import static com.mikosik.stork.test.Outcome.NotCompiled.outcome;
 import static com.mikosik.stork.test.Outcome.NotComputed.outcome;
 import static com.mikosik.stork.test.Outcome.Printed.outcome;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
+import static com.mikosik.stork.test.build.StorkDirectoryBuilder.path;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.quackery.Case.newCase;
 
@@ -38,6 +38,7 @@ import com.mikosik.stork.compute.err.CannotCompute;
 import com.mikosik.stork.compute.err.ComputerException;
 import com.mikosik.stork.model.disk.StorkDirectory;
 import com.mikosik.stork.model.exp.Definition;
+import com.mikosik.stork.test.build.StorkDirectoryBuilder;
 
 public class ProgramTest {
   private static final Supplier<List<Definition>> CORE = singleton(() -> core(DEVELOPMENT));

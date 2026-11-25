@@ -6,7 +6,7 @@ import static com.mikosik.stork.compile.err.Problems.malformedWord;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.SourceBuilder.mainWithBody;
+import static com.mikosik.stork.test.build.SourceBuilder.mainWithBody;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;
 
