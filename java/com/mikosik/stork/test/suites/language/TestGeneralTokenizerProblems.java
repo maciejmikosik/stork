@@ -6,7 +6,7 @@ import static com.mikosik.stork.compile.err.Problems.malformedWord;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static com.mikosik.stork.test.build.SourceBuilder.mainWithBody;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;
 
@@ -41,22 +41,11 @@ public class TestGeneralTokenizerProblems {
 
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
-        .source(sourceCodeWith(character))
+        .source(mainWithBody(character))
         .expect(illegalCharacterInCode()
             .in(root)
             .in(variable("main"))
             .object(character));
-  }
-
-  private static byte[] sourceCodeWith(byte character) {
-    var bytes = "main(stdin) { ? }".getBytes(UTF_8);
-    byte questionMark = '?';
-    for (int i = 0; i < bytes.length; i++) {
-      if (bytes[i] == questionMark) {
-        bytes[i] = character;
-      }
-    }
-    return bytes;
   }
 
   private static Test reportsMalformedTokens() {
@@ -78,7 +67,7 @@ public class TestGeneralTokenizerProblems {
 
   private static Test reportsMalformed(String token) {
     return programTest(token)
-        .source("main(stdin) { %s }".formatted(token))
+        .source(mainWithBody(token))
         .expect(malformedWord()
             .in(root)
             .in(variable("main"))

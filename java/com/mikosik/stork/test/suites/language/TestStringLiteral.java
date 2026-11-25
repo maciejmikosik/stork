@@ -1,13 +1,16 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.common.io.BytesBuilder.bytesBuilder;
 import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
+import static com.mikosik.stork.test.build.SourceBuilder.mainWithBody;
+import static com.mikosik.stork.test.build.SourceBuilder.stringLiteral;
 import static java.util.stream.IntStream.concat;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.quackery.Suite.suite;
+
+import java.util.LinkedList;
 
 import org.quackery.Test;
 
@@ -21,30 +24,25 @@ public class TestStringLiteral {
   }
 
   private static Test allowsLegalCharacters() {
-    var legalCharacters = legalCharacters();
-    return suite("allows legal characters")
-        .addAll(legalCharacters.chars()
-            .mapToObj(character -> (byte) character)
-            .map(character -> programTest("%c".formatted(character))
-                .source(mainWithStringLiteralWith(character))
-                .stdout("%c".formatted(character)))
-            .toList())
-        .add(programTest("all in one string")
-            .source("""
-                main(stdin) {
-                  "%s"
-                }
-                """
-                .formatted(legalCharacters))
-            .stdout(legalCharacters));
-  }
+    var legalCharacterTests = new LinkedList<Test>();
+    var legalStringBuilder = new StringBuilder();
 
-  private static String legalCharacters() {
-    var builder = new StringBuilder();
-    rangeClosed(32, 126)
-        .filter(character -> character != '\"')
-        .forEach(character -> builder.append((char) character));
-    return builder.toString();
+    for (byte character = 32; character <= 126; character++) {
+      if (character != '"') {
+        legalCharacterTests.add(programTest(Character.toString(character))
+            .source(mainWithBody(stringLiteral(character)))
+            .stdout(Character.toString(character)));
+        legalStringBuilder.append((char) character);
+      }
+    }
+    var legalString = legalStringBuilder.toString();
+
+    return suite("allows legal characters")
+        .add(suite("single character")
+            .addAll(legalCharacterTests))
+        .add(programTest("all in one string")
+            .source(mainWithBody(stringLiteral(legalString)))
+            .stdout(legalString));
   }
 
   private static Test reportsIllegalCharacters() {
@@ -57,19 +55,11 @@ public class TestStringLiteral {
 
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
-        .source(mainWithStringLiteralWith(character))
+        .source(mainWithBody(stringLiteral(character)))
         .expect(illegalCharacterInStringLiteral()
             .in(root)
             .in(variable("main"))
             .object(character));
-  }
-
-  private static byte[] mainWithStringLiteralWith(byte character) {
-    return bytesBuilder()
-        .appendAscii("main(stdin) { \"")
-        .append(character)
-        .appendAscii("\" }")
-        .build();
   }
 
   private static ProgramTest programTest(String name) {

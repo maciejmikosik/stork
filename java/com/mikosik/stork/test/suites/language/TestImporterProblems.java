@@ -11,7 +11,7 @@ import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
+import static com.mikosik.stork.test.build.StorkDirectoryBuilder.path;
 import static java.util.stream.IntStream.range;
 import static org.quackery.Suite.suite;
 

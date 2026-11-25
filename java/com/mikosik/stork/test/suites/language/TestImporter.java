@@ -1,7 +1,7 @@
 package com.mikosik.stork.test.suites.language;
 
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
+import static com.mikosik.stork.test.build.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;

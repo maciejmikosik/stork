@@ -1,6 +1,6 @@
 package com.mikosik.stork.common.io;
 
-import static java.nio.charset.StandardCharsets.US_ASCII;
+import static com.mikosik.stork.common.io.AsciiStrings.tryToAsciiBytesOrFail;
 
 import java.io.ByteArrayOutputStream;
 
@@ -12,7 +12,12 @@ public class BytesBuilder {
   }
 
   public BytesBuilder appendAscii(String string) {
-    output.writeBytes(string.getBytes(US_ASCII));
+    output.writeBytes(tryToAsciiBytesOrFail(string));
+    return this;
+  }
+
+  public BytesBuilder append(byte[] bytes) {
+    output.writeBytes(bytes);
     return this;
   }
 

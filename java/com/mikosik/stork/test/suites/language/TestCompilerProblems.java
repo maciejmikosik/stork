@@ -8,7 +8,7 @@ import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
-import static com.mikosik.stork.test.StorkDirectoryBuilder.path;
+import static com.mikosik.stork.test.build.StorkDirectoryBuilder.path;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
