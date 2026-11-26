@@ -32,7 +32,7 @@ public class TestDescriber {
             .add(test("string", "string"))
             .add(suite("expression")
                 .add(test(variable("variable"), "variable"))
-                .add(test(namespace("a/b/c"), "a/b/c"))
+                .add(test(namespace("a/b/c"), "a/b/c/"))
                 .add(test(reference("a/b/c/d"), "a/b/c/d")))
             .add(suite("character")
                 .add(test(
