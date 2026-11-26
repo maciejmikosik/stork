@@ -2,7 +2,7 @@ package com.mikosik.stork.test.suites.unit;
 
 import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.io.Input.input;
-import static com.mikosik.stork.common.io.Serializables.ascii;
+import static com.mikosik.stork.compile.Decompiler.decompile;
 import static com.mikosik.stork.compile.op.Combinator.B;
 import static com.mikosik.stork.compile.op.Combinator.C;
 import static com.mikosik.stork.compile.op.Combinator.I;
@@ -32,18 +32,14 @@ import static org.quackery.Case.newCase;
 import static org.quackery.Suite.suite;
 
 import java.math.BigInteger;
-import java.util.function.Function;
 
 import org.quackery.Test;
 
-import com.mikosik.stork.common.io.Serializable;
 import com.mikosik.stork.compute.Computation;
 import com.mikosik.stork.compute.Stack;
-import com.mikosik.stork.debug.Decompiler;
-import com.mikosik.stork.model.exp.Definition;
-import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Operator;
 import com.mikosik.stork.model.exp.Parameter;
+import com.mikosik.stork.model.exp.Phrase;
 
 public class TestDecompiler {
   public static Test testDecompiler() {
@@ -90,6 +86,8 @@ public class TestDecompiler {
                     .add(test("$STDIN(0)", stdin(input(new byte[0]))))))
             .add(suite("variable")
                 .add(test("var", variable("var"))))
+            .add(suite("namespace")
+                .add(test("a/b/", namespace(list("a", "b")))))
             .add(suite("reference")
                 .add(test(
                     "a/b/c",
@@ -124,17 +122,9 @@ public class TestDecompiler {
                     reference(variable("g"))))));
   }
 
-  private static Test test(String expected, Expression expression) {
-    return test(expected, expression, Decompiler::decompile);
-  }
-
-  private static Test test(String expected, Definition definition) {
-    return test(expected, definition, Decompiler::decompile);
-  }
-
-  private static <M> Test test(String expected, M model, Function<M, Serializable> decompiler) {
+  private static Test test(String expected, Phrase phrase) {
     return newCase(expected, () -> {
-      String actual = ascii(decompiler.apply(model));
+      String actual = decompile(phrase);
       if (!expected.equals(actual)) {
         throw assertException("""
             expected

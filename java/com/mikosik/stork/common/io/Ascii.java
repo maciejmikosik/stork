@@ -1,7 +1,5 @@
 package com.mikosik.stork.common.io;
 
-import static java.nio.charset.StandardCharsets.US_ASCII;
-
 public class Ascii {
   public static final byte SINGLE_QUOTE = '\'';
   public static final byte DOUBLE_QUOTE = '\"';
@@ -52,13 +50,5 @@ public class Ascii {
         || character == '\n'
         || character == '\r'
         || character == '\t';
-  }
-
-  public static String ascii(byte[] bytes) {
-    return new String(bytes, US_ASCII);
-  }
-
-  public static byte[] bytes(String string) {
-    return string.getBytes(US_ASCII);
   }
 }

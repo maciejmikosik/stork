@@ -1,20 +1,16 @@
 package com.mikosik.stork.compile.err;
 
-import static com.mikosik.stork.common.col.ImmutableList.join;
-import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isAscii;
 import static com.mikosik.stork.common.io.Ascii.isPrintable;
 import static com.mikosik.stork.common.text.Outline.outline;
+import static com.mikosik.stork.compile.Decompiler.decompile;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.String.format;
-import static java.lang.String.join;
 
 import java.util.List;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.model.exp.Namespace;
-import com.mikosik.stork.model.exp.Reference;
-import com.mikosik.stork.model.exp.Variable;
+import com.mikosik.stork.model.exp.Phrase;
 import com.mikosik.stork.model.token.Identifier;
 import com.mikosik.stork.model.token.IntegerLiteral;
 import com.mikosik.stork.model.token.Punctuator;
@@ -55,6 +51,7 @@ public class Describer {
 
   private static String formatValue(Object arg) {
     return switch (arg) {
+      case Phrase phrase -> decompile(phrase);
       case Identifier identifier -> identifier.string;
       case Punctuator punctuator -> switch (punctuator) {
         case LEFT_ROUND_BRACKET -> "(";
@@ -66,12 +63,6 @@ public class Describer {
       case IntegerLiteral literal -> "" + literal.value;
       case StringLiteral literal -> literal.string;
       case String string -> string;
-      case Variable variable -> variable.name;
-      case Namespace namespace -> join("/", namespace.components);
-      // TODO create utils for formatting and parsing
-      case Reference reference -> join("/", join(
-          reference.namespace.components,
-          single(reference.variable.name)));
       default -> arg.toString();
     };
   }
