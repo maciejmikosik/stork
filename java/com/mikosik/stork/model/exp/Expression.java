@@ -1,3 +1,3 @@
 package com.mikosik.stork.model.exp;
 
-public interface Expression {}
+public non-sealed interface Expression extends Phrase {}

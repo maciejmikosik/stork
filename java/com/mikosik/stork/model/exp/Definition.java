@@ -1,6 +1,6 @@
 package com.mikosik.stork.model.exp;
 
-public class Definition {
+public final class Definition implements Phrase {
   public final Reference reference;
   public final Expression body;
 

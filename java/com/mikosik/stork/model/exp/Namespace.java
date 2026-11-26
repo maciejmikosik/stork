@@ -8,7 +8,7 @@ import static java.util.Objects.hash;
 
 import java.util.List;
 
-public class Namespace {
+public final class Namespace implements Phrase {
   public static final Namespace root = namespace(none());
 
   public final List<String> components;

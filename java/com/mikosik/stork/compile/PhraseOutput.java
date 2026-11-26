@@ -9,8 +9,10 @@ import com.mikosik.stork.model.exp.Definition;
 import com.mikosik.stork.model.exp.Expression;
 import com.mikosik.stork.model.exp.Integer;
 import com.mikosik.stork.model.exp.Lambda;
+import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Operator;
 import com.mikosik.stork.model.exp.Parameter;
+import com.mikosik.stork.model.exp.Phrase;
 import com.mikosik.stork.model.exp.Quote;
 import com.mikosik.stork.model.exp.Reference;
 import com.mikosik.stork.model.exp.Variable;
@@ -26,21 +28,26 @@ public class PhraseOutput {
     return new PhraseOutput(output);
   }
 
-  public void write(Definition definition) {
+  public void write(Phrase phrase) {
+    switch (phrase) {
+      case Definition definition -> write(definition);
+      case Expression expression -> write(expression);
+      case Namespace namespace -> write(namespace);
+    }
+  }
+
+  private void write(Definition definition) {
     write(definition.reference);
     writeBody(definition.body);
   }
 
-  public void write(Expression expression) {
+  private void write(Expression expression) {
     switch (expression) {
       case Variable variable -> {
         write(variable.name);
       }
       case Reference reference -> {
-        for (var component : reference.namespace.components) {
-          write(component);
-          write('/');
-        }
+        write(reference.namespace);
         write(reference.variable.name);
       }
       case Integer integer -> {
@@ -82,6 +89,13 @@ public class PhraseOutput {
         write(body);
         write('}');
       }
+    }
+  }
+
+  private void write(Namespace namespace) {
+    for (var component : namespace.components) {
+      write(component);
+      write('/');
     }
   }
 
