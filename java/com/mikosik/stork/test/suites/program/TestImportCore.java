@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.suites.program;
 
-import static com.mikosik.stork.compile.err.Miscompilations.duplicatedFunction;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.programTest;
@@ -29,7 +29,7 @@ public class TestImportCore {
     return programTest("cannot override core function")
         .add(path("lang/list")
             .source("length(list) { 0 }"))
-        .expect(duplicatedFunction()
+        .expect(miscompilation("duplicated function")
             .in(namespace("lang/list"))
             .set("function", variable("length")));
   }

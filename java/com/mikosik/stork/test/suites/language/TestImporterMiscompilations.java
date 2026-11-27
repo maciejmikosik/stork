@@ -4,8 +4,7 @@ import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNewline;
-import static com.mikosik.stork.compile.err.Miscompilations.importCollision;
-import static com.mikosik.stork.compile.err.Miscompilations.malformedImportLine;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -67,7 +66,7 @@ public class TestImporterMiscompilations {
         .source("""
             main(stdin) { "ok" }
             """)
-        .expect(malformedImportLine()
+        .expect(miscompilation("malformed import")
             .in(root)
             .set("import", line));
   }
@@ -82,7 +81,7 @@ public class TestImporterMiscompilations {
             .source("""
                 main(stdin) { "ok" }
                 """)
-            .expect(importCollision()
+            .expect(miscompilation("import collision")
                 .in(root)
                 .set("imports", list("a/b/c", "a/b/c"))
                 .set("variable", variable("c"))))
@@ -94,7 +93,7 @@ public class TestImporterMiscompilations {
             .source("""
                 main(stdin) { "ok" }
                 """)
-            .expect(importCollision()
+            .expect(miscompilation("import collision")
                 .in(root)
                 .set("imports", list("a/b/c", "a/x/c"))
                 .set("variable", variable("c"))))
@@ -106,7 +105,7 @@ public class TestImporterMiscompilations {
             .source("""
                 main(stdin) { "ok" }
                 """)
-            .expect(importCollision()
+            .expect(miscompilation("import collision")
                 .in(root)
                 .set("imports", list("a/b/c", "a/b/d c"))
                 .set("variable", variable("c"))))
@@ -125,11 +124,11 @@ public class TestImporterMiscompilations {
                 main(stdin) { "ok" }
                 """)
             .expect(
-                importCollision()
+                miscompilation("import collision")
                     .in(namespace("a/b"))
                     .set("imports", list("x/y/z", "x/y/z"))
                     .set("variable", variable("z")),
-                importCollision()
+                miscompilation("import collision")
                     .in(namespace("a/c"))
                     .set("imports", list("x/y/v", "x/y/v"))
                     .set("variable", variable("v"))));
@@ -143,13 +142,13 @@ public class TestImporterMiscompilations {
                 main(stdin) { "ok" }
                 """)
             .expect(
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(root)
                     .set("import", "!"),
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(root)
                     .set("import", "@"),
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(root)
                     .set("import", "#")))
         .add(programTest("in different files")
@@ -163,13 +162,13 @@ public class TestImporterMiscompilations {
                 main(stdin) { "ok" }
                 """)
             .expect(
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(namespace(single("a")))
                     .set("import", "!"),
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(namespace(single("b")))
                     .set("import", "@"),
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(namespace(single("c")))
                     .set("import", "#")));
   }

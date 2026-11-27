@@ -7,8 +7,7 @@ import static com.mikosik.stork.common.text.Strings.split;
 import static com.mikosik.stork.compile.Patterns.IMPORT_LINE;
 import static com.mikosik.stork.compile.err.CompilerException.verifyNo;
 import static com.mikosik.stork.compile.err.Context.in;
-import static com.mikosik.stork.compile.err.Miscompilations.importCollision;
-import static com.mikosik.stork.compile.err.Miscompilations.malformedImportLine;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Changes.deep;
 import static com.mikosik.stork.model.exp.Changes.ifVariable;
 import static com.mikosik.stork.model.exp.Changes.onBody;
@@ -97,7 +96,7 @@ public class Importer {
   private static List<Miscompilation> findMalformedImports(List<String> lines) {
     return streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
-        .map(line -> malformedImportLine()
+        .map(line -> miscompilation("malformed import")
             .set("import", line)
             .build())
         .toList();
@@ -108,7 +107,7 @@ public class Importer {
         .collect(groupingBy(line -> line.variable));
     return streamer(linesByVariable.entrySet())
         .filter(entry -> entry.getValue().size() > 1)
-        .map(entry -> importCollision()
+        .map(entry -> miscompilation("import collision")
             .set("imports", entry.getValue().stream()
                 .map(line -> line.source)
                 .toList())

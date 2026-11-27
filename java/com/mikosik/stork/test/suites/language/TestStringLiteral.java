@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInStringLiteral;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -56,7 +56,7 @@ public class TestStringLiteral {
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
         .source(mainWithBody(stringLiteral(character)))
-        .expect(illegalCharacterInStringLiteral()
+        .expect(miscompilation("illegal character in string literal")
             .in(root)
             .in(variable("main"))
             .set("character", character));

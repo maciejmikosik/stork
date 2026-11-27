@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Miscompilations.unexpectedToken;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Identifier.identifier;
@@ -83,7 +83,7 @@ public class TestParserMiscompilations {
   private static Test snippet(String snippet, Token token) {
     return programTest(snippet)
         .source(mainWithBody(snippet))
-        .expect(unexpectedToken()
+        .expect(miscompilation("unexpected token")
             .in(root)
             .in(variable("main"))
             .set("token", token));
@@ -92,7 +92,7 @@ public class TestParserMiscompilations {
   private static Test sourceWithMain(String definition, Token token) {
     return programTest(definition)
         .source(definition)
-        .expect(unexpectedToken()
+        .expect(miscompilation("unexpected token")
             .in(root)
             .in(variable("main"))
             .set("token", token));
@@ -101,7 +101,7 @@ public class TestParserMiscompilations {
   private static Test source(String definition, Token token) {
     return programTest(definition)
         .source(definition)
-        .expect(unexpectedToken()
+        .expect(miscompilation("unexpected token")
             .in(root)
             .set("token", token));
   }

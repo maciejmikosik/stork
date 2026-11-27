@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Context.in;
-import static com.mikosik.stork.compile.err.Miscompilations.unexpectedToken;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
 import static com.mikosik.stork.model.exp.Lambda.lambda;
@@ -146,7 +146,7 @@ public class Parser implements Iterator<Definition> {
   private void checkNext(Token expected) {
     var actual = input.next();
     if (!deepEquals(actual, expected)) {
-      throw exception(unexpectedToken()
+      throw exception(miscompilation("unexpected token")
           .set("token", actual)
           .build());
     }
@@ -160,7 +160,7 @@ public class Parser implements Iterator<Definition> {
   }
 
   private static <T> T failUnexpected(Token token) {
-    throw exception(unexpectedToken()
+    throw exception(miscompilation("unexpected token")
         .set("token", token)
         .build());
   }

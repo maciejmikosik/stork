@@ -1,8 +1,6 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Miscompilations.duplicatedFunction;
-import static com.mikosik.stork.compile.err.Miscompilations.unboundVariable;
-import static com.mikosik.stork.compile.err.Miscompilations.undefinedFunction;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.reference;
@@ -27,16 +25,16 @@ public class TestLinkerMiscompilations {
     return suite("unbound variable")
         .add(programTest("once")
             .source("func { var }")
-            .expect(unboundVariable()
+            .expect(miscompilation("unbound variable")
                 .in(reference("func"))
                 .set("variable", variable("var"))))
         .add(programTest("multiple times in same function")
             .source("func { var(var) }")
             .expect(
-                unboundVariable()
+                miscompilation("unbound variable")
                     .in(reference("func"))
                     .set("variable", variable("var")),
-                unboundVariable()
+                miscompilation("unbound variable")
                     .in(reference("func"))
                     .set("variable", variable("var"))));
   }
@@ -47,7 +45,7 @@ public class TestLinkerMiscompilations {
             .add(path("a/aa")
                 .imports("b/bb/funcB")
                 .source("funcA { funcB }"))
-            .expect(undefinedFunction()
+            .expect(miscompilation("undefined function")
                 .in(reference("a/aa/funcA"))
                 .set("function", reference("b/bb/funcB"))))
         .add(programTest("multiple times in same function")
@@ -55,10 +53,10 @@ public class TestLinkerMiscompilations {
                 .imports("b/bb/funcB")
                 .source("funcA { funcB(funcB) }"))
             .expect(
-                undefinedFunction()
+                miscompilation("undefined function")
                     .in(reference("a/aa/funcA"))
                     .set("function", reference("b/bb/funcB")),
-                undefinedFunction()
+                miscompilation("undefined function")
                     .in(reference("a/aa/funcA"))
                     .set("function", reference("b/bb/funcB"))));
   }
@@ -70,7 +68,7 @@ public class TestLinkerMiscompilations {
                 func { 1 }
                 func { 2 }
                 """)
-            .expect(duplicatedFunction()
+            .expect(miscompilation("duplicated function")
                 .in(root)
                 .set("function", variable("func"))))
         .add(programTest("multiple times in same namespace")
@@ -81,10 +79,10 @@ public class TestLinkerMiscompilations {
                 funcB { 2 }
                 """)
             .expect(
-                duplicatedFunction()
+                miscompilation("duplicated function")
                     .in(root)
                     .set("function", variable("funcA")),
-                duplicatedFunction()
+                miscompilation("duplicated function")
                     .in(root)
                     .set("function", variable("funcB"))));
   }

@@ -1,8 +1,6 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Miscompilations.malformedImportLine;
-import static com.mikosik.stork.compile.err.Miscompilations.unexpectedToken;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
@@ -30,17 +28,17 @@ public class TestMiscompilations {
             .imports("y yy yyy")
             .source("func ."))
         .expect(
-            malformedImportLine()
+            miscompilation("malformed import")
                 .in(root)
                 .set("import", "x xx xxx"),
-            illegalCharacterInCode()
+            miscompilation("illegal character in code")
                 .in(root)
                 .in(variable("main"))
                 .set("character", (byte) '!'),
-            malformedImportLine()
+            miscompilation("malformed import")
                 .in(namespace("a/aa"))
                 .set("import", "y yy yyy"),
-            unexpectedToken()
+            miscompilation("unexpected token")
                 .in(namespace("a/aa"))
                 .in(variable("func"))
                 .set("token", DOT));

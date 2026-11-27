@@ -9,9 +9,7 @@ import static com.mikosik.stork.common.io.Ascii.isWhitespace;
 import static com.mikosik.stork.compile.Patterns.IDENTIFIER;
 import static com.mikosik.stork.compile.Patterns.INTEGER_LITERAL;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
-import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInStringLiteral;
-import static com.mikosik.stork.compile.err.Miscompilations.malformedWord;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
@@ -58,7 +56,7 @@ public class Tokenizer implements Iterator<Token> {
         case '{' -> LEFT_CURLY_BRACKET;
         case '}' -> RIGHT_CURLY_BRACKET;
         case '.' -> DOT;
-        default -> throw exception(illegalCharacterInCode()
+        default -> throw exception(miscompilation("illegal character in code")
             .set("character", firstByte)
             .build());
       };
@@ -77,7 +75,7 @@ public class Tokenizer implements Iterator<Token> {
     while (iterator.hasNext() && !isDoubleQuote(iterator.peek())) {
       var nextByte = iterator.next().byteValue();
       if (!isPrintable(nextByte)) {
-        throw exception(illegalCharacterInStringLiteral()
+        throw exception(miscompilation("illegal character in string literal")
             .set("character", nextByte)
             .build());
       }
@@ -99,7 +97,7 @@ public class Tokenizer implements Iterator<Token> {
     } else if (word.matches(IDENTIFIER)) {
       return identifier(word);
     } else {
-      throw exception(malformedWord()
+      throw exception(miscompilation("malformed word")
           .set("word", word)
           .build());
     }

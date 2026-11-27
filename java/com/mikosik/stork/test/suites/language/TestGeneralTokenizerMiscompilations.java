@@ -1,8 +1,7 @@
 package com.mikosik.stork.test.suites.language;
 
 import static com.mikosik.stork.common.io.AsciiSubset.asciiSubset;
-import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Miscompilations.malformedWord;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -42,7 +41,7 @@ public class TestGeneralTokenizerMiscompilations {
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
         .source(mainWithBody(character))
-        .expect(illegalCharacterInCode()
+        .expect(miscompilation("illegal character in code")
             .in(root)
             .in(variable("main"))
             .set("character", character));
@@ -68,7 +67,7 @@ public class TestGeneralTokenizerMiscompilations {
   private static Test reportsMalformed(String word) {
     return programTest(word)
         .source(mainWithBody(word))
-        .expect(malformedWord()
+        .expect(miscompilation("malformed word")
             .in(root)
             .in(variable("main"))
             .set("word", word));
