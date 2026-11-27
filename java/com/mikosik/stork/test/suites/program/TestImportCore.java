@@ -31,6 +31,6 @@ public class TestImportCore {
             .source("length(list) { 0 }"))
         .expect(duplicatedFunction()
             .in(namespace("lang/list"))
-            .object(variable("length")));
+            .set("function", variable("length")));
   }
 }

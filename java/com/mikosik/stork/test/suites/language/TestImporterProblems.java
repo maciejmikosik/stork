@@ -69,7 +69,7 @@ public class TestImporterProblems {
             """)
         .expect(malformedImportLine()
             .in(root)
-            .object(line));
+            .set("import", line));
   }
 
   private static Test reportsCollisions() {
@@ -84,8 +84,8 @@ public class TestImporterProblems {
                 """)
             .expect(importCollision()
                 .in(root)
-                .object(list("a/b/c", "a/b/c"))
-                .variable(variable("c"))))
+                .set("imports", list("a/b/c", "a/b/c"))
+                .set("variable", variable("c"))))
         .add(programTest("same variable from different directory")
             .imports("""
                 a/b/c
@@ -96,8 +96,8 @@ public class TestImporterProblems {
                 """)
             .expect(importCollision()
                 .in(root)
-                .object(list("a/b/c", "a/x/c"))
-                .variable(variable("c"))))
+                .set("imports", list("a/b/c", "a/x/c"))
+                .set("variable", variable("c"))))
         .add(programTest("of renamed variable")
             .imports("""
                 a/b/c
@@ -108,8 +108,8 @@ public class TestImporterProblems {
                 """)
             .expect(importCollision()
                 .in(root)
-                .object(list("a/b/c", "a/b/d c"))
-                .variable(variable("c"))))
+                .set("imports", list("a/b/c", "a/b/d c"))
+                .set("variable", variable("c"))))
         .add(programTest("includes namespaces")
             .add(path("a/b")
                 .imports("""
@@ -127,12 +127,12 @@ public class TestImporterProblems {
             .expect(
                 importCollision()
                     .in(namespace("a/b"))
-                    .object(list("x/y/z", "x/y/z"))
-                    .variable(variable("z")),
+                    .set("imports", list("x/y/z", "x/y/z"))
+                    .set("variable", variable("z")),
                 importCollision()
                     .in(namespace("a/c"))
-                    .object(list("x/y/v", "x/y/v"))
-                    .variable(variable("v"))));
+                    .set("imports", list("x/y/v", "x/y/v"))
+                    .set("variable", variable("v"))));
   }
 
   private static Test reportsMultipleProblems() {
@@ -145,13 +145,13 @@ public class TestImporterProblems {
             .expect(
                 malformedImportLine()
                     .in(root)
-                    .object("!"),
+                    .set("import", "!"),
                 malformedImportLine()
                     .in(root)
-                    .object("@"),
+                    .set("import", "@"),
                 malformedImportLine()
                     .in(root)
-                    .object("#")))
+                    .set("import", "#")))
         .add(programTest("in different files")
             .add(path("a")
                 .imports("!"))
@@ -165,13 +165,13 @@ public class TestImporterProblems {
             .expect(
                 malformedImportLine()
                     .in(namespace(single("a")))
-                    .object("!"),
+                    .set("import", "!"),
                 malformedImportLine()
                     .in(namespace(single("b")))
-                    .object("@"),
+                    .set("import", "@"),
                 malformedImportLine()
                     .in(namespace(single("c")))
-                    .object("#")));
+                    .set("import", "#")));
   }
 
   private static ProgramTest programTest(String name) {

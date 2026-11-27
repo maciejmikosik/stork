@@ -32,18 +32,18 @@ public class TestCompilerProblems {
         .expect(
             malformedImportLine()
                 .in(root)
-                .object("x xx xxx"),
+                .set("import", "x xx xxx"),
             illegalCharacterInCode()
                 .in(root)
                 .in(variable("main"))
-                .object((byte) '!'),
+                .set("character", (byte) '!'),
             malformedImportLine()
                 .in(namespace("a/aa"))
-                .object("y yy yyy"),
+                .set("import", "y yy yyy"),
             unexpectedToken()
                 .in(namespace("a/aa"))
                 .in(variable("func"))
-                .object(DOT));
+                .set("token", DOT));
   }
 
   private static ProgramTest programTest(String name) {

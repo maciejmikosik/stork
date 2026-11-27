@@ -86,7 +86,7 @@ public class TestParserProblems {
         .expect(unexpectedToken()
             .in(root)
             .in(variable("main"))
-            .object(token));
+            .set("token", token));
   }
 
   private static Test sourceWithMain(String definition, Token token) {
@@ -95,7 +95,7 @@ public class TestParserProblems {
         .expect(unexpectedToken()
             .in(root)
             .in(variable("main"))
-            .object(token));
+            .set("token", token));
   }
 
   private static Test source(String definition, Token token) {
@@ -103,7 +103,7 @@ public class TestParserProblems {
         .source(definition)
         .expect(unexpectedToken()
             .in(root)
-            .object(token));
+            .set("token", token));
   }
 
   private static ProgramTest programTest(String name) {

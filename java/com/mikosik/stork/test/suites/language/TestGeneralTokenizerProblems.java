@@ -45,7 +45,7 @@ public class TestGeneralTokenizerProblems {
         .expect(illegalCharacterInCode()
             .in(root)
             .in(variable("main"))
-            .object(character));
+            .set("character", character));
   }
 
   private static Test reportsMalformedTokens() {
@@ -65,13 +65,13 @@ public class TestGeneralTokenizerProblems {
             .add(reportsMalformed("ab-c")));
   }
 
-  private static Test reportsMalformed(String token) {
-    return programTest(token)
-        .source(mainWithBody(token))
+  private static Test reportsMalformed(String word) {
+    return programTest(word)
+        .source(mainWithBody(word))
         .expect(malformedWord()
             .in(root)
             .in(variable("main"))
-            .object(token));
+            .set("word", word));
   }
 
   private static ProgramTest programTest(String name) {

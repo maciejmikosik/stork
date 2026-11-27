@@ -147,7 +147,7 @@ public class Parser implements Iterator<Definition> {
     var actual = input.next();
     if (!deepEquals(actual, expected)) {
       throw exception(unexpectedToken()
-          .object(actual)
+          .set("token", actual)
           .build());
     }
   }
@@ -161,7 +161,7 @@ public class Parser implements Iterator<Definition> {
 
   private static <T> T failUnexpected(Token token) {
     throw exception(unexpectedToken()
-        .object(token)
+        .set("token", token)
         .build());
   }
 

@@ -51,30 +51,22 @@ public class Problem {
       this.description = description;
     }
 
-    private ProblemBuilder describe(String key, Object value) {
+    public ProblemBuilder set(String key, Object value) {
       description.put(key, value);
       return this;
     }
 
     public ProblemBuilder in(Namespace namespace) {
-      return describe("inNamespace", namespace);
+      return set("inNamespace", namespace);
     }
 
     public ProblemBuilder in(Variable variable) {
-      return describe("inFunction", variable);
+      return set("inFunction", variable);
     }
 
     public ProblemBuilder in(Reference reference) {
       return in(reference.namespace)
           .in(reference.variable);
-    }
-
-    public ProblemBuilder object(Object object) {
-      return describe("object", object);
-    }
-
-    public ProblemBuilder variable(Variable variable) {
-      return describe("variable", variable);
     }
 
     public Problem build() {

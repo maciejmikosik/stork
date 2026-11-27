@@ -98,7 +98,7 @@ public class Importer {
     return streamer(lines)
         .filter(line -> !line.matches(IMPORT_LINE))
         .map(line -> malformedImportLine()
-            .object(line)
+            .set("import", line)
             .build())
         .toList();
   }
@@ -109,10 +109,10 @@ public class Importer {
     return streamer(linesByVariable.entrySet())
         .filter(entry -> entry.getValue().size() > 1)
         .map(entry -> importCollision()
-            .object(entry.getValue().stream()
+            .set("imports", entry.getValue().stream()
                 .map(line -> line.source)
                 .toList())
-            .variable(entry.getKey())
+            .set("variable", entry.getKey())
             .build())
         .toList();
   }

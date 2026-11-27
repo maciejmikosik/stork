@@ -63,7 +63,7 @@ public class TestDescriber {
     return test(
         objectValue.getClass().getSimpleName(),
         problem("mockName")
-            .object(objectValue)
+            .set("object", objectValue)
             .build(),
         outline("mockName")
             .nest("object: " + expected));
@@ -73,7 +73,7 @@ public class TestDescriber {
     return test(
         objectValue.getClass().getSimpleName(),
         problem("mockName")
-            .object(objectValue)
+            .set("object", objectValue)
             .build(),
         outline("mockName")
             .nest(outline("object:")

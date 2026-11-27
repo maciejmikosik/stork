@@ -29,16 +29,16 @@ public class TestLinkerProblems {
             .source("func { var }")
             .expect(unboundVariable()
                 .in(reference("func"))
-                .object(variable("var"))))
+                .set("variable", variable("var"))))
         .add(programTest("multiple times in same function")
             .source("func { var(var) }")
             .expect(
                 unboundVariable()
                     .in(reference("func"))
-                    .object(variable("var")),
+                    .set("variable", variable("var")),
                 unboundVariable()
                     .in(reference("func"))
-                    .object(variable("var"))));
+                    .set("variable", variable("var"))));
   }
 
   private static Suite reportsUndefinedFunction() {
@@ -49,7 +49,7 @@ public class TestLinkerProblems {
                 .source("funcA { funcB }"))
             .expect(undefinedFunction()
                 .in(reference("a/aa/funcA"))
-                .object(reference("b/bb/funcB"))))
+                .set("function", reference("b/bb/funcB"))))
         .add(programTest("multiple times in same function")
             .add(path("a/aa")
                 .imports("b/bb/funcB")
@@ -57,10 +57,10 @@ public class TestLinkerProblems {
             .expect(
                 undefinedFunction()
                     .in(reference("a/aa/funcA"))
-                    .object(reference("b/bb/funcB")),
+                    .set("function", reference("b/bb/funcB")),
                 undefinedFunction()
                     .in(reference("a/aa/funcA"))
-                    .object(reference("b/bb/funcB"))));
+                    .set("function", reference("b/bb/funcB"))));
   }
 
   private static Test reportsDuplicatedFunction() {
@@ -72,7 +72,7 @@ public class TestLinkerProblems {
                 """)
             .expect(duplicatedFunction()
                 .in(root)
-                .object(variable("func"))))
+                .set("function", variable("func"))))
         .add(programTest("multiple times in same namespace")
             .source("""
                 funcA { 1 }
@@ -83,10 +83,10 @@ public class TestLinkerProblems {
             .expect(
                 duplicatedFunction()
                     .in(root)
-                    .object(variable("funcA")),
+                    .set("function", variable("funcA")),
                 duplicatedFunction()
                     .in(root)
-                    .object(variable("funcB"))));
+                    .set("function", variable("funcB"))));
   }
 
   private static ProgramTest programTest(String name) {

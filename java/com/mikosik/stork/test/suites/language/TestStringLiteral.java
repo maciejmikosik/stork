@@ -59,7 +59,7 @@ public class TestStringLiteral {
         .expect(illegalCharacterInStringLiteral()
             .in(root)
             .in(variable("main"))
-            .object(character));
+            .set("character", character));
   }
 
   private static ProgramTest programTest(String name) {

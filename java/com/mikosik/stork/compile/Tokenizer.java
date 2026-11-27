@@ -59,7 +59,7 @@ public class Tokenizer implements Iterator<Token> {
         case '}' -> RIGHT_CURLY_BRACKET;
         case '.' -> DOT;
         default -> throw exception(illegalCharacterInCode()
-            .object(firstByte)
+            .set("character", firstByte)
             .build());
       };
     }
@@ -78,7 +78,7 @@ public class Tokenizer implements Iterator<Token> {
       var nextByte = iterator.next().byteValue();
       if (!isPrintable(nextByte)) {
         throw exception(illegalCharacterInStringLiteral()
-            .object(nextByte)
+            .set("character", nextByte)
             .build());
       }
       builder.append((char) nextByte);
@@ -100,7 +100,7 @@ public class Tokenizer implements Iterator<Token> {
       return identifier(word);
     } else {
       throw exception(malformedWord()
-          .object(word)
+          .set("word", word)
           .build());
     }
   }
