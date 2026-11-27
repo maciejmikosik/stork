@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInStringLiteral;
+import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInStringLiteral;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;

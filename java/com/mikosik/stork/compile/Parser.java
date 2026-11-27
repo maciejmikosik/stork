@@ -6,7 +6,7 @@ import static com.mikosik.stork.common.err.Throwables.runtimeException;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Context.in;
-import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
+import static com.mikosik.stork.compile.err.Miscompilations.unexpectedToken;
 import static com.mikosik.stork.model.exp.Application.application;
 import static com.mikosik.stork.model.exp.Definition.definition;
 import static com.mikosik.stork.model.exp.Lambda.lambda;

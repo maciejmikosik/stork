@@ -8,8 +8,8 @@ import static com.mikosik.stork.common.func.On.on;
 import static com.mikosik.stork.compile.Bridge.stork;
 import static com.mikosik.stork.compile.Importer.buildImporter;
 import static com.mikosik.stork.compile.Unlambda.unlambda;
-import static com.mikosik.stork.compile.VerifyLibrary.findLinkingProblems;
-import static com.mikosik.stork.compile.err.CompilerException.verifyNoProblems;
+import static com.mikosik.stork.compile.VerifyLibrary.findLinkingMiscompilations;
+import static com.mikosik.stork.compile.err.CompilerException.verifyNo;
 import static com.mikosik.stork.compile.err.Context.in;
 import static com.mikosik.stork.compile.err.Gatherer.gatherer;
 import static com.mikosik.stork.model.exp.Changes.deep;
@@ -51,7 +51,7 @@ public class Compiler {
   private static List<Definition> compileSources(List<StorkDirectory> directories) {
     return streamer(directories)
         .map(Compiler::compileSource)
-        .apply(CompilerException::gatherCompilerProblems)
+        .apply(CompilerException::gatherMiscompilations)
         .map(Streamer::streamer)
         .apply(Streamer::flatten)
         .toList();
@@ -71,7 +71,7 @@ public class Compiler {
   }
 
   private static List<Definition> link(List<Definition> definitions) {
-    verifyNoProblems(findLinkingProblems(definitions));
+    verifyNo(findLinkingMiscompilations(definitions));
     return definitions;
   }
 

@@ -10,21 +10,21 @@ import com.mikosik.stork.model.exp.Namespace;
 import com.mikosik.stork.model.exp.Variable;
 
 public class Context {
-  private final Faa<Problem> modifier;
+  private final Faa<Miscompilation> modifier;
 
-  private Context(Faa<Problem> modifier) {
+  private Context(Faa<Miscompilation> modifier) {
     this.modifier = modifier;
   }
 
   public static Context in(Namespace namespace) {
-    return new Context(problem -> problem
+    return new Context(miscompilation -> miscompilation
         .edit()
         .in(namespace)
         .build());
   }
 
   public static Context in(Variable variable) {
-    return new Context(problem -> problem
+    return new Context(miscompilation -> miscompilation
         .edit()
         .in(variable)
         .build());
@@ -49,7 +49,7 @@ public class Context {
   }
 
   private CompilerException addContext(CompilerException exception) {
-    return exception(exception.problems.stream()
+    return exception(exception.miscompilations.stream()
         .map(modifier)
         .toList());
   }

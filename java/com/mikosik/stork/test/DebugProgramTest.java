@@ -1,6 +1,6 @@
 package com.mikosik.stork.test;
 
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
+import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInCode;
 import static com.mikosik.stork.compute.err.FunctionMissing.functionMissing;
 import static com.mikosik.stork.model.exp.Reference.reference;
 import static com.mikosik.stork.model.exp.Variable.variable;

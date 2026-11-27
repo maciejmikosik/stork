@@ -1,8 +1,8 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
-import static com.mikosik.stork.compile.err.Problems.unexpectedToken;
+import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInCode;
+import static com.mikosik.stork.compile.err.Miscompilations.malformedImportLine;
+import static com.mikosik.stork.compile.err.Miscompilations.unexpectedToken;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Punctuator.DOT;
@@ -15,14 +15,14 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestCompilerProblems {
-  public static Test testCompilerProblems() {
+public class TestMiscompilations {
+  public static Test testCompilerMiscompilations() {
     return suite("compiler")
-        .add(aggregatesAllProblems());
+        .add(aggregatesAllMiscompilations());
   }
 
-  private static Test aggregatesAllProblems() {
-    return programTest("aggregates all problems")
+  private static Test aggregatesAllMiscompilations() {
+    return programTest("aggregates all miscompilations")
         .add(path()
             .imports("x xx xxx")
             .source("main(stdin) { ! }"))

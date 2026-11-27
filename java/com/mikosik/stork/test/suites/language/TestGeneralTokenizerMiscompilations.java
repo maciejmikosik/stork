@@ -1,8 +1,8 @@
 package com.mikosik.stork.test.suites.language;
 
 import static com.mikosik.stork.common.io.AsciiSubset.asciiSubset;
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Problems.malformedWord;
+import static com.mikosik.stork.compile.err.Miscompilations.illegalCharacterInCode;
+import static com.mikosik.stork.compile.err.Miscompilations.malformedWord;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -16,8 +16,8 @@ import org.quackery.Test;
 import com.mikosik.stork.common.io.AsciiSubset;
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestGeneralTokenizerProblems {
-  public static Test testGeneralTokenizerProblems() {
+public class TestGeneralTokenizerMiscompilations {
+  public static Test testGeneralTokenizerMiscompilations() {
     return suite("tokenizer")
         .add(reportsIllegalCharacters())
         .add(reportsMalformedTokens());
@@ -28,7 +28,7 @@ public class TestGeneralTokenizerProblems {
         .addAll(rangeClosed(0, 255)
             .mapToObj(value -> Byte.valueOf((byte) value))
             .filter(character -> !legalCharacters.contains(character))
-            .map(TestGeneralTokenizerProblems::reportsIllegal)
+            .map(TestGeneralTokenizerMiscompilations::reportsIllegal)
             .toList());
   }
 

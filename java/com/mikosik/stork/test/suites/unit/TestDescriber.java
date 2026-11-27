@@ -3,7 +3,7 @@ package com.mikosik.stork.test.suites.unit;
 import static com.mikosik.stork.common.text.Outline.outline;
 import static com.mikosik.stork.compile.err.CompilerException.exception;
 import static com.mikosik.stork.compile.err.Describer.describe;
-import static com.mikosik.stork.compile.err.Problem.problem;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.model.token.Identifier.identifier;
 import static com.mikosik.stork.model.token.IntegerLiteral.literal;
@@ -23,11 +23,11 @@ import static org.quackery.Suite.suite;
 import org.quackery.Test;
 
 import com.mikosik.stork.common.text.Outline;
-import com.mikosik.stork.compile.err.Problem;
+import com.mikosik.stork.compile.err.Miscompilation;
 
 public class TestDescriber {
   public static Test testDescriber() {
-    return suite("describes problem")
+    return suite("describes miscompilation")
         .add(suite("with field")
             .add(test("string", "string"))
             .add(suite("expression")
@@ -62,7 +62,7 @@ public class TestDescriber {
   private static Test test(Object objectValue, String expected) {
     return test(
         objectValue.getClass().getSimpleName(),
-        problem("mockName")
+        miscompilation("mockName")
             .set("object", objectValue)
             .build(),
         outline("mockName")
@@ -72,7 +72,7 @@ public class TestDescriber {
   private static Test test(Object objectValue, Outline expected) {
     return test(
         objectValue.getClass().getSimpleName(),
-        problem("mockName")
+        miscompilation("mockName")
             .set("object", objectValue)
             .build(),
         outline("mockName")
@@ -80,12 +80,12 @@ public class TestDescriber {
                 .nest(expected)));
   }
 
-  private static Test test(String name, Problem problem, Outline outline) {
+  private static Test test(String name, Miscompilation miscompilation, Outline outline) {
     return newCase(name, () -> {
       assertMatch(
           outline("cannot compile")
               .nest(outline),
-          describe(exception(problem)));
+          describe(exception(miscompilation)));
     });
   }
 }

@@ -16,10 +16,10 @@ import static org.quackery.Suite.suite;
 import org.quackery.Suite;
 import org.quackery.Test;
 
-import com.mikosik.stork.compile.err.Problem;
+import com.mikosik.stork.compile.err.Miscompilation;
 import com.mikosik.stork.test.Outcome;
 
-//TODO add tests for stdout outcome and computer problems
+//TODO add tests for stdout outcome and miscomputations
 public class TestOutcome {
   public static Test testOutcome() {
     return suite("outcome")
@@ -35,22 +35,22 @@ public class TestOutcome {
               outcome("abc".getBytes())
                   .describe());
         }))
-        .add(newCase("single problem", () -> {
+        .add(newCase("single miscompilation", () -> {
           assertMatch(
-              describe(exception(problem(1))),
-              outcome(exception(problem(1)))
+              describe(exception(miscompilation(1))),
+              outcome(exception(miscompilation(1)))
                   .describe());
         }))
-        .add(newCase("many problems", () -> {
+        .add(newCase("many miscompilations", () -> {
           assertMatch(
               describe(exception(list(
-                  problem(1),
-                  problem(2),
-                  problem(3)))),
+                  miscompilation(1),
+                  miscompilation(2),
+                  miscompilation(3)))),
               outcome(exception(list(
-                  problem(1),
-                  problem(2),
-                  problem(3))))
+                  miscompilation(1),
+                  miscompilation(2),
+                  miscompilation(3))))
                       .describe());
         }));
   }
@@ -68,42 +68,42 @@ public class TestOutcome {
                   outcome(new byte[] { 1, 2, 3 }),
                   outcome(new byte[] { 1, 0, 3 }));
             })))
-        .add(suite("compiler problems")
-            .add(newCase("accepts same problem", () -> {
+        .add(suite("compiler miscompilations")
+            .add(newCase("accepts same miscompilation", () -> {
               assertEqual(
-                  outcome(exception(problem(1))),
-                  outcome(exception(problem(1))));
+                  outcome(exception(miscompilation(1))),
+                  outcome(exception(miscompilation(1))));
             }))
-            .add(newCase("rejects different problem", () -> {
+            .add(newCase("rejects different miscompilation", () -> {
               assertNotEqual(
-                  outcome(exception(problem(1))),
-                  outcome(exception(problem(2))));
+                  outcome(exception(miscompilation(1))),
+                  outcome(exception(miscompilation(2))));
             })))
         .add(newCase("rejects different count", () -> {
           assertNotEqual(
-              outcome(exception(list(problem(1), problem(1)))),
-              outcome(exception(single(problem(1)))));
+              outcome(exception(list(miscompilation(1), miscompilation(1)))),
+              outcome(exception(single(miscompilation(1)))));
           assertNotEqual(
-              outcome(exception(single(problem(1)))),
-              outcome(exception(list(problem(1), problem(1)))));
+              outcome(exception(single(miscompilation(1)))),
+              outcome(exception(list(miscompilation(1), miscompilation(1)))));
         }))
         .add(newCase("accepts different order", () -> {
           assertEqual(
-              outcome(exception(list(problem(1), problem(2), problem(3)))),
-              outcome(exception(list(problem(3), problem(2), problem(1)))));
+              outcome(exception(list(miscompilation(1), miscompilation(2), miscompilation(3)))),
+              outcome(exception(list(miscompilation(3), miscompilation(2), miscompilation(1)))));
         }))
         .add(newCase("rejects different cardinality", () -> {
           assertNotEqual(
-              outcome(exception(list(problem(1), problem(1), problem(2)))),
-              outcome(exception(list(problem(1), problem(2), problem(2)))));
+              outcome(exception(list(miscompilation(1), miscompilation(1), miscompilation(2)))),
+              outcome(exception(list(miscompilation(1), miscompilation(2), miscompilation(2)))));
           assertNotEqual(
-              outcome(exception(list(problem(1), problem(2), problem(2)))),
-              outcome(exception(list(problem(1), problem(1), problem(2)))));
+              outcome(exception(list(miscompilation(1), miscompilation(2), miscompilation(2)))),
+              outcome(exception(list(miscompilation(1), miscompilation(1), miscompilation(2)))));
         }));
   }
 
-  private static Problem problem(int id) {
-    return Problem.problem(Integer.toString(id)).build();
+  private static Miscompilation miscompilation(int id) {
+    return Miscompilation.miscompilation(Integer.toString(id)).build();
   }
 
   private static void assertEqual(Outcome outcomeA, Outcome outcomeB) {

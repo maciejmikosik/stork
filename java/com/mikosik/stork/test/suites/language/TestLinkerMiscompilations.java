@@ -1,8 +1,8 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
-import static com.mikosik.stork.compile.err.Problems.unboundVariable;
-import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
+import static com.mikosik.stork.compile.err.Miscompilations.duplicatedFunction;
+import static com.mikosik.stork.compile.err.Miscompilations.unboundVariable;
+import static com.mikosik.stork.compile.err.Miscompilations.undefinedFunction;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.reference;
@@ -15,8 +15,8 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestLinkerProblems {
-  public static Test testLinkerProblems() {
+public class TestLinkerMiscompilations {
+  public static Test testLinkerMiscompilations() {
     return suite("linker reports")
         .add(reportsUnboundVariable())
         .add(reportsUndefinedFunction())

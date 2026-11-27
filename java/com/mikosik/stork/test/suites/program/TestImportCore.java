@@ -1,6 +1,6 @@
 package com.mikosik.stork.test.suites.program;
 
-import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
+import static com.mikosik.stork.compile.err.Miscompilations.duplicatedFunction;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.namespace;
 import static com.mikosik.stork.test.ProgramTest.programTest;

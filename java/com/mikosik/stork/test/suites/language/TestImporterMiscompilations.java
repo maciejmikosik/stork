@@ -4,8 +4,8 @@ import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNewline;
-import static com.mikosik.stork.compile.err.Problems.importCollision;
-import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
+import static com.mikosik.stork.compile.err.Miscompilations.importCollision;
+import static com.mikosik.stork.compile.err.Miscompilations.malformedImportLine;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -19,12 +19,12 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestImporterProblems {
-  public static Test testImporterProblems() {
+public class TestImporterMiscompilations {
+  public static Test testImporterMiscompilations() {
     return suite("importer reports")
         .add(reportsMalformedLines())
         .add(reportsCollisions())
-        .add(reportsMultipleProblems());
+        .add(reportsMultipleMiscompilations());
   }
 
   private static Test reportsMalformedLines() {
@@ -135,8 +135,8 @@ public class TestImporterProblems {
                     .set("variable", variable("v"))));
   }
 
-  private static Test reportsMultipleProblems() {
-    return suite("multiple problems")
+  private static Test reportsMultipleMiscompilations() {
+    return suite("multiple miscompilations")
         .add(programTest("in same file")
             .imports("!\n@\n#\n")
             .source("""
