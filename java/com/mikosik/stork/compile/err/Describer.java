@@ -19,14 +19,14 @@ import com.mikosik.stork.model.token.StringLiteral;
 public class Describer {
   public static Outline describe(CompilerException exception) {
     return outline("cannot compile")
-        .nest(exception.problems.stream()
+        .nest(exception.miscompilations.stream()
             .map(Describer::describe)
             .toList());
   }
 
-  private static Outline describe(Problem problem) {
-    return outline(problem.name)
-        .nest(problem.description.entrySet().stream()
+  private static Outline describe(Miscompilation miscompilation) {
+    return outline(miscompilation.name)
+        .nest(miscompilation.attributes.entrySet().stream()
             .map(entry -> describeEntry(
                 entry.getKey(),
                 entry.getValue()))

@@ -11,27 +11,27 @@ import java.util.List;
 import com.mikosik.stork.common.col.Streamer;
 
 public class CompilerException extends RuntimeException {
-  public final List<Problem> problems;
+  public final List<Miscompilation> miscompilations;
 
-  private CompilerException(List<Problem> problems) {
-    this.problems = problems;
+  private CompilerException(List<Miscompilation> miscompilations) {
+    this.miscompilations = miscompilations;
   }
 
-  public static CompilerException exception(List<Problem> problems) {
-    return new CompilerException(cast(problems));
+  public static CompilerException exception(List<Miscompilation> miscompilations) {
+    return new CompilerException(cast(miscompilations));
   }
 
-  public static CompilerException exception(Problem problem) {
-    return new CompilerException(single(problem));
+  public static CompilerException exception(Miscompilation miscompilations) {
+    return new CompilerException(single(miscompilations));
   }
 
   public String getMessage() {
     return describe(this).toString();
   }
 
-  public static <E> Streamer<E> gatherCompilerProblems(Streamer<E> streamer) {
+  public static <E> Streamer<E> gatherMiscompilations(Streamer<E> streamer) {
     var elements = new ArrayList<E>();
-    var problems = new ArrayList<Problem>();
+    var miscompilations = new ArrayList<Miscompilation>();
 
     var iterator = streamer.toIterator();
     while (true) {
@@ -42,16 +42,16 @@ public class CompilerException extends RuntimeException {
           break;
         }
       } catch (CompilerException exception) {
-        problems.addAll(exception.problems);
+        miscompilations.addAll(exception.miscompilations);
       }
     }
-    verifyNoProblems(problems);
+    verifyNo(miscompilations);
     return streamer(elements);
   }
 
-  public static void verifyNoProblems(List<Problem> problems) {
-    if (!problems.isEmpty()) {
-      throw exception(problems);
+  public static void verifyNo(List<Miscompilation> miscompilations) {
+    if (!miscompilations.isEmpty()) {
+      throw exception(miscompilations);
     }
   }
 }

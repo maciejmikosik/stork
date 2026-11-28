@@ -1,8 +1,7 @@
 package com.mikosik.stork.test.suites.language;
 
 import static com.mikosik.stork.common.io.AsciiSubset.asciiSubset;
-import static com.mikosik.stork.compile.err.Problems.illegalCharacterInCode;
-import static com.mikosik.stork.compile.err.Problems.malformedWord;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.ProgramTest.minimalProgramTest;
@@ -16,8 +15,8 @@ import org.quackery.Test;
 import com.mikosik.stork.common.io.AsciiSubset;
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestGeneralTokenizerProblems {
-  public static Test testGeneralTokenizerProblems() {
+public class TestGeneralTokenizerMiscompilations {
+  public static Test testGeneralTokenizerMiscompilations() {
     return suite("tokenizer")
         .add(reportsIllegalCharacters())
         .add(reportsMalformedTokens());
@@ -28,7 +27,7 @@ public class TestGeneralTokenizerProblems {
         .addAll(rangeClosed(0, 255)
             .mapToObj(value -> Byte.valueOf((byte) value))
             .filter(character -> !legalCharacters.contains(character))
-            .map(TestGeneralTokenizerProblems::reportsIllegal)
+            .map(TestGeneralTokenizerMiscompilations::reportsIllegal)
             .toList());
   }
 
@@ -42,10 +41,10 @@ public class TestGeneralTokenizerProblems {
   private static Test reportsIllegal(byte character) {
     return programTest("[%d]".formatted(character))
         .source(mainWithBody(character))
-        .expect(illegalCharacterInCode()
+        .expect(miscompilation("illegal character in code")
             .in(root)
             .in(variable("main"))
-            .object(character));
+            .set("character", character));
   }
 
   private static Test reportsMalformedTokens() {
@@ -65,13 +64,13 @@ public class TestGeneralTokenizerProblems {
             .add(reportsMalformed("ab-c")));
   }
 
-  private static Test reportsMalformed(String token) {
-    return programTest(token)
-        .source(mainWithBody(token))
-        .expect(malformedWord()
+  private static Test reportsMalformed(String word) {
+    return programTest(word)
+        .source(mainWithBody(word))
+        .expect(miscompilation("malformed word")
             .in(root)
             .in(variable("main"))
-            .object(token));
+            .set("word", word));
   }
 
   private static ProgramTest programTest(String name) {

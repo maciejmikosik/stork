@@ -4,8 +4,7 @@ import static com.mikosik.stork.common.col.ImmutableList.list;
 import static com.mikosik.stork.common.col.ImmutableList.single;
 import static com.mikosik.stork.common.io.Ascii.isLetter;
 import static com.mikosik.stork.common.io.Ascii.isNewline;
-import static com.mikosik.stork.compile.err.Problems.importCollision;
-import static com.mikosik.stork.compile.err.Problems.malformedImportLine;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.namespace;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
@@ -19,12 +18,12 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestImporterProblems {
-  public static Test testImporterProblems() {
+public class TestImporterMiscompilations {
+  public static Test testImporterMiscompilations() {
     return suite("importer reports")
         .add(reportsMalformedLines())
         .add(reportsCollisions())
-        .add(reportsMultipleProblems());
+        .add(reportsMultipleMiscompilations());
   }
 
   private static Test reportsMalformedLines() {
@@ -67,9 +66,9 @@ public class TestImporterProblems {
         .source("""
             main(stdin) { "ok" }
             """)
-        .expect(malformedImportLine()
+        .expect(miscompilation("malformed import")
             .in(root)
-            .object(line));
+            .set("import", line));
   }
 
   private static Test reportsCollisions() {
@@ -82,10 +81,10 @@ public class TestImporterProblems {
             .source("""
                 main(stdin) { "ok" }
                 """)
-            .expect(importCollision()
+            .expect(miscompilation("import collision")
                 .in(root)
-                .object(list("a/b/c", "a/b/c"))
-                .variable(variable("c"))))
+                .set("imports", list("a/b/c", "a/b/c"))
+                .set("variable", variable("c"))))
         .add(programTest("same variable from different directory")
             .imports("""
                 a/b/c
@@ -94,10 +93,10 @@ public class TestImporterProblems {
             .source("""
                 main(stdin) { "ok" }
                 """)
-            .expect(importCollision()
+            .expect(miscompilation("import collision")
                 .in(root)
-                .object(list("a/b/c", "a/x/c"))
-                .variable(variable("c"))))
+                .set("imports", list("a/b/c", "a/x/c"))
+                .set("variable", variable("c"))))
         .add(programTest("of renamed variable")
             .imports("""
                 a/b/c
@@ -106,10 +105,10 @@ public class TestImporterProblems {
             .source("""
                 main(stdin) { "ok" }
                 """)
-            .expect(importCollision()
+            .expect(miscompilation("import collision")
                 .in(root)
-                .object(list("a/b/c", "a/b/d c"))
-                .variable(variable("c"))))
+                .set("imports", list("a/b/c", "a/b/d c"))
+                .set("variable", variable("c"))))
         .add(programTest("includes namespaces")
             .add(path("a/b")
                 .imports("""
@@ -125,33 +124,33 @@ public class TestImporterProblems {
                 main(stdin) { "ok" }
                 """)
             .expect(
-                importCollision()
+                miscompilation("import collision")
                     .in(namespace("a/b"))
-                    .object(list("x/y/z", "x/y/z"))
-                    .variable(variable("z")),
-                importCollision()
+                    .set("imports", list("x/y/z", "x/y/z"))
+                    .set("variable", variable("z")),
+                miscompilation("import collision")
                     .in(namespace("a/c"))
-                    .object(list("x/y/v", "x/y/v"))
-                    .variable(variable("v"))));
+                    .set("imports", list("x/y/v", "x/y/v"))
+                    .set("variable", variable("v"))));
   }
 
-  private static Test reportsMultipleProblems() {
-    return suite("multiple problems")
+  private static Test reportsMultipleMiscompilations() {
+    return suite("multiple miscompilations")
         .add(programTest("in same file")
             .imports("!\n@\n#\n")
             .source("""
                 main(stdin) { "ok" }
                 """)
             .expect(
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(root)
-                    .object("!"),
-                malformedImportLine()
+                    .set("import", "!"),
+                miscompilation("malformed import")
                     .in(root)
-                    .object("@"),
-                malformedImportLine()
+                    .set("import", "@"),
+                miscompilation("malformed import")
                     .in(root)
-                    .object("#")))
+                    .set("import", "#")))
         .add(programTest("in different files")
             .add(path("a")
                 .imports("!"))
@@ -163,15 +162,15 @@ public class TestImporterProblems {
                 main(stdin) { "ok" }
                 """)
             .expect(
-                malformedImportLine()
+                miscompilation("malformed import")
                     .in(namespace(single("a")))
-                    .object("!"),
-                malformedImportLine()
+                    .set("import", "!"),
+                miscompilation("malformed import")
                     .in(namespace(single("b")))
-                    .object("@"),
-                malformedImportLine()
+                    .set("import", "@"),
+                miscompilation("malformed import")
                     .in(namespace(single("c")))
-                    .object("#")));
+                    .set("import", "#")));
   }
 
   private static ProgramTest programTest(String name) {

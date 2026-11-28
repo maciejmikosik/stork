@@ -11,7 +11,7 @@ import java.util.Arrays;
 import com.mikosik.stork.common.text.Outline;
 import com.mikosik.stork.compile.err.CompilerException;
 import com.mikosik.stork.compile.err.Describer;
-import com.mikosik.stork.compile.err.Problem;
+import com.mikosik.stork.compile.err.Miscompilation;
 import com.mikosik.stork.compute.err.ComputerException;
 
 public sealed interface Outcome {
@@ -29,13 +29,13 @@ public sealed interface Outcome {
     public boolean equals(Object object) {
       return object instanceof NotCompiled that
           && unorderedEquals(
-              this.exception.problems,
-              that.exception.problems);
+              this.exception.miscompilations,
+              that.exception.miscompilations);
     }
 
     public int hashCode() {
-      return exception.problems.stream()
-          .mapToInt(Problem::hashCode)
+      return exception.miscompilations.stream()
+          .mapToInt(Miscompilation::hashCode)
           .sum();
     }
   }

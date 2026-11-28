@@ -32,8 +32,8 @@ import java.util.function.Supplier;
 import org.quackery.Test;
 
 import com.mikosik.stork.compile.err.CompilerException;
-import com.mikosik.stork.compile.err.Problem;
-import com.mikosik.stork.compile.err.Problem.ProblemBuilder;
+import com.mikosik.stork.compile.err.Miscompilation;
+import com.mikosik.stork.compile.err.Miscompilation.Builder;
 import com.mikosik.stork.compute.err.CannotCompute;
 import com.mikosik.stork.compute.err.ComputerException;
 import com.mikosik.stork.model.disk.StorkDirectory;
@@ -90,17 +90,17 @@ public class ProgramTest {
     return newCaseExpecting(outcome(bytes(stdout)));
   }
 
-  public Test expect(List<Problem> problems) {
-    return newCaseExpecting(outcome(exception(problems)));
+  public Test expect(List<Miscompilation> miscompilations) {
+    return newCaseExpecting(outcome(exception(miscompilations)));
   }
 
-  public Test expect(Problem problem, Problem... moreProblems) {
-    return expect(listFromVarargs(problem, moreProblems));
+  public Test expect(Miscompilation miscompilation, Miscompilation... moreMiscompilations) {
+    return expect(listFromVarargs(miscompilation, moreMiscompilations));
   }
 
-  public Test expect(ProblemBuilder problem, ProblemBuilder... moreProblems) {
-    return expect(listFromVarargs(problem, moreProblems).stream()
-        .map(ProblemBuilder::build)
+  public Test expect(Builder miscompilation, Builder... moreMiscompilations) {
+    return expect(listFromVarargs(miscompilation, moreMiscompilations).stream()
+        .map(Builder::build)
         .toList());
   }
 

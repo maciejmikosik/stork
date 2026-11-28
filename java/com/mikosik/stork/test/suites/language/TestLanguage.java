@@ -1,14 +1,14 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.test.suites.language.TestCompilerProblems.testCompilerProblems;
 import static com.mikosik.stork.test.suites.language.TestImporter.testImporter;
-import static com.mikosik.stork.test.suites.language.TestImporterProblems.testImporterProblems;
-import static com.mikosik.stork.test.suites.language.TestLinkerProblems.testLinkerProblems;
+import static com.mikosik.stork.test.suites.language.TestImporterMiscompilations.testImporterMiscompilations;
+import static com.mikosik.stork.test.suites.language.TestLinkerMiscompilations.testLinkerMiscompilations;
+import static com.mikosik.stork.test.suites.language.TestMiscompilations.testCompilerMiscompilations;
 import static com.mikosik.stork.test.suites.language.TestParser.testParser;
-import static com.mikosik.stork.test.suites.language.TestParserProblems.testParserProblems;
+import static com.mikosik.stork.test.suites.language.TestParserMiscompilations.testParserMiscompilations;
 import static com.mikosik.stork.test.suites.language.TestStringLiteral.testStringLiteral;
 import static com.mikosik.stork.test.suites.language.TestTokenizer.testTokenizer;
-import static com.mikosik.stork.test.suites.language.TestTokenizerProblems.testTokenizerProblems;
+import static com.mikosik.stork.test.suites.language.TestTokenizerMiscompilations.testTokenizerMiscompilations;
 import static org.quackery.Suite.suite;
 
 import org.quackery.Test;
@@ -20,11 +20,11 @@ public class TestLanguage {
         .add(testTokenizer())
         .add(testParser())
         .add(testImporter())
-        .add(suite("problems")
-            .add(testImporterProblems())
-            .add(testTokenizerProblems())
-            .add(testParserProblems())
-            .add(testCompilerProblems())
-            .add(testLinkerProblems()));
+        .add(suite("miscompilations")
+            .add(testImporterMiscompilations())
+            .add(testTokenizerMiscompilations())
+            .add(testParserMiscompilations())
+            .add(testCompilerMiscompilations())
+            .add(testLinkerMiscompilations()));
   }
 }

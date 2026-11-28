@@ -1,8 +1,6 @@
 package com.mikosik.stork.test.suites.language;
 
-import static com.mikosik.stork.compile.err.Problems.duplicatedFunction;
-import static com.mikosik.stork.compile.err.Problems.unboundVariable;
-import static com.mikosik.stork.compile.err.Problems.undefinedFunction;
+import static com.mikosik.stork.compile.err.Miscompilation.miscompilation;
 import static com.mikosik.stork.model.exp.Namespace.root;
 import static com.mikosik.stork.model.exp.Variable.variable;
 import static com.mikosik.stork.test.Factories.reference;
@@ -15,8 +13,8 @@ import org.quackery.Test;
 
 import com.mikosik.stork.test.ProgramTest;
 
-public class TestLinkerProblems {
-  public static Test testLinkerProblems() {
+public class TestLinkerMiscompilations {
+  public static Test testLinkerMiscompilations() {
     return suite("linker reports")
         .add(reportsUnboundVariable())
         .add(reportsUndefinedFunction())
@@ -27,18 +25,18 @@ public class TestLinkerProblems {
     return suite("unbound variable")
         .add(programTest("once")
             .source("func { var }")
-            .expect(unboundVariable()
+            .expect(miscompilation("unbound variable")
                 .in(reference("func"))
-                .object(variable("var"))))
+                .set("variable", variable("var"))))
         .add(programTest("multiple times in same function")
             .source("func { var(var) }")
             .expect(
-                unboundVariable()
+                miscompilation("unbound variable")
                     .in(reference("func"))
-                    .object(variable("var")),
-                unboundVariable()
+                    .set("variable", variable("var")),
+                miscompilation("unbound variable")
                     .in(reference("func"))
-                    .object(variable("var"))));
+                    .set("variable", variable("var"))));
   }
 
   private static Suite reportsUndefinedFunction() {
@@ -47,20 +45,20 @@ public class TestLinkerProblems {
             .add(path("a/aa")
                 .imports("b/bb/funcB")
                 .source("funcA { funcB }"))
-            .expect(undefinedFunction()
+            .expect(miscompilation("undefined function")
                 .in(reference("a/aa/funcA"))
-                .object(reference("b/bb/funcB"))))
+                .set("function", reference("b/bb/funcB"))))
         .add(programTest("multiple times in same function")
             .add(path("a/aa")
                 .imports("b/bb/funcB")
                 .source("funcA { funcB(funcB) }"))
             .expect(
-                undefinedFunction()
+                miscompilation("undefined function")
                     .in(reference("a/aa/funcA"))
-                    .object(reference("b/bb/funcB")),
-                undefinedFunction()
+                    .set("function", reference("b/bb/funcB")),
+                miscompilation("undefined function")
                     .in(reference("a/aa/funcA"))
-                    .object(reference("b/bb/funcB"))));
+                    .set("function", reference("b/bb/funcB"))));
   }
 
   private static Test reportsDuplicatedFunction() {
@@ -70,9 +68,9 @@ public class TestLinkerProblems {
                 func { 1 }
                 func { 2 }
                 """)
-            .expect(duplicatedFunction()
+            .expect(miscompilation("duplicated function")
                 .in(root)
-                .object(variable("func"))))
+                .set("function", variable("func"))))
         .add(programTest("multiple times in same namespace")
             .source("""
                 funcA { 1 }
@@ -81,12 +79,12 @@ public class TestLinkerProblems {
                 funcB { 2 }
                 """)
             .expect(
-                duplicatedFunction()
+                miscompilation("duplicated function")
                     .in(root)
-                    .object(variable("funcA")),
-                duplicatedFunction()
+                    .set("function", variable("funcA")),
+                miscompilation("duplicated function")
                     .in(root)
-                    .object(variable("funcB"))));
+                    .set("function", variable("funcB"))));
   }
 
   private static ProgramTest programTest(String name) {
